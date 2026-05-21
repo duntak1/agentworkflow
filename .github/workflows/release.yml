@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: CI + e2e
+        run: |
+          chmod +x scripts/*.sh scripts/aw .githooks/*
+          ./scripts/check-skill-source.sh
+          AW_SYNC_PROJECT_SKILL=0 ./scripts/sync-skill.sh
+          ./scripts/check-skill-package.sh "${HOME}/.cursor/skills/agent-workflow"
+          ./scripts/e2e-smoke.sh
+
+      - name: Build skill archive
+        run: ./scripts/build-skill-archive.sh
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="$(tr -d '[:space:]' < agent-workflow/VERSION)"
+          gh release create "${GITHUB_REF_NAME}" \
+            --title "agent-workflow ${GITHUB_REF_NAME}" \
+            --notes "Cursor Skill bundle. See PUBLISH.md and skill/QUICKSTART.md.
+
+Install:
+\`\`\`bash
+# extract agent-workflow-skill-*.tar.gz to ~/.cursor/skills/agent-workflow
+# or run install-cursor-skill.sh from a clone
+\`\`\`" \
+            dist/agent-workflow-skill-"${VERSION}".tar.gz \
+            dist/install-cursor-skill.sh \
+            dist/QUICKSTART.md \
+            dist/PUBLISH.md

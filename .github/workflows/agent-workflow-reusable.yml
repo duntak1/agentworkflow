@@ -1,0 +1,33 @@
+name: agent-workflow reusable
+
+on:
+  workflow_call:
+    inputs:
+      run_e2e_smoke:
+        type: boolean
+        required: false
+        default: true
+
+jobs:
+  agent-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare scripts
+        run: chmod +x scripts/aw scripts/*.sh .githooks/* 2>/dev/null || chmod +x scripts/aw scripts/*.sh
+
+      - name: Check workflow state
+        run: ./scripts/aw check all
+
+      - name: Check skill source
+        run: ./scripts/check-skill-source.sh
+
+      - name: Sync and check skill package
+        run: |
+          AW_SYNC_PROJECT_SKILL=0 ./scripts/sync-skill.sh
+          ./scripts/check-skill-package.sh "${HOME}/.cursor/skills/agent-workflow"
+
+      - name: E2E smoke
+        if: ${{ inputs.run_e2e_smoke }}
+        run: ./scripts/e2e-smoke.sh

@@ -1,0 +1,43 @@
+{
+  "name": "agent-workflow",
+  "version": "1.1.0",
+  "description": "Tool-agnostic AI delivery workflow with DSL gates, executable plans, atomic tasks, and verification.",
+  "author": {
+    "name": "agent-workflow maintainers",
+    "email": "[TODO: maintainer email]",
+    "url": "[TODO: maintainer URL]"
+  },
+  "homepage": "[TODO: documentation URL]",
+  "repository": "[TODO: repository URL]",
+  "license": "MIT",
+  "keywords": [
+    "agent-workflow",
+    "ai-coding",
+    "dsl",
+    "planning",
+    "verification",
+    "codex",
+    "cursor"
+  ],
+  "skills": "./skill/",
+  "interface": {
+    "displayName": "agent-workflow",
+    "shortDescription": "Reference to verified AI delivery workflow.",
+    "longDescription": "Use Reference -> reviewed DSL -> executable Plan -> confirmed AT-T tasks -> verification to keep AI coding work scoped, reviewable, and tool-agnostic.",
+    "developerName": "agent-workflow maintainers",
+    "category": "Productivity",
+    "capabilities": [
+      "Write",
+      "Automation"
+    ],
+    "websiteURL": "[TODO: website URL]",
+    "privacyPolicyURL": "[TODO: privacy policy URL]",
+    "termsOfServiceURL": "[TODO: terms of service URL]",
+    "defaultPrompt": [
+      "Set up agent-workflow in this repo.",
+      "Show current workflow status.",
+      "Create a DSL and executable plan."
+    ],
+    "brandColor": "#2563EB"
+  }
+}

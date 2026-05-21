@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(git rev-parse --show-toplevel)"
+mkdir -p "${ROOT}/local"
+HASH="$(git rev-parse HEAD)"
+SUBJECT="$(git log -1 --pretty=%s)"
+TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+printf '{"hash":"%s","subject":"%s","ts":"%s"}\n' "$HASH" "$SUBJECT" "$TS" >> "${ROOT}/local/commit-autolog.jsonl"

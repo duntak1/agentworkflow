@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  docs-and-scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Shell syntax
+        run: |
+          chmod +x scripts/*.sh scripts/aw .githooks/*
+          for f in scripts/*.sh .githooks/*; do
+            [[ -f "$f" ]] && bash -n "$f"
+          done
+
+      - name: REQ / TP index
+        run: |
+          ./scripts/check-req-index.sh
+          ./scripts/check-test-plan-index.sh
+
+      - name: Layout check
+        run: ./scripts/check-aw-layout.sh
+
+      - name: Skill source + sync
+        run: |
+          ./scripts/check-skill-source.sh
+          ./scripts/check-docs-commands.sh
+          AW_SYNC_PROJECT_SKILL=0 ./scripts/sync-skill.sh
+          ./scripts/check-skill-package.sh "${HOME}/.cursor/skills/agent-workflow"
+
+      - name: E2E smoke
+        run: ./scripts/e2e-smoke.sh
+
+      - name: Pre-commit (static only)
+        env:
+          SKIP_PRE_COMMIT_TESTS: "1"
+          SKIP_CHANGELOG_GATE: "1"
+          SKIP_AW_CHECK: "1"
+        run: ./scripts/pre-commit-verify.sh

@@ -1,0 +1,379 @@
+#!/usr/bin/env bash
+# Universal agent-workflow CLI (tool-agnostic).
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=_aw-lib.sh
+source "${SCRIPT_DIR}/_aw-lib.sh"
+# shellcheck source=_aw-task-lib.sh
+source "${SCRIPT_DIR}/_aw-task-lib.sh"
+CMD="${1:-help}"
+shift || true
+AW_CLI_VERSION="unknown"
+if [[ -f "${SCRIPT_DIR}/../agent-workflow/VERSION" ]]; then
+  AW_CLI_VERSION="$(tr -d '[:space:]' < "${SCRIPT_DIR}/../agent-workflow/VERSION")"
+elif [[ -f "${SCRIPT_DIR}/../package/VERSION" ]]; then
+  AW_CLI_VERSION="$(tr -d '[:space:]' < "${SCRIPT_DIR}/../package/VERSION")"
+elif [[ -f "${SCRIPT_DIR}/../VERSION" ]]; then
+  AW_CLI_VERSION="$(tr -d '[:space:]' < "${SCRIPT_DIR}/../VERSION")"
+fi
+
+case "$CMD" in
+  init)
+    exec "${SCRIPT_DIR}/init-project.sh" "$@"
+    ;;
+  install)
+    exec "${SCRIPT_DIR}/aw-install.sh" "$@"
+    ;;
+  setup)
+    exec "${SCRIPT_DIR}/aw-setup.sh" "$@"
+    ;;
+  doctor)
+    exec "${SCRIPT_DIR}/aw-doctor.sh" "$@"
+    ;;
+  demo)
+    exec "${SCRIPT_DIR}/aw-demo.sh" "$@"
+    ;;
+  upgrade)
+    exec "${SCRIPT_DIR}/aw-upgrade.sh" "$@"
+    ;;
+  remove)
+    exec "${SCRIPT_DIR}/aw-remove.sh" "$@"
+    ;;
+  dsl)
+    if [[ "${1:-}" == suite ]]; then
+      shift
+      exec "${SCRIPT_DIR}/aw-dsl-suite.sh" "$@"
+    fi
+    if [[ "${1:-}" == review ]]; then
+      shift
+      exec "${SCRIPT_DIR}/aw-dsl-review.sh" "$@"
+    fi
+    if [[ "${1:-}" == list || "${1:-}" == use ]]; then
+      exec "${SCRIPT_DIR}/aw-dsl-select.sh" "$@"
+    fi
+    if [[ "${1:-}" == approve ]]; then
+      shift
+      exec "${SCRIPT_DIR}/aw-approve.sh" dsl "$@"
+    fi
+    if [[ "${1:-}" == apply ]]; then
+      shift
+      exec "${SCRIPT_DIR}/aw-dsl-apply.sh" "$@"
+    fi
+    if [[ "${1:-}" == write ]]; then
+      exec "${SCRIPT_DIR}/aw" paste dsl-write
+    fi
+    exec "${SCRIPT_DIR}/draft-dsl.sh" "$@"
+    ;;
+  plan)
+    if [[ "${1:-}" == list || "${1:-}" == use ]]; then
+      exec "${SCRIPT_DIR}/aw-plan-select.sh" "$@"
+    fi
+    if [[ "${1:-}" == change || "${1:-}" == task-add ]]; then
+      exec "${SCRIPT_DIR}/aw-plan-change.sh" "$@"
+    fi
+    if [[ "${1:-}" == approve ]]; then
+      shift
+      exec "${SCRIPT_DIR}/aw-approve.sh" plan "$@"
+    fi
+    if [[ "${1:-}" == apply ]]; then
+      shift
+      exec "${SCRIPT_DIR}/aw-plan-apply.sh" "$@"
+    fi
+    if [[ "${1:-}" == write ]]; then
+      exec "${SCRIPT_DIR}/aw" paste plan-write
+    fi
+    exec "${SCRIPT_DIR}/draft-plan.sh" "$@"
+    ;;
+  atomic)
+    exec "${SCRIPT_DIR}/aw-atomic.sh" "$@"
+    ;;
+  commit)
+    exec "${SCRIPT_DIR}/aw-commit.sh" "$@"
+    ;;
+  changelog)
+    exec "${SCRIPT_DIR}/aw-changelog.sh" "$@"
+    ;;
+  audit)
+    exec "${SCRIPT_DIR}/aw-audit.sh" "$@"
+    ;;
+  policy)
+    exec "${SCRIPT_DIR}/aw-policy.sh" "$@"
+    ;;
+  security)
+    exec "${SCRIPT_DIR}/aw-security.sh" "$@"
+    ;;
+  service-catalog)
+    exec "${SCRIPT_DIR}/aw-service-catalog.sh" "$@"
+    ;;
+  release)
+    exec "${SCRIPT_DIR}/aw-release.sh" "$@"
+    ;;
+  report)
+    exec "${SCRIPT_DIR}/aw-report.sh" "$@"
+    ;;
+  trace)
+    exec "${SCRIPT_DIR}/aw-trace.sh" "$@"
+    ;;
+  metrics)
+    exec "${SCRIPT_DIR}/aw-metrics.sh" "$@"
+    ;;
+  ops)
+    exec "${SCRIPT_DIR}/aw-ops.sh" "$@"
+    ;;
+  agents)
+    exec "${SCRIPT_DIR}/aw-agents.sh" "$@"
+    ;;
+  sync)
+    exec "${SCRIPT_DIR}/aw-sync.sh" "$@"
+    ;;
+  approve)
+    exec "${SCRIPT_DIR}/aw-approve.sh" "$@"
+    ;;
+  check)
+    SUB="${1:-all}"
+    shift || true
+    exec "${SCRIPT_DIR}/check-aw-all.sh" "$SUB" "$@"
+    ;;
+  config)
+    exec "${SCRIPT_DIR}/aw-config.sh" "$@"
+    ;;
+  rules)
+    exec "${SCRIPT_DIR}/aw-rules.sh" "$@"
+    ;;
+  ci)
+    exec "${SCRIPT_DIR}/aw-ci.sh" "$@"
+    ;;
+  status)
+    exec "${SCRIPT_DIR}/aw-status.sh" "$@"
+    ;;
+  capabilities)
+    exec "${SCRIPT_DIR}/aw-capabilities.sh" "$@"
+    ;;
+  dashboard)
+    exec "${SCRIPT_DIR}/aw-dashboard.sh" "$@"
+    ;;
+  confirm)
+    exec "${SCRIPT_DIR}/aw-confirm.sh" "$@"
+    ;;
+  index)
+    "${SCRIPT_DIR}/generate-file-index.sh" >/dev/null 2>&1 || true
+    AW_INDEX_MODE=scan exec "${SCRIPT_DIR}/generate-engineering-index.sh" --scan-only "$@"
+    ;;
+  file-index)
+    exec "${SCRIPT_DIR}/generate-file-index.sh" "$@"
+    ;;
+  dev)
+    cat <<'EOF'
+按 agent-workflow 研发阶段 A→E（agent-workflow/AICODING_WORKFLOW.md）。
+
+1. 阶段 A：假设清单
+2. 阶段 B：可检查验收 + 验证命令
+3. 阶段 C/D：最短方案 → 手术式改代码
+4. 阶段 E：PROJECT_CONFIG 命令 + 真实环境用例
+
+当前任务：运行 ./scripts/aw next 查看 AT-T*
+EOF
+    ;;
+  next)
+    exec "${SCRIPT_DIR}/aw-next.sh" "$@"
+    ;;
+  task)
+    if [[ "${1:-}" == split ]]; then
+      shift
+      exec "${SCRIPT_DIR}/aw-plan-change.sh" split "$@"
+    fi
+    exec "${SCRIPT_DIR}/aw-task.sh" "$@"
+    ;;
+  verify)
+    exec "${SCRIPT_DIR}/aw-verify.sh" "$@"
+    ;;
+  req)
+    exec "${SCRIPT_DIR}/aw-req.sh" "$@"
+    ;;
+  handoff)
+    exec "${SCRIPT_DIR}/draft-handoff.sh" "$@"
+    ;;
+  hooks)
+    exec "${SCRIPT_DIR}/install-git-hooks.sh" "$@"
+    ;;
+  adapters)
+    exec "${SCRIPT_DIR}/install-aw-adapters.sh" "$@"
+    ;;
+  sync-skill)
+    exec "${SCRIPT_DIR}/sync-skill.sh" "$@"
+    ;;
+  tp)
+    exec "${SCRIPT_DIR}/aw-tp.sh" "$@"
+    ;;
+  memory)
+    exec "${SCRIPT_DIR}/aw-memory.sh" "$@"
+    ;;
+  bug)
+    exec "${SCRIPT_DIR}/aw-bug.sh" "$@"
+    ;;
+  paste)
+    SUB="${1:-session}"
+    AW_ROOT="$(aw_repo_root)"
+    POLICY="$(aw_policy_dir)"
+    case "$SUB" in
+      session)
+        cat <<EOF
+请按本仓库 agent-workflow 工作流执行（工具无关）。
+
+先读：
+- ${POLICY}/INVOCATION.md
+- ${POLICY}/PRODUCT_INPUT_WORKFLOW.md
+- ${AW_ROOT}/docs/handoff/PROJECT_HANDOFF.md
+- ${AW_ROOT}/docs/requirements/INDEX.md
+- ${AW_ROOT}/docs/memory/INDEX.md
+- ${AW_ROOT}/docs/ENGINEERING_RULES.md
+
+勿读：ENGINEERING_INDEX.md（仅供人类工程师）
+
+本轮任务：（由人类填写）
+闸门：docs/dsl/ 元数据状态非「已审」时，只改文档，不写业务代码。
+验证：docs/PROJECT_CONFIG.md + ${POLICY}/VERSION_CHANGELOG_QUALITY_LOOP.md §11
+工程规范：docs/ENGINEERING_RULES.md
+记忆：需要跨会话上下文时运行 ./scripts/aw memory inject
+EOF
+        ;;
+      dev)
+        cat <<EOF
+按 agent-workflow 研发阶段 A→E（${POLICY}/AICODING_WORKFLOW.md）。
+
+1. 阶段 A：假设清单
+2. 阶段 B：可检查验收 + 验证命令
+3. 阶段 C/D：最短方案 → 手术式改代码
+4. 阶段 E：PROJECT_CONFIG 命令 + 真实环境用例
+
+当前任务：运行 ./scripts/aw next 查看 AT-T*
+EOF
+        ;;
+      task)
+        exec "${SCRIPT_DIR}/aw-task.sh" paste
+        ;;
+      dsl-write)
+        MANIFEST="${AW_ROOT}/reference/manifest.yaml"
+        DSL_OUT="$(grep -E '^[[:space:]]*dsl_file:' "$MANIFEST" 2>/dev/null | head -1 | sed 's/.*dsl_file:[[:space:]]*//' | tr -d '"' | tr -d "'" || echo "docs/dsl/DSL_DRAFT.md")"
+        cat <<EOF
+请将 DSL 写入 \`${DSL_OUT}\`（勿编造 reference 路径）。
+
+【必读】
+- ${POLICY}/templates/prompts/PROMPT-DSL.md
+- ${AW_ROOT}/docs/dsl/DSL_SPEC_TEMPLATE.md
+- ${AW_ROOT}/docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md（前端页面时）
+- ${MANIFEST}
+- ${AW_ROOT}/reference/inputs/（及 source/ 若路径 C）
+
+【输出】
+- 单文件 DSL Markdown，含元数据表、验收（可检查）、页面/模块结构
+- 元数据「状态」= 草稿；「关联 REQ」填真实路径
+
+【规则】
+- 路径仅来自 manifest；勿读 ENGINEERING_INDEX.md
+- 勿写业务代码
+- 人类审阅后：\`./scripts/aw dsl review ${DSL_OUT} --write\` → \`./scripts/aw approve dsl ${DSL_OUT} --plan\`
+EOF
+        ;;
+      plan-write)
+        DSL_W="$(aw_resolve_dsl_file 2>/dev/null || echo "docs/dsl/DSL_DRAFT.md")"
+        cat <<EOF
+请将 Plan + 原子任务写入 docs/plans/（勿编造 reference 路径）。
+
+前置：DSL 元数据须为 **已审**（当前建议：${AW_ROOT}/${DSL_W}）
+
+【输出】
+1. docs/plans/PLAN_<slug>.md — 自 _TEMPLATE_PLAN.md
+2. docs/plans/ATOMIC_TASKS_<slug>.md — 自 _TEMPLATE_ATOMIC_TASKS.md，每项含领域与可执行验证命令
+
+【必读】
+- ${POLICY}/templates/prompts/PROMPT-PLAN.md
+- ${AW_ROOT}/docs/plans/_TEMPLATE_PLAN.md
+- ${AW_ROOT}/docs/plans/_TEMPLATE_ATOMIC_TASKS.md
+- ${AW_ROOT}/${DSL_W}
+- ${AW_ROOT}/docs/PROJECT_CONFIG.md
+
+【规则】
+- 元数据「状态」保持 草稿；人类审阅后：aw approve plan …
+- 在 DSL 元数据回填「关联 Plan」路径
+- 勿写业务代码
+EOF
+        ;;
+      *)
+        echo "Usage: aw paste session|dev|task|dsl-write|plan-write" >&2
+        exit 1
+        ;;
+    esac
+    ;;
+  help|--help|-h)
+    cat <<EOF
+agent-workflow CLI v${AW_CLI_VERSION} (any AI tool)
+
+  aw install [path]    Copy agent-workflow/ + scripts/ into target repo
+  aw setup             One-shot setup (install/init/adapters/ci/status/doctor)
+  aw doctor            Diagnose install, gates, adapters, CI, config
+  aw demo              Run an end-to-end workflow demonstration in /tmp
+  aw upgrade           Refresh package/scripts in current repo
+  aw remove            Dry-run removal for adapters/CI/package (--execute to delete)
+  aw init              Initialize reference/, docs/dsl, docs/plans, ...
+  aw dsl [A|B|C]       Print DSL prompt (L1); aw dsl write / apply for L2/L3
+  aw dsl suite <slug> "title"  Create multi-file DSL suite
+  aw dsl review [dsl]  Print/write engineer review checklist before approve
+  aw dsl list|use      Select active DSL in multi-DSL repos
+  aw approve dsl <file> [--req REQ-...] [--plan] [--domain frontend|backend|...]   Set DSL status 已审; --plan prints Plan prompt
+  aw plan <dsl.md> [--domain frontend|backend|...]  Print Plan prompt (L1)
+  aw plan write        Paste block for Plan + ATOMIC (L2); aw plan apply for L3
+  aw plan list|use     Select active Plan in multi-Plan repos
+  aw plan change|task-add  Record dev-time plan changes or append a new AT-T
+  aw approve plan <file>                  Set Plan status 可执行
+  aw status            Workflow state + suggested next command
+  aw status --json     Machine-readable workflow state
+  aw capabilities      Print supported tools, commands, and proof paths
+  aw capabilities --json  Machine-readable supported tools, commands, and proof paths
+  aw dashboard         Read-only terminal dashboard
+  aw confirm <dsl> <plan>   Task confirmed (DSL 已审 + Plan 可执行) → ENGINEERING_INDEX.md
+  aw index [dsl] [plan]     Scan-only ENGINEERING_INDEX refresh (not task confirm)
+  aw file-index             Generate docs/FILE_INDEX.md with project code file descriptions
+  aw dev                    Print A→E dev paste block (same as paste dev)
+  aw check [all|layout|dsl|plan|config|rules|req|tp|docs|plugin|memory|changelog|audit|policy|security|service-catalog|release|sync]
+  aw config init       Fill docs/PROJECT_CONFIG.md commands/placeholders
+  aw rules init|review|check  Engineering rules template/review/check
+  aw ci install        Install GitHub Actions workflow template
+  aw atomic list|use   Select ATOMIC_TASKS_*.md when multiple plans
+  aw commit [-m msg]   Verify + suggest commit message (--execute to commit)
+  aw changelog add|check  Add/check [Unreleased] changelog entries
+  aw audit init|add|check  Agent execution trace for AI actions/decisions/commands
+  aw policy init|decision|check  Minimal policy-as-code and exception decisions
+  aw security init|finding|dependency|scan|check  Security findings, dependency review, scanner adapters
+  aw service-catalog init|add|discover|check  Service/module catalog and discovery candidates
+  aw release init|record|flag|gate|check  Environment, release, rollback, feature flag records and release gate
+  aw report handoff|release [--write]  Generate engineer-readable Harness reports in docs/reports/
+  aw trace check|list  Traceability across REQ, DSL, Plan, AT-T, TP, Bug, Changelog, Harness records
+  aw metrics init|record|summary|check  DORA/flow delivery metrics and summary
+  aw ops init|slo|incident|incident-close|runbook|gate|check  SLO, incident, runbook records and ops gate
+  aw agents init|assign|handoff|review|gate|check  Multi-agent role, handoff, review records and collaboration gate
+  aw sync init|push|pull|status|check  Cross-project frontend/backend agent synchronization via shared harness
+  aw req new <slug> "title"   Record spoken/new requirement in unified REQ table
+  aw req change <AT-T> "summary"  Record dev-time requirement change and backwrite DSL/Plan/ATOMIC
+  aw next              Next AT-T* (requires confirm + gates)
+  aw task brief|confirm|start|blocked|split|complete|done   Task lifecycle (see: aw task --help)
+  aw paste task        Full single-task prompt for Agent
+  aw verify [--task] [--run-e2e]   Run PROJECT_CONFIG / task Verify commands
+  aw handoff [focus] [--write|--check]  Print/write/check PROJECT_HANDOFF
+  aw hooks             Install .githooks (pre-commit)
+  aw adapters [--all]  IDE rules: claude/codex/copilot/cursor/windsurf/cline/continue
+  aw sync-skill        Install ~/.cursor/skills/agent-workflow (Cursor only)
+  aw tp list|show|new|link  Test plans ↔ AT-T (Verify: TP:path or ; separated)
+  aw memory init|add|chat|list|search|show|archive|inject
+  aw bug add|list      Record every bug/suspected bug in docs/handoff/AI_BUG_LOG.md
+  aw paste session|dev|dsl-write|plan-write
+
+Docs: agent-workflow/INVOCATION.md · agent-workflow/PRODUCT_INPUT_WORKFLOW.md
+EOF
+    ;;
+  *)
+    echo "Unknown command: $CMD (try: aw help)" >&2
+    exit 1
+    ;;
+esac

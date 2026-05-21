@@ -1,0 +1,233 @@
+# 调用说明（工具无关 · 真源）
+
+**本文件与 `scripts/*.sh` 适用于任意 AI 编码工具**（Claude Code、OpenAI Codex、GitHub Copilot、Cursor、Windsurf、Cline、Continue、网页对话等）。  
+工具专属挂载见 [`adapters/README.md`](./adapters/README.md) — **仅指针，不替代本文流程。**
+
+```bash
+./scripts/aw install . --adapters   # 推荐：装入包 + 各 IDE 入口文件
+./scripts/aw adapters --all         # 已 install 后补装适配器
+```
+
+---
+
+## 一句话流程
+
+```text
+install/init → reference/ → aw dsl → DSL 已审 → 选择项目类型（GitHub 仓库 / 本地 Git 仓库）+ 构建目标（前端/后端/前后端）→ aw plan → Plan 可执行 → aw confirm → ENGINEERING_INDEX.md → aw next → AICODING 写代码 → verify → CHANGELOG/Git → handoff
+```
+
+## 闭环管理目标
+
+每个大需求和每个 AT-T 完成前，必须能回答并留痕：
+
+| 目标 | 必备证据 |
+|------|----------|
+| **完整性** | REQ / DSL / Plan / ATOMIC / 测试计划覆盖需求描述、页面结构、交互行为、事件、联动边界、验收和非目标 |
+| **可追溯性** | 代码 diff 能追到 REQ / DSL / Plan / AT-T；Bug 进 `AI_BUG_LOG.md`；对外可见变更进 `CHANGELOG [Unreleased]`；按确认结果形成 Git 提交 |
+| **可维护性** | `docs/ENGINEERING_RULES.md`、成熟方案选择、必要代码注释、测试、`docs/FILE_INDEX.md` 与实现保持一致 |
+| **可交接性** | `docs/handoff/PROJECT_HANDOFF.md`、可复用 Memory、验证证据、遗留风险、下一步、提交/版本记录状态可供新会话或人类工程师接手 |
+
+缺任一项时，不得口头宣布完成；要么补齐，要么在 REQ / Bug / Handoff 中写明例外、责任人和后续动作。
+
+---
+
+## 统一 CLI（推荐）
+
+在仓库根（已拷贝 `scripts/aw` 或 `scripts/aw.sh`）：
+
+```bash
+chmod +x scripts/aw scripts/*.sh
+./scripts/aw install .    # 首次从源码仓装入目标库（可选）
+./scripts/aw init
+./scripts/aw demo          # 可选：临时目录演示完整路径
+./scripts/aw dashboard     # 可选：只读终端视图
+./scripts/aw memory inject # 可选：跨会话记忆摘要
+./scripts/aw status --json # 可选：机器可读状态
+./scripts/aw capabilities --json # 可选：机器可读能力摘要
+./scripts/aw config init --project-kind 1 --github-url https://github.com/<owner>/<repo> # 1 = GitHub 仓库
+# 或：./scripts/aw config init --project-kind 2 # 2 = 本地 Git 仓库，无需 GitHub 地址
+./scripts/aw config init --build-target 1 # 1=前端项目；2=后端项目；3=前后端项目
+./scripts/aw rules init && ./scripts/aw rules discover --write && ./scripts/aw rules review # 工程规范：保留团队固定清单，补项目差异
+./scripts/aw dsl          # L1 prompt；L2: aw paste dsl-write；L3: aw dsl apply
+./scripts/aw dsl review docs/dsl/DSL_DRAFT.md --write  # 工程师审阅包
+./scripts/aw approve dsl docs/dsl/DSL_DRAFT.md [--req REQ-...] --plan [--domain frontend|backend]
+./scripts/aw plan apply --plan-file /tmp/PLAN.md --atomic-file /tmp/ATOMIC_TASKS.md --slug xxx
+./scripts/aw approve plan docs/plans/PLAN_xxx.md
+./scripts/aw confirm docs/dsl/<已审>.md docs/plans/<可执行-plan>.md   # 须同时指定 DSL + Plan
+./scripts/aw index              # 仅刷新路径表，不等同任务确认
+./scripts/aw file-index         # 刷新 docs/FILE_INDEX.md 项目代码文件索引
+./scripts/aw check
+./scripts/aw paste dev    # 打印可贴入任意对话的指令块
+```
+
+---
+
+## 对话触发语（各工具通用）
+
+人类在**任意** Agent 对话中说：
+
+| 意图 | 示例 |
+|------|------|
+| 初始化 | `按 agent-workflow 初始化` / `aw init` |
+| 一键设置 | `aw setup` |
+| 诊断 | `aw doctor` |
+| 演示 | `aw demo` |
+| 仪表盘 | `aw dashboard` |
+| 能力摘要 | `aw capabilities` |
+| 机器能力摘要 | `aw capabilities --json` |
+| 机器状态 | `aw status --json` |
+| 升级 | `aw upgrade` |
+| 移除集成 | `aw remove` |
+| 记忆 | `aw memory add/search/inject`；记住聊天用 `aw memory chat` |
+| 工程规范 | `aw rules init|discover|review|check`（默认带团队前端/后端/统一 AI 规范清单，项目内补差异） |
+| 生成 DSL | `生成 DSL` / `aw dsl` |
+| 生成 DSL 套件 | `aw dsl suite <slug> "title"`（复杂项目，多维规格） |
+| DSL 工程师审阅 | `aw dsl review <dsl> --write` |
+| 生成 Plan | `aw approve dsl <dsl> --plan` / `生成 Plan` / `aw plan`（须 DSL 已审） |
+| 研发中计划变更 | 小变更用 `aw plan change --summary "..."`；同范围新增任务用 `aw plan task-add --title "..."`；任务过大用 `aw task split <AT-T> --into "A; B"`；大范围变化新建 Plan / ATOMIC 后重新 approve/confirm |
+| 选择项目类型 | 任务拆分前执行 `aw config init --project-kind 1 --github-url ...` 或 `aw config init --project-kind 2`；1 = GitHub 仓库，2 = 本地 Git 仓库 |
+| 选择构建目标 | DSL 已审后、Plan 生成前执行 `aw config init --build-target 1|2|3`；1=前端项目，2=后端项目，3=前后端项目 |
+| 定向生成任务 | `aw approve dsl <dsl> --plan --domain frontend` / `--domain backend` |
+| 任务确认 | `任务确认` / `aw confirm` → 生成 `ENGINEERING_INDEX.md` |
+| 研发 | `aw next` → `aw task brief` → 需求沟通确认 → `aw task confirm` → `aw task start` → `aw paste task` → `aw task complete` |
+| 子任务需求确认 | `aw task brief <AT-T>` → 工程师确认后 `aw task confirm <AT-T> "已确认：..."` |
+| 口述新增需求 | `aw req new <slug> "标题" --type 口述新增 --impact "..." --acceptance "..."` |
+| 研发中需求变更 | `aw req change <AT-T> "摘要" --impact "..." --acceptance "..."` → 回写 REQ / DSL / Plan / ATOMIC → 重新 brief/confirm |
+| 阻塞任务 | `aw task blocked <AT-T>` |
+| 完成任务 | `aw task complete <AT-T>`（自动验证；失败写 `AI_BUG_LOG.md`） |
+| 阶段性提交提醒 | 每个大需求 / AT-T 完成后询问是否提交当前分支；同意后 `aw commit --task <AT-T> ... --execute` |
+| Bug 留痕 | `aw bug add "摘要" --source chat|test|review|runtime|prod --scope <范围>` |
+| 版本记录 | `aw changelog add --type Changed --message "..."`；也可在提交助手中用 `aw commit --changelog "..."` 写入 `[Unreleased]` |
+| 执行审计 | `aw audit add --task <AT-T> --action "..." --result "..." --evidence "..."`，记录 AI 关键动作、命令、结果和确认点 |
+| Policy 门禁 | `aw policy check`；高风险路径、新依赖、生产/数据库/安全/破坏性变更用 `aw policy decision ...` 留痕；严格阻断用 `aw policy gate --strict` |
+| Policy diff | `aw policy diff [--staged|--all]` 检查 git diff 中的高风险路径和依赖文件变化 |
+| 安全与依赖 | `aw security finding "..."` 记录安全发现；`aw security dependency "pkg" --version ... --purpose ...` 记录依赖准入 |
+| 安全扫描适配 | `aw security scan` 检测可用 secret/SCA/SAST 工具并建议命令；`aw security scan --run` 执行已安装扫描器 |
+| 服务目录 | `aw service-catalog add "module" ...` 维护 `docs/SERVICE_CATALOG.md` |
+| 服务目录发现 | `aw service-catalog discover` 输出候选服务/模块，并提示入口、API、数据、依赖、端口/脚本、日志/观测；`--write` 写入候选项 |
+| 发布闭环 | `aw release record ...` 记录环境、发布、验证、回滚、CHANGELOG/tag；`aw release flag ...` 记录 Feature Flag |
+| 发布门禁 | `aw release gate [--run-verify] [--run-security] [--strict-policy] [--strict-report]` 聚合 CHANGELOG、Policy、Security、Service Catalog、环境、Ops、Agents、Metrics、报告门禁与可选验证 |
+| 严格报告发布门禁 | `aw release gate --strict-report` 要求最近 release 报告存在且关键快照完整 |
+| 工程报告 | `aw report handoff|release [--write]` 生成交接 / 发布审查报告，落盘到 `docs/reports/` |
+| 发布报告 | `aw report release [--write]` 生成发布审查报告，包含 release gate、trace check、metrics summary 和服务发现快照 |
+| 报告门禁 | `aw report check [--strict]` 检查最近交接 / 发布报告是否存在且关键章节完整；严格模式可作为交接 / 发布阻断项 |
+| Feature Flag 生命周期 | `aw release flag-check` 检查 flag 是否有清理计划 |
+| 交付度量 | `aw metrics record --type deploy|change|failure|recovery ...` 记录 DORA / Flow 指标；`aw metrics summary` 输出交付健康摘要 |
+| 可靠性 / 事故 | `aw ops slo|incident|incident-close|runbook ...` 记录 SLO、事故、恢复闭环、Runbook；`aw ops gate` 检查未关闭高危事故 |
+| 多 Agent 协作 | `aw agents assign|handoff|review ...` 记录角色、文件边界、交接和评审结论；`aw agents gate` 检查阻断评审和路径重叠，`--strict` 可阻断冲突 |
+| 多 Agent 严格门禁 | `aw agents gate --strict` 发现 allowed paths 重叠时阻断，要求先 handoff 或重新分配文件边界 |
+| 跨项目前后端同步 | `aw sync init <harness-dir> --project <name> --agent <name>` 配置共享同步中心；`aw sync baseline` 显示 / 初始化共享 DSL、协作 Plan、接口契约基线路径；`aw sync board` 生成 / 查看共享任务看板；`aw sync event --type ...` 编排任务完成、需求变更、阻塞、问题、契约、Bug、决策和交接；`aw sync change <AT-T> "summary" --to <agent> --impact "..." --acceptance "..."` 是需求变更快捷入口；`aw sync inbox` 汇总对方事件；`aw sync pull` 拉取其他项目快照到只读 inbox；`aw sync push --task <AT-T>` 发布本项目 DSL / Plan / REQ / Handoff / Agents / Bug / TP / Security 快照 |
+| 追溯链检查 | `aw trace check` 检查 REQ、DSL、Plan、AT-T、TP、Bug、Changelog 和 Harness 记录是否断链 |
+| 验证 | `aw verify` / `aw verify --task AT-T…` / `aw verify --run-e2e` |
+| Plan 校验 | `aw check plan` |
+| Plugin 校验 | `aw check plugin` |
+| Memory 校验 | `aw check memory` |
+| 项目配置 | `aw check config`（占位符检测） |
+| 项目配置填写 | `aw config init --project-kind 1|2 --build-target 1|2|3 --lint ...` |
+| CI 模板 | `aw ci install` |
+| 项目代码文件索引 | `aw file-index` → `docs/FILE_INDEX.md`（新增 / 删除 / 重命名前端、后端、共享、测试、运行配置代码文件时刷新；脚本/模板/文档只是辅助索引） |
+| Plan 落盘 | `aw paste plan-write` / `aw plan write` / `aw plan apply` |
+| 多 ATOMIC | `aw atomic list` / `aw atomic use <slug>` |
+| 多 DSL / Plan | `aw dsl list/use` · `aw plan list/use` |
+| 提交助手 | `aw commit -m "feat(AT-T…): …" --changelog "Changed: ..."`（默认不执行 git commit） |
+| DSL 落盘 | `aw dsl write` / `aw paste dsl-write` / `aw dsl apply` |
+| 测试计划 | `aw tp new` · `aw tp link <AT-T> <TP>` · `aw check tp` · Verify 列 `TP:path` |
+| Git 提交 | `aw commit --task <AT-T> --changelog "..." -m "type(<AT-T>): 摘要"` → 版本记录 + 验证 + 建议提交；工程师确认或 `--execute` 后才真正提交 |
+| 交接 | `aw handoff "本轮目标"` 生成草稿；审阅后 `aw handoff "本轮目标" --write` 落盘；新会话前 `aw handoff --check` |
+| 闭环检查 | 进入下一大需求 / AT-T 前，核对完整性、可追溯性、可维护性、可交接性；缺口写入 REQ / Bug / Handoff |
+
+Agent 应：**先读本文 + `PRODUCT_INPUT_WORKFLOW.md`**，再执行对应 `scripts/aw` 子命令或等价步骤。
+
+前后端分成两个项目时，先读 [`CROSS_PROJECT_SYNC.md`](./CROSS_PROJECT_SYNC.md)：共享 DSL / 协作 Plan 放在同步中心 `global/dsl/` 和 `global/plans/`，共享任务看板放在 `global/plans/TASK_BOARD.md`，本项目 DSL / Plan 是执行派生；`aw sync pull` 只导入对方快照到 `docs/sync/inbox/`，不得直接覆盖本项目 DSL / Plan / 代码；接口、字段、权限、错误码或阻塞变化必须在本项目重新通过 REQ / Bug / Handoff 落账后再 `aw sync push`。
+
+写入 REQ / Bug / TP / DSL / Plan 的 CLI 命令成功后会自动以扫描模式刷新 `ENGINEERING_INDEX.md`；这不等同于 `aw confirm`，不会改变任务确认状态。
+
+## Handoff 与 Memory 边界
+
+| 功能 | 用途 | 命令 / 文件 |
+|------|------|-------------|
+| Handoff | 当前交接：目标、进度、阻塞、下一步、待确认 | `docs/handoff/PROJECT_HANDOFF.md` / `aw handoff` |
+| Memory | 长期复用：稳定事实、决策、偏好、流程、风险、聊天摘要 | `docs/memory/` / `aw memory add|chat|search|inject` |
+
+规则：Handoff 写过程状态；Memory 写可复用结论和聊天摘要。只有当 Handoff 里的结论未来会反复用，才提炼成 `aw memory add`。当用户要求记住聊天时，使用 `aw memory chat` 保存摘要、决策、待办、待确认和关联对象；不要把整段 Handoff、完整逐字聊天或 secret 写入 Memory。
+
+`aw handoff "focus"` 会自动读取当前 DSL / Plan / ATOMIC / 任务 / REQ / Bug / 项目配置 / Git 状态并输出可审阅草稿。推荐先看草稿：
+
+```bash
+./scripts/aw handoff "本轮目标" > /tmp/PROJECT_HANDOFF.md
+```
+
+人工审阅后可直接落盘并自动备份旧文件：
+
+```bash
+./scripts/aw handoff "本轮目标" --write
+./scripts/aw handoff --check
+```
+
+等价占位示例：`aw handoff "focus" --write`。
+
+---
+
+## Agent 必读（按阶段）
+
+| 阶段 | 文档 |
+|------|------|
+| 0 Reference→DSL→Plan | [`PRODUCT_INPUT_WORKFLOW.md`](./PRODUCT_INPUT_WORKFLOW.md) |
+| A–E 写代码 | [`AICODING_WORKFLOW.md`](./AICODING_WORKFLOW.md) |
+| 规则面 | [`AGENT_RULES.md`](./AGENT_RULES.md) |
+| 栈/命令 | 仓库 `docs/PROJECT_CONFIG.md` |
+| 工程规范 | 仓库 `docs/ENGINEERING_RULES.md`（团队固定清单 + 项目特有差异） |
+| 质量 | [`VERSION_CHANGELOG_QUALITY_LOOP.md`](./VERSION_CHANGELOG_QUALITY_LOOP.md) |
+| 交接 | 仓库 `docs/handoff/PROJECT_HANDOFF.md` |
+| 记忆 | 仓库 `docs/memory/INDEX.md`，按需 `aw memory inject` |
+
+---
+
+## 硬闸门（所有工具）
+
+1. 未 init → 建议运行 `./scripts/aw init`。
+2. DSL **状态 ≠ 已审** → 只改文档，**不写业务代码**。
+3. 禁止编造 `reference/`、`docs/dsl/` 下不存在的路径。
+4. 代码实现遵守 `docs/ENGINEERING_RULES.md`；验证以 `docs/PROJECT_CONFIG.md` 命令 + §11 真实环境为准。
+5. 大需求 / AT-T 未完成闭环检查（完整性、可追溯性、可维护性、可交接性）前，不进入下一项实现。
+
+---
+
+## 新会话粘贴块（复制到任意 Chat）
+
+```text
+请按本仓库 agent-workflow 工作流执行。
+先读：agent-workflow/INVOCATION.md、agent-workflow/PRODUCT_INPUT_WORKFLOW.md
+真源：docs/handoff/PROJECT_HANDOFF.md、docs/requirements/INDEX.md、docs/dsl/、docs/plans/
+本轮：<一句话任务>
+闸门：DSL 非「已审」不写业务代码。
+```
+
+运行 `./scripts/aw paste session` 可打印带路径的完整版。
+
+---
+
+## IDE 适配（一览）
+
+| 工具 | 入口文件 | 安装 |
+|------|----------|------|
+| Claude Code | `CLAUDE.md` | `aw adapters --claude` |
+| Codex | `AGENTS.md` | `aw adapters --codex` |
+| Copilot / VS Code | `.github/copilot-instructions.md` | `aw adapters --copilot` |
+| Cursor | `.cursor/rules/agent-workflow.mdc` | `aw adapters --cursor` |
+| Windsurf | `.windsurfrules` | `aw adapters --windsurf` |
+| Cline | `.clinerules` | `aw adapters --cline` |
+| Continue | `.continue/rules/agent-workflow.md` | `aw adapters --continue` |
+| 任意对话 | — | `aw paste session` |
+
+Windows / WSL / Git Bash 见 [`WINDOWS.md`](./WINDOWS.md)。
+
+## 与 Cursor Skill 的关系
+
+| 载体 | 角色 |
+|------|------|
+| **`agent-workflow/` + `scripts/aw`** | **跨工具真源**（进 Git） |
+| 各 IDE 规则文件 | 指向真源的**薄适配** |
+| `~/.cursor/skills/agent-workflow/` | **仅 Cursor 可选** Skill，见 [`adapters/cursor.md`](./adapters/cursor.md) |
+
+**不要**把流程只写在某一 IDE 私有目录而不进 `agent-workflow/`。

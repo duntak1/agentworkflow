@@ -1,0 +1,1371 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AgentWorkflow Skills 使用手册</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b12;
+      --surface: #0d111b;
+      --panel: #111827;
+      --panel-2: #172033;
+      --line: #273244;
+      --line-strong: #38465c;
+      --text: #e6edf7;
+      --muted: #9aa8bb;
+      --accent: #7dd3fc;
+      --accent-2: #5eead4;
+      --warn: #facc15;
+      --danger: #fb7185;
+      --ok: #86efac;
+      --code: #0a0f1a;
+      --shadow: rgba(0, 0, 0, .38);
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      line-height: 1.65;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .layout {
+      display: grid;
+      grid-template-columns: 290px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 0 22px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8, 11, 18, .86);
+      backdrop-filter: blur(18px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 220px;
+      color: var(--text);
+      font-weight: 750;
+      letter-spacing: 0;
+    }
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      border: 1px solid rgba(125, 211, 252, .35);
+      background: linear-gradient(135deg, rgba(99, 102, 241, .35), rgba(14, 165, 233, .18));
+      color: #e0f2fe;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+    }
+    .version {
+      border: 1px solid rgba(129, 140, 248, .5);
+      background: rgba(79, 70, 229, .18);
+      color: #c4b5fd;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .topnav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      flex: 1;
+      min-width: 0;
+    }
+    .topnav a {
+      color: #a8b3c7;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .topnav a:hover { color: var(--text); text-decoration: none; }
+    .top-actions { display: flex; gap: 8px; align-items: center; }
+    .top-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 7px 10px;
+      color: #cbd5e1;
+      background: rgba(17, 24, 39, .75);
+      font-size: 13px;
+    }
+    .top-button:hover {
+      border-color: var(--line-strong);
+      color: #ffffff;
+      text-decoration: none;
+    }
+    aside {
+      position: sticky;
+      top: 60px;
+      height: calc(100vh - 60px);
+      overflow: auto;
+      border-right: 1px solid var(--line);
+      background: #0b1019;
+      padding: 22px 18px;
+    }
+    aside h1 {
+      font-size: 18px;
+      line-height: 1.3;
+      margin: 0 0 8px;
+    }
+    aside p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    nav a {
+      display: block;
+      padding: 7px 10px;
+      margin: 2px 0;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    nav a:hover {
+      color: var(--text);
+      background: #172033;
+      text-decoration: none;
+    }
+    main {
+      max-width: 1240px;
+      padding: 0 44px 80px;
+    }
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 60px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 50% 18%, rgba(99, 102, 241, .3), transparent 22%),
+        radial-gradient(circle at 28% 42%, rgba(14, 165, 233, .12), transparent 18%),
+        linear-gradient(180deg, rgba(11, 16, 28, .92) 0%, rgba(8, 11, 18, .98) 100%);
+      border-width: 0 0 1px;
+      border-radius: 0;
+      padding: 72px 34px 64px;
+      box-shadow: none;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .5;
+      background-image:
+        radial-gradient(circle, rgba(125, 211, 252, .55) 1px, transparent 1.5px),
+        linear-gradient(rgba(125, 211, 252, .04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(125, 211, 252, .04) 1px, transparent 1px);
+      background-size: 160px 160px, 120px 120px, 120px 120px;
+      background-position: 20px 30px, 0 0, 0 0;
+      mask-image: radial-gradient(circle at center, black 0%, transparent 78%);
+      pointer-events: none;
+    }
+    .hero > * { position: relative; z-index: 1; }
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      border: 1px solid rgba(129, 140, 248, .45);
+      background: rgba(79, 70, 229, .2);
+      color: #a5b4fc;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-weight: 650;
+      font-size: 14px;
+      margin-bottom: 34px;
+    }
+    .hero-kicker::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #818cf8;
+      box-shadow: 0 0 18px #818cf8;
+    }
+    .terminal-banner {
+      width: min(460px, 92%);
+      border: 1px solid rgba(148, 163, 184, .22);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.1), transparent 24%),
+        #05070c;
+      color: #e5e7eb;
+      padding: 13px 18px;
+      margin-bottom: 28px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.35;
+      text-align: right;
+      letter-spacing: .08em;
+      box-shadow: 0 24px 80px rgba(79, 70, 229, .22);
+    }
+    .hero h2 {
+      max-width: 900px;
+      font-size: clamp(42px, 6vw, 76px);
+      line-height: 1.08;
+      margin: 0 0 22px;
+      letter-spacing: 0;
+    }
+    .hero h2 span {
+      display: block;
+      color: #60a5fa;
+      text-shadow: 0 0 30px rgba(37, 99, 235, .45);
+    }
+    .hero p {
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 18px;
+      margin: 0;
+    }
+    .badge-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 34px; }
+    .badge {
+      border: 1px solid rgba(125, 211, 252, .35);
+      color: #bae6fd;
+      background: rgba(14, 165, 233, .12);
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 34px;
+    }
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-width: 150px;
+      padding: 14px 22px;
+      border-radius: 9px;
+      border: 1px solid rgba(129, 140, 248, .45);
+      background: linear-gradient(135deg, #6366f1, #2563eb);
+      color: #ffffff;
+      font-weight: 750;
+      box-shadow: 0 18px 38px rgba(37, 99, 235, .28);
+    }
+    .cta.secondary {
+      background: rgba(15, 23, 42, .62);
+      color: #dbeafe;
+      border-color: var(--line);
+      box-shadow: none;
+    }
+    .cta:hover { text-decoration: none; filter: brightness(1.08); }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 0;
+      margin-top: 58px;
+      width: min(760px, 100%);
+    }
+    .stat {
+      padding: 0 22px;
+      border-right: 1px solid rgba(148, 163, 184, .18);
+    }
+    .stat:last-child { border-right: 0; }
+    .stat strong {
+      display: block;
+      color: #818cf8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+    .stat span {
+      display: block;
+      color: #8fa0b8;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    section {
+      margin-top: 34px;
+      padding-top: 4px;
+    }
+    section#overview { margin-top: 42px; }
+    h2 {
+      font-size: 25px;
+      margin: 0 0 14px;
+      letter-spacing: 0;
+    }
+    h3 {
+      font-size: 18px;
+      margin: 24px 0 10px;
+      letter-spacing: 0;
+    }
+    h4 {
+      font-size: 15px;
+      margin: 18px 0 8px;
+      color: #bfdbfe;
+    }
+    p, li { color: #d3dbe7; }
+    .muted { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .card h3, .card h4 { margin-top: 0; }
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: rgba(14, 165, 233, .1);
+      padding: 13px 15px;
+      border-radius: 8px;
+      margin: 14px 0;
+    }
+    .warn {
+      border-left-color: var(--warn);
+      background: rgba(250, 204, 21, .1);
+    }
+    .danger {
+      border-left-color: var(--danger);
+      background: rgba(251, 113, 133, .1);
+    }
+    code {
+      background: #0b1220;
+      border: 1px solid #29364a;
+      border-radius: 5px;
+      color: #bae6fd;
+      padding: 1px 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .92em;
+    }
+    pre {
+      background: var(--code);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+      overflow: auto;
+      color: #dbeafe;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.025);
+    }
+    pre code {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      color: inherit;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 20px;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #172033;
+      color: #e6edf7;
+      font-weight: 650;
+    }
+    tr:nth-child(even) td { background: rgba(255,255,255,.018); }
+    tr:last-child td { border-bottom: 0; }
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 16px 0;
+    }
+    .step {
+      min-width: 138px;
+      flex: 1 1 138px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 10px;
+      padding: 12px;
+      position: relative;
+    }
+    .step strong {
+      display: block;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+    .step span { color: var(--muted); font-size: 13px; }
+    .arrow {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .swimlane {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 14px 0;
+    }
+    .lane-title {
+      background: #172033;
+      padding: 14px;
+      font-weight: 700;
+      color: #e6edf7;
+      border-right: 1px solid var(--line);
+    }
+    .lane-body {
+      padding: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      align-items: center;
+    }
+    .pill {
+      border: 1px solid var(--line);
+      background: #0d1524;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: #dbeafe;
+      font-size: 13px;
+    }
+    .checklist li { margin: 6px 0; }
+    .kbd {
+      display: inline-block;
+      border: 1px solid #334155;
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      padding: 1px 6px;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+    .footer {
+      margin-top: 46px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 900px) {
+      .topbar { position: relative; height: auto; align-items: flex-start; flex-wrap: wrap; padding: 14px 18px; }
+      .brand { min-width: 0; }
+      .topnav { order: 3; flex-basis: 100%; justify-content: flex-start; overflow: auto; gap: 16px; }
+      .top-actions { margin-left: auto; }
+      .layout { grid-template-columns: 1fr; }
+      aside { position: relative; top: 0; height: auto; }
+      main { padding: 0 18px 60px; }
+      .hero { min-height: auto; padding: 56px 16px 46px; }
+      .hero p { font-size: 16px; }
+      .hero-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 24px; }
+      .stat:nth-child(2) { border-right: 0; }
+      .grid, .grid.two { grid-template-columns: 1fr; }
+      .swimlane { grid-template-columns: 1fr; }
+      .lane-title { border-right: 0; border-bottom: 1px solid var(--line); }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#overview" aria-label="AgentWorkflow 首页">
+      <span class="brand-mark">AW</span>
+      <span>AgentWorkflow</span>
+      <span class="version">v1.1</span>
+    </a>
+    <nav class="topnav" aria-label="顶部导航">
+      <a href="#overview">概览</a>
+      <a href="#install">快速开始</a>
+      <a href="#product-path">研发路径</a>
+      <a href="#sync">前后端同步</a>
+      <a href="#commands">CLI</a>
+      <a href="#prompts">提示词</a>
+    </nav>
+    <div class="top-actions">
+      <a class="top-button" href="#commands">命令参考</a>
+      <a class="top-button" href="#prompts">提示词大全</a>
+    </div>
+  </header>
+  <div class="layout">
+    <aside>
+      <h1>AgentWorkflow Manual</h1>
+      <p>本地 HTML 使用手册 · 工程化流程版 · 面向工程师与 Agent</p>
+      <nav>
+        <a href="#overview">1. 这是什么</a>
+        <a href="#roles">2. 工程师与 Agent 分工</a>
+        <a href="#install">3. 安装与初始化</a>
+        <a href="#scenario-router">4. 按场景选择路线</a>
+        <a href="#product-path">5. 真实产品研发路径</a>
+        <a href="#full-flow">6. 总流程图</a>
+        <a href="#reference">7. Reference 与 DSL</a>
+        <a href="#plan">8. Plan 与任务拆分</a>
+        <a href="#dev">9. 研发阶段</a>
+        <a href="#quality">10. 测试、Bug、变更</a>
+        <a href="#memory">11. Handoff 与 Memory</a>
+        <a href="#rules">12. 工程规范</a>
+        <a href="#harness">13. Engineering Harness</a>
+        <a href="#agents">14. Agent 团队</a>
+        <a href="#sync">15. 前后端双项目同步</a>
+        <a href="#git">16. Git 与版本记录</a>
+        <a href="#daily">17. 工程师日常操作</a>
+        <a href="#commands">18. 命令速查</a>
+        <a href="#prompts">19. 提示词大全</a>
+        <a href="#faq">20. FAQ</a>
+      </nav>
+    </aside>
+    <main>
+      <div class="hero">
+        <div class="hero-kicker">AI 原生 · 真实研发闭环</div>
+        <div class="terminal-banner">AGENTWORKFLOW<br>ENGINEERING HARNESS FOR AI-ASSISTED DELIVERY</div>
+        <h2>让 AI 研发助手<span>真正按工程流程交付</span></h2>
+        <p>AgentWorkflow 是面向真实项目的 AI 研发工作流系统，把参考资料、DSL、研发计划、任务确认、代码开发、测试、Bug、变更、交接、记忆、Git 与前后端同步收进同一套可追溯闭环。</p>
+        <div class="badge-row">
+          <span class="badge">Reference → DSL → Plan → Dev</span>
+          <span class="badge">DSL 未已审不写业务代码</span>
+          <span class="badge">每个 AT-T 开始前先确认需求</span>
+          <span class="badge">Bug / 变更 / Handoff 全留痕</span>
+          <span class="badge">支持前后端双项目同步</span>
+        </div>
+        <div class="hero-actions">
+          <a class="cta" href="#install">▷ 快速开始</a>
+          <a class="cta secondary" href="#product-path">了解工作流</a>
+        </div>
+        <div class="hero-stats" aria-label="产品能力指标">
+          <div class="stat"><strong>20+</strong><span>研发治理能力</span></div>
+          <div class="stat"><strong>DSL</strong><span>先规格后编码</span></div>
+          <div class="stat"><strong>AT-T</strong><span>原子任务执行</span></div>
+          <div class="stat"><strong>Sync</strong><span>跨项目前后端协同</span></div>
+        </div>
+      </div>
+
+      <section id="overview">
+        <h2>1. 这是什么</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>它解决什么</h3>
+            <p>防止 AI 直接猜需求、乱写代码、忘记上下文、漏测试、漏 Bug、漏交接。所有关键动作都落到项目文件中，工程师可以追溯。</p>
+          </div>
+          <div class="card">
+            <h3>它不是什么</h3>
+            <p>它不是后台服务，不会自动监听代码变化；也不是两个 Agent 的实时聊天系统。它是 CLI + 文档 + 流程约束。</p>
+          </div>
+          <div class="card">
+            <h3>核心命令</h3>
+            <p>所有工具共用 <code>./scripts/aw</code>。Codex、Cursor、Claude、Copilot、Windsurf、Cline 都按同一套项目文件协作。</p>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>最重要的规则：</strong>DSL 没有工程师确认成 <code>已审</code> 前，不写业务代码；每个 AT-T 开始前，Agent 必须先问清需求并等待工程师确认。
+        </div>
+      </section>
+
+      <section id="roles">
+        <h2>2. 工程师与 Agent 分工</h2>
+        <table>
+          <thead><tr><th>角色</th><th>负责什么</th><th>不能省略的动作</th></tr></thead>
+          <tbody>
+            <tr><td>工程师 / 产品负责人</td><td>提供需求、确认 DSL、确认计划、确认子任务边界、确认高风险操作和 Git 提交。</td><td>确认关键业务规则、权限、金额、数据口径、接口契约、发布风险。</td></tr>
+            <tr><td>Codex / Agent</td><td>读取项目文件，生成 DSL/Plan，拆任务，执行代码修改，跑验证，记录 Bug/变更/Handoff。</td><td>不得猜需求；不得越过 DSL/Plan/AT-T；不得自动 Git 提交。</td></tr>
+            <tr><td>Reviewer Agent</td><td>只读代码并记录评审，不直接修改业务代码。</td><td>使用 <code>aw agents review</code> 留痕，阻塞项必须写清楚。</td></tr>
+            <tr><td>Tester Agent</td><td>维护测试计划、验证命令、复测和失败记录。</td><td>测试失败必须进入 <code>AI_BUG_LOG.md</code>。</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="install">
+        <h2>3. 安装与初始化</h2>
+        <h3>在业务项目里安装</h3>
+        <pre><code># 在 agentworkflow 源码仓或 skill 包里执行
+./scripts/aw install /path/to/your-project --adapters
+
+cd /path/to/your-project
+chmod +x scripts/aw scripts/*.sh
+./scripts/aw init
+./scripts/aw status
+./scripts/aw dashboard</code></pre>
+        <h3>配置项目类型与构建目标</h3>
+        <pre><code># GitHub 仓库
+./scripts/aw config init --project-kind 1 --github-url https://github.com/owner/repo
+
+# 或本地 Git 仓库
+./scripts/aw config init --project-kind 2
+
+# 构建目标：1=前端，2=后端，3=前后端
+./scripts/aw config init --build-target 1</code></pre>
+        <div class="warn callout">
+          <strong>注意：</strong>这些配置不是装饰信息。后续 Plan 拆分、验证命令、GitHub 引导、任务执行都会读取 <code>docs/PROJECT_CONFIG.md</code>。
+        </div>
+      </section>
+
+      <section id="scenario-router">
+        <h2>4. 按场景选择路线</h2>
+        <p>开始真实项目之前，先让工程师选择项目形态。不同形态的目录、Agent 角色、同步方式和提示词不同，不能混用。</p>
+        <table>
+          <thead><tr><th>项目场景</th><th>推荐目录</th><th>Agent 会做什么</th><th>工程师怎么启动</th></tr></thead>
+          <tbody>
+            <tr><td>仅前端项目</td><td><code>project-frontend/</code></td><td>只生成前端 DSL/Plan/AT-T，重点确认页面、路由、状态、接口契约、组件和验收。</td><td>使用 <code>19.6</code> 提示词，构建目标选 <code>1=前端项目</code>。</td></tr>
+            <tr><td>仅后端项目</td><td><code>project-backend/</code></td><td>只生成后端 DSL/Plan/AT-T，重点确认接口、权限、错误码、事务、数据表、消息和验收。</td><td>使用 <code>19.8</code> 提示词，构建目标选 <code>2=后端项目</code>。</td></tr>
+            <tr><td>同电脑前后端两个项目</td><td><code>project-frontend/</code><br><code>project-backend/</code><br><code>project-harness/</code></td><td>前后端各自开发，各自维护本项目事实，通过本地同步中心交换 handoff、REQ、Bug、接口契约。</td><td>使用 <code>19.10</code> 提示词，分别在两个项目会话中声明项目路径和同步中心路径。</td></tr>
+            <tr><td>不同电脑前后端两个项目</td><td>两端各有本地项目；<code>project-harness</code> 是单独 GitHub 仓库。</td><td>每端先拉取 GitHub Harness，再 <code>aw sync pull</code>、<code>aw sync inbox</code>、<code>aw sync board</code>；跨端事项用 <code>aw sync event</code>，经确认后提交 Harness。</td><td>使用 <code>19.11</code> 提示词，先准备 GitHub Harness 仓库。</td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <strong>选择原则：</strong>如果前端和后端有独立仓库、独立启动命令或不同工程师维护，就按两个项目处理；如果它们在一个 monorepo 中统一构建，可以按一个前后端项目处理，但 Plan 仍要拆出 frontend/backend 两类 AT-T。
+        </div>
+      </section>
+
+      <section id="product-path">
+        <h2>5. 真实产品研发路径</h2>
+        <p>真实项目不要从“写代码”开始，而是从需求输入、工程化确认、任务拆分、研发执行、联调验证、发布交接一路闭环。下面是推荐路径。</p>
+        <div class="flow">
+          <div class="step"><strong>0. 项目准备</strong><span>安装 skill、配置项目类型、构建目标、GitHub/本地 Git</span></div><div class="arrow">→</div>
+          <div class="step"><strong>1. 需求输入</strong><span>PRD、原型、接口、旧系统、约束进入 reference</span></div><div class="arrow">→</div>
+          <div class="step"><strong>2. 规格冻结</strong><span>生成 DSL suite，工程师审阅并确认已审</span></div><div class="arrow">→</div>
+          <div class="step"><strong>3. 研发计划</strong><span>按前端/后端/全栈拆 Plan 与 AT-T</span></div><div class="arrow">→</div>
+          <div class="step"><strong>4. 任务执行</strong><span>每个 AT-T 先 brief，确认后编码</span></div><div class="arrow">→</div>
+          <div class="step"><strong>5. 联调验证</strong><span>verify、TP、Bug、REQ change、sync</span></div><div class="arrow">→</div>
+          <div class="step"><strong>6. 发布交接</strong><span>report、release gate、handoff、Git 提交</span></div>
+        </div>
+        <table>
+          <thead><tr><th>阶段</th><th>工程师做什么</th><th>Agent 做什么</th><th>关键产物</th></tr></thead>
+          <tbody>
+            <tr><td>项目准备</td><td>告诉 Agent 项目路径、仓库类型、构建目标、前后端形态。</td><td>执行 <code>aw init</code>、<code>aw config init</code>、<code>aw rules init</code>。</td><td><code>PROJECT_CONFIG.md</code>、<code>ENGINEERING_RULES.md</code></td></tr>
+            <tr><td>需求输入</td><td>上传 PRD、原型、接口文档、现有代码说明。</td><td>读取 <code>reference/manifest.yaml</code>，不编造路径。</td><td><code>reference/inputs/</code></td></tr>
+            <tr><td>规格冻结</td><td>审 DSL，确认需求、页面、交互、事件、边界、验收。</td><td>生成 DSL suite 和 review 包。</td><td><code>docs/dsl/DSL_*/</code></td></tr>
+            <tr><td>研发计划</td><td>确认生成前端、后端或全栈计划。</td><td>生成 Plan 和 ATOMIC_TASKS，等待审批。</td><td><code>docs/plans/</code></td></tr>
+            <tr><td>任务执行</td><td>每个任务开始前确认需求问题。</td><td><code>task brief</code> 后等待确认，再写代码。</td><td>代码 diff、<code>ATOMIC_TASKS</code></td></tr>
+            <tr><td>联调验证</td><td>确认接口、权限、字段、异常态和验收。</td><td>跑验证，记录 Bug / REQ change / Handoff / sync。</td><td><code>TP</code>、<code>AI_BUG_LOG</code>、<code>REQ</code></td></tr>
+            <tr><td>发布交接</td><td>确认是否提交 Git、是否发布、是否交接。</td><td>生成 report、release gate、handoff、changelog。</td><td><code>reports</code>、<code>CHANGELOG</code>、<code>PROJECT_HANDOFF</code></td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <strong>判断是否可以进入下一阶段：</strong>不是看 Agent 说“完成了”，而是看 DSL / Plan / AT-T / TP / Bug / Handoff / Trace 是否都有证据。
+        </div>
+      </section>
+
+      <section id="full-flow">
+        <h2>6. 总流程图</h2>
+        <div class="flow">
+          <div class="step"><strong>Reference</strong><span>上传需求、原型、接口、旧代码资料</span></div><div class="arrow">→</div>
+          <div class="step"><strong>DSL 草稿</strong><span>需求、页面、交互、事件、边界、验收</span></div><div class="arrow">→</div>
+          <div class="step"><strong>DSL 已审</strong><span>工程师确认，不再靠猜</span></div><div class="arrow">→</div>
+          <div class="step"><strong>Plan 可执行</strong><span>拆研发计划与 AT-T</span></div><div class="arrow">→</div>
+          <div class="step"><strong>Confirm</strong><span>DSL + Plan 双确认</span></div><div class="arrow">→</div>
+          <div class="step"><strong>AT-T 开发</strong><span>brief → confirm → start → code</span></div><div class="arrow">→</div>
+          <div class="step"><strong>Verify</strong><span>lint/test/build/e2e/TP</span></div><div class="arrow">→</div>
+          <div class="step"><strong>Handoff / Git</strong><span>交接、版本记录、提交确认</span></div>
+        </div>
+        <div class="swimlane">
+          <div class="lane-title">工程师</div>
+          <div class="lane-body">
+            <span class="pill">提供 reference</span>
+            <span class="pill">确认 DSL</span>
+            <span class="pill">选择前端/后端/全栈</span>
+            <span class="pill">确认 Plan</span>
+            <span class="pill">确认每个 AT-T 需求</span>
+            <span class="pill">确认 Git 提交</span>
+          </div>
+        </div>
+        <div class="swimlane">
+          <div class="lane-title">Agent</div>
+          <div class="lane-body">
+            <span class="pill">生成 DSL/Plan</span>
+            <span class="pill">维护 REQ/ATOMIC</span>
+            <span class="pill">精准改代码</span>
+            <span class="pill">跑验证</span>
+            <span class="pill">记录 Bug/变更</span>
+            <span class="pill">写 Handoff/报告</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="reference">
+        <h2>7. Reference 与 DSL</h2>
+        <p>Reference 是输入材料。DSL 是把需求变成可审阅规格的中间层。复杂项目建议使用多文件 DSL suite。</p>
+        <pre><code>./scripts/aw dsl suite user-center "用户中心"
+# 填写 docs/dsl/DSL_USER_CENTER/
+# 00-requirements.md
+# 10-pages.md
+# 20-interactions.md
+# 30-events.md
+# 40-boundaries.md
+# 90-acceptance.md
+
+./scripts/aw dsl review docs/dsl/DSL_USER_CENTER/INDEX.md --write
+./scripts/aw approve dsl docs/dsl/DSL_USER_CENTER/INDEX.md --plan</code></pre>
+        <table>
+          <thead><tr><th>DSL 文件</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td><code>00-requirements.md</code></td><td>需求描述、目标用户、范围、非目标、约束。</td></tr>
+            <tr><td><code>10-pages.md</code></td><td>页面结构、模块结构、字段、路由。</td></tr>
+            <tr><td><code>20-interactions.md</code></td><td>用户操作、状态变化、异常态、空态。</td></tr>
+            <tr><td><code>30-events.md</code></td><td>事件、触发条件、数据流、异步行为。</td></tr>
+            <tr><td><code>40-boundaries.md</code></td><td>前后端联动边界、接口、权限、错误码、数据口径。</td></tr>
+            <tr><td><code>90-acceptance.md</code></td><td>可检查验收与测试锚点。</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="plan">
+        <h2>8. Plan 与任务拆分</h2>
+        <p>DSL 确认后，再按前端、后端或前后端生成 Plan 和 ATOMIC_TASKS。</p>
+        <pre><code># 只生成前端计划
+./scripts/aw approve dsl docs/dsl/DSL_USER_CENTER/INDEX.md --plan --domain frontend
+
+# 只生成后端计划
+./scripts/aw approve dsl docs/dsl/DSL_USER_CENTER/INDEX.md --plan --domain backend
+
+# Plan 落盘后审批
+./scripts/aw approve plan docs/plans/PLAN_USER_CENTER_FRONTEND.md
+./scripts/aw confirm docs/dsl/DSL_USER_CENTER/INDEX.md docs/plans/PLAN_USER_CENTER_FRONTEND.md</code></pre>
+        <div class="callout">
+          <strong>Confirm 的意义：</strong>只有 DSL 是已审、Plan 是可执行，才能进入业务代码阶段。它会生成工程师索引，但 Agent 不应把 <code>ENGINEERING_INDEX.md</code> 当上下文全文读取。
+        </div>
+        <h3>工程师索引与代码文件索引</h3>
+        <p>确认 DSL 和 Plan 后，AgentWorkflow 会生成两类索引，分别服务于交付追溯和工程师手动优化代码。</p>
+        <table>
+          <thead><tr><th>文件</th><th>读者</th><th>作用</th><th>更新方式</th></tr></thead>
+          <tbody>
+            <tr><td><code>ENGINEERING_INDEX.md</code></td><td>人类工程师</td><td>工程交付总索引，聚合 DSL、Plan、AT-T、REQ、Bug、测试计划、Handoff、发布、追溯和 <code>docs/FILE_INDEX.md</code> 入口。</td><td><code>aw confirm &lt;dsl&gt; &lt;plan&gt;</code> 生成确认态；<code>aw index</code> 仅扫描刷新。写入 REQ / Bug / TP / DSL / Plan 等命令会自动尝试刷新。</td></tr>
+            <tr><td><code>docs/FILE_INDEX.md</code></td><td>人类工程师</td><td>项目代码文件索引。优先列出前端业务代码、后端业务代码、共享代码、测试代码、运行配置，方便工程师查找 AI 写过的代码并手动审查、优化、接手。</td><td><code>aw file-index</code> 生成；新增 / 删除 / 重命名前端、后端、共享、测试或配置代码文件后刷新。</td></tr>
+          </tbody>
+        </table>
+        <div class="warn callout">
+          <strong>边界：</strong><code>ENGINEERING_INDEX.md</code> 和 <code>docs/FILE_INDEX.md</code> 都是给人类工程师看的索引文件。Agent 不应把 <code>ENGINEERING_INDEX.md</code> 当上下文全文读取；需要查代码时应根据任务、DSL、Plan 和工程师指令精确读取相关文件。
+        </div>
+      </section>
+
+      <section id="dev">
+        <h2>9. 研发阶段</h2>
+        <p>每个子任务都必须按同一条生命周期执行。</p>
+        <div class="flow">
+          <div class="step"><strong>aw next</strong><span>找下一项 AT-T</span></div><div class="arrow">→</div>
+          <div class="step"><strong>task brief</strong><span>输出需求沟通包</span></div><div class="arrow">→</div>
+          <div class="step"><strong>工程师确认</strong><span>问清边界和验收</span></div><div class="arrow">→</div>
+          <div class="step"><strong>task start</strong><span>进入编码</span></div><div class="arrow">→</div>
+          <div class="step"><strong>task complete</strong><span>验证并更新状态</span></div>
+        </div>
+        <pre><code>./scripts/aw next
+./scripts/aw task brief AT-T1-001
+# 工程师确认后
+./scripts/aw task confirm AT-T1-001 "已确认：范围、验收、非目标、接口字段。"
+./scripts/aw task start AT-T1-001
+./scripts/aw paste task
+# 编码完成后
+./scripts/aw task complete AT-T1-001</code></pre>
+        <div class="danger callout">
+          <strong>禁止：</strong>没有 <code>task confirm</code> 就开始写代码。需求不清楚时，Agent 必须继续追问，不能靠猜。
+        </div>
+      </section>
+
+      <section id="quality">
+        <h2>10. 测试、Bug、变更</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3>测试计划</h3>
+            <pre><code>./scripts/aw tp new user-list "用户列表测试"
+./scripts/aw tp link AT-T1-001 docs/quality/test-plans/TP-xxx.md
+./scripts/aw verify --task AT-T1-001 --run-e2e</code></pre>
+          </div>
+          <div class="card">
+            <h3>Bug 记录</h3>
+            <pre><code>./scripts/aw bug add "用户列表接口缺少 avatarUrl" \
+  --source runtime \
+  --scope AT-T1-001</code></pre>
+          </div>
+        </div>
+        <h3>研发中变更</h3>
+        <pre><code>./scripts/aw req change AT-T1-001 "用户状态枚举调整为 enabled|disabled" \
+  --impact "影响筛选和状态展示" \
+  --acceptance "enabled 显示启用，disabled 显示停用"</code></pre>
+        <p>研发中变更会回写 REQ / DSL / Plan / ATOMIC，并重置当前任务需求确认，避免 Agent 继续基于旧需求写代码。</p>
+      </section>
+
+      <section id="memory">
+        <h2>11. Handoff 与 Memory</h2>
+        <table>
+          <thead><tr><th>功能</th><th>用途</th><th>命令</th></tr></thead>
+          <tbody>
+            <tr><td>Handoff</td><td>当前目标、进度、阻塞、下一步、风险。</td><td><code>aw handoff "focus" --write</code></td></tr>
+            <tr><td>Memory</td><td>长期复用的稳定结论、偏好、流程、风险。</td><td><code>aw memory add</code></td></tr>
+            <tr><td>Chat Memory</td><td>保存聊天摘要、决策、待办、待确认，不保存逐字全文。</td><td><code>aw memory chat</code></td></tr>
+          </tbody>
+        </table>
+        <pre><code>./scripts/aw handoff "用户中心前端开发进度" --write
+./scripts/aw handoff --check
+./scripts/aw memory chat user-center-discussion "用户中心讨论" \
+  --summary "讨论了用户列表字段和状态枚举" \
+  --decisions "status 使用 enabled|disabled" \
+  --todos "后端确认 avatarUrl 空值规则" \
+  --open "权限失败错误码待确认" \
+  --related "AT-T1-001"</code></pre>
+      </section>
+
+      <section id="rules">
+        <h2>12. 工程规范</h2>
+        <p>工程规范集中在 <code>docs/ENGINEERING_RULES.md</code>。里面包含团队固定前端栈、后端栈、安全底线、注释原则、成熟方案优先、Git 提交流程，以及 <code>ENGINEERING_INDEX.md</code> / <code>docs/FILE_INDEX.md</code> 的维护边界。</p>
+        <pre><code>./scripts/aw rules init
+./scripts/aw rules discover --write
+./scripts/aw rules review
+./scripts/aw check rules</code></pre>
+        <ul class="checklist">
+          <li>前端固定栈：Vue3、Vite、TypeScript、Pinia、Vue Router、Axios、Element Plus、EleAdmin。</li>
+          <li>后端固定栈：Java 8、Spring Boot 2.6.13、Spring Cloud Alibaba、MyBatis-Plus、Redis、Kafka、MinIO、Nacos 等。</li>
+          <li>AI 写代码必须有必要注释，但不能写废话注释。</li>
+          <li>能用成熟方案、官方 SDK、框架内置能力时，不手写脆弱实现。</li>
+          <li>新增、删除、重命名前端、后端、共享、测试或配置代码文件后，刷新 <code>docs/FILE_INDEX.md</code>，方便工程师手动优化代码。</li>
+        </ul>
+      </section>
+
+      <section id="harness">
+        <h2>13. Engineering Harness</h2>
+        <p>Harness 是研发治理层，覆盖审计、策略、安全、服务目录、发布、指标、运维、报告和追溯。</p>
+        <table>
+          <thead><tr><th>能力</th><th>命令</th><th>用途</th></tr></thead>
+          <tbody>
+            <tr><td>Audit</td><td><code>aw audit add/check</code></td><td>记录 AI 动作、命令、结果、人工确认。</td></tr>
+            <tr><td>Policy</td><td><code>aw policy gate --strict</code></td><td>高风险路径、依赖、生产/数据库/安全变更门禁。</td></tr>
+            <tr><td>Security</td><td><code>aw security finding/dependency/scan</code></td><td>安全发现、依赖准入、扫描器适配。</td></tr>
+            <tr><td>Service Catalog</td><td><code>aw service-catalog discover</code></td><td>服务、模块、入口、API、数据、依赖、部署信息。</td></tr>
+            <tr><td>Release</td><td><code>aw release gate</code></td><td>发布、环境、回滚、Feature Flag、报告门禁。</td></tr>
+            <tr><td>Metrics</td><td><code>aw metrics summary</code></td><td>DORA / Flow 指标。</td></tr>
+            <tr><td>Ops</td><td><code>aw ops gate</code></td><td>SLO、事故、Runbook、未关闭高危事故阻断。</td></tr>
+            <tr><td>Report</td><td><code>aw report handoff|release --write</code></td><td>生成工程师可读交接/发布报告。</td></tr>
+            <tr><td>Trace</td><td><code>aw trace check</code></td><td>检查 REQ、DSL、Plan、AT-T、Bug、Changelog 等是否断链。</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="agents">
+        <h2>14. Agent 团队</h2>
+        <p>Agent 团队不是常驻 AI，而是角色、边界、交接和评审记录。它让工程师知道“谁负责什么、能改哪里、交给谁、是否阻塞”。</p>
+        <pre><code>./scripts/aw agents assign \
+  --role developer \
+  --owner frontend-agent \
+  --scope "AT-T-FE-001 用户列表页面" \
+  --allowed "src/views/user,src/api/user,src/router" \
+  --blocked "backend,docs/dsl" \
+  --related AT-T-FE-001
+
+./scripts/aw agents handoff \
+  --from frontend-agent \
+  --to backend-agent \
+  --scope AT-T-FE-001 \
+  --done "页面结构已完成" \
+  --todo "请确认 /api/users 字段" \
+  --risk "字段不一致会导致联调返工" \
+  --evidence "docs/handoff/PROJECT_HANDOFF.md" \
+  --related AT-T-FE-001
+
+./scripts/aw agents gate --strict</code></pre>
+      </section>
+
+      <section id="sync">
+        <h2>15. 前后端双项目同步</h2>
+        <p>当前后端在两个项目或两台电脑上时，用第三个目录或 GitHub 仓库作为同步中心。同步中心不只保存前后端快照，还应保存一份前后端共同确认的共享 DSL 和协作 Plan，避免两边各自拆分后产生歧义。</p>
+        <div class="flow">
+          <div class="step"><strong>同步基线</strong><span>读取 global DSL / Plan / TASK_BOARD</span></div><div class="arrow">→</div>
+          <div class="step"><strong>拉取收件箱</strong><span>sync pull + sync inbox</span></div><div class="arrow">→</div>
+          <div class="step"><strong>事件发布</strong><span>sync event 记录 complete/change/contract 等</span></div><div class="arrow">→</div>
+          <div class="step"><strong>人工确认 Git</strong><span>工程师确认后提交 project-harness</span></div><div class="arrow">→</div>
+          <div class="step"><strong>对方采纳</strong><span>pull/inbox/board 后回写本地事实</span></div>
+        </div>
+        <h3>推荐目录</h3>
+        <pre><code>workspace/
+  project-frontend/
+  project-backend/
+  project-harness/   # 唯一同步中心，可是 GitHub 仓库
+    global/
+      dsl/            # 共享 DSL 基线
+      plans/          # 协作 Plan 基线
+        TASK_BOARD.md # 共享任务看板
+      contracts/      # 共享接口契约
+    projects/
+      frontend/       # 前端快照
+      backend/        # 后端快照</code></pre>
+        <h3>共享基线与本地派生</h3>
+        <table>
+          <thead><tr><th>文件层级</th><th>位置</th><th>作用</th></tr></thead>
+          <tbody>
+            <tr><td>共享 DSL 基线</td><td><code>project-harness/global/dsl/</code></td><td>前后端共同事实：需求、页面/模块、交互、事件、接口边界、权限、错误码、验收、非目标。</td></tr>
+            <tr><td>协作 Plan 基线</td><td><code>project-harness/global/plans/</code></td><td>跨端里程碑、依赖顺序、接口联调点、阻塞关系和验收门槛。</td></tr>
+            <tr><td>共享任务看板</td><td><code>project-harness/global/plans/TASK_BOARD.md</code></td><td>自动汇总前端/后端已 push 的 ATOMIC 任务，让两个 Agent 同时知道双方计划、状态、依赖和验证方式。</td></tr>
+            <tr><td>前端派生计划</td><td><code>project-frontend/docs/dsl/</code><br><code>project-frontend/docs/plans/</code></td><td>前端执行计划：页面、组件、路由、状态、API client、前端 AT-T。</td></tr>
+            <tr><td>后端派生计划</td><td><code>project-backend/docs/dsl/</code><br><code>project-backend/docs/plans/</code></td><td>后端执行计划：接口、权限、数据、事务、消息、后端 AT-T。</td></tr>
+          </tbody>
+        </table>
+        <div class="warn callout">
+          <strong>关键规则：</strong><code>global/dsl/</code> 和 <code>global/plans/</code> 是共同基线；<code>TASK_BOARD.md</code> 是共享任务视图；前端/后端本地 DSL 和 Plan 是派生执行文件，不能与共同基线冲突。修改共享基线必须先让工程师确认，再回写双方本地 REQ / DSL / Plan / ATOMIC。
+        </div>
+        <h3>同步事件类型</h3>
+        <table>
+          <thead><tr><th>事件类型</th><th>什么时候使用</th><th>对方如何处理</th></tr></thead>
+          <tbody>
+            <tr><td><code>complete</code></td><td>一个任务完成，可能解除对方依赖或需要对方联调。</td><td><code>sync inbox</code> 查看证据，必要时更新本地 Plan / ATOMIC。</td></tr>
+            <tr><td><code>change</code></td><td>需求、字段、权限、状态、验收标准变化。</td><td>用 <code>aw req change</code> 采纳到本地，再回写 DSL / Plan / ATOMIC。</td></tr>
+            <tr><td><code>contract</code></td><td>接口契约、DTO、枚举、错误码、分页规则变化。</td><td>更新 API client / Service Catalog / 测试用例，并重新 brief 相关任务。</td></tr>
+            <tr><td><code>question</code></td><td>不确定需求、接口、页面、交互、权限边界。</td><td>先回答并发布新的 <code>decision</code> 或 <code>handoff</code>，不能让对方猜。</td></tr>
+            <tr><td><code>block</code></td><td>当前任务被对方接口、字段、页面或决策阻塞。</td><td>对方优先处理阻塞，或给出替代方案和预计时间。</td></tr>
+            <tr><td><code>bug</code></td><td>跨端 Bug、联调失败或疑似契约不一致。</td><td>本地写入 Bug 记录，修复后用 <code>complete</code> 或 <code>contract</code> 回传。</td></tr>
+            <tr><td><code>decision</code></td><td>跨端共同结论，例如错误码、权限策略、字段默认值。</td><td>双方都更新本地 DSL / Plan / 代码约束。</td></tr>
+            <tr><td><code>handoff</code></td><td>普通交接、进度说明、证据路径。</td><td>只读查看，必要时转成任务、Bug 或需求变更。</td></tr>
+          </tbody>
+        </table>
+        <h3>初始化</h3>
+        <pre><code># 前端项目
+cd workspace/project-frontend
+./scripts/aw sync init ../project-harness --project frontend --agent frontend-agent --role frontend
+./scripts/aw sync baseline
+./scripts/aw sync board
+
+# 后端项目
+cd workspace/project-backend
+./scripts/aw sync init ../project-harness --project backend --agent backend-agent --role backend</code></pre>
+        <h3>日常同步</h3>
+        <pre><code># 前端开始任务前
+./scripts/aw sync pull --from backend
+./scripts/aw sync inbox --from backend
+./scripts/aw sync board
+
+# 后端开始任务前
+./scripts/aw sync pull --from frontend
+./scripts/aw sync inbox --from frontend
+./scripts/aw sync board
+
+# 完成、变更、问题、契约、Bug、阻塞都用事件同步
+./scripts/aw sync event \
+  --type complete \
+  --task AT-T-FE-001 \
+  --to backend-agent \
+  --summary "前端用户列表已完成，等待接口联调" \
+  --impact "影响用户列表接口联调" \
+  --acceptance "后端确认字段并完成联调" \
+  --risk "不处理会阻塞验收" \
+  --evidence "docs/handoff/PROJECT_HANDOFF.md"
+
+# 事件发布后同步共享任务视图
+./scripts/aw sync board</code></pre>
+        <div class="warn callout">
+          <strong>两台电脑时：</strong><code>project-harness</code> 建议是单独 GitHub 仓库。<code>aw sync event</code> 和 <code>aw sync push</code> 只写本地 harness 目录，仍需要在 harness 仓库里 <code>git add</code>、<code>git commit</code>、<code>git push</code>；另一台电脑先 <code>git pull</code>，再 <code>aw sync pull</code>、<code>aw sync inbox</code>、<code>aw sync board</code>。Git 提交和推送必须先问工程师。
+        </div>
+      </section>
+
+      <section id="git">
+        <h2>16. Git 与版本记录</h2>
+        <p>AgentWorkflow 默认不会自动提交 Git。每个大需求或 AT-T 完成后，Agent 必须先问工程师是否提交当前分支。</p>
+        <pre><code># 先写 changelog 并验证，再建议提交
+./scripts/aw commit --task AT-T1-001 --changelog "Changed: 完成用户列表页面"
+
+# 工程师确认后才执行
+./scripts/aw commit --task AT-T1-001 \
+  --changelog "Changed: 完成用户列表页面" \
+  -m "feat(AT-T1-001): add user list page" \
+  --execute</code></pre>
+      </section>
+
+      <section id="daily">
+        <h2>17. 工程师日常操作</h2>
+        <p>真实研发中，工程师不需要记住所有命令，只需要在关键节点用固定提示词驱动 Agent，并检查产物是否落盘。</p>
+        <table>
+          <thead><tr><th>时间点</th><th>工程师说什么</th><th>Agent 必须返回什么</th><th>落盘证据</th></tr></thead>
+          <tbody>
+            <tr><td>新项目第一轮</td><td>说明项目路径、项目类型、本地 Git 或 GitHub、构建目标。</td><td>配置结果、缺失项、下一步，不写业务代码。</td><td><code>docs/PROJECT_CONFIG.md</code></td></tr>
+            <tr><td>需求输入后</td><td>要求生成 DSL suite。</td><td>需求/页面/交互/事件/边界/验收的多文件 DSL，列出待确认问题。</td><td><code>docs/dsl/DSL_*/</code></td></tr>
+            <tr><td>DSL 已确认</td><td>指定生成前端、后端或全栈 Plan。</td><td>Plan、ATOMIC_TASKS、风险、验证方式，等待确认。</td><td><code>docs/plans/</code></td></tr>
+            <tr><td>每个子任务开始前</td><td>让 Agent brief 当前 AT-T，并追问需求边界。</td><td>需求沟通包、非目标、验收、风险、需要确认的问题。</td><td><code>task confirm</code> 记录</td></tr>
+            <tr><td>子任务完成后</td><td>要求跑验证、记录 Bug/变更、写 handoff，并刷新代码文件索引。</td><td>验证结果、失败记录、影响文件、是否更新 <code>docs/FILE_INDEX.md</code>、是否建议提交 Git。</td><td><code>AI_BUG_LOG</code>、<code>PROJECT_HANDOFF</code>、<code>CHANGELOG</code>、<code>docs/FILE_INDEX.md</code></td></tr>
+            <tr><td>阶段确认后</td><td>要求刷新工程师索引。</td><td><code>ENGINEERING_INDEX.md</code> 汇总交付链路，<code>docs/FILE_INDEX.md</code> 指向代码文件。</td><td><code>ENGINEERING_INDEX.md</code>、<code>docs/FILE_INDEX.md</code></td></tr>
+            <tr><td>双项目协作时</td><td>要求先 <code>pull + inbox + board</code>，跨端事项用 <code>sync event</code>。</td><td>收件箱摘要、事件分类、采纳动作、是否需要提交 Harness。</td><td><code>docs/sync/inbox/</code>、<code>docs/sync/SYNC_EVENTS.md</code>、<code>project-harness/</code></td></tr>
+          </tbody>
+        </table>
+        <div class="warn callout">
+          <strong>自动与人工的边界：</strong>Agent 可以在当前会话中自动执行检查、生成文件、同步快照；但需求确认、计划确认、Git 提交、发布、删除/重命名、数据库和安全高风险操作必须由工程师明确确认。
+        </div>
+      </section>
+
+      <section id="commands">
+        <h2>18. 命令速查</h2>
+        <table>
+          <thead><tr><th>阶段</th><th>常用命令</th></tr></thead>
+          <tbody>
+            <tr><td>状态</td><td><code>aw status</code> · <code>aw dashboard</code> · <code>aw capabilities --json</code></td></tr>
+            <tr><td>输入</td><td><code>aw dsl</code> · <code>aw dsl suite</code> · <code>aw dsl review</code> · <code>aw approve dsl</code></td></tr>
+            <tr><td>计划</td><td><code>aw plan</code> · <code>aw plan apply</code> · <code>aw approve plan</code> · <code>aw confirm</code></td></tr>
+            <tr><td>索引</td><td><code>aw index</code> · <code>aw file-index</code> · <code>ENGINEERING_INDEX.md</code> · <code>docs/FILE_INDEX.md</code></td></tr>
+            <tr><td>任务</td><td><code>aw next</code> · <code>aw task brief</code> · <code>aw task confirm</code> · <code>aw task start</code> · <code>aw task complete</code></td></tr>
+            <tr><td>质量</td><td><code>aw verify</code> · <code>aw tp</code> · <code>aw bug</code> · <code>aw req change</code></td></tr>
+            <tr><td>交接</td><td><code>aw handoff --write</code> · <code>aw memory chat</code> · <code>aw report handoff --write</code></td></tr>
+            <tr><td>治理</td><td><code>aw audit</code> · <code>aw policy</code> · <code>aw security</code> · <code>aw service-catalog</code> · <code>aw release</code></td></tr>
+            <tr><td>团队</td><td><code>aw agents assign</code> · <code>aw agents handoff</code> · <code>aw agents review</code> · <code>aw agents gate</code></td></tr>
+            <tr><td>跨项目</td><td><code>aw sync init</code> · <code>aw sync pull</code> · <code>aw sync inbox</code> · <code>aw sync push</code> · <code>aw sync board</code> · <code>aw sync event</code> · <code>aw sync change</code> · <code>aw sync check</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="prompts">
+        <h2>19. 提示词大全</h2>
+        <p>下面的提示词按真实项目场景组织。复制后替换路径、任务 ID、项目名即可。建议工程师在每个新会话第一条消息中给出“项目形态 + 路径 + 当前阶段”。</p>
+        <h3>19.1 新项目接入：先不要写代码</h3>
+        <pre><code>使用 agentworkflow。
+当前项目路径：/path/to/project
+当前是新项目接入阶段，不要写业务代码。
+请按顺序完成：
+1. 检查是否已安装 scripts/aw；没有则说明需要从 agentworkflow 源码安装
+2. 执行 aw status、aw check config、aw rules review
+3. 如果没有初始化，执行 aw init
+4. 引导我确认：这是 GitHub 项目还是本地 Git 项目；构建目标是前端、后端还是前后端
+5. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
+最后输出缺失项清单和下一步建议。</code></pre>
+        <h3>19.2 GitHub / 本地 Git 配置引导</h3>
+        <pre><code>使用 agentworkflow 配置项目来源。
+请先问我并等待回答：
+1. 这是 GitHub 项目还是本地 Git 项目？
+2. 如果是 GitHub 项目，仓库地址是什么？
+3. 当前分支是什么？是否允许后续在大需求完成后询问提交？
+确认后更新 docs/PROJECT_CONFIG.md。
+不要自动提交 Git。</code></pre>
+        <h3>19.3 构建目标选择：前端 / 后端 / 前后端</h3>
+        <pre><code>DSL 生成前，请先引导我确认构建目标：
+1. 仅前端项目
+2. 仅后端项目
+3. 前后端项目
+如果是前后端项目，请继续确认：
+- 是同一个仓库，还是前后端两个项目？
+- 如果是两个项目，是否在同一台电脑？
+- 是否需要 project-harness 同步中心？
+确认后再进入 DSL 生成。</code></pre>
+        <h3>19.4 需求输入与 DSL 生成</h3>
+        <pre><code>使用 agentworkflow 生成 DSL。
+参考资料已经放在 reference/inputs/，请先读取 reference/manifest.yaml。
+请生成多文件 DSL suite，覆盖：
+需求描述、页面/模块结构、交互行为、事件、前后端联动边界、权限、错误码、验收、非目标。
+生成后请列出：
+1. 已覆盖的需求点
+2. 仍需工程师确认的问题
+3. 不允许进入研发的阻塞项
+不要写业务代码，不要编造 reference 路径。</code></pre>
+        <h3>19.5 DSL 审核后生成计划</h3>
+        <pre><code>DSL 已确认。
+请先检查 docs/PROJECT_CONFIG.md：
+1. 项目类型是 GitHub 还是本地 Git
+2. 构建目标是前端、后端还是前后端
+3. lint/test/build/e2e 命令是否配置
+然后按 DSL 生成研发 Plan 和 ATOMIC_TASKS。
+生成后不要直接写代码，等待我确认 Plan。
+Plan 确认后再执行 aw confirm 生成 ENGINEERING_INDEX.md，并确认 docs/FILE_INDEX.md 已刷新。</code></pre>
+        <h3>19.6 仅前端项目：完整开发会话</h3>
+        <pre><code>你是 frontend-agent。
+当前是仅前端项目：/path/project-frontend
+使用 agentworkflow。
+技术栈按 docs/ENGINEERING_RULES.md：Vue3、Vite、TypeScript、Pinia、Vue Router、Axios、Element Plus、EleAdmin。
+开始任务前：
+1. aw status
+2. aw next
+3. aw task brief &lt;AT-T&gt;
+4. 向我确认页面结构、字段、交互、权限、接口 mock/真实接口、验收标准
+确认前不要写代码。
+完成后：
+1. aw task complete &lt;AT-T&gt;
+2. 记录 bug / req change
+3. 如果新增 / 删除 / 重命名前端代码文件，执行 aw file-index 刷新 docs/FILE_INDEX.md
+4. aw handoff --write
+5. 问我是否提交 Git。</code></pre>
+        <h3>19.7 仅前端项目：页面任务确认问题</h3>
+        <pre><code>当前准备开始前端页面任务 &lt;AT-T&gt;。
+请先不要写代码，先按真实研发方式向我确认：
+1. 页面入口、路由、菜单权限
+2. 列表/表单/详情/弹窗的字段和校验
+3. 空态、加载态、失败态、无权限态
+4. 接口使用 mock 还是真实接口
+5. 是否需要复用现有组件、store、api client
+6. 验收方式：截图、交互、单测、e2e、build
+确认后再 task confirm 和编码。</code></pre>
+        <h3>19.8 仅后端项目：完整开发会话</h3>
+        <pre><code>你是 backend-agent。
+当前是仅后端项目：/path/project-backend
+使用 agentworkflow。
+技术栈按 docs/ENGINEERING_RULES.md：Java 8、Spring Boot 2.6.13、Spring Cloud Alibaba、MyBatis-Plus、Redis、Kafka、MinIO、Nacos。
+开始任务前：
+1. aw status
+2. aw next
+3. aw task brief &lt;AT-T&gt;
+4. 向我确认接口路径、入参、出参、权限、错误码、事务、数据表、验收标准
+确认前不要写代码。
+完成后：
+1. aw task complete &lt;AT-T&gt;
+2. 更新 SERVICE_CATALOG / 接口契约
+3. 记录 bug / req change
+4. 如果新增 / 删除 / 重命名后端代码文件，执行 aw file-index 刷新 docs/FILE_INDEX.md
+5. aw handoff --write
+6. 问我是否提交 Git。</code></pre>
+        <h3>19.9 仅后端项目：接口任务确认问题</h3>
+        <pre><code>当前准备开始后端接口任务 &lt;AT-T&gt;。
+请先不要写代码，先按真实研发方式向我确认：
+1. 接口路径、HTTP 方法、权限注解和鉴权失败行为
+2. 入参、出参、分页、排序、枚举、空值规则
+3. 数据表、索引、事务边界、幂等要求
+4. 错误码、异常处理、日志脱敏
+5. 是否涉及 Redis/Kafka/MinIO/Nacos/第三方 SDK
+6. 验收方式：单测、集成测试、接口测试、启动检查
+确认后再 task confirm 和编码。</code></pre>
+        <h3>19.10 同一台电脑：前后端两个项目</h3>
+        <pre><code>使用 agentworkflow 的双项目同步。
+当前电脑上有三个目录：
+前端项目：/path/workspace/project-frontend
+后端项目：/path/workspace/project-backend
+同步中心：/path/workspace/project-harness
+
+当前会话是 frontend-agent。
+开始任务前先读取同步中心 global/dsl、global/plans 和 global/plans/TASK_BOARD.md，确认共享基线和双方任务状态没有冲突。
+每个前端任务开始前，先在前端项目执行：
+1. aw sync pull --from backend
+2. aw sync inbox --from backend
+3. aw sync board
+读取 docs/sync/inbox/backend 后再 task brief。
+遇到接口字段、权限、错误码不明确时，使用 aw sync event --type question 或 --type contract，不要只写聊天结论。
+完成任务后 aw task complete；如果影响后端，用 aw sync event --type complete/change/contract/handoff 发布事件，再问我是否提交 Git 或同步中心版本。</code></pre>
+        <pre><code>使用 agentworkflow 的双项目同步。
+当前电脑上有三个目录：
+前端项目：/path/workspace/project-frontend
+后端项目：/path/workspace/project-backend
+同步中心：/path/workspace/project-harness
+
+当前会话是 backend-agent。
+开始任务前先读取同步中心 global/dsl、global/plans 和 global/plans/TASK_BOARD.md，确认共享基线和双方任务状态没有冲突。
+每个后端任务开始前，先在后端项目执行：
+1. aw sync pull --from frontend
+2. aw sync inbox --from frontend
+3. aw sync board
+读取 docs/sync/inbox/frontend 后再 task brief。
+遇到页面字段、交互、联动边界不明确时，使用 aw sync event --type question 或 --type contract，不要只写聊天结论。
+完成任务后 aw task complete、更新 SERVICE_CATALOG；如果影响前端，用 aw sync event --type complete/change/contract/handoff 发布事件，再问我是否提交 Git 或同步中心版本。</code></pre>
+        <h3>19.11 不同电脑：前后端两个项目 + GitHub Harness</h3>
+        <pre><code>使用 agentworkflow 的跨电脑双项目同步。
+同步中心是单独 GitHub 仓库 project-harness。
+本机本地路径：/path/workspace/project-harness
+前端项目路径：/path/workspace/project-frontend
+后端项目路径：/path/workspace/project-backend
+
+当前会话是 frontend-agent。
+开始任务前：
+1. 进入 project-harness 执行 git pull
+2. 读取 project-harness/global/dsl、project-harness/global/plans 和 TASK_BOARD.md，确认共享基线和双方任务状态
+3. 回到前端项目执行 aw sync pull --from backend
+4. 执行 aw sync inbox --from backend
+5. 执行 aw sync board
+6. aw task brief 当前 AT-T，并向我确认需求
+
+完成任务后：
+1. aw task complete 当前 AT-T
+2. 如果影响后端，使用 aw sync event --type complete/change/contract/question/bug/block/decision/handoff
+3. aw sync board
+4. 进入 project-harness 前先告诉我本次同步事件和影响范围
+5. 如需 git add / commit / push，同步中心 Git 提交前必须问我确认。</code></pre>
+        <pre><code>使用 agentworkflow 的跨电脑双项目同步。
+同步中心是单独 GitHub 仓库 project-harness。
+本机本地路径：/path/workspace/project-harness
+前端项目路径：/path/workspace/project-frontend
+后端项目路径：/path/workspace/project-backend
+
+当前会话是 backend-agent。
+开始任务前：
+1. 进入 project-harness 执行 git pull
+2. 读取 project-harness/global/dsl、project-harness/global/plans 和 TASK_BOARD.md，确认共享基线和双方任务状态
+3. 回到后端项目执行 aw sync pull --from frontend
+4. 执行 aw sync inbox --from frontend
+5. 执行 aw sync board
+6. aw task brief 当前 AT-T，并向我确认接口、权限、字段、错误码
+
+完成任务后：
+1. aw task complete 当前 AT-T
+2. 更新 SERVICE_CATALOG 和 handoff
+3. 如果影响前端，使用 aw sync event --type complete/change/contract/question/bug/block/decision/handoff
+4. aw sync board
+5. 进入 project-harness 前先告诉我本次同步事件和影响范围
+6. 如需 git add / commit / push，同步中心 Git 提交前必须问我确认。</code></pre>
+        <h3>19.12 跨端问题提问</h3>
+        <pre><code>当前任务遇到跨端问题，不要猜。
+请使用通用同步事件：
+
+./scripts/aw sync event \
+  --type question \
+  --task 当前 AT-T \
+  --to 对方 agent \
+  --summary "需要确认的问题" \
+  --impact "影响页面 / 接口 / 字段 / 权限 / 联调" \
+  --acceptance "对方需要给出的确认标准" \
+  --risk "不确认的风险" \
+  --evidence "相关 DSL / Plan / Handoff / Service Catalog"
+
+完成后告诉我对方需要 pull 哪个项目的快照。</code></pre>
+        <h3>19.13 对方回复后的采纳</h3>
+        <pre><code>请执行：
+1. aw sync pull --from &lt;peer&gt;
+2. aw sync inbox --from &lt;peer&gt;
+3. aw sync board
+
+如果对方回复影响当前需求、接口字段、权限、错误码、页面交互或验收：
+1. 先判断事件类型：complete/change/contract/question/block/bug/decision/handoff
+2. 需要采纳时，用 aw req change、aw bug add、aw task blocked 或更新 SERVICE_CATALOG 记录到当前项目
+3. 回写 DSL / Plan / ATOMIC
+4. 重新 aw task brief 并让我确认
+不要直接把 inbox 当成本项目真源；inbox 是只读输入，采纳后才成为本项目事实。</code></pre>
+        <h3>19.14 联调阶段</h3>
+        <pre><code>进入前后端联调阶段。
+请使用 agentworkflow 做以下事情：
+1. 双方先读取同步中心 global/dsl、global/plans、global/plans/TASK_BOARD.md、global/contracts
+2. 双方分别执行 aw sync pull --from &lt;peer&gt;、aw sync inbox --from &lt;peer&gt;、aw sync board
+3. 接口契约变化用 aw sync event --type contract
+4. 检查 SERVICE_CATALOG、DSL boundaries、Plan、ATOMIC 是否一致
+5. 跑各自验证命令
+6. 发现跨端 Bug 用 aw sync event --type bug，本地也必须写 AI_BUG_LOG
+7. 需求变化用 aw sync change 或 aw sync event --type change
+8. 阻塞用 aw sync event --type block；问题用 aw sync event --type question
+9. 给出联调阻塞项、责任方、下一步
+不要用口头结论替代文件记录。</code></pre>
+        <h3>19.15 研发中需求变更</h3>
+        <pre><code>当前出现研发中需求变更：
+变更内容：&lt;写清楚变更&gt;
+来源：工程师口述 / 产品补充 / 联调发现 / Bug 修复 / 技术约束
+影响范围：&lt;页面、接口、任务、测试、发布&gt;
+请使用 aw req change 记录，并回写 DSL、Plan、ATOMIC_TASKS。
+如果影响当前任务，请重新 task brief 并等待我确认后再继续编码。</code></pre>
+        <h3>19.15b 跨端需求变更同步</h3>
+        <pre><code>当前需求变更会影响其他 Agent。
+请使用 aw sync change，不要手动漏步骤：
+
+./scripts/aw sync change &lt;AT-T&gt; "变更摘要" \
+  --to &lt;peer-agent&gt; \
+  --impact "影响页面 / 接口 / 字段 / 权限 / 测试" \
+  --acceptance "新的验收标准" \
+  --risk "对方不采纳时的风险"
+
+它会自动执行：
+1. aw req change
+2. aw sync event --type change
+3. 写入 SYNC_EVENTS / AGENT_HANDOFFS
+4. aw sync push
+5. aw sync board
+6. 输出 project-harness 的 Git 提交建议
+
+注意：Git commit / push 仍然必须询问工程师确认。</code></pre>
+        <h3>19.15c 通用前后端同步事件</h3>
+        <pre><code>所有影响其他 Agent 的事件都使用 aw sync event：
+
+complete  任务完成，会解除对方依赖
+change    需求、字段、权限、状态、验收变化
+block     当前任务被对方阻塞
+question  需要对方确认
+contract  接口契约、DTO、枚举、错误码变化
+bug       跨端 Bug 或疑似 Bug
+decision  跨端共同决策
+handoff   普通交接
+
+示例：
+./scripts/aw sync event \
+  --type contract \
+  --task AT-BE-003 \
+  --to public-frontend-agent \
+  --summary "用户列表接口响应新增 avatarUrl" \
+  --impact "影响前台用户列表展示" \
+  --acceptance "前端 API client 和列表头像展示完成" \
+  --risk "前端不采纳会导致联调字段不一致" \
+  --evidence "docs/SERVICE_CATALOG.md; project-harness/global/contracts/"
+
+对方采纳前先执行：
+./scripts/aw sync pull --from &lt;peer&gt;
+./scripts/aw sync inbox --from &lt;peer&gt;
+./scripts/aw sync board</code></pre>
+        <h3>19.16 Bug 记录与复测</h3>
+        <pre><code>当前发现 Bug：
+现象：&lt;描述现象&gt;
+复现步骤：&lt;步骤&gt;
+期望结果：&lt;期望&gt;
+实际结果：&lt;实际&gt;
+关联任务：&lt;AT-T&gt;
+请先写入 AI_BUG_LOG，再定位问题。
+修复后运行相关测试，并在 Bug 记录中追加复测结果。
+不要只在聊天里说明 Bug。</code></pre>
+        <h3>19.17 完成任务与提交确认</h3>
+        <pre><code>完成当前 AT-T。
+请按顺序执行：
+1. aw task complete &lt;AT-T&gt;
+2. 如果失败，写 AI_BUG_LOG 并保持任务未完成
+3. 如果通过，更新 handoff / agents handoff / report
+4. 如果是双项目且影响其他 Agent，执行 aw sync event --type complete；如果只是本项目快照，才使用 aw sync push
+5. 如果本任务新增 / 删除 / 重命名前端、后端、共享、测试或配置代码文件，执行 aw file-index
+6. 执行 aw index 刷新 ENGINEERING_INDEX.md 的扫描信息
+7. 执行 aw sync board 更新共享任务视图
+8. 写入 changelog
+9. 说明是否建议提交本项目 Git、是否建议提交 project-harness Git
+10. 问我是否提交 Git，不要自动 commit。</code></pre>
+        <h3>19.18 新会话恢复上下文</h3>
+        <pre><code>使用 agentworkflow 恢复上下文。
+当前项目路径：/path/to/project
+请先读取：
+1. docs/handoff/PROJECT_HANDOFF.md
+2. docs/memory/INDEX.md
+3. docs/PROJECT_CONFIG.md
+4. 当前 Plan 和 ATOMIC_TASKS
+5. AI_BUG_LOG 和最近 REQ change
+6. 如需人工定位代码，提示工程师查看 docs/FILE_INDEX.md
+如果是双项目，再执行 aw sync status，并提示我是否需要 pull 对方快照。
+如果需要恢复跨端上下文，再执行 aw sync pull --from all、aw sync inbox --from all、aw sync board。
+恢复后只总结当前阶段、阻塞、下一步，不要直接写代码。
+不要把 ENGINEERING_INDEX.md 当成 AI 上下文全文读取；它是人类工程师索引。</code></pre>
+        <h3>19.19 发布前检查</h3>
+        <pre><code>准备发布前检查。
+请使用 agentworkflow：
+1. aw trace check
+2. aw policy gate --strict
+3. aw security scan 或说明当前项目可用扫描命令
+4. aw release gate
+5. 汇总未关闭 Bug、未确认变更、未同步 handoff、未提交版本记录
+如有阻塞项，不要建议发布。</code></pre>
+      </section>
+
+      <section id="faq">
+        <h2>20. FAQ</h2>
+        <h3>这些动作会自动后台执行吗？</h3>
+        <p>不会。它不是后台服务。Codex 在执行 AgentWorkflow 流程时可以自动调用命令，但必须在当前任务回合中执行。</p>
+        <h3>同步中心在哪里？</h3>
+        <p>本地同一台电脑时，建议与前后端项目平级：<code>workspace/project-harness</code>。两台电脑时，建议做成单独 GitHub 仓库。</p>
+        <h3>pull 会覆盖本项目文件吗？</h3>
+        <p>不会。它只写入 <code>docs/sync/inbox/&lt;peer&gt;/</code>，作为只读收件箱。</p>
+        <h3>什么时候需要工程师确认？</h3>
+        <p>新需求、研发中变更、接口字段、权限、金额、数据口径、删除/重命名、数据库变更、新依赖、Git 提交、发布都需要确认。</p>
+        <h3>如果 Agent 忘记同步怎么办？</h3>
+        <p>工程师可以要求它执行：<code>aw sync status</code>、<code>aw sync pull --from &lt;peer&gt;</code>、<code>aw sync inbox --from &lt;peer&gt;</code>、<code>aw sync board</code>。如果是跨端事项，要求它补一条 <code>aw sync event</code>，不要只补普通 handoff。</p>
+      </section>
+
+      <div class="footer">
+        <p>本手册为本地静态 HTML，可直接用浏览器打开。建议与 <code>agent-workflow/INVOCATION.md</code>、<code>CROSS_PROJECT_SYNC.md</code>、<code>skill/reference.md</code> 一起阅读。</p>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

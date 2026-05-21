@@ -1,0 +1,52 @@
+# agent-workflow policy-as-code（最小门禁）
+
+version: 1
+
+required_confirmations:
+  before_business_code:
+    enabled: true
+    requires:
+      - dsl_status: 已审
+      - plan_status: 可执行
+      - task_confirmed: true
+  high_risk_changes:
+    enabled: true
+    paths:
+      - ".github/workflows/"
+      - ".githooks/"
+      - "scripts/"
+      - "infra/"
+      - "migrations/"
+      - "agent-workflow/"
+    requires:
+      - audit_entry
+      - changelog_entry
+      - engineer_confirmation
+  new_dependency:
+    enabled: true
+    manifests:
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "package-lock.json"
+      - "yarn.lock"
+      - "requirements.txt"
+      - "pyproject.toml"
+      - "pom.xml"
+      - "build.gradle"
+      - "go.mod"
+      - "Cargo.toml"
+    requires:
+      - dependency_review
+      - license_check
+      - security_check
+
+restricted_actions:
+  require_explicit_confirmation:
+    - destructive_git
+    - production_deploy
+    - database_migration
+    - secret_or_credential_change
+    - public_api_breaking_change
+
+exceptions:
+  rule: "例外必须写入 docs/policy/POLICY_DECISIONS.md，并关联 REQ / AT-T / Bug。"

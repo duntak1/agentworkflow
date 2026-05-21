@@ -1,0 +1,20 @@
+{
+  "name": "agent-workflow-local",
+  "interface": {
+    "displayName": "agent-workflow Local"
+  },
+  "plugins": [
+    {
+      "name": "agent-workflow",
+      "source": {
+        "source": "local",
+        "path": "."
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

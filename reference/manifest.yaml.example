@@ -1,0 +1,19 @@
+# 复制为 manifest.yaml 后填写。aw dsl 据此选择路径 A/B/C。
+
+project_name: my-product
+dsl_path: auto   # auto | A | B | C
+
+inputs:
+  - id: prd-001
+    type: spec          # spec | design | source
+    path: inputs/prd.md
+    notes: 主需求说明
+
+  # - id: legacy-ui
+  #   type: source
+  #   path: source/legacy-app/src
+  #   notes: 迁移对照（路径 C）
+
+output:
+  dsl_dir: docs/dsl
+  draft_file: DSL_DRAFT.md
