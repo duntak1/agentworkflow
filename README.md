@@ -2,6 +2,8 @@
 
 通用 **AI 交付工作流 Skill + CLI**：把需求材料变成可审阅 DSL、可执行 Plan、原子任务和可验证交付。它不绑定某个 IDE，支持 **Claude Code、Codex、Copilot、Cursor、Windsurf、Cline、Continue** 及任意对话；Cursor Skill 只是可选入口。
 
+在线手册：<https://duntak1.github.io/agentworkflow/>
+
 ## 为什么需要
 
 AI 编码常见问题不是“不会写代码”，而是上下文和闸门不稳定：
@@ -66,7 +68,7 @@ chmod +x scripts/aw scripts/*.sh
 如果从远程仓库安装 Cursor Skill，可直接传 GitHub URL：
 
 ```bash
-/path/to/agentworkflow/scripts/install-cursor-skill.sh https://github.com/<owner>/<repo>.git
+/path/to/agentworkflow/scripts/install-cursor-skill.sh https://github.com/duntak1/agentworkflow.git
 ```
 
 验证整条流程：
@@ -122,7 +124,7 @@ cd agentworkflow
 也可从远程仓安装：
 
 ```bash
-./scripts/install-cursor-skill.sh https://github.com/<you>/agentworkflow.git
+./scripts/install-cursor-skill.sh https://github.com/duntak1/agentworkflow.git
 ```
 
 详见 [PUBLISH.md](PUBLISH.md) · [skill/QUICKSTART.md](skill/QUICKSTART.md)。

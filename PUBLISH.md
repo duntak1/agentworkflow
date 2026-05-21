@@ -31,14 +31,14 @@ git clone <repo-url> agentworkflow && cd agentworkflow
 /path/to/agentworkflow/scripts/install-cursor-skill.sh
 
 # 方式 B：远程仓库（直接传 URL）
-./scripts/install-cursor-skill.sh https://github.com/<you>/agentworkflow.git
+./scripts/install-cursor-skill.sh https://github.com/duntak1/agentworkflow.git
 
 # 方式 C：远程仓库（环境变量，适合 README/CI）
-export AW_SKILL_REPO_URL=https://github.com/<you>/agentworkflow.git
+export AW_SKILL_REPO_URL=https://github.com/duntak1/agentworkflow.git
 ./scripts/install-cursor-skill.sh
 
 # 可选：指定分支或 tag
-AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/agentworkflow.git
+AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/duntak1/agentworkflow.git
 ```
 
 ## 接入业务项目（任意 IDE）
@@ -64,7 +64,7 @@ chmod +x scripts/aw scripts/*.sh
 ```bash
 ./scripts/install-cursor-skill.sh /path/to/agentworkflow
 # 或
-./scripts/install-cursor-skill.sh https://github.com/<you>/agentworkflow.git
+./scripts/install-cursor-skill.sh https://github.com/duntak1/agentworkflow.git
 ```
 
 ## 发版 checklist
