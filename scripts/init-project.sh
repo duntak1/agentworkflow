@@ -25,6 +25,7 @@ mkdir -p "${ROOT}/docs/dsl" "${ROOT}/docs/plans" "${ROOT}/docs/requirements" \
   "${ROOT}/docs/memory/entries" "${ROOT}/docs/memory/archive" \
   "${ROOT}/docs/audit" "${ROOT}/docs/policy" "${ROOT}/docs/security" "${ROOT}/docs/release" \
   "${ROOT}/docs/metrics" "${ROOT}/docs/ops" "${ROOT}/docs/agents" "${ROOT}/docs/reports"
+  "${ROOT}/docs/hooks" "${ROOT}/docs/contracts" "${ROOT}/docs/github" "${ROOT}/docs/score" "${ROOT}/docs/recovery"
 
 for f in DSL_SPEC_TEMPLATE.md FRONTEND_PAGE_SPEC_TEMPLATE.md DSL_DRAFT.md \
   DSL_SUITE_INDEX.md DSL_SUITE_REQUIREMENTS.md DSL_SUITE_PAGES.md \
@@ -205,6 +206,18 @@ aw_copy_if_missing "${TEMPLATES}/ops/RUNBOOKS.md" "${ROOT}/docs/ops/RUNBOOKS.md"
 aw_copy_if_missing "${TEMPLATES}/agents/AGENT_ROLES.md" "${ROOT}/docs/agents/AGENT_ROLES.md"
 aw_copy_if_missing "${TEMPLATES}/agents/AGENT_HANDOFFS.md" "${ROOT}/docs/agents/AGENT_HANDOFFS.md"
 aw_copy_if_missing "${TEMPLATES}/agents/AGENT_REVIEWS.md" "${ROOT}/docs/agents/AGENT_REVIEWS.md"
+aw_copy_if_missing "${TEMPLATES}/agents/AGENT_LOCKS.md" "${ROOT}/docs/agents/AGENT_LOCKS.md"
+aw_copy_if_missing "${TEMPLATES}/agents/AGENT_HEARTBEATS.md" "${ROOT}/docs/agents/AGENT_HEARTBEATS.md"
+aw_copy_if_missing "${TEMPLATES}/hooks/HOOKS.md" "${ROOT}/docs/hooks/HOOKS.md"
+aw_copy_if_missing "${TEMPLATES}/contracts/API_CONTRACT.openapi.yaml" "${ROOT}/docs/contracts/API_CONTRACT.openapi.yaml"
+aw_copy_if_missing "${TEMPLATES}/contracts/API_CHANGELOG.md" "${ROOT}/docs/contracts/API_CHANGELOG.md"
+aw_copy_if_missing "${TEMPLATES}/contracts/CONTRACT_TESTS.md" "${ROOT}/docs/contracts/CONTRACT_TESTS.md"
+aw_copy_if_missing "${TEMPLATES}/contracts/MOCK_SERVER.md" "${ROOT}/docs/contracts/MOCK_SERVER.md"
+aw_copy_if_missing "${TEMPLATES}/github/PR_CHECKLIST.md" "${ROOT}/docs/github/PR_CHECKLIST.md"
+aw_copy_if_missing "${TEMPLATES}/github/REVIEW_GATE.md" "${ROOT}/docs/github/REVIEW_GATE.md"
+aw_copy_if_missing "${TEMPLATES}/github/BRANCH_POLICY.md" "${ROOT}/docs/github/BRANCH_POLICY.md"
+aw_copy_if_missing "${TEMPLATES}/score/DELIVERY_SCORE.md" "${ROOT}/docs/score/DELIVERY_SCORE.md"
+aw_copy_if_missing "${TEMPLATES}/recovery/RECOVERY_PLAYBOOK.md" "${ROOT}/docs/recovery/RECOVERY_PLAYBOOK.md"
 
 if [[ ! -f "${ROOT}/docs/ENGINEERING_RULES.md" ]]; then
   aw_copy_if_missing "${TEMPLATES}/rules/ENGINEERING_RULES.md" "${ROOT}/docs/ENGINEERING_RULES.md"
@@ -264,7 +277,7 @@ echo ""
 echo "Done. Next:"
 echo "  1. Edit reference/manifest.yaml and add files under reference/inputs/"
 echo "  2. Fill docs/PROJECT_CONFIG.md and docs/ENGINEERING_RULES.md"
-echo "  3. Review Engineering Harness docs: docs/audit docs/policy docs/security docs/release docs/SERVICE_CATALOG.md"
+echo "  3. Review Engineering Harness docs: docs/audit docs/policy docs/security docs/release docs/contracts docs/github docs/hooks docs/score docs/recovery docs/SERVICE_CATALOG.md"
 echo "  4. ./scripts/aw dsl"
 echo "  5. Human: review DSL → aw approve dsl ... --plan"
 echo "  6. ./scripts/aw confirm docs/dsl/<已审>.md docs/plans/<可执行>.md"

@@ -170,8 +170,14 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw ops init|slo|incident|incident-close|runbook|gate|check` | 记录 SLO、事故、恢复闭环和 Runbook；发布/交接前可运行 ops gate |
 | `aw ops gate` | 检查是否存在未关闭的 sev1 / sev2 事故；存在时阻断发布 / 交接 |
 | `aw agents init|assign|handoff|review|gate|check` | 记录多 Agent 角色、文件边界、交接和评审结论；gate 检查阻断评审 |
+| `aw agents claim|heartbeat|release|lock-check` | 多 Agent 任务锁和状态心跳，防止并行修改冲突和任务无人负责 |
 | `aw agents gate` | 检查 block 评审、未确认文件边界、多个 Agent allowed paths 重叠；默认 warn |
 | `aw agents gate --strict` | 严格协作门禁：发现 allowed paths 重叠时阻断，要求先 handoff 或重新分配边界 |
+| `aw gate init|check|pre-commit|task|pr|release` | 自动 Gate 聚合 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release 等关键检查 |
+| `aw contract init|change|test|diff|gate|check` | 前后端契约系统：OpenAPI、API 变更、Mock、Contract Test、Schema Diff、破坏性变更阻断 |
+| `aw github-pr init|branch|draft|review|gate|check` | GitHub PR 闭环：分支、PR 草稿、Review、Contract/Score/Release/Rollback 检查 |
+| `aw score init|record|check|latest` | 交付评分：需求、DSL/Plan、任务确认、验证、Bug、文件索引、Contract、Git/Release、Handoff |
+| `aw recover init|context|plan|sync|failed-task|conflict|rollback|check` | 恢复机制：上下文断裂、计划过期、同步漂移、任务失败、冲突和回滚 |
 | `aw sync init <harness-dir> --project <name> --agent <name>` | 为前后端分仓项目配置共享同步中心 |
 | `aw sync pull [--from <project|all>]` | 将其他项目快照拉到 `docs/sync/inbox/` 供只读参考，不覆盖本项目 DSL / Plan / 代码 |
 | `aw sync push [--task AT-T...]` | 将本项目 DSL / Plan / REQ / Handoff / Agents / Bug / TP / Security 等快照发布到同步中心 |

@@ -127,6 +127,21 @@ case "$CMD" in
   sync)
     exec "${SCRIPT_DIR}/aw-sync.sh" "$@"
     ;;
+  gate)
+    exec "${SCRIPT_DIR}/aw-gate.sh" "$@"
+    ;;
+  contract)
+    exec "${SCRIPT_DIR}/aw-contract.sh" "$@"
+    ;;
+  github-pr|pr)
+    exec "${SCRIPT_DIR}/aw-github-pr.sh" "$@"
+    ;;
+  score)
+    exec "${SCRIPT_DIR}/aw-score.sh" "$@"
+    ;;
+  recover)
+    exec "${SCRIPT_DIR}/aw-recover.sh" "$@"
+    ;;
   approve)
     exec "${SCRIPT_DIR}/aw-approve.sh" "$@"
     ;;

@@ -901,8 +901,19 @@ chmod +x scripts/aw scripts/*.sh
             <tr><td>Ops</td><td><code>aw ops gate</code></td><td>SLO、事故、Runbook、未关闭高危事故阻断。</td></tr>
             <tr><td>Report</td><td><code>aw report handoff|release --write</code></td><td>生成工程师可读交接/发布报告。</td></tr>
             <tr><td>Trace</td><td><code>aw trace check</code></td><td>检查 REQ、DSL、Plan、AT-T、Bug、Changelog 等是否断链。</td></tr>
+            <tr><td>Auto Gate</td><td><code>aw gate pre-commit|task|pr|release</code></td><td>把 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release 串成自动门禁。</td></tr>
+            <tr><td>Contract</td><td><code>aw contract change|test|gate</code></td><td>OpenAPI、Mock、Contract Test、Schema Diff、破坏性变更阻断。</td></tr>
+            <tr><td>GitHub PR</td><td><code>aw github-pr branch|draft|review|gate</code></td><td>分支、PR 草稿、Review、CI/Release/Rollback 检查。</td></tr>
+            <tr><td>Score</td><td><code>aw score record</code></td><td>对需求、DSL/Plan、任务确认、验证、Bug、文件索引、Contract、Git、Handoff 评分。</td></tr>
+            <tr><td>Recovery</td><td><code>aw recover context|plan|sync|failed-task|conflict|rollback</code></td><td>上下文断裂、计划过期、同步漂移、任务失败、冲突和回滚的固定恢复路径。</td></tr>
           </tbody>
         </table>
+        <pre><code>./scripts/aw hooks install
+./scripts/aw gate pre-commit
+./scripts/aw contract gate
+./scripts/aw github-pr gate
+./scripts/aw score record --scope pr
+./scripts/aw recover context</code></pre>
       </section>
 
       <section id="agents">
@@ -927,6 +938,25 @@ chmod +x scripts/aw scripts/*.sh
   --related AT-T-FE-001
 
 ./scripts/aw agents gate --strict</code></pre>
+        <h3>任务锁与心跳</h3>
+        <p>多 Agent 真正开始写代码前，需要先认领任务锁。长任务过程中通过 heartbeat 同步状态；完成、阻塞或转交时释放或 handoff。</p>
+        <pre><code>./scripts/aw agents claim \
+  --agent frontend-agent \
+  --task AT-T-FE-001 \
+  --role frontend \
+  --scope "用户列表页面" \
+  --allowed "src/views/user,src/api/user" \
+  --ttl-min 120
+
+./scripts/aw agents heartbeat \
+  --agent frontend-agent \
+  --task AT-T-FE-001 \
+  --status working \
+  --action "正在接入 /api/users mock 数据" \
+  --next "完成表格状态展示"
+
+./scripts/aw agents lock-check --task AT-T-FE-001
+./scripts/aw agents release --agent frontend-agent --task AT-T-FE-001</code></pre>
       </section>
 
       <section id="sync">

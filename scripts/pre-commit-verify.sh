@@ -14,6 +14,9 @@ echo "== pre-commit-verify =="
 "${SCRIPT_DIR}/check-dsl-business-gate.sh"
 "${SCRIPT_DIR}/check-req-index.sh"
 "${SCRIPT_DIR}/check-test-plan-index.sh"
+if [[ "${SKIP_AW_GATE:-}" != "1" ]]; then
+  "${SCRIPT_DIR}/aw-gate.sh" pre-commit
+fi
 
 for shf in "${SCRIPT_DIR}"/*.sh .githooks/*; do
   [[ -f "$shf" ]] || continue

@@ -1,0 +1,25 @@
+openapi: 3.0.3
+info:
+  title: Project API Contract
+  version: 0.1.0
+  description: >
+    Shared frontend/backend contract. Keep this file synchronized through
+    aw contract commands before frontend/backend dependent work starts.
+servers:
+  - url: http://localhost:3000
+paths: {}
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true

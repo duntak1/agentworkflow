@@ -176,3 +176,5 @@ else
 fi
 echo ""
 echo "Next:     ${next}"
+echo ""
+echo "Harness:  aw gate check · aw contract gate · aw github-pr gate · aw score record --scope current · aw recover context"

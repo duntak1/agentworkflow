@@ -35,6 +35,7 @@ Closed-loop management is mandatory for every large requirement and every AT-T:
 | Traceability | Every code diff maps back to REQ / DSL / Plan / AT-T; bugs map to `AI_BUG_LOG`; version-visible changes map to `CHANGELOG [Unreleased]` and optional Git commit |
 | Maintainability | `docs/ENGINEERING_RULES.md`, mature-solution choice, focused code comments, tests, and `docs/FILE_INDEX.md` stay current with the implementation |
 | Handoffability | `docs/handoff/PROJECT_HANDOFF.md`, `docs/memory/` when reusable, verification evidence, open risks, next steps, and commit/changelog status are current before context switch |
+| Harness control | `aw gate`, `aw contract`, `aw github-pr`, `aw agents claim`, `aw score`, and `aw recover` make hooks, API contracts, PRs, agent locks, delivery scoring, and recovery checkable |
 
 Do not mark work done until these four properties have evidence or an explicit documented exception.
 
@@ -140,9 +141,14 @@ Proof path:
 | Reports | `aw report handoff|release` prints engineer-readable Harness summaries; add `--write` to save under `docs/reports/`; use `aw report check --strict` before handoff/release gates |
 | Metrics | `aw metrics record ...` tracks DORA/flow signals; use `aw metrics summary` before release or handoff to summarize delivery health |
 | Ops | `aw ops slo|incident|incident-close|runbook ...` maintains SLO, incident, recovery, and runbook records; use `aw ops gate` before release/handoff |
-| Agents | `aw agents assign|handoff|review ...` records multi-agent roles, ownership, handoffs, and review outcomes; use `aw agents gate` to detect blocking reviews and overlapping allowed paths, or `aw agents gate --strict` to block path conflicts |
+| Hook / Gate automation | `aw hooks install` enables Git hooks; `aw gate pre-commit|task|pr|release` runs lifecycle gates for DSL, REQ, TP, Contract, Agent locks, Trace, Score, and Release |
+| API contracts | `aw contract init|change|test|diff|gate` maintains OpenAPI, API changelog, mock-server notes, schema diff, and contract-test evidence for frontend/backend alignment |
+| GitHub PR loop | `aw github-pr branch|draft|review|gate` records branch policy, PR checklist, review outcomes, Contract/Score/Release readiness, and rollback notes |
+| Agents | `aw agents assign|claim|heartbeat|release|handoff|review ...` records roles, task locks, heartbeats, ownership, handoffs, and review outcomes; use `aw agents gate --strict` to block path conflicts or expired/missing locks |
 | Cross-project sync | For split frontend/backend repos, configure a shared harness with `aw sync init <dir> --project <name> --agent <name>`; run `aw sync pull` before starting dependent work and `aw sync push --task <id>` after updating contracts, handoff, bugs, requirements, or verification |
 | Traceability | `aw trace check` checks REQ → DSL/Plan, Plan → ATOMIC, AT-T → Verify/TP, Bug ledger, Changelog, and Harness records |
+| Delivery score | `aw score record --scope <REQ|AT-T|pr|release>` writes a 0-100 score across requirements, DSL/Plan, task confirmation, verification, Bug, file index, contract, Git/release, and handoff |
+| Recovery | `aw recover context|plan|sync|failed-task|conflict|rollback` gives deterministic recovery paths for context loss, stale plans, frontend/backend drift, failed tasks, conflicts, and rollback |
 
 `aw index` = scan only, **not** confirm. REQ / Bug / TP / DSL / Plan write commands auto-refresh `ENGINEERING_INDEX.md` in scan mode after successful writes.
 
@@ -163,6 +169,9 @@ Proof path:
 12. Maintain the four-property delivery loop: completeness, traceability, maintainability, and handoffability. If any property is missing, either fix the missing artifact before continuing or record an explicit exception, owner, and follow-up in the appropriate ledger.
 13. For Engineering Harness control, use `aw audit`, `aw policy`, `aw security`, `aw service-catalog`, `aw release`, `aw trace`, `aw metrics`, `aw ops`, `aw agents`, and `aw sync` when a task touches high-risk code, dependencies, service boundaries, deployment, feature flags, reliability, incidents, multi-agent handoff, split frontend/backend repositories, or production behavior.
 14. In split frontend/backend repositories, `aw sync pull` is a read-only inbox import and must happen before dependent work; `aw sync push` publishes this project's workflow snapshot after contract, REQ, Bug, Handoff, Agent, or verification changes. Never treat pulled inbox files as local truth without engineer confirmation.
+15. Frontend/backend API changes must go through `aw contract change` and `aw contract test`; breaking changes stay blocked until both sides confirm and the contract gate passes.
+16. Multi-agent implementation requires `aw agents claim` before coding and `aw agents heartbeat` during long work; missing, expired, or conflicting locks block strict gates.
+17. Before PR/release handoff, run `aw gate pr`, `aw github-pr gate`, `aw contract gate`, and `aw score record`; recover with `aw recover ...` instead of guessing when a gate fails.
 
 ## Cursor-only (optional)
 
