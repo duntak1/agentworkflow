@@ -387,6 +387,37 @@
       padding: 0;
       color: inherit;
     }
+    #prompts pre {
+      position: relative;
+      padding-top: 46px;
+    }
+    .prompt-copy {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid rgba(125, 211, 252, .32);
+      border-radius: 8px;
+      padding: 6px 10px;
+      background: rgba(15, 23, 42, .88);
+      color: #bae6fd;
+      font-size: 12px;
+      font-weight: 650;
+      cursor: pointer;
+      transition: border-color .15s ease, color .15s ease, background .15s ease;
+    }
+    .prompt-copy:hover {
+      border-color: rgba(125, 211, 252, .7);
+      color: #ffffff;
+      background: rgba(30, 41, 59, .95);
+    }
+    .prompt-copy.copied {
+      border-color: rgba(134, 239, 172, .55);
+      color: #bbf7d0;
+      background: rgba(20, 83, 45, .5);
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -498,6 +529,7 @@
       .grid, .grid.two { grid-template-columns: 1fr; }
       .swimlane { grid-template-columns: 1fr; }
       .lane-title { border-right: 0; border-bottom: 1px solid var(--line); }
+      #prompts pre { padding-top: 48px; }
     }
   </style>
 </head>
@@ -1380,5 +1412,55 @@ handoff   普通交接
       </div>
     </main>
   </div>
+  <script>
+    (function () {
+      function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(text);
+        }
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          return Promise.resolve();
+        } catch (error) {
+          return Promise.reject(error);
+        } finally {
+          document.body.removeChild(textarea);
+        }
+      }
+
+      document.querySelectorAll('#prompts pre').forEach(function (block, index) {
+        var code = block.querySelector('code');
+        if (!code) return;
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'prompt-copy';
+        button.setAttribute('aria-label', '复制提示词 ' + (index + 1));
+        button.textContent = '复制';
+        button.addEventListener('click', function () {
+          copyText(code.innerText).then(function () {
+            button.textContent = '已复制';
+            button.classList.add('copied');
+            window.setTimeout(function () {
+              button.textContent = '复制';
+              button.classList.remove('copied');
+            }, 1600);
+          }).catch(function () {
+            button.textContent = '复制失败';
+            window.setTimeout(function () {
+              button.textContent = '复制';
+            }, 1600);
+          });
+        });
+        block.appendChild(button);
+      });
+    })();
+  </script>
 </body>
 </html>
