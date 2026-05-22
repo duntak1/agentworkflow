@@ -560,10 +560,12 @@
       <p>本地 HTML 使用手册 · 工程化流程版 · 面向工程师与 Agent</p>
       <nav>
         <a href="#overview">1. 这是什么</a>
+        <a href="#quick-tutorial">1.1 新手完整教程</a>
         <a href="#roles">2. 工程师与 Agent 分工</a>
         <a href="#install">3. 安装与初始化</a>
         <a href="#scenario-router">4. 按场景选择路线</a>
         <a href="#existing-project">4.1 非全新项目接入</a>
+        <a href="#repo-topology">4.2 仓库与同步中心</a>
         <a href="#product-path">5. 真实产品研发路径</a>
         <a href="#full-flow">6. 总流程图</a>
         <a href="#reference">7. Reference 与 DSL</a>
@@ -626,6 +628,33 @@
         </div>
         <div class="callout">
           <strong>最重要的规则：</strong>DSL 没有工程师确认成 <code>已审</code> 前，不写业务代码；每个 AT-T 开始前，Agent 必须先问清需求并等待工程师确认。
+        </div>
+      </section>
+
+      <section id="quick-tutorial">
+        <h2>1.1 新手完整教程</h2>
+        <p>第一次使用时，不要从命令开始背。工程师只要按下面路径回答问题、确认文件、批准计划即可；Agent 负责把每一步落到项目文件里。</p>
+        <div class="flow">
+          <div class="step"><strong>1. 启动分流</strong><span>确认全新 / 已有，单项目 / 双项目</span></div><div class="arrow">→</div>
+          <div class="step"><strong>2. 仓库准备</strong><span>确认真实代码仓库和同步中心</span></div><div class="arrow">→</div>
+          <div class="step"><strong>3. 需求输入</strong><span>PRD、原型、接口、旧系统材料进入 reference</span></div><div class="arrow">→</div>
+          <div class="step"><strong>4. DSL 审核</strong><span>需求、页面、交互、事件、边界、验收确认</span></div><div class="arrow">→</div>
+          <div class="step"><strong>5. Plan 拆分</strong><span>共享协作 Plan 或本地执行 Plan</span></div><div class="arrow">→</div>
+          <div class="step"><strong>6. 研发闭环</strong><span>brief → confirm → code → verify → handoff</span></div>
+        </div>
+        <table>
+          <thead><tr><th>你要告诉 Agent 什么</th><th>Agent 会做什么</th><th>你要确认什么</th></tr></thead>
+          <tbody>
+            <tr><td>这是全新项目还是已有项目。</td><td>写入 <code>PROJECT_CONFIG</code> 的项目阶段，并选择全新流程或存量流程。</td><td>没有确认前，不允许生成 DSL / Plan 或写代码。</td></tr>
+            <tr><td>这是仅前端、仅后端、单仓前后端，还是前后端两个项目。</td><td>写入构建目标，并决定是否需要同步中心。</td><td>如果是两个项目，必须确认真实前端仓库、后端仓库和同步中心。</td></tr>
+            <tr><td>前后端是否同一台电脑开发。</td><td>同电脑用本地 <code>project-harness</code>；不同电脑引导创建 GitHub <code>project-harness</code> 仓库。</td><td>GitHub 地址、分支、提交权限和同步节奏。</td></tr>
+            <tr><td>需求材料在哪里。</td><td>读取 <code>reference/manifest.yaml</code> 和 <code>reference/inputs/</code>，生成 DSL suite。</td><td>DSL 是否覆盖需求、页面、交互、事件、接口边界和验收。</td></tr>
+            <tr><td>DSL 已确认。</td><td>单项目生成本地 Plan；双项目先生成同步中心协作 Plan，再派生前端 / 后端本地 Plan。</td><td>Plan 是否可执行、依赖是否清楚、任务是否落在真实仓库。</td></tr>
+            <tr><td>Plan 已确认。</td><td>执行 <code>aw confirm</code>，之后每个 AT-T 先 brief 再编码。</td><td>每个任务开始前的需求问题、验收方式、高风险改动和 Git 提交。</td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <strong>最短上手提示词：</strong>“使用 agentworkflow。当前项目路径是 X。请先不要写代码，先引导我确认项目阶段、项目形态、真实代码仓库和是否需要同步中心，然后按手册流程继续。”
         </div>
       </section>
 
@@ -718,26 +747,75 @@ chmod +x scripts/aw scripts/*.sh
         </div>
       </section>
 
+      <section id="repo-topology">
+        <h2>4.2 仓库与同步中心准备</h2>
+        <p>从“构建项目”进入“拆研发计划”之前，Agent 必须先确认真实项目代码仓库。尤其是前后端双项目，不能只在一个临时目录里拆 Plan；Plan 必须落到真实前端仓库、真实后端仓库和唯一同步中心上。</p>
+        <div class="flow">
+          <div class="step"><strong>确认拓扑</strong><span>单项目 / 双项目 / 同电脑 / 不同电脑</span></div><div class="arrow">→</div>
+          <div class="step"><strong>确认仓库</strong><span>前端仓库、后端仓库、同步中心</span></div><div class="arrow">→</div>
+          <div class="step"><strong>安装 workflow</strong><span>各代码仓库执行 aw install / init / config</span></div><div class="arrow">→</div>
+          <div class="step"><strong>同步中心初始化</strong><span>aw sync init / baseline / board</span></div><div class="arrow">→</div>
+          <div class="step"><strong>DSL 已审</strong><span>共享 DSL 进入 global/dsl</span></div><div class="arrow">→</div>
+          <div class="step"><strong>Plan 拆分</strong><span>先协作 Plan，再本地派生 Plan</span></div>
+        </div>
+        <table>
+          <thead><tr><th>工程师选择</th><th>Agent 必须引导</th><th>Plan 拆分规则</th></tr></thead>
+          <tbody>
+            <tr><td>单前端项目</td><td>确认前端真实仓库路径 / GitHub 地址，安装并初始化。</td><td>只在前端项目生成本地 DSL / Plan / AT-T。</td></tr>
+            <tr><td>单后端项目</td><td>确认后端真实仓库路径 / GitHub 地址，安装并初始化。</td><td>只在后端项目生成本地 DSL / Plan / AT-T。</td></tr>
+            <tr><td>同仓前后端项目</td><td>确认 monorepo 路径、前端目录、后端目录、启动和验证命令。</td><td>一个 Plan 可拆 frontend / backend / contract / integration 任务，但仍在同一仓库确认。</td></tr>
+            <tr><td>同电脑前后端两个项目</td><td>确认 <code>project-frontend</code>、<code>project-backend</code>、本地 <code>project-harness</code> 三个路径。</td><td>共享 DSL / 协作 Plan 放同步中心；前端 / 后端各自生成本地派生 Plan。</td></tr>
+            <tr><td>不同电脑前后端两个项目</td><td>引导工程师先创建独立 GitHub <code>project-harness</code> 仓库，两端 clone 到本地。</td><td>同步中心 GitHub 仓库是真源；每次共享 DSL / 协作 Plan / 事件变更后都提示是否提交并 push。</td></tr>
+          </tbody>
+        </table>
+        <h3>双项目仓库准备清单</h3>
+        <pre><code># 1. 前端真实代码仓库
+cd /path/workspace/project-frontend
+/path/to/agentworkflow/scripts/aw install . --adapters
+./scripts/aw init
+./scripts/aw config init --project-stage 1 --project-kind 1 --github-url https://github.com/owner/frontend
+./scripts/aw config init --build-target 1
+
+# 2. 后端真实代码仓库
+cd /path/workspace/project-backend
+/path/to/agentworkflow/scripts/aw install . --adapters
+./scripts/aw init
+./scripts/aw config init --project-stage 1 --project-kind 1 --github-url https://github.com/owner/backend
+./scripts/aw config init --build-target 2
+
+# 3. 同步中心：同电脑可以是本地目录；不同电脑必须是单独 GitHub 仓库
+mkdir -p /path/workspace/project-harness
+cd /path/workspace/project-frontend
+./scripts/aw sync init ../project-harness --project frontend --agent frontend-agent --role frontend
+cd /path/workspace/project-backend
+./scripts/aw sync init ../project-harness --project backend --agent backend-agent --role backend</code></pre>
+        <div class="warn callout">
+          <strong>Plan 前置闸门：</strong>如果前端 / 后端真实仓库或同步中心还没确认，Agent 只能继续引导工程师建仓和初始化，不能直接生成本地 Plan。双项目必须先有同步中心协作 Plan，再派生本地 Plan。
+        </div>
+      </section>
+
       <section id="product-path">
         <h2>5. 真实产品研发路径</h2>
         <p>真实项目不要从“写代码”开始，而是从需求输入、工程化确认、任务拆分、研发执行、联调验证、发布交接一路闭环。下面是推荐路径。</p>
         <div class="flow">
           <div class="step"><strong>0. 项目准备</strong><span>安装 skill、配置项目类型、构建目标、GitHub/本地 Git</span></div><div class="arrow">→</div>
-          <div class="step"><strong>1. 需求输入</strong><span>PRD、原型、接口、旧系统、约束进入 reference</span></div><div class="arrow">→</div>
-          <div class="step"><strong>2. 规格冻结</strong><span>生成 DSL suite，工程师审阅并确认已审</span></div><div class="arrow">→</div>
-          <div class="step"><strong>3. 研发计划</strong><span>按前端/后端/全栈拆 Plan 与 AT-T</span></div><div class="arrow">→</div>
-          <div class="step"><strong>4. 任务执行</strong><span>每个 AT-T 先 brief，确认后编码</span></div><div class="arrow">→</div>
-          <div class="step"><strong>5. 联调验证</strong><span>verify、TP、Bug、REQ change、sync</span></div><div class="arrow">→</div>
-          <div class="step"><strong>6. 发布交接</strong><span>report、release gate、handoff、Git 提交</span></div>
+          <div class="step"><strong>1. 仓库拓扑</strong><span>确认单项目 / 双项目 / 同电脑 / 不同电脑</span></div><div class="arrow">→</div>
+          <div class="step"><strong>2. 需求输入</strong><span>PRD、原型、接口、旧系统、约束进入 reference</span></div><div class="arrow">→</div>
+          <div class="step"><strong>3. 规格冻结</strong><span>生成 DSL suite，工程师审阅并确认已审</span></div><div class="arrow">→</div>
+          <div class="step"><strong>4. 研发计划</strong><span>单项目本地 Plan；双项目先协作 Plan 再本地派生</span></div><div class="arrow">→</div>
+          <div class="step"><strong>5. 任务执行</strong><span>每个 AT-T 先 brief，确认后编码</span></div><div class="arrow">→</div>
+          <div class="step"><strong>6. 联调验证</strong><span>verify、TP、Bug、REQ change、sync</span></div><div class="arrow">→</div>
+          <div class="step"><strong>7. 发布交接</strong><span>report、release gate、handoff、Git 提交</span></div>
         </div>
         <table>
           <thead><tr><th>阶段</th><th>工程师做什么</th><th>Agent 做什么</th><th>关键产物</th></tr></thead>
           <tbody>
             <tr><td>项目准备</td><td>告诉 Agent 项目路径、仓库类型、构建目标、前后端形态。</td><td>执行 <code>aw init</code>、<code>aw config init</code>、<code>aw rules init</code>。</td><td><code>PROJECT_CONFIG.md</code>、<code>ENGINEERING_RULES.md</code></td></tr>
+            <tr><td>仓库拓扑</td><td>确认真实前端仓库、后端仓库、同步中心；不同电脑时确认 GitHub Harness 仓库。</td><td>引导完成 <code>aw sync init</code>、<code>sync baseline</code>、<code>sync board</code>，未准备好前不拆 Plan。</td><td><code>project-harness</code>、<code>global/dsl</code>、<code>global/plans</code></td></tr>
             <tr><td>存量接入</td><td>说明项目已完成阶段、当前分支、一期范围、下一期目标。</td><td>先生成事实基线、代码索引、服务目录、Handoff，再处理增量需求。</td><td><code>FILE_INDEX</code>、<code>SERVICE_CATALOG</code>、<code>PROJECT_HANDOFF</code></td></tr>
             <tr><td>需求输入</td><td>上传 PRD、原型、接口文档、现有代码说明。</td><td>读取 <code>reference/manifest.yaml</code>，不编造路径。</td><td><code>reference/inputs/</code></td></tr>
             <tr><td>规格冻结</td><td>审 DSL，确认需求、页面、交互、事件、边界、验收。</td><td>生成 DSL suite 和 review 包。</td><td><code>docs/dsl/DSL_*/</code></td></tr>
-            <tr><td>研发计划</td><td>确认生成前端、后端或全栈计划。</td><td>生成 Plan 和 ATOMIC_TASKS，等待审批。</td><td><code>docs/plans/</code></td></tr>
+            <tr><td>研发计划</td><td>确认生成前端、后端或全栈计划；双项目先确认协作 Plan。</td><td>单项目生成本地 Plan；双项目先写同步中心协作 Plan，再生成前端 / 后端派生 Plan。</td><td><code>docs/plans/</code>、<code>project-harness/global/plans</code></td></tr>
             <tr><td>任务执行</td><td>每个任务开始前确认需求问题。</td><td><code>task brief</code> 后等待确认，再写代码。</td><td>代码 diff、<code>ATOMIC_TASKS</code></td></tr>
             <tr><td>联调验证</td><td>确认接口、权限、字段、异常态和验收。</td><td>跑验证，记录 Bug / REQ change / Handoff / sync。</td><td><code>TP</code>、<code>AI_BUG_LOG</code>、<code>REQ</code></td></tr>
             <tr><td>发布交接</td><td>确认是否提交 Git、是否发布、是否交接。</td><td>生成 report、release gate、handoff、changelog。</td><td><code>reports</code>、<code>CHANGELOG</code>、<code>PROJECT_HANDOFF</code></td></tr>
@@ -1008,12 +1086,16 @@ chmod +x scripts/aw scripts/*.sh
       <section id="sync">
         <h2>15. 前后端双项目同步</h2>
         <p>当前后端在两个项目或两台电脑上时，用第三个目录或 GitHub 仓库作为同步中心。同步中心不只保存前后端快照，还应保存一份前后端共同确认的共享 DSL 和协作 Plan，避免两边各自拆分后产生歧义。</p>
+        <div class="danger callout">
+          <strong>Plan 前置规则：</strong>双项目场景下，完成 DSL 后不能让前端和后端各自直接拆本地 Plan。Agent 必须先确认前端真实仓库、后端真实仓库和同步中心是否已经建好；不同电脑时必须先引导创建并 clone GitHub <code>project-harness</code> 仓库。同步中心就绪后，先生成 <code>global/plans</code> 协作 Plan，再派生前端 / 后端本地 Plan。
+        </div>
         <div class="flow">
-          <div class="step"><strong>同步基线</strong><span>读取 global DSL / Plan / TASK_BOARD</span></div><div class="arrow">→</div>
-          <div class="step"><strong>拉取收件箱</strong><span>sync pull + sync inbox</span></div><div class="arrow">→</div>
-          <div class="step"><strong>事件发布</strong><span>sync event 记录 complete/change/contract 等</span></div><div class="arrow">→</div>
-          <div class="step"><strong>人工确认 Git</strong><span>工程师确认后提交 project-harness</span></div><div class="arrow">→</div>
-          <div class="step"><strong>对方采纳</strong><span>pull/inbox/board 后回写本地事实</span></div>
+          <div class="step"><strong>拓扑确认</strong><span>本地双项目 / 同电脑 / 不同电脑</span></div><div class="arrow">→</div>
+          <div class="step"><strong>仓库就绪</strong><span>前端、后端、project-harness</span></div><div class="arrow">→</div>
+          <div class="step"><strong>共享 DSL</strong><span>global/dsl 共同事实</span></div><div class="arrow">→</div>
+          <div class="step"><strong>协作 Plan</strong><span>global/plans 跨端计划</span></div><div class="arrow">→</div>
+          <div class="step"><strong>本地派生</strong><span>前端 / 后端各自执行 Plan</span></div><div class="arrow">→</div>
+          <div class="step"><strong>事件同步</strong><span>sync event / inbox / board</span></div>
         </div>
         <h3>推荐目录</h3>
         <pre><code>workspace/
@@ -1277,7 +1359,74 @@ DSL 必须区分：
 然后按 DSL 生成研发 Plan 和 ATOMIC_TASKS。
 生成后不要直接写代码，等待我确认 Plan。
 Plan 确认后再执行 aw confirm 生成 ENGINEERING_INDEX.md，并确认 docs/FILE_INDEX.md 已刷新。</code></pre>
-        <h3>19.5b 非全新项目：增量 Plan 生成</h3>
+        <h3>19.5a 前后端双项目：DSL/Plan 前置引导</h3>
+        <pre><code>使用 agentworkflow。
+当前准备进入前后端双项目的 DSL / Plan 阶段。
+请先不要生成 Plan，不要写业务代码。
+
+请先问我并等待确认：
+1. 前端和后端是同一个仓库，还是两个独立代码仓库？
+2. 如果是两个仓库，是同一台电脑开发，还是不同电脑开发？
+3. 前端真实项目路径和 GitHub 地址是什么？
+4. 后端真实项目路径和 GitHub 地址是什么？
+5. 是否已经有同步中心 project-harness？
+6. 如果不同电脑开发，project-harness 的 GitHub 仓库地址是什么？两端是否都已 clone？
+
+确认后请按场景执行：
+- 同电脑双项目：引导我准备 project-frontend、project-backend、project-harness 三个本地目录。
+- 不同电脑双项目：引导我先创建独立 GitHub 仓库 project-harness，并在每台电脑 clone。
+- 分别在前端和后端真实代码仓库安装 agentworkflow、执行 aw init、aw config init。
+- 分别执行 aw sync init，把前端和后端注册到同一个 project-harness。
+
+完成前置准备前，不要拆本地 Plan。
+完成后输出：前端仓库、后端仓库、同步中心、下一步 DSL / Plan 拆分路径。</code></pre>
+        <h3>19.5b 前后端双项目：同步中心建设</h3>
+        <pre><code>使用 agentworkflow 建设前后端同步中心。
+
+项目信息：
+前端项目路径：/path/workspace/project-frontend
+后端项目路径：/path/workspace/project-backend
+同步中心路径：/path/workspace/project-harness
+同步中心 GitHub 地址：git@github.com:owner/project-harness.git 或 https://github.com/owner/project-harness
+开发方式：同一台电脑 / 不同电脑
+
+请按顺序完成：
+1. 检查前端和后端是否是真实代码仓库，而不是临时目录
+2. 检查两个项目是否已安装 agentworkflow；没有则引导安装
+3. 前端执行 aw config init --build-target 1；后端执行 aw config init --build-target 2
+4. 前端执行 aw sync init &lt;harness&gt; --project frontend --agent frontend-agent --role frontend
+5. 后端执行 aw sync init &lt;harness&gt; --project backend --agent backend-agent --role backend
+6. 执行 aw sync baseline 和 aw sync board
+7. 如果是不同电脑开发，提醒我提交并 push project-harness；Git 操作前必须问我确认
+
+最后输出同步中心目录结构、共享 DSL 路径、协作 Plan 路径、TASK_BOARD 路径。</code></pre>
+        <h3>19.5c 前后端双项目：DSL 已审后拆 Plan</h3>
+        <pre><code>前后端共享 DSL 已确认。
+请不要让前端和后端各自直接独立拆 Plan。
+
+请先检查：
+1. project-harness/global/dsl 是否已有共享 DSL 基线
+2. 前端真实代码仓库是否已初始化 agentworkflow
+3. 后端真实代码仓库是否已初始化 agentworkflow
+4. project-harness 是否已经完成 aw sync init / baseline / board
+5. 如果不同电脑开发，project-harness 是否已 git pull 到最新
+
+然后按顺序生成：
+1. 同步中心协作 Plan：写入 project-harness/global/plans/
+   - 跨端里程碑
+   - 接口契约和 Mock 顺序
+   - 前后端依赖关系
+   - 联调检查点
+   - 阻塞处理规则
+2. 前端本地派生 Plan：写入 project-frontend/docs/plans/
+   - 只拆页面、路由、组件、状态、API client、前端测试任务
+3. 后端本地派生 Plan：写入 project-backend/docs/plans/
+   - 只拆接口、权限、数据、事务、消息、后端测试任务
+4. 刷新 project-harness/global/plans/TASK_BOARD.md
+
+生成后等待我确认协作 Plan 和两个本地 Plan。
+Plan 未确认前不要写业务代码。</code></pre>
+        <h3>19.5d 非全新项目：增量 Plan 生成</h3>
         <pre><code>存量项目的增量 DSL 已确认。
 请基于已审 DSL、一期基线和代码索引生成增量 Plan。
 

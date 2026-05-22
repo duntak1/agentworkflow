@@ -25,7 +25,7 @@ Works with **any** AI coding tool. Cursor Skill is **optional**; other tools use
 
 ## Solution shape
 
-`project stage selected → project kind + build target selected → new project: Reference → DSL → Plan OR existing project: inventory → baseline → incremental DSL → incremental Plan → confirm → AT-T task → verify → changelog/git → handoff`
+`project stage selected → project kind + build target selected → if split frontend/backend: real repos + sync center ready → new project: Reference → DSL → Plan OR existing project: inventory → baseline → incremental DSL → incremental Plan → if split frontend/backend: shared DSL + collaboration Plan before local Plans → confirm → AT-T task → verify → changelog/git → handoff`
 
 Closed-loop management is mandatory for every large requirement and every AT-T:
 
@@ -122,6 +122,8 @@ Proof path:
 | DSL suite | `aw dsl suite <slug> "title"` → fill requirements/pages/interactions/events/boundaries/acceptance → `aw dsl review docs/dsl/DSL_<SLUG>/INDEX.md --write` → `aw approve dsl docs/dsl/DSL_<SLUG>/INDEX.md --plan` |
 | Project kind | Before task planning, ask the engineer to choose: `1 = GitHub repository` (`aw config init --project-kind 1 --github-url ...`) or `2 = local Git repository` (`aw config init --project-kind 2`); local Git repositories skip GitHub URL |
 | Build target | After DSL review and before Plan, ask the engineer to choose: `1 = frontend`, `2 = backend`, `3 = fullstack`, then run `aw config init --build-target 1|2|3` |
+| Split frontend/backend repos | Before Plan, ask whether frontend/backend are in one repo or two; if two, ask same computer vs different computers, real frontend repo path/GitHub URL, real backend repo path/GitHub URL, and `project-harness` path/GitHub URL. Do not generate local Plans until repos and sync center are ready |
+| Sync center before local Plans | For split repos, put shared DSL in `project-harness/global/dsl/`, collaboration Plan in `project-harness/global/plans/`, then derive frontend/backend local Plans in each real code repo |
 | Plan | `aw plan <dsl>` → `aw paste plan-write` or `aw plan apply` → `aw approve plan` → `aw check plan` |
 | Plan change | During development, use `aw plan change --summary "..."` for scope notes, `aw plan task-add --title "..."` for same-scope new AT-T, and `aw task split <id> --into "A; B"` when a task is too large |
 | Engineering rules | `aw rules init` → `aw rules discover --write` to map key files → keep team defaults from frontend/backend/unified AI manuals, fill project-specific differences and comment principles → `aw rules review` → `aw check rules` |

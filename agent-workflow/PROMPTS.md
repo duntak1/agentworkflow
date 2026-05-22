@@ -140,6 +140,85 @@ DSL 已确认。
 生成后不要直接写代码，等待我确认 Plan。
 ```
 
+## 前后端双项目：DSL/Plan 前置引导
+
+```text
+使用 agentworkflow。
+当前准备进入前后端双项目的 DSL / Plan 阶段。
+请先不要生成 Plan，不要写业务代码。
+
+请先问我并等待确认：
+1. 前端和后端是同一个仓库，还是两个独立代码仓库？
+2. 如果是两个仓库，是同一台电脑开发，还是不同电脑开发？
+3. 前端真实项目路径和 GitHub 地址是什么？
+4. 后端真实项目路径和 GitHub 地址是什么？
+5. 是否已经有同步中心 project-harness？
+6. 如果不同电脑开发，project-harness 的 GitHub 仓库地址是什么？两端是否都已 clone？
+
+确认后请按场景执行：
+- 同电脑双项目：引导我准备 project-frontend、project-backend、project-harness 三个本地目录。
+- 不同电脑双项目：引导我先创建独立 GitHub 仓库 project-harness，并在每台电脑 clone。
+- 分别在前端和后端真实代码仓库安装 agentworkflow、执行 aw init、aw config init。
+- 分别执行 aw sync init，把前端和后端注册到同一个 project-harness。
+
+完成前置准备前，不要拆本地 Plan。
+完成后输出：前端仓库、后端仓库、同步中心、下一步 DSL / Plan 拆分路径。
+```
+
+## 前后端双项目：同步中心建设
+
+```text
+使用 agentworkflow 建设前后端同步中心。
+
+项目信息：
+前端项目路径：/path/workspace/project-frontend
+后端项目路径：/path/workspace/project-backend
+同步中心路径：/path/workspace/project-harness
+同步中心 GitHub 地址：git@github.com:owner/project-harness.git 或 https://github.com/owner/project-harness
+开发方式：同一台电脑 / 不同电脑
+
+请按顺序完成：
+1. 检查前端和后端是否是真实代码仓库，而不是临时目录
+2. 检查两个项目是否已安装 agentworkflow；没有则引导安装
+3. 前端执行 aw config init --build-target 1；后端执行 aw config init --build-target 2
+4. 前端执行 aw sync init <harness> --project frontend --agent frontend-agent --role frontend
+5. 后端执行 aw sync init <harness> --project backend --agent backend-agent --role backend
+6. 执行 aw sync baseline 和 aw sync board
+7. 如果是不同电脑开发，提醒我提交并 push project-harness；Git 操作前必须问我确认
+
+最后输出同步中心目录结构、共享 DSL 路径、协作 Plan 路径、TASK_BOARD 路径。
+```
+
+## 前后端双项目：DSL 已审后拆 Plan
+
+```text
+前后端共享 DSL 已确认。
+请不要让前端和后端各自直接独立拆 Plan。
+
+请先检查：
+1. project-harness/global/dsl 是否已有共享 DSL 基线
+2. 前端真实代码仓库是否已初始化 agentworkflow
+3. 后端真实代码仓库是否已初始化 agentworkflow
+4. project-harness 是否已经完成 aw sync init / baseline / board
+5. 如果不同电脑开发，project-harness 是否已 git pull 到最新
+
+然后按顺序生成：
+1. 同步中心协作 Plan：写入 project-harness/global/plans/
+   - 跨端里程碑
+   - 接口契约和 Mock 顺序
+   - 前后端依赖关系
+   - 联调检查点
+   - 阻塞处理规则
+2. 前端本地派生 Plan：写入 project-frontend/docs/plans/
+   - 只拆页面、路由、组件、状态、API client、前端测试任务
+3. 后端本地派生 Plan：写入 project-backend/docs/plans/
+   - 只拆接口、权限、数据、事务、消息、后端测试任务
+4. 刷新 project-harness/global/plans/TASK_BOARD.md
+
+生成后等待我确认协作 Plan 和两个本地 Plan。
+Plan 未确认前不要写业务代码。
+```
+
 ## 非全新项目：增量 Plan
 
 ```text

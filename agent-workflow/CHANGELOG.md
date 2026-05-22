@@ -11,6 +11,8 @@
 
 ### Added
 
+- Add a beginner tutorial and frontend/backend repository topology gate so engineers must confirm real code repos, same-computer vs cross-computer development, and `project-harness` readiness before shared/local Plan generation.
+
 - Add startup project-stage routing so agents must ask whether a project is new or existing/brownfield, write `--project-stage` into PROJECT_CONFIG, and follow the matching onboarding path.
 
 - Add brownfield project onboarding workflow and prompts for existing projects, including current-state baselining, targeted code inventory, incremental DSL, and incremental Plan generation.

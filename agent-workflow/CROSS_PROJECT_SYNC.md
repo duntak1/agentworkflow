@@ -14,6 +14,32 @@
 - 前后端在同一个仓库里。此时优先用 `aw agents assign` 划分目录边界即可。
 - 只想拷贝代码文件。`aw sync` 同步的是工作流快照，不是代码合并工具。
 
+## DSL / Plan 前置流程
+
+双项目同步不是研发后期才使用。只要前后端是两个真实代码仓库，Agent 在 DSL 已审、准备拆 Plan 前，就必须先引导工程师完成仓库和同步中心建设。
+
+推荐顺序：
+
+```text
+确认前后端双项目
+→ 确认同电脑 / 不同电脑
+→ 确认前端真实代码仓库路径 + GitHub 地址
+→ 确认后端真实代码仓库路径 + GitHub 地址
+→ 确认或创建 project-harness 同步中心
+→ 前后端分别安装 agentworkflow 并 aw init / aw config init
+→ 前后端分别 aw sync init 到同一个 project-harness
+→ 共享 DSL 写入 project-harness/global/dsl/
+→ 协作 Plan 写入 project-harness/global/plans/
+→ 前端 / 后端分别生成本地派生 Plan
+```
+
+闸门：
+
+- 前端真实仓库、后端真实仓库、同步中心未确认前，不得生成本地 Plan。
+- 不同电脑开发时，`project-harness` 必须是单独 GitHub 仓库；双方先 clone / pull 最新同步中心，再拆 Plan。
+- 双项目不能各自独立拆完全分离的 Plan。必须先有 `global/plans/` 协作 Plan，再派生本地 Plan。
+- 如果 DSL 已审但真实代码仓库还没创建，Agent 应继续引导工程师创建仓库、配置 GitHub 地址和初始化 workflow，而不是把计划写进临时目录。
+
 ## 核心概念
 
 `aw sync` 使用一个共享目录作为同步中心，建议叫 `project-harness`。
