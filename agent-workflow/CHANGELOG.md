@@ -11,6 +11,8 @@
 
 ### Added
 
+- Add brownfield project onboarding workflow and prompts for existing projects, including current-state baselining, targeted code inventory, incremental DSL, and incremental Plan generation.
+
 - Add automation helpers for context enrichment, affected verification, contract diff logging, PR draft filling, and watch-based index refresh.
 
 - Add Context Intelligence workflow with `aw context`, task-level Context Plans, code-reading budgets, CodeGraph fallback guidance, affected analysis, and task-start context gates.

@@ -69,6 +69,7 @@ chmod +x scripts/aw scripts/*.sh
 | 意图 | 示例 |
 |------|------|
 | 初始化 | `按 agent-workflow 初始化` / `aw init` |
+| 非全新项目接入 | 先执行 `aw status`、`aw check config`、`aw rules review`、`aw context plan`、`aw file-index`、`aw service-catalog discover --write`；回填一期基线后，再为下一期 / 当前增量需求生成 DSL / Plan |
 | 一键设置 | `aw setup` |
 | 诊断 | `aw doctor` |
 | 演示 | `aw demo` |
@@ -147,6 +148,8 @@ chmod +x scripts/aw scripts/*.sh
 | 闭环检查 | 进入下一大需求 / AT-T 前，核对完整性、可追溯性、可维护性、可交接性；缺口写入 REQ / Bug / Handoff |
 
 Agent 应：**先读本文 + `PRODUCT_INPUT_WORKFLOW.md`**，再执行对应 `scripts/aw` 子命令或等价步骤。
+
+非全新 / 存量项目接入时，Agent 应先建立当前真实状态，不得按空白新项目重建：确认项目阶段、仓库类型、构建目标和一期完成范围；目标化读取入口文件，禁止无目标全仓扫描；刷新 `docs/FILE_INDEX.md` 与 `docs/SERVICE_CATALOG.md`；把已实现能力、已知 Bug、技术债、未确认事项、不应被误改的稳定边界写入 Handoff / REQ / Memory；只有一期基线经工程师确认后，才为下一期、维护、Bug 修复或联调需求生成增量 DSL 和增量 Plan。
 
 前后端分成两个项目时，先读 [`CROSS_PROJECT_SYNC.md`](./CROSS_PROJECT_SYNC.md)：共享 DSL / 协作 Plan 放在同步中心 `global/dsl/` 和 `global/plans/`，共享任务看板放在 `global/plans/TASK_BOARD.md`，本项目 DSL / Plan 是执行派生；`aw sync pull` 只导入对方快照到 `docs/sync/inbox/`，不得直接覆盖本项目 DSL / Plan / 代码；接口、字段、权限、错误码或阻塞变化必须在本项目重新通过 REQ / Bug / Handoff 落账后再 `aw sync push`。
 

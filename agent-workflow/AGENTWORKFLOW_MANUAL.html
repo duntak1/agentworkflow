@@ -563,6 +563,7 @@
         <a href="#roles">2. 工程师与 Agent 分工</a>
         <a href="#install">3. 安装与初始化</a>
         <a href="#scenario-router">4. 按场景选择路线</a>
+        <a href="#existing-project">4.1 非全新项目接入</a>
         <a href="#product-path">5. 真实产品研发路径</a>
         <a href="#full-flow">6. 总流程图</a>
         <a href="#reference">7. Reference 与 DSL</a>
@@ -674,12 +675,39 @@ chmod +x scripts/aw scripts/*.sh
           <tbody>
             <tr><td>仅前端项目</td><td><code>project-frontend/</code></td><td>只生成前端 DSL/Plan/AT-T，重点确认页面、路由、状态、接口契约、组件和验收。</td><td>使用 <code>19.6</code> 提示词，构建目标选 <code>1=前端项目</code>。</td></tr>
             <tr><td>仅后端项目</td><td><code>project-backend/</code></td><td>只生成后端 DSL/Plan/AT-T，重点确认接口、权限、错误码、事务、数据表、消息和验收。</td><td>使用 <code>19.8</code> 提示词，构建目标选 <code>2=后端项目</code>。</td></tr>
+            <tr><td>非全新 / 存量项目</td><td>已有一期代码、已有需求或已进入研发阶段的项目。</td><td>先做项目盘点、事实基线、代码索引、已有需求回填，再为“下一期 / 当前增量需求”生成 DSL 和 Plan。</td><td>使用 <code>19.1b</code>、<code>19.1c</code> 提示词；禁止把存量代码当成新项目重建。</td></tr>
             <tr><td>同电脑前后端两个项目</td><td><code>project-frontend/</code><br><code>project-backend/</code><br><code>project-harness/</code></td><td>前后端各自开发，各自维护本项目事实，通过本地同步中心交换 handoff、REQ、Bug、接口契约。</td><td>使用 <code>19.10</code> 提示词，分别在两个项目会话中声明项目路径和同步中心路径。</td></tr>
             <tr><td>不同电脑前后端两个项目</td><td>两端各有本地项目；<code>project-harness</code> 是单独 GitHub 仓库。</td><td>每端先拉取 GitHub Harness，再 <code>aw sync pull</code>、<code>aw sync inbox</code>、<code>aw sync board</code>；跨端事项用 <code>aw sync event</code>，经确认后提交 Harness。</td><td>使用 <code>19.11</code> 提示词，先准备 GitHub Harness 仓库。</td></tr>
           </tbody>
         </table>
         <div class="callout">
           <strong>选择原则：</strong>如果前端和后端有独立仓库、独立启动命令或不同工程师维护，就按两个项目处理；如果它们在一个 monorepo 中统一构建，可以按一个前后端项目处理，但 Plan 仍要拆出 frontend/backend 两类 AT-T。
+        </div>
+      </section>
+
+      <section id="existing-project">
+        <h2>4.1 非全新项目接入</h2>
+        <p>如果项目已经开发过一期，或者已经进入研发阶段，不要按“空白新项目”处理。AgentWorkflow 的第一步是把现状变成可追溯基线：代码在哪里、已经实现了什么、哪些需求已经完成、哪些 Bug 和变更遗留、下一期要做什么。</p>
+        <div class="flow">
+          <div class="step"><strong>0. 冻结现状</strong><span>不先改代码，先识别项目阶段和仓库状态</span></div><div class="arrow">→</div>
+          <div class="step"><strong>1. 安装初始化</strong><span>aw install/init/config/rules，不覆盖业务代码</span></div><div class="arrow">→</div>
+          <div class="step"><strong>2. 事实盘点</strong><span>扫描目录、脚本、模块、接口、测试、配置、Git 状态</span></div><div class="arrow">→</div>
+          <div class="step"><strong>3. 回填基线</strong><span>生成 FILE_INDEX、SERVICE_CATALOG、Handoff、一期基线 REQ</span></div><div class="arrow">→</div>
+          <div class="step"><strong>4. 增量 DSL</strong><span>只为下一期 / 当前需求生成 DSL suite</span></div><div class="arrow">→</div>
+          <div class="step"><strong>5. 增量 Plan</strong><span>只拆未完成任务，保留既有实现边界</span></div>
+        </div>
+        <table>
+          <thead><tr><th>步骤</th><th>Agent 必须做</th><th>禁止做</th><th>关键产物</th></tr></thead>
+          <tbody>
+            <tr><td>接入判断</td><td>询问项目是否已有生产代码、一期是否完成、当前要做维护还是二期。</td><td>不问阶段就直接生成新项目 DSL。</td><td><code>docs/PROJECT_CONFIG.md</code></td></tr>
+            <tr><td>代码盘点</td><td>优先用 <code>aw context plan</code>、<code>aw file-index</code>、<code>aw service-catalog discover</code> 做目标化索引。</td><td>全仓无目标读取所有文件。</td><td><code>docs/FILE_INDEX.md</code>、<code>docs/SERVICE_CATALOG.md</code></td></tr>
+            <tr><td>一期基线</td><td>把已完成能力、入口、接口、已知风险、未关闭 Bug 写入 Handoff / Memory / REQ。</td><td>把历史事实混进新增需求，导致验收边界不清。</td><td><code>PROJECT_HANDOFF.md</code>、<code>docs/memory/</code>、<code>docs/requirements/</code></td></tr>
+            <tr><td>增量需求</td><td>为下一期或当前变更生成增量 DSL，明确“复用现有实现 / 需要改造 / 不改动”。</td><td>重写已有页面、接口、表结构或权限模型。</td><td><code>docs/dsl/DSL_*/</code></td></tr>
+            <tr><td>增量计划</td><td>只拆新增、变更、修复、联调任务；每个 AT-T 关联受影响文件和验证命令。</td><td>把已完成的一期能力重新拆成待开发任务。</td><td><code>docs/plans/</code>、<code>ATOMIC_TASKS</code></td></tr>
+          </tbody>
+        </table>
+        <div class="warn callout">
+          <strong>存量项目铁律：</strong>先建立“当前真实状态”，再生成“下一步计划”。如果代码事实、已有需求和增量需求冲突，必须先问工程师确认，不能让 Agent 选择一个看起来顺眼的版本。
         </div>
       </section>
 
@@ -699,6 +727,7 @@ chmod +x scripts/aw scripts/*.sh
           <thead><tr><th>阶段</th><th>工程师做什么</th><th>Agent 做什么</th><th>关键产物</th></tr></thead>
           <tbody>
             <tr><td>项目准备</td><td>告诉 Agent 项目路径、仓库类型、构建目标、前后端形态。</td><td>执行 <code>aw init</code>、<code>aw config init</code>、<code>aw rules init</code>。</td><td><code>PROJECT_CONFIG.md</code>、<code>ENGINEERING_RULES.md</code></td></tr>
+            <tr><td>存量接入</td><td>说明项目已完成阶段、当前分支、一期范围、下一期目标。</td><td>先生成事实基线、代码索引、服务目录、Handoff，再处理增量需求。</td><td><code>FILE_INDEX</code>、<code>SERVICE_CATALOG</code>、<code>PROJECT_HANDOFF</code></td></tr>
             <tr><td>需求输入</td><td>上传 PRD、原型、接口文档、现有代码说明。</td><td>读取 <code>reference/manifest.yaml</code>，不编造路径。</td><td><code>reference/inputs/</code></td></tr>
             <tr><td>规格冻结</td><td>审 DSL，确认需求、页面、交互、事件、边界、验收。</td><td>生成 DSL suite 和 review 包。</td><td><code>docs/dsl/DSL_*/</code></td></tr>
             <tr><td>研发计划</td><td>确认生成前端、后端或全栈计划。</td><td>生成 Plan 和 ATOMIC_TASKS，等待审批。</td><td><code>docs/plans/</code></td></tr>
@@ -1125,6 +1154,48 @@ cd workspace/project-backend
 4. 引导我确认：这是 GitHub 项目还是本地 Git 项目；构建目标是前端、后端还是前后端
 5. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
 最后输出缺失项清单和下一步建议。</code></pre>
+        <h3>19.1b 非全新项目接入：先盘点现状</h3>
+        <pre><code>使用 agentworkflow。
+当前项目路径：/path/to/existing-project
+这是非全新项目，已经有一期代码 / 已进入研发阶段。
+当前目标不是重建项目，而是把 AgentWorkflow 接入现有项目。
+
+请先不要写业务代码，也不要生成新增需求的 Plan。
+请按顺序完成：
+1. 检查 scripts/aw 是否已安装；没有则说明安装方式
+2. 执行 aw status、aw check config、aw rules review
+3. 如果没有初始化，执行 aw init，但不得覆盖业务代码
+4. 引导我确认：GitHub 项目还是本地 Git 项目；构建目标是前端、后端还是前后端；当前是维护、Bug 修复、二期开发还是联调阶段
+5. 读取 package.json / pom.xml / build.gradle / README / 启动脚本 / 路由 / API 目录 / 测试目录等入口文件，禁止全仓无目标读取
+6. 执行 aw context plan、aw file-index、aw service-catalog discover --write
+7. 输出项目事实盘点：技术栈、启动命令、测试命令、主要模块、接口入口、已知风险、缺失配置
+
+最后给出：
+- 现状基线是否足够
+- 还需要我补充哪些一期文档或口述说明
+- 下一步是否进入“一期基线回填”或“增量 DSL 生成”。</code></pre>
+        <h3>19.1c 非全新项目：一期基线回填</h3>
+        <pre><code>使用 agentworkflow 为存量项目回填一期基线。
+当前项目路径：/path/to/existing-project
+一期需求状态：已完成 / 部分完成 / 不确定
+下一步目标：维护 / Bug 修复 / 二期开发 / 联调
+
+请基于现有代码、README、接口文档、测试、Git 状态和我补充的口述说明，生成“当前真实状态”：
+1. 已实现能力清单
+2. 已有页面 / 模块 / 接口 / 数据模型 / 权限边界
+3. 已知 Bug、技术债、风险和未确认事项
+4. 当前可运行命令和失败命令
+5. 不应被二期误改的稳定边界
+
+请落盘或建议落盘到：
+- docs/handoff/PROJECT_HANDOFF.md
+- docs/FILE_INDEX.md
+- docs/SERVICE_CATALOG.md
+- docs/requirements/ 中的一期基线 REQ
+- docs/memory/ 中可复用的稳定结论
+
+完成后不要写业务代码。
+请问我是否确认这份一期基线；确认后再为下一期 / 当前增量需求生成 DSL。</code></pre>
         <h3>19.2 GitHub / 本地 Git 配置引导</h3>
         <pre><code>使用 agentworkflow 配置项目来源。
 请先问我并等待回答：
@@ -1153,6 +1224,26 @@ cd workspace/project-backend
 2. 仍需工程师确认的问题
 3. 不允许进入研发的阻塞项
 不要写业务代码，不要编造 reference 路径。</code></pre>
+        <h3>19.4b 非全新项目：增量 DSL 生成</h3>
+        <pre><code>使用 agentworkflow 为存量项目生成增量 DSL。
+当前项目路径：/path/to/existing-project
+已确认的一期基线：docs/handoff/PROJECT_HANDOFF.md、docs/FILE_INDEX.md、docs/SERVICE_CATALOG.md、docs/requirements/
+本次增量需求：&lt;写清楚二期需求 / 维护需求 / Bug 修复目标&gt;
+
+请先读取一期基线和必要入口文件，再生成多文件 DSL suite。
+DSL 必须区分：
+1. 已有能力：只引用，不重新设计
+2. 本次新增：需要实现
+3. 本次变更：说明从旧行为改成什么
+4. 本次修复：说明复现、期望、验收
+5. 不改动边界：页面、接口、表结构、权限、数据口径、兼容性
+6. 受影响文件候选：只列候选，不全仓扫描
+
+生成后请列出：
+- 与一期基线冲突的地方
+- 需要工程师确认的问题
+- 不允许进入研发的阻塞项
+不要直接生成 Plan，等待我确认 DSL。</code></pre>
         <h3>19.5 DSL 审核后生成计划</h3>
         <pre><code>DSL 已确认。
 请先检查 docs/PROJECT_CONFIG.md：
@@ -1162,6 +1253,19 @@ cd workspace/project-backend
 然后按 DSL 生成研发 Plan 和 ATOMIC_TASKS。
 生成后不要直接写代码，等待我确认 Plan。
 Plan 确认后再执行 aw confirm 生成 ENGINEERING_INDEX.md，并确认 docs/FILE_INDEX.md 已刷新。</code></pre>
+        <h3>19.5b 非全新项目：增量 Plan 生成</h3>
+        <pre><code>存量项目的增量 DSL 已确认。
+请基于已审 DSL、一期基线和代码索引生成增量 Plan。
+
+计划必须满足：
+1. 只拆本次新增 / 变更 / 修复 / 联调任务，不把一期已完成能力重新拆为待开发
+2. 每个 AT-T 写清楚受影响文件候选、不可改动边界、验证命令、回滚风险
+3. 如果需要修改已有接口、DTO、数据库、权限或公共组件，必须标记为高风险并要求工程师确认
+4. 如果是前后端分项目，必须同步到 project-harness 的 global/dsl、global/plans、TASK_BOARD
+5. 如果信息不足，先列问题，不要猜测拆任务
+
+生成后不要写代码。
+等待我确认 Plan；确认后再执行 aw confirm，并刷新 ENGINEERING_INDEX.md 和 docs/FILE_INDEX.md。</code></pre>
         <h3>19.6 仅前端项目：完整开发会话</h3>
         <pre><code>你是 frontend-agent。
 当前是仅前端项目：/path/project-frontend
