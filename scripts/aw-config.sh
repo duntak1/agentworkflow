@@ -14,7 +14,12 @@ shift || true
 usage() {
   cat <<'EOF'
 Usage:
-  aw config init [--project-kind 1|2] [--build-target 1|2|3] [--github-url url] [--default-branch branch] [--issue-system name] [--language lang] [--package-manager pm] [--frontend stack] [--ui library] [--backend stack] [--database db] [--lint cmd] [--format cmd] [--typecheck cmd] [--test cmd] [--build cmd] [--e2e cmd]
+  aw config init [--project-stage 1|2] [--project-kind 1|2] [--build-target 1|2|3] [--github-url url] [--default-branch branch] [--issue-system name] [--language lang] [--package-manager pm] [--frontend stack] [--ui library] [--backend stack] [--database db] [--lint cmd] [--format cmd] [--typecheck cmd] [--test cmd] [--build cmd] [--e2e cmd]
+
+Project stage:
+  1 = new       Brand-new project; start from reference -> DSL -> Plan.
+  2 = existing  Existing/brownfield project; inventory current state first,
+                backfill baseline, then generate incremental DSL/Plan.
 
 Project kind:
   1 = github    GitHub repository; requires GitHub 仓库地址 before planning/coding.
@@ -69,6 +74,7 @@ replace_cmd() {
 case "$CMD" in
   init)
     [[ -f "$CFG" ]] || { echo "error: missing docs/PROJECT_CONFIG.md (run aw init)" >&2; exit 1; }
+    project_stage=""
     project_kind=""
     build_target=""
     github_url=""
@@ -88,6 +94,14 @@ case "$CMD" in
     e2e=""
     while [[ $# -gt 0 ]]; do
       case "$1" in
+        --project-stage|--stage)
+          case "$(echo "${2:-}" | tr '[:upper:]' '[:lower:]')" in
+            1|new|greenfield|fresh|全新|全新项目|新项目) project_stage="new" ;;
+            2|existing|brownfield|legacy|current|已有|已有项目|存量|存量项目|非全新|非全新项目) project_stage="existing" ;;
+            *) echo "error: --project-stage must be 1/new or 2/existing" >&2; exit 1 ;;
+          esac
+          shift 2
+          ;;
         --project-kind|--kind)
           case "$(echo "${2:-}" | tr '[:upper:]' '[:lower:]')" in
             1|github|git|remote|github-repo|github仓库|github项目) project_kind="github" ;;
@@ -124,6 +138,13 @@ case "$CMD" in
         *) echo "Unknown: $1" >&2; usage 1 ;;
       esac
     done
+    if [[ -z "$project_stage" ]]; then
+      current_stage="$(awk -F'|' '/\*\*项目阶段\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "$CFG" 2>/dev/null || true)"
+      case "$current_stage" in
+        1|new|greenfield|fresh|全新|全新项目|新项目) project_stage="new" ;;
+        2|existing|brownfield|legacy|current|已有|已有项目|存量|存量项目|非全新|非全新项目) project_stage="existing" ;;
+      esac
+    fi
     if [[ -z "$project_kind" && -n "$github_url" ]]; then
       project_kind="github"
     fi
@@ -151,6 +172,7 @@ case "$CMD" in
     [[ -n "$test_cmd" ]] || test_cmd="$(detect_npm_script test 2>/dev/null || true)"
     [[ -n "$build" ]] || build="$(detect_npm_script build 2>/dev/null || true)"
     [[ -n "$e2e" ]] || e2e="$(detect_npm_script e2e 2>/dev/null || detect_npm_script playwright 2>/dev/null || true)"
+    replace_field "项目阶段" "$project_stage"
     replace_field "项目类型" "$project_kind"
     replace_field "构建目标" "$build_target"
     replace_field "GitHub 仓库地址" "$github_url"

@@ -117,6 +117,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw upgrade` | 刷新 package/scripts，保留业务 docs/reference |
 | `aw remove` | 预览移除 adapters/CI/package，`--execute` 后删除 |
 | `aw init` | 初始化 reference、DSL、Plan、TP 模板 |
+| `aw config init --project-stage 1|2` | 选择启动分流：1=全新项目，2=已有 / 存量项目；未选择前不得生成 DSL / Plan 或写业务代码 |
 | `aw dsl [A|B|C]` | 打印 DSL prompt |
 | `aw dsl suite <slug> "title"` | 生成多文件 DSL 套件：需求、页面、交互、事件、联动边界、验收 |
 | `aw dsl review [dsl] [--write]` | 输出/写入工程师 DSL 审阅包，通过后再 approve |
@@ -199,7 +200,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw check all|dsl|plan|config|req|tp|plugin` | 分项或聚合检查 |
 | `aw check plugin` | 校验 Codex plugin / marketplace metadata |
 | `aw check memory` | 校验 docs/memory 布局、字段与敏感信息 |
-| `aw config init --project-kind 1|2 --build-target 1|2|3` | 填写 PROJECT_CONFIG；项目类型 1=GitHub 仓库（需 GitHub 地址）、2=本地 Git 仓库（跳过 GitHub 地址）；构建目标 1=前端、2=后端、3=前后端 |
+| `aw config init --project-stage 1|2 --project-kind 1|2 --build-target 1|2|3` | 填写 PROJECT_CONFIG；项目阶段 1=全新项目、2=已有 / 存量项目；项目类型 1=GitHub 仓库（需 GitHub 地址）、2=本地 Git 仓库（跳过 GitHub 地址）；构建目标 1=前端、2=后端、3=前后端 |
 | `aw rules init|review|check` | 生成、审阅、校验工程规范 `docs/ENGINEERING_RULES.md`；默认固化团队前端/后端/统一 AI 执行规范清单，真实项目只补差异、关键文件和注释原则 |
 | `aw rules discover [--write]` | 扫描真实项目候选关键文件，并可回写 `docs/ENGINEERING_RULES.md` 的“关键文件”表 |
 | `aw ci install` | 安装 GitHub Actions workflow 模板 |

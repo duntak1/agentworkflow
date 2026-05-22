@@ -25,7 +25,7 @@ Works with **any** AI coding tool. Cursor Skill is **optional**; other tools use
 
 ## Solution shape
 
-`Reference → DSL 已审 → project kind + build target selected → Plan 可执行 → confirm → AT-T task → verify → changelog/git → handoff`
+`project stage selected → project kind + build target selected → new project: Reference → DSL → Plan OR existing project: inventory → baseline → incremental DSL → incremental Plan → confirm → AT-T task → verify → changelog/git → handoff`
 
 Closed-loop management is mandatory for every large requirement and every AT-T:
 
@@ -116,6 +116,7 @@ Proof path:
 
 | Step | Command |
 |------|---------|
+| Project stage | At startup, ask the engineer: `1 = new project` (`aw config init --project-stage 1`) or `2 = existing/brownfield project` (`aw config init --project-stage 2`). Do not generate DSL/Plan or code before this is confirmed |
 | Reference | edit `reference/manifest.yaml` + `inputs/` |
 | DSL | `aw dsl` → `aw dsl write` or `aw dsl apply` → `aw check dsl` → `aw dsl review` → `aw approve dsl --plan` |
 | DSL suite | `aw dsl suite <slug> "title"` → fill requirements/pages/interactions/events/boundaries/acceptance → `aw dsl review docs/dsl/DSL_<SLUG>/INDEX.md --write` → `aw approve dsl docs/dsl/DSL_<SLUG>/INDEX.md --plan` |

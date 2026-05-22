@@ -13,7 +13,7 @@
 ## 一句话流程
 
 ```text
-install/init → reference/ → aw dsl → DSL 已审 → 选择项目类型（GitHub 仓库 / 本地 Git 仓库）+ 构建目标（前端/后端/前后端）→ aw plan → Plan 可执行 → aw confirm → ENGINEERING_INDEX.md → aw next → AICODING 写代码 → verify → CHANGELOG/Git → handoff
+install/init → 选择项目阶段（全新 / 已有）→ 选择项目类型（GitHub 仓库 / 本地 Git 仓库）+ 构建目标（前端/后端/前后端）→ 全新项目走 reference → DSL → Plan；已有项目走现状盘点 → 一期基线 → 增量 DSL → 增量 Plan → DSL 已审 / Plan 可执行 → aw confirm → ENGINEERING_INDEX.md → aw next → AICODING 写代码 → verify → CHANGELOG/Git → handoff
 ```
 
 ## 闭环管理目标
@@ -44,7 +44,8 @@ chmod +x scripts/aw scripts/*.sh
 ./scripts/aw memory inject # 可选：跨会话记忆摘要
 ./scripts/aw status --json # 可选：机器可读状态
 ./scripts/aw capabilities --json # 可选：机器可读能力摘要
-./scripts/aw config init --project-kind 1 --github-url https://github.com/<owner>/<repo> # 1 = GitHub 仓库
+./scripts/aw config init --project-stage 1 # 1=全新项目；2=已有/存量项目
+./scripts/aw config init --project-kind 1 --github-url https://github.com/<owner>/<repo> # 1=GitHub 仓库
 # 或：./scripts/aw config init --project-kind 2 # 2 = 本地 Git 仓库，无需 GitHub 地址
 ./scripts/aw config init --build-target 1 # 1=前端项目；2=后端项目；3=前后端项目
 ./scripts/aw rules init && ./scripts/aw rules discover --write && ./scripts/aw rules review # 工程规范：保留团队固定清单，补项目差异
@@ -68,7 +69,8 @@ chmod +x scripts/aw scripts/*.sh
 
 | 意图 | 示例 |
 |------|------|
-| 初始化 | `按 agent-workflow 初始化` / `aw init` |
+| 初始化 | `按 agent-workflow 初始化` / `aw init`；启动时必须先问：这是全新项目还是已有 / 存量项目 |
+| 选择项目阶段 | `aw config init --project-stage 1` = 全新项目；`aw config init --project-stage 2` = 已有 / 存量项目。未选择前不得生成 DSL / Plan 或写业务代码 |
 | 非全新项目接入 | 先执行 `aw status`、`aw check config`、`aw rules review`、`aw context plan`、`aw file-index`、`aw service-catalog discover --write`；回填一期基线后，再为下一期 / 当前增量需求生成 DSL / Plan |
 | 一键设置 | `aw setup` |
 | 诊断 | `aw doctor` |
@@ -86,7 +88,7 @@ chmod +x scripts/aw scripts/*.sh
 | DSL 工程师审阅 | `aw dsl review <dsl> --write` |
 | 生成 Plan | `aw approve dsl <dsl> --plan` / `生成 Plan` / `aw plan`（须 DSL 已审） |
 | 研发中计划变更 | 小变更用 `aw plan change --summary "..."`；同范围新增任务用 `aw plan task-add --title "..."`；任务过大用 `aw task split <AT-T> --into "A; B"`；大范围变化新建 Plan / ATOMIC 后重新 approve/confirm |
-| 选择项目类型 | 任务拆分前执行 `aw config init --project-kind 1 --github-url ...` 或 `aw config init --project-kind 2`；1 = GitHub 仓库，2 = 本地 Git 仓库 |
+| 选择项目类型 | 项目阶段确认后执行 `aw config init --project-kind 1 --github-url ...` 或 `aw config init --project-kind 2`；1 = GitHub 仓库，2 = 本地 Git 仓库 |
 | 选择构建目标 | DSL 已审后、Plan 生成前执行 `aw config init --build-target 1|2|3`；1=前端项目，2=后端项目，3=前后端项目 |
 | 定向生成任务 | `aw approve dsl <dsl> --plan --domain frontend` / `--domain backend` |
 | 任务确认 | `任务确认` / `aw confirm` → 生成 `ENGINEERING_INDEX.md` |
@@ -148,6 +150,8 @@ chmod +x scripts/aw scripts/*.sh
 | 闭环检查 | 进入下一大需求 / AT-T 前，核对完整性、可追溯性、可维护性、可交接性；缺口写入 REQ / Bug / Handoff |
 
 Agent 应：**先读本文 + `PRODUCT_INPUT_WORKFLOW.md`**，再执行对应 `scripts/aw` 子命令或等价步骤。
+
+启动 AgentWorkflow 时，Agent 必须先问工程师：这是全新项目还是已有 / 存量项目？确认后写入 `docs/PROJECT_CONFIG.md`：全新项目用 `aw config init --project-stage 1`；已有 / 存量项目用 `aw config init --project-stage 2`。未确认项目阶段前，不得生成 DSL / Plan，不得写业务代码。
 
 非全新 / 存量项目接入时，Agent 应先建立当前真实状态，不得按空白新项目重建：确认项目阶段、仓库类型、构建目标和一期完成范围；目标化读取入口文件，禁止无目标全仓扫描；刷新 `docs/FILE_INDEX.md` 与 `docs/SERVICE_CATALOG.md`；把已实现能力、已知 Bug、技术债、未确认事项、不应被误改的稳定边界写入 Handoff / REQ / Memory；只有一期基线经工程师确认后，才为下一期、维护、Bug 修复或联调需求生成增量 DSL 和增量 Plan。
 

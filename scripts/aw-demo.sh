@@ -26,6 +26,7 @@ cd "${APP_DIR}"
 chmod +x scripts/aw scripts/*.sh
 ./scripts/aw init
 ./scripts/aw config init \
+  --project-stage "1" \
   --language "shell" \
   --package-manager "none" \
   --frontend "shell" \

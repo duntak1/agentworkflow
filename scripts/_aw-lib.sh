@@ -131,6 +131,17 @@ aw_project_kind() {
   esac
 }
 
+aw_project_stage() {
+  local stage
+  stage="$(aw_project_config_field "项目阶段" 2>/dev/null || true)"
+  stage="$(echo "$stage" | tr '[:upper:]' '[:lower:]')"
+  case "$stage" in
+    1|new|greenfield|fresh|全新|全新项目|新项目) echo "new" ;;
+    2|existing|brownfield|legacy|current|已有|已有项目|存量|存量项目|非全新|非全新项目) echo "existing" ;;
+    *) echo "" ;;
+  esac
+}
+
 aw_build_target() {
   local target
   target="$(aw_project_config_field "构建目标" 2>/dev/null || true)"
@@ -156,6 +167,24 @@ aw_github_url_configured() {
   local url
   url="$(aw_project_config_field "GitHub 仓库地址" 2>/dev/null || true)"
   [[ -n "$url" && "$url" != *"____"* ]]
+}
+
+aw_print_project_stage_guidance() {
+  echo "请先确认项目阶段：" >&2
+  echo "  1) 全新项目：./scripts/aw config init --project-stage 1" >&2
+  echo "     路线：reference/inputs → DSL suite → DSL 审核 → Plan → confirm → 开发" >&2
+  echo "  2) 已有 / 存量项目：./scripts/aw config init --project-stage 2" >&2
+  echo "     路线：现状盘点 → 一期基线回填 → 增量 DSL → 增量 Plan → confirm → 开发" >&2
+}
+
+aw_warn_project_stage_before_planning() {
+  local stage
+  stage="$(aw_project_stage)"
+  [[ -n "$stage" ]] && return 0
+  echo "" >&2
+  echo "warn: 项目阶段未配置；启动 AgentWorkflow 时必须先选择 1=全新项目 或 2=已有/存量项目。" >&2
+  aw_print_project_stage_guidance
+  echo "" >&2
 }
 
 aw_print_build_target_guidance() {

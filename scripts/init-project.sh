@@ -108,6 +108,7 @@ if [[ ! -f "${ROOT}/docs/PROJECT_CONFIG.md" ]]; then
 
 | 字段 | 内容 |
 |------|------|
+| **项目阶段** | ________________ |
 | **项目类型** | ________________ |
 | **构建目标** | ________________ |
 | **Issue 系统** | GitHub Issues |
@@ -121,6 +122,7 @@ if [[ ! -f "${ROOT}/docs/PROJECT_CONFIG.md" ]]; then
 | **数据库** | ________________ |
 | **工程规范** | docs/ENGINEERING_RULES.md |
 
+> 项目阶段：`new` = 全新项目，从 reference → DSL → Plan 开始；`existing` = 已有 / 存量项目，先盘点现状、回填一期基线，再生成增量 DSL / Plan。
 > 项目类型：`github` = GitHub 仓库，必须配置 GitHub 仓库地址；`local-git` = 本地 Git 仓库，跳过 GitHub 仓库地址。
 
 ## 本地验证命令

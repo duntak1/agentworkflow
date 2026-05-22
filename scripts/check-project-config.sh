@@ -31,6 +31,19 @@ if grep -qE 'lint：________________|test：________________|build：___________
   warn "lint/test/build still default placeholders"
 fi
 
+project_stage="$(awk -F'|' '/\*\*项目阶段\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "$CFG" 2>/dev/null || true)"
+case "$project_stage" in
+  1|new|greenfield|fresh|全新|全新项目|新项目)
+    ok "项目阶段: new"
+    ;;
+  2|existing|brownfield|legacy|current|已有|已有项目|存量|存量项目|非全新|非全新项目)
+    ok "项目阶段: existing"
+    ;;
+  *)
+    warn "项目阶段 not filled (choose: 1=全新项目 ./scripts/aw config init --project-stage 1 OR 2=已有/存量项目 ./scripts/aw config init --project-stage 2)"
+    ;;
+esac
+
 project_kind="$(awk -F'|' '/\*\*项目类型\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "$CFG" 2>/dev/null || true)"
 case "$project_kind" in
   1|git|github)

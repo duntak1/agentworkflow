@@ -30,6 +30,8 @@ if $JSON; then
 {
   "version": "${VERSION}",
   "pipeline": [
+    "Project stage selected",
+    "Project kind/build target selected",
     "Reference",
     "DSL reviewed",
     "Plan executable",
@@ -172,7 +174,7 @@ cat <<EOF
 version: ${VERSION}
 
 Pipeline:
-  Reference -> DSL reviewed -> Plan executable -> confirm -> AT-T task -> verify -> changelog/git -> handoff
+  Project stage selected -> Project kind/build target selected -> Reference or baseline -> DSL reviewed -> Plan executable -> confirm -> AT-T task -> verify -> changelog/git -> handoff
 
 Adapters:
   Claude Code, Codex, Copilot / VS Code, Cursor, Windsurf, Cline, Continue, Any chat

@@ -655,13 +655,20 @@ chmod +x scripts/aw scripts/*.sh
 ./scripts/aw dashboard</code></pre>
         <h3>配置项目类型与构建目标</h3>
         <pre><code># GitHub 仓库
-./scripts/aw config init --project-kind 1 --github-url https://github.com/owner/repo
+./scripts/aw config init --project-stage 1 --project-kind 1 --github-url https://github.com/owner/repo
 
 # 或本地 Git 仓库
-./scripts/aw config init --project-kind 2
+./scripts/aw config init --project-stage 2 --project-kind 2
 
 # 构建目标：1=前端，2=后端，3=前后端
 ./scripts/aw config init --build-target 1</code></pre>
+        <table>
+          <thead><tr><th>启动时必须先问</th><th>配置值</th><th>后续路线</th></tr></thead>
+          <tbody>
+            <tr><td>这是全新项目吗？</td><td><code>--project-stage 1</code> / <code>new</code></td><td>走全新项目流程：reference → DSL suite → DSL 审核 → Plan → confirm → 开发。</td></tr>
+            <tr><td>这是已有 / 存量项目吗？</td><td><code>--project-stage 2</code> / <code>existing</code></td><td>走存量项目流程：现状盘点 → 一期基线回填 → 增量 DSL → 增量 Plan → confirm → 开发。</td></tr>
+          </tbody>
+        </table>
         <div class="warn callout">
           <strong>注意：</strong>这些配置不是装饰信息。后续 Plan 拆分、验证命令、GitHub 引导、任务执行都会读取 <code>docs/PROJECT_CONFIG.md</code>。
         </div>
@@ -1143,16 +1150,33 @@ cd workspace/project-backend
       <section id="prompts">
         <h2>19. 提示词大全</h2>
         <p>下面的提示词按真实项目场景组织。复制后替换路径、任务 ID、项目名即可。建议工程师在每个新会话第一条消息中给出“项目形态 + 路径 + 当前阶段”。</p>
-        <h3>19.1 新项目接入：先不要写代码</h3>
+        <h3>19.1 启动分流：先判断全新项目还是已有项目</h3>
         <pre><code>使用 agentworkflow。
 当前项目路径：/path/to/project
-当前是新项目接入阶段，不要写业务代码。
+当前是项目启动接入阶段，不要写业务代码。
+请先问我并等待回答：
+1. 这是全新项目，还是已有 / 存量项目？
+2. 这是 GitHub 项目，还是本地 Git 项目？
+3. 构建目标是仅前端、仅后端，还是前后端项目？
+
+得到回答后：
+- 如果是全新项目，执行 aw config init --project-stage 1，并继续 19.1a 全新项目接入流程
+- 如果是已有 / 存量项目，执行 aw config init --project-stage 2，并继续 19.1b 非全新项目接入流程
+- 如果是 GitHub 项目，继续配置 --project-kind 1 --github-url
+- 如果是本地 Git 项目，继续配置 --project-kind 2
+
+在我确认项目阶段前，不要生成 DSL、不要生成 Plan、不要修改业务代码。</code></pre>
+        <h3>19.1a 全新项目接入：先不要写代码</h3>
+        <pre><code>使用 agentworkflow。
+当前项目路径：/path/to/project
+当前是全新项目接入阶段，不要写业务代码。
 请按顺序完成：
 1. 检查是否已安装 scripts/aw；没有则说明需要从 agentworkflow 源码安装
 2. 执行 aw status、aw check config、aw rules review
 3. 如果没有初始化，执行 aw init
-4. 引导我确认：这是 GitHub 项目还是本地 Git 项目；构建目标是前端、后端还是前后端
-5. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
+4. 确认 docs/PROJECT_CONFIG.md 中项目阶段为 new；如果没有，执行 aw config init --project-stage 1
+5. 引导我确认：这是 GitHub 项目还是本地 Git 项目；构建目标是前端、后端还是前后端
+6. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
 最后输出缺失项清单和下一步建议。</code></pre>
         <h3>19.1b 非全新项目接入：先盘点现状</h3>
         <pre><code>使用 agentworkflow。

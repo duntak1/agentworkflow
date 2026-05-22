@@ -11,6 +11,8 @@
 
 ### Added
 
+- Add startup project-stage routing so agents must ask whether a project is new or existing/brownfield, write `--project-stage` into PROJECT_CONFIG, and follow the matching onboarding path.
+
 - Add brownfield project onboarding workflow and prompts for existing projects, including current-state baselining, targeted code inventory, incremental DSL, and incremental Plan generation.
 
 - Add automation helpers for context enrichment, affected verification, contract diff logging, PR draft filling, and watch-based index refresh.

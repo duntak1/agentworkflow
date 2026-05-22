@@ -53,8 +53,9 @@ grep -q 'scripts/aw' docs/FILE_INDEX.md || { echo "fail: FILE_INDEX missing scri
 grep -q 'scripts/generate-file-index.sh' docs/FILE_INDEX.md || { echo "fail: FILE_INDEX missing generator"; exit 1; }
 ./scripts/aw file-index
 grep -q '项目代码文件索引' docs/FILE_INDEX.md || { echo "fail: aw file-index did not generate detailed index"; exit 1; }
-./scripts/aw config init --project-kind "1" --build-target "3" --github-url "https://github.com/example/e2e-app" --default-branch "main" --language "shell" --package-manager "none" --frontend "shell" --ui "none" --backend "none" --database "none" --lint "./scripts/aw check layout" --format "./scripts/aw check layout" --typecheck "./scripts/aw check layout" --test "./scripts/aw check tp" --build "./scripts/aw check plan" --e2e "./scripts/aw check tp"
+./scripts/aw config init --project-stage "1" --project-kind "1" --build-target "3" --github-url "https://github.com/example/e2e-app" --default-branch "main" --language "shell" --package-manager "none" --frontend "shell" --ui "none" --backend "none" --database "none" --lint "./scripts/aw check layout" --format "./scripts/aw check layout" --typecheck "./scripts/aw check layout" --test "./scripts/aw check tp" --build "./scripts/aw check plan" --e2e "./scripts/aw check tp"
 grep -q 'https://github.com/example/e2e-app' docs/PROJECT_CONFIG.md || { echo "fail: github url not written"; exit 1; }
+grep -Fq '| **项目阶段** | new |' docs/PROJECT_CONFIG.md || { echo "fail: project stage not written"; exit 1; }
 grep -Fq '| **项目类型** | github |' docs/PROJECT_CONFIG.md || { echo "fail: project kind not written"; exit 1; }
 grep -Fq '| **构建目标** | fullstack |' docs/PROJECT_CONFIG.md || { echo "fail: build target not written"; exit 1; }
 ./scripts/aw check config

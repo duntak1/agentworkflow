@@ -114,6 +114,7 @@ if git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1; then
   [[ -n "$git_head" ]] || git_head="—"
 fi
 
+project_stage="$(project_field_or_dash "项目阶段")"
 project_kind="$(project_field_or_dash "项目类型")"
 build_target="$(project_field_or_dash "构建目标")"
 github_url="$(project_field_or_dash "GitHub 仓库地址")"
@@ -147,6 +148,7 @@ ${FOCUS:-（填写）}
 
 | 项 | 值 |
 |----|----|
+| 项目阶段 | ${project_stage} |
 | 项目类型 | ${project_kind} |
 | 构建目标 | ${build_target} |
 | GitHub 仓库地址 | ${github_url} |

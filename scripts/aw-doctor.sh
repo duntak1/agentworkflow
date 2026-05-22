@@ -41,10 +41,16 @@ echo "== project files =="
 exists "reference" && ok "reference/" || warn "missing reference/ (run: ./scripts/aw init)"
 exists "docs/PROJECT_CONFIG.md" && ok "PROJECT_CONFIG" || warn "missing docs/PROJECT_CONFIG.md (run: ./scripts/aw init)"
 if exists "docs/PROJECT_CONFIG.md"; then
+  project_stage="$(awk -F'|' '/\*\*项目阶段\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "${ROOT}/docs/PROJECT_CONFIG.md" 2>/dev/null || true)"
   project_kind="$(awk -F'|' '/\*\*项目类型\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "${ROOT}/docs/PROJECT_CONFIG.md" 2>/dev/null || true)"
   build_target="$(awk -F'|' '/\*\*构建目标\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "${ROOT}/docs/PROJECT_CONFIG.md" 2>/dev/null || true)"
   github_url="$(awk -F'|' '/\*\*GitHub 仓库地址\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3; exit }' "${ROOT}/docs/PROJECT_CONFIG.md" 2>/dev/null || true)"
   origin_url="$(git -C "$ROOT" remote get-url origin 2>/dev/null || true)"
+  case "$project_stage" in
+    1|new|greenfield|fresh|全新|全新项目|新项目) ok "project stage new" ;;
+    2|existing|brownfield|legacy|current|已有|已有项目|存量|存量项目|非全新|非全新项目) ok "project stage existing" ;;
+    *) warn "project stage not recorded (choose: 1=全新项目 ./scripts/aw config init --project-stage 1 OR 2=已有/存量项目 ./scripts/aw config init --project-stage 2)" ;;
+  esac
   case "$project_kind" in
     1|git|github) project_kind="github"; ok "project kind github" ;;
     2|local|local-git|local_git|本地|本地git|本地项目) project_kind="local-git"; ok "project kind local-git" ;;

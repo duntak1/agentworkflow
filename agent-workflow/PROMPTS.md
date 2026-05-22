@@ -9,18 +9,39 @@
 | DSL 路径 A/B/C | [`templates/prompts/PROMPT-DSL.md`](./templates/prompts/PROMPT-DSL.md) |
 | Plan（DSL 已审后） | [`templates/prompts/PROMPT-PLAN.md`](./templates/prompts/PROMPT-PLAN.md) |
 
-## 真实项目启动
+## 启动分流：先判断全新项目还是已有项目
 
 ```text
 使用 agentworkflow。
 当前项目路径：/path/to/project
-当前是新项目接入阶段，不要写业务代码。
+当前是项目启动接入阶段，不要写业务代码。
+请先问我并等待回答：
+1. 这是全新项目，还是已有 / 存量项目？
+2. 这是 GitHub 项目，还是本地 Git 项目？
+3. 构建目标是仅前端、仅后端，还是前后端项目？
+
+得到回答后：
+- 如果是全新项目，执行 aw config init --project-stage 1，并继续“全新项目接入”流程
+- 如果是已有 / 存量项目，执行 aw config init --project-stage 2，并继续“非全新项目接入”流程
+- 如果是 GitHub 项目，继续配置 --project-kind 1 --github-url
+- 如果是本地 Git 项目，继续配置 --project-kind 2
+
+在我确认项目阶段前，不要生成 DSL、不要生成 Plan、不要修改业务代码。
+```
+
+## 全新项目接入
+
+```text
+使用 agentworkflow。
+当前项目路径：/path/to/project
+当前是全新项目接入阶段，不要写业务代码。
 请按顺序完成：
 1. 检查是否已安装 scripts/aw；没有则说明需要从 agentworkflow 源码安装
 2. 执行 aw status、aw check config、aw rules review
 3. 如果没有初始化，执行 aw init
-4. 引导我确认：这是 GitHub 项目还是本地 Git 项目；构建目标是前端、后端还是前后端
-5. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
+4. 确认 docs/PROJECT_CONFIG.md 中项目阶段为 new；如果没有，执行 aw config init --project-stage 1
+5. 引导我确认：这是 GitHub 项目还是本地 Git 项目；构建目标是前端、后端还是前后端
+6. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
 最后输出缺失项清单和下一步建议。
 ```
 
@@ -37,10 +58,11 @@
 1. 检查 scripts/aw 是否已安装；没有则说明安装方式
 2. 执行 aw status、aw check config、aw rules review
 3. 如果没有初始化，执行 aw init，但不得覆盖业务代码
-4. 引导我确认：GitHub 项目还是本地 Git 项目；构建目标是前端、后端还是前后端；当前是维护、Bug 修复、二期开发还是联调阶段
-5. 读取 package.json / pom.xml / build.gradle / README / 启动脚本 / 路由 / API 目录 / 测试目录等入口文件，禁止全仓无目标读取
-6. 执行 aw context plan、aw file-index、aw service-catalog discover --write
-7. 输出项目事实盘点：技术栈、启动命令、测试命令、主要模块、接口入口、已知风险、缺失配置
+4. 确认 docs/PROJECT_CONFIG.md 中项目阶段为 existing；如果没有，执行 aw config init --project-stage 2
+5. 引导我确认：GitHub 项目还是本地 Git 项目；构建目标是前端、后端还是前后端；当前是维护、Bug 修复、二期开发还是联调阶段
+6. 读取 package.json / pom.xml / build.gradle / README / 启动脚本 / 路由 / API 目录 / 测试目录等入口文件，禁止全仓无目标读取
+7. 执行 aw context plan、aw file-index、aw service-catalog discover --write
+8. 输出项目事实盘点：技术栈、启动命令、测试命令、主要模块、接口入口、已知风险、缺失配置
 
 最后给出：
 - 现状基线是否足够

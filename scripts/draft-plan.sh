@@ -90,9 +90,11 @@ if ! grep -qE '已审' "$FULL" 2>/dev/null; then
 fi
 
 aw_warn_github_url_before_planning
+aw_warn_project_stage_before_planning
 aw_warn_build_target_before_planning
 
 PROMPT_FILE="${TEMPLATES}/prompts/PROMPT-PLAN.md"
+PROJECT_STAGE="$(aw_project_stage)"
 BUILD_TARGET="$(aw_build_target)"
 BUILD_TARGET_LABEL="$(aw_build_target_label "$BUILD_TARGET")"
 
@@ -100,6 +102,7 @@ echo "=============================================="
 echo " Plan draft prompt"
 echo " DSL: ${FULL}"
 [[ -n "$DOMAIN" ]] && echo " Domain: ${DOMAIN}"
+[[ -n "$PROJECT_STAGE" ]] && echo " Project stage: ${PROJECT_STAGE}"
 [[ -n "$BUILD_TARGET_LABEL" ]] && echo " Build target: ${BUILD_TARGET_LABEL}"
 echo "=============================================="
 echo ""
@@ -134,6 +137,29 @@ if [[ -n "$DOMAIN" ]]; then
 - 如发现 ${DOMAIN} 任务无法独立完成，必须在 Plan 风险中列出阻塞依赖，而不是擅自生成其他领域任务。
 EOF
 fi
+
+cat <<EOF
+
+【项目阶段】
+EOF
+case "$PROJECT_STAGE" in
+  new)
+    cat <<'EOF'
+- 当前项目阶段：全新项目。Plan 应从已审 DSL 拆出完整研发任务。
+EOF
+    ;;
+  existing)
+    cat <<'EOF'
+- 当前项目阶段：已有 / 存量项目。Plan 只能拆本次新增 / 变更 / 修复 / 联调任务，不得把一期已完成能力重新拆为待开发。
+- 每个 AT-T 必须写清受影响文件候选、不可改动边界、验证命令和回滚风险。
+EOF
+    ;;
+  *)
+    cat <<'EOF'
+- 当前项目阶段未配置。生成 Plan 前必须先让工程师选择：1=全新项目，2=已有 / 存量项目。
+EOF
+    ;;
+esac
 
 if [[ -n "$BUILD_TARGET_LABEL" ]]; then
   cat <<EOF
