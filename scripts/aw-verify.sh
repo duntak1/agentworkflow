@@ -14,6 +14,7 @@ ROOT="$(aw_repo_root)"
 TASK_ID=""
 RUN_CONFIG=true
 RUN_E2E=false
+RUN_AFFECTED=false
 
 audit_verify() {
   local action="$1" result="$2"
@@ -27,8 +28,9 @@ while [[ $# -gt 0 ]]; do
     --task) TASK_ID="${2:-}"; shift 2 ;;
     --config-only) RUN_CONFIG=true; TASK_ID=""; shift ;;
     --run-e2e) RUN_E2E=true; shift ;;
+    --affected) RUN_AFFECTED=true; shift ;;
     -h|--help)
-      echo "Usage: aw verify [--task AT-T...] [--config-only] [--run-e2e]"
+      echo "Usage: aw verify [--task AT-T...] [--config-only] [--run-e2e] [--affected]"
       echo "  AT-T Verify may use: shell cmd; TP:docs/quality/test-plans/TP-….md; combine with ;"
       echo "  --run-e2e executes PROJECT_CONFIG e2e/playwright command for TP specs when configured."
       exit 0
@@ -92,6 +94,14 @@ run_verify_spec() {
 }
 
 ERR=0
+
+if $RUN_AFFECTED; then
+  if [[ -n "$TASK_ID" ]]; then
+    "${SCRIPT_DIR}/aw-context.sh" affected --task "$TASK_ID" || true
+  else
+    "${SCRIPT_DIR}/aw-context.sh" affected || true
+  fi
+fi
 
 if [[ -n "$TASK_ID" ]]; then
   atomic="$(aw_resolve_atomic_tasks_file 2>/dev/null || true)"

@@ -144,6 +144,7 @@ Proof path:
 | Ops | `aw ops slo|incident|incident-close|runbook ...` maintains SLO, incident, recovery, and runbook records; use `aw ops gate` before release/handoff |
 | Hook / Gate automation | `aw hooks install` enables Git hooks; `aw gate pre-commit|task|pr|release` runs lifecycle gates for DSL, REQ, TP, Contract, Agent locks, Trace, Score, and Release |
 | Code context | `aw context init|status|plan|query|impact|affected|gate` manages CodeGraph/file-index-backed task context, allowed-read files, symbol/impact lookup, and affected-test notes |
+| Automation helpers | `aw context enrich`, `aw verify --affected`, `aw contract diff --write`, `aw github-pr fill`, and `aw watch index` automate context enrichment, affected validation, contract diffs, PR drafts, and index refresh |
 | API contracts | `aw contract init|change|test|diff|gate` maintains OpenAPI, API changelog, mock-server notes, schema diff, and contract-test evidence for frontend/backend alignment |
 | GitHub PR loop | `aw github-pr branch|draft|review|gate` records branch policy, PR checklist, review outcomes, Contract/Score/Release readiness, and rollback notes |
 | Agents | `aw agents assign|claim|heartbeat|release|handoff|review ...` records roles, task locks, heartbeats, ownership, handoffs, and review outcomes; use `aw agents gate --strict` to block path conflicts or expired/missing locks |

@@ -22,7 +22,9 @@ Usage:
   aw contract init
   aw contract change --summary "..." --endpoint "..." --type add|change|remove [--task AT-T] [--breaking]
   aw contract test --task AT-T --mock "..." --contract "..." [--schema-diff "..."] [--result pass|fail] [--evidence "..."]
-  aw contract diff [--base path] [--head path]
+  aw contract diff [--base path] [--head path] [--write] [--task AT-T...]
+  aw contract breaking-check
+  aw contract sync --task AT-T...
   aw contract gate
   aw contract check
 EOF
@@ -107,20 +109,65 @@ case "$CMD" in
   diff)
     BASE=""
     HEAD=""
+    WRITE=false
+    TASK="—"
     while [[ $# -gt 0 ]]; do
       case "$1" in
         --base) BASE="${2:-}"; shift 2 ;;
         --head) HEAD="${2:-}"; shift 2 ;;
+        --write) WRITE=true; shift ;;
+        --task|--related) TASK="${2:-}"; shift 2 ;;
         *) echo "Unknown: $1" >&2; usage 1 ;;
       esac
     done
     ensure_contracts
+    DIFF_OUT=""
     if [[ -n "$BASE" && -n "$HEAD" ]]; then
-      diff -u "$BASE" "$HEAD" || true
+      DIFF_OUT="$(diff -u "$BASE" "$HEAD" || true)"
     elif git -C "$ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-      git -C "$ROOT" diff -- docs/contracts/API_CONTRACT.openapi.yaml || true
+      DIFF_OUT="$(git -C "$ROOT" diff -- docs/contracts/API_CONTRACT.openapi.yaml || true)"
     else
       echo "No git diff available. Provide --base and --head."
+    fi
+    [[ -n "$DIFF_OUT" ]] && printf '%s\n' "$DIFF_OUT" || echo "no contract diff"
+    if $WRITE; then
+      summary="OpenAPI contract diff"
+      [[ -z "$DIFF_OUT" ]] && summary="No OpenAPI contract diff"
+      breaking=false
+      if echo "$DIFF_OUT" | grep -E '^-.*(required:|type:|paths:|responses:|parameters:|schema:)' >/dev/null 2>&1; then
+        breaking=true
+      fi
+      now="$(date '+%Y-%m-%d %H:%M:%S')"
+      btxt="non-breaking"
+      [[ "$breaking" == true ]] && btxt="breaking-candidate"
+      insert_row "$CHANGELOG" "| ${now} | ${TASK} | diff / ${btxt} | docs/contracts/API_CONTRACT.openapi.yaml: ${summary} | 待前端确认 | 待后端确认 | aw contract diff --write | open |"
+      echo "logged: docs/contracts/API_CHANGELOG.md"
+      aw_refresh_engineering_index
+    fi
+    ;;
+  breaking-check)
+    ensure_contracts
+    echo "== contract breaking-check =="
+    diff_out="$(git -C "$ROOT" diff -- docs/contracts/API_CONTRACT.openapi.yaml 2>/dev/null || true)"
+    if echo "$diff_out" | grep -E '^-.*(required:|type:|paths:|responses:|parameters:|schema:)' >/dev/null 2>&1; then
+      echo "block: possible breaking OpenAPI change detected" >&2
+      echo "fix: aw contract diff --write --task <AT-T>; confirm frontend/backend impact; add contract test" >&2
+      exit 1
+    fi
+    echo "contract breaking-check: ok"
+    ;;
+  sync)
+    TASK="—"
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --task|--related) TASK="${2:-}"; shift 2 ;;
+        *) echo "Unknown: $1" >&2; usage 1 ;;
+      esac
+    done
+    ensure_contracts
+    "${SCRIPT_DIR}/aw-contract.sh" diff --write --task "$TASK" || true
+    if [[ -x "${SCRIPT_DIR}/aw-sync.sh" ]]; then
+      "${SCRIPT_DIR}/aw-sync.sh" event --type contract --task "$TASK" --summary "API contract updated; review docs/contracts/API_CONTRACT.openapi.yaml" --evidence "docs/contracts/" || true
     fi
     ;;
   gate)

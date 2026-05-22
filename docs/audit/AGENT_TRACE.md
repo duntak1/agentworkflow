@@ -12,4 +12,5 @@
 
 | 时间 | AT-T / REQ | 动作 | 决策 / 命令 / 结果 | 证据 | 确认人 |
 |------|------------|------|--------------------|------|--------|
+| 2026-05-22 09:45:28 | — | verify | ok | aw verify | — |
 | 2026-05-20 14:57:13 | EH-P0-001 | Engineering Harness skill enhancement | Added audit/policy/security/service-catalog/release minimal control-plane docs and commands. | docs/handoff/ENGINEERING_HARNESS_TASKS.md | user-approved direction |

@@ -130,6 +130,9 @@ case "$CMD" in
   context)
     exec "${SCRIPT_DIR}/aw-context.sh" "$@"
     ;;
+  watch)
+    exec "${SCRIPT_DIR}/aw-watch.sh" "$@"
+    ;;
   gate)
     exec "${SCRIPT_DIR}/aw-gate.sh" "$@"
     ;;

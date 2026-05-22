@@ -109,8 +109,12 @@ chmod +x scripts/aw scripts/*.sh
 | 发布门禁 | `aw release gate [--run-verify] [--run-security] [--strict-policy] [--strict-report]` 聚合 CHANGELOG、Policy、Security、Service Catalog、环境、Ops、Agents、Metrics、报告门禁与可选验证 |
 | 自动 Gate | `aw gate pre-commit|task|pr|release` 聚合 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release；`aw hooks install` 可接入 Git hooks |
 | 代码上下文控制 | `aw context init|status|plan|query|impact|affected|gate` 生成任务级 Context Plan，限制读取文件和 symbol，优先接入 CodeGraph，避免无目标全仓扫描 |
+| 上下文自动补全 | `aw context enrich --task <AT-T>` 自动补全 Symbol / 影响范围；`aw verify --affected --task <AT-T>` 先写入 affected analysis 再验证 |
 | 前后端契约 | `aw contract init|change|test|diff|gate` 维护 OpenAPI、API 变更、Mock、Contract Test、Schema Diff 和破坏性变更阻断 |
+| 契约自动化 | `aw contract diff --write|breaking-check|sync` 自动记录 OpenAPI diff、检测破坏性变更候选，并发布契约同步事件 |
 | GitHub PR 闭环 | `aw github-pr branch|draft|review|gate` 维护分支策略、PR 清单、Review、Contract/Score/Release/Rollback 检查 |
+| PR 自动填充 | `aw github-pr fill|create` 基于 AT-T、DSL、Plan、Context、Verify、Contract、Score 自动生成 PR 草稿；真正创建 PR 需工程师确认 |
+| Watch 自动化 | `aw watch index [--once|--loop]` 刷新 FILE_INDEX / ENGINEERING_INDEX，并输出 affected analysis |
 | 多 Agent 锁 | `aw agents claim|heartbeat|release|lock-check` 维护任务锁、心跳、过期锁、路径冲突；严格模式阻断并行冲突 |
 | 交付评分 / 恢复 | `aw score record --scope ...` 写 0-100 交付评分；`aw recover context|plan|sync|failed-task|conflict|rollback` 固化恢复路径 |
 | 严格报告发布门禁 | `aw release gate --strict-report` 要求最近 release 报告存在且关键快照完整 |

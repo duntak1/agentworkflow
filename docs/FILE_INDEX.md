@@ -8,7 +8,7 @@
 - 新增 / 删除 / 重命名前端、后端、共享、测试或配置代码文件后，运行 `./scripts/aw file-index`。
 - 优先查看「前端业务代码 / 后端业务代码 / 共享代码 / 测试代码 / 运行配置」；脚本、模板、工作流文档只是辅助索引。
 - 本文件供人类工程师定位代码和手改点，不替代代码真源、DSL、Plan、REQ、测试计划或 Bug 流水。
-- 生成时间：2026-05-21T03:38:59Z
+- 生成时间：2026-05-22T01:45:31Z
 
 ## 前端业务代码
 
@@ -60,6 +60,8 @@
 | `scripts/aw-commit.sh` | 提交助手：默认先 verify，再建议或执行 commit message。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-config.sh` | 初始化和更新 docs/PROJECT_CONFIG.md 的技术栈与验证命令。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-confirm.sh` | 任务确认入口：校验 DSL 已审、Plan 可执行并生成确认态和工程师索引。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-context.sh` | 项目文件：aw-context.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-contract.sh` | 项目文件：aw-contract.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-dashboard.sh` | 只读终端 dashboard，汇总状态、能力和机器可读入口。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-demo.sh` | 在临时目录演示完整 agent-workflow 工作流。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-doctor.sh` | 诊断安装、配置、adapter、CI、工作流状态和聚合检查。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
@@ -67,6 +69,8 @@
 | `scripts/aw-dsl-review.sh` | 生成 DSL 工程师审阅包，支持单文件 DSL 和 DSL suite。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-dsl-select.sh` | 多 DSL 文件的 list/use 选择器。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-dsl-suite.sh` | 创建多文件 DSL 套件，覆盖需求、页面、交互、事件、边界、验收。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-gate.sh` | 项目文件：aw-gate.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-github-pr.sh` | 项目文件：aw-github-pr.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-install.sh` | 将 agent-workflow 包和 scripts 安装到目标业务仓。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-memory.sh` | 文件化记忆系统：init、add、list、search、show、archive、inject。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-metrics.sh` | 交付度量助手：记录 DORA / Flow 指标，包括部署、变更、失败和恢复。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
@@ -76,11 +80,13 @@
 | `scripts/aw-plan-change.sh` | 研发中计划变更助手：记录 plan change、追加 AT-T、拆分过大任务并自动审计。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-plan-select.sh` | 多 Plan 文件的 list/use 选择器。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-policy.sh` | Policy-as-Code 助手：初始化策略文件、记录策略例外和审批决策、检查策略结构。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-recover.sh` | 项目文件：aw-recover.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-release.sh` | 发布闭环助手：维护环境、发布记录、回滚计划、Feature Flag 台账和发布门禁。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-remove.sh` | 干运行或执行移除 adapters、CI、package 等安装产物。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-report.sh` | 项目文件：aw-report.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-req.sh` | 统一需求入口：口述新增和研发中变更记录到 REQ，并回写 DSL/Plan/ATOMIC。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-rules.sh` | 生成、审阅、检查 docs/ENGINEERING_RULES.md。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-score.sh` | 项目文件：aw-score.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-security.sh` | 安全与依赖准入助手：记录安全发现和新依赖评审结论。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-service-catalog.sh` | 服务目录助手：维护 docs/SERVICE_CATALOG.md 的服务/模块级交接信息。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-setup.sh` | 一键 setup：install/init/adapters/ci/status/doctor 组合流程。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
@@ -91,6 +97,7 @@
 | `scripts/aw-trace.sh` | 项目文件：aw-trace.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-upgrade.sh` | 升级目标仓中的 agent-workflow 包、脚本和可选 CI。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-verify.sh` | 执行任务 Verify、PROJECT_CONFIG lint/format/typecheck/test/build/e2e。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-watch.sh` | 项目文件：aw-watch.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/build-skill-archive.sh` | 构建 dist/agent-workflow-skill-*.tar.gz 并运行包检查。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/check-aw-all.sh` | 聚合检查入口，串联 layout、dsl、plan、config、rules、req、tp、plugin、memory。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/check-aw-layout.sh` | 检查 agent-workflow 基础目录和关键文件是否存在。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
@@ -164,9 +171,18 @@
 | `agent-workflow/templates/ENGINEERING_INDEX.header.md` | ENGINEERING_INDEX.md 生成模板。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/SERVICE_CATALOG.md` | 服务/模块级目录，记录 owner、入口、API、数据、依赖、验证、部署和告警入口。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/agents/AGENT_HANDOFFS.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/agents/AGENT_HEARTBEATS.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/agents/AGENT_LOCKS.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/agents/AGENT_REVIEWS.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/agents/AGENT_ROLES.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/audit/AGENT_TRACE.md` | Agent 执行审计模板或流水，记录关键动作、命令、结果和确认点。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/context/CODE_CONTEXT_INDEX.md` | 项目 Markdown 文档：CODE_CONTEXT_INDEX.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/context/CONTEXT_CONFIG.md` | 项目 Markdown 文档：CONTEXT_CONFIG.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md` | 项目 Markdown 文档：CONTEXT_PLAN_TEMPLATE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/contracts/API_CHANGELOG.md` | 项目 Markdown 文档：API_CHANGELOG.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/contracts/API_CONTRACT.openapi.yaml` | 项目 YAML 配置：API_CONTRACT.openapi.yaml。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/contracts/CONTRACT_TESTS.md` | 项目 Markdown 文档：CONTRACT_TESTS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/contracts/MOCK_SERVER.md` | 项目 Markdown 文档：MOCK_SERVER.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/dsl/DSL_DRAFT.md` | DSL 模板或示例文件：DSL_DRAFT.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md` | DSL 模板或示例文件：DSL_SPEC_TEMPLATE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/dsl/DSL_SUITE_ACCEPTANCE.md` | DSL 模板或示例文件：DSL_SUITE_ACCEPTANCE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
@@ -177,6 +193,10 @@
 | `agent-workflow/templates/dsl/DSL_SUITE_PAGES.md` | DSL 模板或示例文件：DSL_SUITE_PAGES.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md` | DSL 模板或示例文件：DSL_SUITE_REQUIREMENTS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md` | DSL 模板或示例文件：FRONTEND_PAGE_SPEC_TEMPLATE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/github/BRANCH_POLICY.md` | 项目 Markdown 文档：BRANCH_POLICY.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/github/PR_CHECKLIST.md` | 项目 Markdown 文档：PR_CHECKLIST.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/github/REVIEW_GATE.md` | 项目 Markdown 文档：REVIEW_GATE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/hooks/HOOKS.md` | 项目 Markdown 文档：HOOKS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/memory/INDEX.md` | 记忆系统模板或说明：INDEX.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/memory/README.md` | 记忆系统模板或说明：README.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/memory/_TEMPLATE.md` | 记忆系统模板或说明：_TEMPLATE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
@@ -193,12 +213,14 @@
 | `agent-workflow/templates/quality/test-plans/INDEX.md` | 测试计划模板或索引：INDEX.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/quality/test-plans/README.md` | 测试计划模板或索引：README.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/quality/test-plans/_TEMPLATE.md` | 测试计划模板或索引：_TEMPLATE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/recovery/RECOVERY_PLAYBOOK.md` | 项目 Markdown 文档：RECOVERY_PLAYBOOK.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/reference/README.md` | 项目 Markdown 文档：README.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/reference/manifest.yaml.example` | 项目文件：manifest.yaml.example。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/release/ENVIRONMENTS.md` | 环境、发布、回滚和 Feature Flag 记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/release/FEATURE_FLAGS.md` | 环境、发布、回滚和 Feature Flag 记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/release/RELEASE_RECORD.md` | 环境、发布、回滚和 Feature Flag 记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/rules/ENGINEERING_RULES.md` | 工程规范模板：ENGINEERING_RULES.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/score/DELIVERY_SCORE.md` | 项目 Markdown 文档：DELIVERY_SCORE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/security/DEPENDENCY_REVIEW.md` | 安全发现与依赖准入记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/security/SECURITY_FINDINGS.md` | 安全发现与依赖准入记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 
@@ -225,6 +247,8 @@
 |------|------|----------|
 | `docs/SERVICE_CATALOG.md` | 服务/模块级目录，记录 owner、入口、API、数据、依赖、验证、部署和告警入口。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/agents/AGENT_HANDOFFS.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/agents/AGENT_HEARTBEATS.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/agents/AGENT_LOCKS.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/agents/AGENT_REVIEWS.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/agents/AGENT_ROLES.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/audit/AGENT_TRACE.md` | Agent 执行审计模板或流水，记录关键动作、命令、结果和确认点。 | 变更后按影响范围同步索引、文档和验证。 |
@@ -298,6 +322,20 @@
 
 | 路径 | 说明 | 维护提示 |
 |------|------|----------|
+| `docs/context/CODE_CONTEXT_INDEX.md` | 项目 Markdown 文档：CODE_CONTEXT_INDEX.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/context/CONTEXT_CONFIG.md` | 项目 Markdown 文档：CONTEXT_CONFIG.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/contracts/API_CHANGELOG.md` | 项目 Markdown 文档：API_CHANGELOG.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/contracts/API_CONTRACT.openapi.yaml` | 项目 YAML 配置：API_CONTRACT.openapi.yaml。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/contracts/CONTRACT_TESTS.md` | 项目 Markdown 文档：CONTRACT_TESTS.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/contracts/MOCK_SERVER.md` | 项目 Markdown 文档：MOCK_SERVER.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/github/BRANCH_POLICY.md` | 项目 Markdown 文档：BRANCH_POLICY.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/github/PR_CHECKLIST.md` | 项目 Markdown 文档：PR_CHECKLIST.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/github/REVIEW_GATE.md` | 项目 Markdown 文档：REVIEW_GATE.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/hooks/HOOKS.md` | 项目 Markdown 文档：HOOKS.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/index.html` | 项目文件：index.html。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/product/ENGINEERING_HARNESS_PRD.md` | 项目 Markdown 文档：ENGINEERING_HARNESS_PRD.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/recovery/RECOVERY_PLAYBOOK.md` | 项目 Markdown 文档：RECOVERY_PLAYBOOK.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/score/DELIVERY_SCORE.md` | 项目 Markdown 文档：DELIVERY_SCORE.md。 | 变更后按影响范围同步索引、文档和验证。 |
 | `scripts/README.md` | 项目 Markdown 文档：README.md。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/e2e-smoke.sh` | 端到端冒烟测试：打包、安装、init、DSL/Plan、任务、REQ、Bug、TP、索引刷新。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 

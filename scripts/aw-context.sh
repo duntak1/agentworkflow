@@ -23,6 +23,7 @@ Usage:
   aw context init
   aw context status
   aw context plan --task AT-T... [--max-files 8] [--max-symbols 20]
+  aw context enrich --task AT-T...
   aw context query "symbol or keyword"
   aw context impact "symbol or keyword"
   aw context affected [--task AT-T...]
@@ -96,7 +97,7 @@ ctx_candidate_files_for_task() {
   fi
 
   if ctx_codegraph_available; then
-    codegraph context "$query" 2>/dev/null | sed -n 's/.*\([^[:space:]]\+\.[A-Za-z0-9][A-Za-z0-9._-]*\).*/\1/p' | head - "$max_files" || true
+    codegraph context "$query" 2>/dev/null | sed -n 's/.*\([^[:space:]]\+\.[A-Za-z0-9][A-Za-z0-9._-]*\).*/\1/p' | head -n "$max_files" || true
   fi
 
   {
@@ -106,7 +107,7 @@ ctx_candidate_files_for_task() {
     [[ -n "$file" && -f "${ROOT}/${file}" ]] || continue
     ctx_is_blocked_path "$file" && continue
     echo "$file"
-  done | awk '!seen[$0]++' | head - "$max_files"
+  done | awk '!seen[$0]++' | head -n "$max_files"
 }
 
 ctx_insert_after_section() {
@@ -119,6 +120,47 @@ ctx_insert_after_section() {
       done=1
       next
     }
+    {print}
+  ' "$file" > "$tmp"
+  mv "$tmp" "$file"
+}
+
+ctx_task_query() {
+  local task="$1" row title domain
+  row=""
+  atomic="$(aw_resolve_atomic_tasks_file 2>/dev/null || true)"
+  if [[ -n "${atomic:-}" && -f "${ROOT}/${atomic}" ]]; then
+    row="$(aw_task_get_row "${ROOT}/${atomic}" "$task" 2>/dev/null || true)"
+  fi
+  if [[ -n "$row" ]]; then
+    title="$(echo "$row" | awk -F'\t' '{print $3}')"
+    domain="$(echo "$row" | awk -F'\t' '{print $2}')"
+    echo "${task} ${domain} ${title}"
+  else
+    echo "$task"
+  fi
+}
+
+ctx_allowed_files() {
+  local out="$1"
+  awk -F'|' '/^\| [^|]+ \| [^|]+ \| (no|yes) \|/ && $2 !~ /文件/ {
+    gsub(/^[ \t]+|[ \t]+$/, "", $2)
+    if ($2 != "待补充") print $2
+  }' "$out"
+}
+
+ctx_update_section_table() {
+  local file="$1" section="$2" table_file="$3" tmp
+  tmp="$(mktemp)"
+  awk -v section="$section" -v table="$table_file" '
+    $0 == section {
+      print
+      while ((getline line < table) > 0) print line
+      skip=1
+      next
+    }
+    skip && /^## / {skip=0; print; next}
+    skip {next}
     {print}
   ' "$file" > "$tmp"
   mv "$tmp" "$file"
@@ -254,6 +296,50 @@ PY
         echo "updated: $(ctx_rel "$OUT")"
       fi
     fi
+    ;;
+  enrich)
+    TASK=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --task) TASK="${2:-}"; shift 2 ;;
+        *) echo "Unknown: $1" >&2; usage 1 ;;
+      esac
+    done
+    [[ -n "$TASK" ]] || { echo "error: --task is required" >&2; exit 1; }
+    ensure_context
+    OUT="$(ctx_plan_path "$TASK")"
+    [[ -f "$OUT" ]] || "${SCRIPT_DIR}/aw-context.sh" plan --task "$TASK" >/dev/null
+    query="$(ctx_task_query "$TASK")"
+    tmp_symbols="$(mktemp)"
+    tmp_impact="$(mktemp)"
+    {
+      echo ""
+      echo "| Symbol | 类型 | 文件 | 关系 |"
+      echo "|--------|------|------|------|"
+      if ctx_codegraph_available; then
+        codegraph search "$query" 2>/dev/null | head -20 | sed 's/|/ /g' | awk '{print "| " $0 " | codegraph | 待确认 | candidate |"}'
+      fi
+      rg -n --glob '!node_modules/**' --glob '!dist/**' --glob '!build/**' --glob '!.git/**' --glob '!coverage/**' --glob '!target/**' "$query" "$ROOT" 2>/dev/null \
+        | sed "s#${ROOT}/##" | head -20 | awk -F: '{print "| " $3 " | rg | " $1 " | candidate |"}'
+    } > "$tmp_symbols"
+    {
+      echo ""
+      echo "| 类型 | 内容 |"
+      echo "|------|------|"
+      echo "| Query | ${query} |"
+      if ctx_codegraph_available; then
+        echo "| CodeGraph impact | $(codegraph impact "$query" 2>/dev/null | head -10 | tr '\n' ';' | sed 's/|/ /g') |"
+      else
+        echo "| CodeGraph | unavailable; fallback to CODE_CONTEXT_INDEX / FILE_INDEX / precise rg |"
+      fi
+      echo "| Affected files | $(ctx_allowed_files "$OUT" | tr '\n' ';' | sed 's/;$//') |"
+      echo "| Affected tests | run aw context affected --task ${TASK} after code changes |"
+    } > "$tmp_impact"
+    ctx_update_section_table "$OUT" "## 相关 Symbol" "$tmp_symbols"
+    ctx_update_section_table "$OUT" "## 调用链 / 影响范围" "$tmp_impact"
+    rm -f "$tmp_symbols" "$tmp_impact"
+    echo "enriched: $(ctx_rel "$OUT")"
+    echo "next: review generated symbols/impact, then aw context gate --task ${TASK}"
     ;;
   budget)
     TASK=""

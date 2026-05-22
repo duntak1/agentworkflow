@@ -21,6 +21,8 @@ Usage:
   aw github-pr init
   aw github-pr branch --name "task/AT-T001-title" [--checkout]
   aw github-pr draft --title "..." --task AT-T... [--branch "..."] [--write]
+  aw github-pr fill --task AT-T... [--title "..."] [--write]
+  aw github-pr create --task AT-T... [--title "..."] [--execute]
   aw github-pr review --reviewer "..." --task AT-T... --result pass|changes|block [--evidence "..."]
   aw github-pr gate
   aw github-pr check
@@ -116,6 +118,94 @@ EOF
       echo "written: ${out#"${ROOT}/"}"
     else
       printf '%s\n' "$body"
+    fi
+    ;;
+  fill)
+    TASK=""
+    TITLE=""
+    WRITE=false
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --task|--related) TASK="${2:-}"; shift 2 ;;
+        --title) TITLE="${2:-}"; shift 2 ;;
+        --write) WRITE=true; shift ;;
+        *) echo "Unknown: $1" >&2; usage 1 ;;
+      esac
+    done
+    [[ -n "$TASK" ]] || { echo "error: --task is required" >&2; exit 1; }
+    ensure_github_pr
+    branch="$(git -C "$ROOT" branch --show-current 2>/dev/null || echo "待确认")"
+    [[ -n "$TITLE" ]] || TITLE="${TASK} delivery"
+    dsl="$(aw_resolve_dsl_file 2>/dev/null || echo "待确认")"
+    plan="$(aw_resolve_plan_file 2>/dev/null || echo "待确认")"
+    ctx="docs/context/tasks/CTX-${TASK}.md"
+    body="$(cat <<EOF
+# ${TITLE}
+
+## Trace
+
+- Branch: ${branch}
+- Task: ${TASK}
+- DSL: ${dsl}
+- Plan: ${plan}
+- Context: ${ctx}
+- Requirements: docs/requirements/INDEX.md
+
+## Gate Checklist
+
+- [ ] aw context gate --task ${TASK}
+- [ ] aw contract gate
+- [ ] aw verify --task ${TASK} --affected
+- [ ] aw trace check
+- [ ] aw score record --scope pr
+- [ ] aw github-pr gate
+
+## Changed Files
+
+\`\`\`text
+$(git -C "$ROOT" diff --name-only 2>/dev/null || true)
+\`\`\`
+
+## Rollback
+
+- Commit checkpoint: 待确认
+- Release impact: 待确认
+EOF
+)"
+    if $WRITE; then
+      mkdir -p "${ROOT}/docs/github/pr-drafts"
+      out="${ROOT}/docs/github/pr-drafts/${branch//\//-}-${TASK}.md"
+      printf '%s\n' "$body" > "$out"
+      echo "written: ${out#"${ROOT}/"}"
+    else
+      printf '%s\n' "$body"
+    fi
+    ;;
+  create)
+    TASK=""
+    TITLE=""
+    EXECUTE=false
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --task|--related) TASK="${2:-}"; shift 2 ;;
+        --title) TITLE="${2:-}"; shift 2 ;;
+        --execute) EXECUTE=true; shift ;;
+        *) echo "Unknown: $1" >&2; usage 1 ;;
+      esac
+    done
+    [[ -n "$TASK" ]] || { echo "error: --task is required" >&2; exit 1; }
+    ensure_github_pr
+    "${SCRIPT_DIR}/aw-github-pr.sh" fill --task "$TASK" ${TITLE:+--title "$TITLE"} --write
+    branch="$(git -C "$ROOT" branch --show-current 2>/dev/null || echo "")"
+    draft="${ROOT}/docs/github/pr-drafts/${branch//\//-}-${TASK}.md"
+    [[ -n "$TITLE" ]] || TITLE="${TASK} delivery"
+    if $EXECUTE; then
+      command -v gh >/dev/null 2>&1 || { echo "error: gh CLI not installed" >&2; exit 1; }
+      gh pr create --title "$TITLE" --body-file "$draft"
+    else
+      echo "Suggested GitHub PR command:"
+      echo "  gh pr create --title \"${TITLE}\" --body-file \"${draft#"${ROOT}/"}\""
+      echo "Run with --execute only after engineer confirmation."
     fi
     ;;
   review)
