@@ -27,7 +27,7 @@
 
 ## AI 执行协议（摘要）
 
-1. `./scripts/aw task brief <AT-T…>` → 和工程师沟通需求 → `./scripts/aw task confirm <AT-T…> "已确认：..."` → `./scripts/aw task start <AT-T…>` → `./scripts/aw paste task` → 阶段 A→E 写码。
+1. `./scripts/aw next` → `./scripts/aw task brief <AT-T…>` → 和工程师沟通需求 → `./scripts/aw task confirm <AT-T…> "已确认：..."` → `./scripts/aw context plan --task <AT-T…>` → `./scripts/aw context gate --task <AT-T…>` → `./scripts/aw task start <AT-T…>` → `./scripts/aw paste task` → 阶段 A→E 写码。
 2. 只改当前 AT-T* 范围；不猜需求；研发中需求变更先 `./scripts/aw req change <id> "摘要"`，回写 DSL / Plan / ATOMIC 并重新确认。
 3. 验证与完成：`./scripts/aw task complete <id>`。
 4. `task complete` 通过才会标记完成；失败会写 `docs/handoff/AI_BUG_LOG.md` 并保持 `进行中`。

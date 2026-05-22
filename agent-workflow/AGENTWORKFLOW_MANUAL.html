@@ -925,6 +925,7 @@ cd /path/workspace/project-backend
           <div class="step"><strong>aw next</strong><span>找下一项 AT-T</span></div><div class="arrow">→</div>
           <div class="step"><strong>task brief</strong><span>输出需求沟通包</span></div><div class="arrow">→</div>
           <div class="step"><strong>工程师确认</strong><span>问清边界和验收</span></div><div class="arrow">→</div>
+          <div class="step"><strong>context gate</strong><span>限制允许读取文件</span></div><div class="arrow">→</div>
           <div class="step"><strong>task start</strong><span>进入编码</span></div><div class="arrow">→</div>
           <div class="step"><strong>task complete</strong><span>验证并更新状态</span></div>
         </div>
@@ -932,12 +933,15 @@ cd /path/workspace/project-backend
 ./scripts/aw task brief AT-T1-001
 # 工程师确认后
 ./scripts/aw task confirm AT-T1-001 "已确认：范围、验收、非目标、接口字段。"
+./scripts/aw context plan --task AT-T1-001
+# 工程师审阅允许读取文件后
+./scripts/aw context gate --task AT-T1-001
 ./scripts/aw task start AT-T1-001
 ./scripts/aw paste task
 # 编码完成后
 ./scripts/aw task complete AT-T1-001</code></pre>
         <div class="danger callout">
-          <strong>禁止：</strong>没有 <code>task confirm</code> 就开始写代码。需求不清楚时，Agent 必须继续追问，不能靠猜。
+          <strong>硬闸门：</strong>工程师说“执行研发任务 / 开始开发 / 做下一个任务”时，Agent 必须先执行 <code>aw next</code> 和 <code>aw task brief &lt;AT-T&gt;</code>，追问需求并等待确认。没有 <code>task confirm</code>、<code>context gate</code> 和 <code>task start</code>，<code>aw paste task</code> 不会输出编码提示，也不允许写业务代码。
         </div>
       </section>
 
@@ -1449,6 +1453,7 @@ Plan 未确认前不要写业务代码。</code></pre>
 2. aw next
 3. aw task brief &lt;AT-T&gt;
 4. 向我确认页面结构、字段、交互、权限、接口 mock/真实接口、验收标准
+5. 我确认后执行 aw task confirm、aw context plan、aw context gate、aw task start
 确认前不要写代码。
 完成后：
 1. aw task complete &lt;AT-T&gt;
@@ -1476,6 +1481,7 @@ Plan 未确认前不要写业务代码。</code></pre>
 2. aw next
 3. aw task brief &lt;AT-T&gt;
 4. 向我确认接口路径、入参、出参、权限、错误码、事务、数据表、验收标准
+5. 我确认后执行 aw task confirm、aw context plan、aw context gate、aw task start
 确认前不要写代码。
 完成后：
 1. aw task complete &lt;AT-T&gt;
@@ -1540,6 +1546,7 @@ Plan 未确认前不要写业务代码。</code></pre>
 4. 执行 aw sync inbox --from backend
 5. 执行 aw sync board
 6. aw task brief 当前 AT-T，并向我确认需求
+7. 我确认后执行 aw task confirm、aw context plan、aw context gate、aw task start
 
 完成任务后：
 1. aw task complete 当前 AT-T
@@ -1561,6 +1568,7 @@ Plan 未确认前不要写业务代码。</code></pre>
 4. 执行 aw sync inbox --from frontend
 5. 执行 aw sync board
 6. aw task brief 当前 AT-T，并向我确认接口、权限、字段、错误码
+7. 我确认后执行 aw task confirm、aw context plan、aw context gate、aw task start
 
 完成任务后：
 1. aw task complete 当前 AT-T

@@ -24,8 +24,8 @@ mkdir -p "${ROOT}/docs/dsl" "${ROOT}/docs/plans" "${ROOT}/docs/requirements" \
   "${ROOT}/docs/handoff" "${ROOT}/docs/quality/test-plans" \
   "${ROOT}/docs/memory/entries" "${ROOT}/docs/memory/archive" \
   "${ROOT}/docs/audit" "${ROOT}/docs/policy" "${ROOT}/docs/security" "${ROOT}/docs/release" \
-  "${ROOT}/docs/metrics" "${ROOT}/docs/ops" "${ROOT}/docs/agents" "${ROOT}/docs/reports"
-  "${ROOT}/docs/hooks" "${ROOT}/docs/contracts" "${ROOT}/docs/github" "${ROOT}/docs/score" "${ROOT}/docs/recovery"
+  "${ROOT}/docs/metrics" "${ROOT}/docs/ops" "${ROOT}/docs/agents" "${ROOT}/docs/reports" \
+  "${ROOT}/docs/hooks" "${ROOT}/docs/contracts" "${ROOT}/docs/github" "${ROOT}/docs/score" "${ROOT}/docs/recovery" \
   "${ROOT}/docs/context/tasks"
 
 for f in DSL_SPEC_TEMPLATE.md FRONTEND_PAGE_SPEC_TEMPLATE.md DSL_DRAFT.md \

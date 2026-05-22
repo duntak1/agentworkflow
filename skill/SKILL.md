@@ -42,6 +42,8 @@ Do not mark work done until these four properties have evidence or an explicit d
 
 Use `aw setup` for first-time project setup and `aw demo` when you need to prove the full install-to-verify path in a temporary repo.
 
+When the user says “执行研发任务”, “开始开发”, “做下一个任务”, or equivalent, do **not** start coding immediately. First run or present `aw next` and `aw task brief <id>`, ask requirement questions, wait for the engineer's explicit confirmation, then record it with `aw task confirm <id> "已确认：..."`. Only after `aw context plan`, `aw context gate`, and `aw task start` may you request or use `aw paste task`.
+
 Context continuity has two lanes:
 
 | Lane | Use for | Do not use for |

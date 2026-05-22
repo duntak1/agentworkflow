@@ -292,6 +292,16 @@ case "$BRIEF_OUT" in *"子任务需求沟通包"*AT-T1-001*) ;; *) echo "fail: t
 grep -q '需求类型' docs/requirements/INDEX.md || { echo "fail: req index missing type column"; exit 1; }
 grep -q '口述新增' docs/requirements/INDEX.md || { echo "fail: spoken req type missing"; exit 1; }
 grep -q '口述新增：导出按钮需要权限控制' ENGINEERING_INDEX.md || { echo "fail: engineering index not refreshed for req new"; exit 1; }
+if ./scripts/aw task start AT-T1-001; then
+  echo "fail: task start should require context gate"
+  exit 1
+fi
+if ./scripts/aw paste task; then
+  echo "fail: paste task should require a started/current task"
+  exit 1
+fi
+./scripts/aw context plan --task AT-T1-001
+./scripts/aw context gate --task AT-T1-001
 ./scripts/aw task start AT-T1-001
 ./scripts/aw req change AT-T1-001 "研发中追加空态验收" --impact "DSL 验收、Plan 范围、ATOMIC 当前任务" --acceptance "空数据时显示明确空态"
 grep -q '研发中追加空态验收' docs/requirements/INDEX.md || { echo "fail: req change index"; exit 1; }
@@ -305,6 +315,8 @@ if ./scripts/aw task start AT-T1-001; then
 fi
 ./scripts/aw task brief AT-T1-001 >/dev/null
 ./scripts/aw task confirm AT-T1-001 "已确认：研发中变更已回写，空态验收清楚"
+./scripts/aw context plan --task AT-T1-001
+./scripts/aw context gate --task AT-T1-001
 ./scripts/aw task start AT-T1-001
 ./scripts/aw plan change --summary "E2E same-scope plan note" --related AT-T1-001 --dsl-update "docs/dsl/DSL_DRAFT.md" --plan-update "docs/plans/PLAN_E2E.md"
 grep -q 'E2E same-scope plan note' docs/plans/ATOMIC_TASKS_E2E.md || { echo "fail: plan change note"; exit 1; }
@@ -313,6 +325,7 @@ grep -q 'E2E additional task' docs/plans/ATOMIC_TASKS_E2E.md || { echo "fail: pl
 ./scripts/aw task split AT-T1-001 --into "E2E split A; E2E split B" --domain QA --verify "./scripts/aw check layout" --related AT-T1-001
 grep -q 'E2E split A' docs/plans/ATOMIC_TASKS_E2E.md || { echo "fail: task split A"; exit 1; }
 grep -q 'task split' docs/audit/AGENT_TRACE.md || { echo "fail: task split audit"; exit 1; }
+./scripts/aw context gate --task AT-T1-001
 ./scripts/aw task start AT-T1-001
 TASK_PASTE_OUT="$(./scripts/aw paste task)"
 case "$TASK_PASTE_OUT" in *AT-T1-001*) ;; *) echo "fail: paste task"; echo "$TASK_PASTE_OUT"; exit 1 ;; esac
@@ -341,6 +354,7 @@ case "$PASTE_OUT" in *关联测试计划*) ;;
 esac
 ./scripts/aw task blocked AT-T1-001
 grep -q '阻塞' docs/plans/ATOMIC_TASKS_E2E.md || { echo "fail: task not marked blocked"; exit 1; }
+./scripts/aw context gate --task AT-T1-001
 ./scripts/aw task start AT-T1-001
 TASK_COMPLETE_OUT="$(./scripts/aw task complete AT-T1-001 --run-e2e)"
 case "$TASK_COMPLETE_OUT" in *"Commit checkpoint"*aw\ commit\ --task\ AT-T1-001*--changelog*) ;; *) echo "fail: task complete missing changelog commit checkpoint"; echo "$TASK_COMPLETE_OUT"; exit 1 ;; esac
@@ -352,6 +366,8 @@ cat >> docs/plans/ATOMIC_TASKS_E2E.md <<'EOF'
 | AT-T1-099 | QA | 故意失败任务 | 待办 |  | false |
 EOF
 ./scripts/aw task confirm AT-T1-099 "已确认：故意失败用于验证 Bug 流水"
+./scripts/aw context plan --task AT-T1-099
+./scripts/aw context gate --task AT-T1-099
 ./scripts/aw task start AT-T1-099
 if ./scripts/aw task complete AT-T1-099; then
   echo "fail: task complete should fail for false verify"

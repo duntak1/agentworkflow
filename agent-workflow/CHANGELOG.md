@@ -41,6 +41,8 @@
 
 ### Changed
 
+- Strengthen the development-task hard gate: “execute/start/do next task” now routes to `aw next` + `aw task brief`, requires engineer confirmation, requires `aw context gate`, and blocks `aw paste task` unless the current task is confirmed and started.
+
 - Document closed-loop management for completeness, traceability, maintainability, and handoffability across the agent-workflow lifecycle.
 
 - 移除 `examples/`、`EXAMPLES.md` 及示例 REQ/TP（`REQ-002`、`TP-001`）

@@ -90,8 +90,9 @@ print_task_paste() {
 - ${ROOT}/docs/handoff/PROJECT_HANDOFF.md
 
 ## 阶段 A（先输出再写码）
-1. 列出假设与不确定点；有多解时让我选。
-2. 用阶段 B 格式写清验收（可检查）与验证命令。
+1. 先复述工程师已确认的需求摘要；如果发现任何未确认点，立即停止编码并回到 \`aw task brief ${id}\`。
+2. 列出假设与不确定点；有多解时让我选。
+3. 用阶段 B 格式写清验收（可检查）与验证命令。
 
 ## 阶段 C–D
 - 最短方案 → 再改代码；只服务本任务验收。
@@ -104,6 +105,7 @@ print_task_paste() {
 
 ## 闸门
 - 勿改无关文件；DSL/Plan 真源见上路径。
+- 如果本提示不是在 \`aw task confirm\`、\`aw context gate\`、\`aw task start\` 全部通过后生成，禁止写业务代码。
 - 禁止无目标全仓扫描；写代码前必须先通过 \`./scripts/aw context gate --task ${id}\`。
 - 只读取 \`docs/context/tasks/CTX-${id}.md\` 中“允许读取文件”列出的文件。
 EOF
@@ -234,7 +236,7 @@ case "$CMD" in
     aw_task_mark_requirement_confirmed "$TASK_ID" "$SUMMARY"
     audit_task "$TASK_ID" "task requirement confirmed" "$SUMMARY" "$(aw_task_requirement_confirm_path)"
     echo "ok: ${TASK_ID} requirement confirmed"
-    echo "next: ./scripts/aw task start ${TASK_ID}"
+    echo "next: ./scripts/aw context plan --task ${TASK_ID} → review allowed files → ./scripts/aw context gate --task ${TASK_ID} → ./scripts/aw task start ${TASK_ID}"
     ;;
   start)
     [[ -n "$TASK_ID" ]] || { echo "error: aw task start <AT-T...>" >&2; exit 1; }
@@ -259,7 +261,7 @@ case "$CMD" in
     }
     aw_task_set_status "${ROOT}/${atomic}" "$TASK_ID" "进行中"
     aw_task_set_current "$TASK_ID"
-    audit_task "$TASK_ID" "task start" "Marked task as 进行中 after requirement confirmation." "$atomic"
+    audit_task "$TASK_ID" "task start" "Marked task as 进行中 after requirement confirmation and context gate." "$atomic"
     echo "ok: ${TASK_ID} → 进行中"
     echo "next: ./scripts/aw paste task"
     ;;
@@ -344,14 +346,41 @@ case "$CMD" in
   paste)
     aw_gate_coding_ready || exit 1
     atomic="$(aw_resolve_atomic_tasks_file)" || exit 1
-    if ! row="$(aw_task_find_next "${ROOT}/${atomic}")"; then
-      cid=""
-      [[ -f "$(aw_workflow_json_path)" ]] && \
-        cid="$(grep -E '"current_task_id"' "$(aw_workflow_json_path)" | sed -E 's/.*"([^"]*)".*/\1/' | head -1)"
-      if [[ -n "$cid" ]]; then
-        row="$(aw_task_get_row "${ROOT}/${atomic}" "$cid")" || true
-      fi
-      [[ -n "$row" ]] || { echo "error: no task for paste (run aw next)" >&2; exit 1; }
+    cid="$(aw_task_current_id 2>/dev/null || true)"
+    if [[ -z "$cid" ]]; then
+      echo "error: no current task is started; coding prompt is blocked" >&2
+      echo "  required flow:" >&2
+      echo "    ./scripts/aw next" >&2
+      echo "    ./scripts/aw task brief <AT-T>" >&2
+      echo "    discuss with engineer until requirements are clear" >&2
+      echo "    ./scripts/aw task confirm <AT-T> \"已确认：...\"" >&2
+      echo "    ./scripts/aw context plan --task <AT-T>" >&2
+      echo "    ./scripts/aw context gate --task <AT-T>" >&2
+      echo "    ./scripts/aw task start <AT-T>" >&2
+      echo "    ./scripts/aw paste task" >&2
+      exit 1
+    fi
+    row="$(aw_task_get_row "${ROOT}/${atomic}" "$cid")" || {
+      echo "error: current task not found: ${cid}" >&2
+      exit 1
+    }
+    if ! aw_task_requirement_confirmed "$cid"; then
+      echo "error: requirement discussion not confirmed for ${cid}; coding prompt is blocked" >&2
+      echo "  run: ./scripts/aw task brief ${cid}" >&2
+      echo "  then discuss and run: ./scripts/aw task confirm ${cid} \"已确认：...\"" >&2
+      exit 1
+    fi
+    "${SCRIPT_DIR}/aw-context.sh" gate --task "$cid" >/dev/null || {
+      echo "error: context gate not passed for ${cid}; coding prompt is blocked" >&2
+      echo "  run: ./scripts/aw context plan --task ${cid}" >&2
+      echo "  review allowed files, then: ./scripts/aw context gate --task ${cid}" >&2
+      exit 1
+    }
+    st="$(echo "$row" | awk -F'\t' '{print $4}')"
+    if [[ "$st" != "进行中" ]]; then
+      echo "error: current task ${cid} is not started (status: ${st}); coding prompt is blocked" >&2
+      echo "  run: ./scripts/aw task start ${cid}" >&2
+      exit 1
     fi
     IFS=$'\t' read -r id domain title st dep ver <<< "$row"
     print_task_paste "$id" "$domain" "$title" "$st" "$dep" "$ver"

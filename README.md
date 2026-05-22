@@ -33,7 +33,8 @@ Reference → DSL 已审 → Plan 可执行 → confirm → AT-T 任务 → veri
 | `aw rules init|review|check` | 生成并校验工程规范：技术栈、代码规范、禁令、SOP |
 | `aw confirm` | 人类确认后才生成工程执行索引 |
 | `aw file-index` / `docs/FILE_INDEX.md` | 生成项目代码文件索引；AI 代写代码后供人类工程师快速定位需手改文件 |
-| `aw task brief|confirm` | 每个子任务写代码前先沟通需求，工程师确认后才允许 start |
+| `aw task brief|confirm` | 每个子任务写代码前先沟通需求；用户说“执行研发任务”时先 brief 和追问，不直接写代码 |
+| `aw context plan|gate` | 每个子任务写代码前限制允许读取文件，防止无目标全仓扫描 |
 | `aw task start|blocked|complete|done` | 任务状态可追踪，阻塞显式化 |
 | `aw task complete --run-e2e` | 使用项目真实命令验证；通过完成，失败自动写 Bug 流水 |
 | `aw bug add|list` | 所有 Bug / 疑似 Bug 统一记录到 `docs/handoff/AI_BUG_LOG.md` |

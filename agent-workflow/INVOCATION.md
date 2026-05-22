@@ -95,7 +95,7 @@ chmod +x scripts/aw scripts/*.sh
 | 双项目 Plan 拆分 | DSL 已审后，先写 `project-harness/global/plans/` 协作 Plan，再派生 `project-frontend/docs/plans/` 和 `project-backend/docs/plans/` 本地 Plan |
 | 定向生成任务 | `aw approve dsl <dsl> --plan --domain frontend` / `--domain backend` |
 | 任务确认 | `任务确认` / `aw confirm` → 生成 `ENGINEERING_INDEX.md` |
-| 研发 | `aw next` → `aw task brief` → 需求沟通确认 → `aw task confirm` → `aw task start` → `aw paste task` → `aw task complete` |
+| 研发 | `aw next` → `aw task brief` → 需求沟通确认 → `aw task confirm` → `aw context plan` → `aw context gate` → `aw task start` → `aw paste task` → `aw task complete` |
 | 子任务需求确认 | `aw task brief <AT-T>` → 工程师确认后 `aw task confirm <AT-T> "已确认：..."` |
 | 口述新增需求 | `aw req new <slug> "标题" --type 口述新增 --impact "..." --acceptance "..."` |
 | 研发中需求变更 | `aw req change <AT-T> "摘要" --impact "..." --acceptance "..."` → 回写 REQ / DSL / Plan / ATOMIC → 重新 brief/confirm |
@@ -154,6 +154,8 @@ chmod +x scripts/aw scripts/*.sh
 
 Agent 应：**先读本文 + `PRODUCT_INPUT_WORKFLOW.md`**，再执行对应 `scripts/aw` 子命令或等价步骤。
 
+当工程师说“执行研发任务 / 开始开发 / 做下一个任务”时，Agent 的第一步必须是输出或执行 `aw next` 与 `aw task brief <AT-T>`，然后像真实研发一样追问需求、边界、验收、异常态、联动、非目标和风险。工程师明确确认前，不得写业务代码，不得生成编码提示，不得调用 `aw paste task`。确认后必须记录 `aw task confirm <AT-T> "已确认：..."`，再执行 `aw context plan`、`aw context gate`、`aw task start`。
+
 启动 AgentWorkflow 时，Agent 必须先问工程师：这是全新项目还是已有 / 存量项目？确认后写入 `docs/PROJECT_CONFIG.md`：全新项目用 `aw config init --project-stage 1`；已有 / 存量项目用 `aw config init --project-stage 2`。未确认项目阶段前，不得生成 DSL / Plan，不得写业务代码。
 
 非全新 / 存量项目接入时，Agent 应先建立当前真实状态，不得按空白新项目重建：确认项目阶段、仓库类型、构建目标和一期完成范围；目标化读取入口文件，禁止无目标全仓扫描；刷新 `docs/FILE_INDEX.md` 与 `docs/SERVICE_CATALOG.md`；把已实现能力、已知 Bug、技术债、未确认事项、不应被误改的稳定边界写入 Handoff / REQ / Memory；只有一期基线经工程师确认后，才为下一期、维护、Bug 修复或联调需求生成增量 DSL 和增量 Plan。
@@ -209,9 +211,11 @@ Agent 应：**先读本文 + `PRODUCT_INPUT_WORKFLOW.md`**，再执行对应 `sc
 
 1. 未 init → 建议运行 `./scripts/aw init`。
 2. DSL **状态 ≠ 已审** → 只改文档，**不写业务代码**。
-3. 禁止编造 `reference/`、`docs/dsl/` 下不存在的路径。
-4. 代码实现遵守 `docs/ENGINEERING_RULES.md`；验证以 `docs/PROJECT_CONFIG.md` 命令 + §11 真实环境为准。
-5. 大需求 / AT-T 未完成闭环检查（完整性、可追溯性、可维护性、可交接性）前，不进入下一项实现。
+3. 用户说“执行研发任务 / 开始开发 / 做下一个任务” → 只允许进入 `aw next` + `aw task brief` + 追问确认流程；未 `aw task confirm`、`aw context gate`、`aw task start` 前不写业务代码。
+4. `aw paste task` 是编码提示闸门；如果没有当前已 start 且已确认的任务，它必须阻断。
+5. 禁止编造 `reference/`、`docs/dsl/` 下不存在的路径。
+6. 代码实现遵守 `docs/ENGINEERING_RULES.md`；验证以 `docs/PROJECT_CONFIG.md` 命令 + §11 真实环境为准。
+7. 大需求 / AT-T 未完成闭环检查（完整性、可追溯性、可维护性、可交接性）前，不进入下一项实现。
 
 ---
 

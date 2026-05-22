@@ -188,10 +188,12 @@ case "$CMD" in
     cat <<'EOF'
 按 agent-workflow 研发阶段 A→E（agent-workflow/AICODING_WORKFLOW.md）。
 
-1. 阶段 A：假设清单
-2. 阶段 B：可检查验收 + 验证命令
-3. 阶段 C/D：最短方案 → 手术式改代码
-4. 阶段 E：PROJECT_CONFIG 命令 + 真实环境用例
+硬闸门：不要直接写代码。
+1. 先运行 ./scripts/aw next 查看候选 AT-T
+2. 运行 ./scripts/aw task brief <AT-T>，向工程师追问需求、边界、验收、异常态、非目标
+3. 工程师确认后运行 ./scripts/aw task confirm <AT-T> "已确认：..."
+4. 再运行 ./scripts/aw context plan --task <AT-T>、./scripts/aw context gate --task <AT-T>、./scripts/aw task start <AT-T>
+5. 只有这些步骤完成后，才能运行 ./scripts/aw paste task 获取编码提示
 
 当前任务：运行 ./scripts/aw next 查看 AT-T*
 EOF
@@ -263,10 +265,12 @@ EOF
         cat <<EOF
 按 agent-workflow 研发阶段 A→E（${POLICY}/AICODING_WORKFLOW.md）。
 
-1. 阶段 A：假设清单
-2. 阶段 B：可检查验收 + 验证命令
-3. 阶段 C/D：最短方案 → 手术式改代码
-4. 阶段 E：PROJECT_CONFIG 命令 + 真实环境用例
+硬闸门：不要直接写代码。
+1. 先运行 ./scripts/aw next 查看候选 AT-T
+2. 运行 ./scripts/aw task brief <AT-T>，向工程师追问需求、边界、验收、异常态、非目标
+3. 工程师确认后运行 ./scripts/aw task confirm <AT-T> "已确认：..."
+4. 再运行 ./scripts/aw context plan --task <AT-T>、./scripts/aw context gate --task <AT-T>、./scripts/aw task start <AT-T>
+5. 只有这些步骤完成后，才能运行 ./scripts/aw paste task 获取编码提示
 
 当前任务：运行 ./scripts/aw next 查看 AT-T*
 EOF

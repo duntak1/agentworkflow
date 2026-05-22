@@ -301,6 +301,13 @@ aw_task_set_current() {
   mv "$tmp" "$wf"
 }
 
+aw_task_current_id() {
+  local wf
+  wf="$(aw_workflow_json_path)"
+  [[ -f "$wf" ]] || return 1
+  grep -E '"current_task_id"' "$wf" 2>/dev/null | sed -E 's/.*"current_task_id"[[:space:]]*:[[:space:]]*"([^"]*)".*/\1/' | head -1
+}
+
 aw_task_requirement_confirmed() {
   local task_id="$1"
   local f
