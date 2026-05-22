@@ -61,6 +61,7 @@ case "$CMD" in
     run_or_mark "test plans" "${SCRIPT_DIR}/check-test-plan-index.sh"
     run_or_mark "trace" "${SCRIPT_DIR}/aw-trace.sh" check
     run_or_mark "contract" "${SCRIPT_DIR}/aw-contract.sh" check
+    run_or_mark "context" "${SCRIPT_DIR}/aw-context.sh" check
     run_or_mark "agents" "${SCRIPT_DIR}/aw-agents.sh" gate
     run_or_mark "score" "${SCRIPT_DIR}/aw-score.sh" check
     exit "$ERR"
@@ -72,6 +73,7 @@ case "$CMD" in
     run_or_mark "requirements" "${SCRIPT_DIR}/check-req-index.sh"
     run_or_mark "test plans" "${SCRIPT_DIR}/check-test-plan-index.sh"
     run_or_mark "contract" "${SCRIPT_DIR}/aw-contract.sh" gate
+    run_or_mark "context" "${SCRIPT_DIR}/aw-context.sh" check
     run_or_mark "agents" "${SCRIPT_DIR}/aw-agents.sh" gate --strict
     run_or_mark "score" "${SCRIPT_DIR}/aw-score.sh" check
     aw_refresh_engineering_index
@@ -88,6 +90,7 @@ case "$CMD" in
     ERR=0
     run_or_mark "coding gates" bash -c 'source "'"${SCRIPT_DIR}"'/_aw-task-lib.sh"; aw_gate_coding_ready'
     if [[ -n "$TASK_ID" ]]; then
+      run_or_mark "context" "${SCRIPT_DIR}/aw-context.sh" gate --task "$TASK_ID"
       run_or_mark "task lock" "${SCRIPT_DIR}/aw-agents.sh" lock-check --task "$TASK_ID"
     fi
     run_or_mark "verify" "${SCRIPT_DIR}/aw-verify.sh" ${TASK_ID:+--task "$TASK_ID"}
@@ -106,6 +109,7 @@ case "$CMD" in
     ERR=0
     run_or_mark "github-pr" "${SCRIPT_DIR}/aw-github-pr.sh" gate
     run_or_mark "contract" "${SCRIPT_DIR}/aw-contract.sh" gate
+    run_or_mark "context" "${SCRIPT_DIR}/aw-context.sh" check
     run_or_mark "trace" "${SCRIPT_DIR}/aw-trace.sh" check
     run_or_mark "agents" "${SCRIPT_DIR}/aw-agents.sh" gate --strict
     if $STRICT; then

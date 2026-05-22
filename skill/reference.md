@@ -174,6 +174,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw agents gate` | 检查 block 评审、未确认文件边界、多个 Agent allowed paths 重叠；默认 warn |
 | `aw agents gate --strict` | 严格协作门禁：发现 allowed paths 重叠时阻断，要求先 handoff 或重新分配边界 |
 | `aw gate init|check|pre-commit|task|pr|release` | 自动 Gate 聚合 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release 等关键检查 |
+| `aw context init|status|plan|query|impact|affected|gate|budget` | 任务级代码上下文控制：禁止无目标全仓扫描，按 CodeGraph / CODE_CONTEXT_INDEX / FILE_INDEX 生成最小读取范围和 affected 分析 |
 | `aw contract init|change|test|diff|gate|check` | 前后端契约系统：OpenAPI、API 变更、Mock、Contract Test、Schema Diff、破坏性变更阻断 |
 | `aw github-pr init|branch|draft|review|gate|check` | GitHub PR 闭环：分支、PR 草稿、Review、Contract/Score/Release/Rollback 检查 |
 | `aw score init|record|check|latest` | 交付评分：需求、DSL/Plan、任务确认、验证、Bug、文件索引、Contract、Git/Release、Handoff |

@@ -127,6 +127,9 @@ case "$CMD" in
   sync)
     exec "${SCRIPT_DIR}/aw-sync.sh" "$@"
     ;;
+  context)
+    exec "${SCRIPT_DIR}/aw-context.sh" "$@"
+    ;;
   gate)
     exec "${SCRIPT_DIR}/aw-gate.sh" "$@"
     ;;

@@ -11,6 +11,8 @@
 
 ### Added
 
+- Add Context Intelligence workflow with `aw context`, task-level Context Plans, code-reading budgets, CodeGraph fallback guidance, affected analysis, and task-start context gates.
+
 - Add automatic Harness gates, frontend/backend contract workflow, GitHub PR lifecycle checks, multi-agent task locks, delivery scorecards, and recovery playbooks.
 
 - Add multi-agent collaboration protocol with role assignment, handoff, and review records.

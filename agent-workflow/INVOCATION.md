@@ -108,6 +108,7 @@ chmod +x scripts/aw scripts/*.sh
 | 发布闭环 | `aw release record ...` 记录环境、发布、验证、回滚、CHANGELOG/tag；`aw release flag ...` 记录 Feature Flag |
 | 发布门禁 | `aw release gate [--run-verify] [--run-security] [--strict-policy] [--strict-report]` 聚合 CHANGELOG、Policy、Security、Service Catalog、环境、Ops、Agents、Metrics、报告门禁与可选验证 |
 | 自动 Gate | `aw gate pre-commit|task|pr|release` 聚合 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release；`aw hooks install` 可接入 Git hooks |
+| 代码上下文控制 | `aw context init|status|plan|query|impact|affected|gate` 生成任务级 Context Plan，限制读取文件和 symbol，优先接入 CodeGraph，避免无目标全仓扫描 |
 | 前后端契约 | `aw contract init|change|test|diff|gate` 维护 OpenAPI、API 变更、Mock、Contract Test、Schema Diff 和破坏性变更阻断 |
 | GitHub PR 闭环 | `aw github-pr branch|draft|review|gate` 维护分支策略、PR 清单、Review、Contract/Score/Release/Rollback 检查 |
 | 多 Agent 锁 | `aw agents claim|heartbeat|release|lock-check` 维护任务锁、心跳、过期锁、路径冲突；严格模式阻断并行冲突 |

@@ -902,6 +902,7 @@ chmod +x scripts/aw scripts/*.sh
             <tr><td>Report</td><td><code>aw report handoff|release --write</code></td><td>生成工程师可读交接/发布报告。</td></tr>
             <tr><td>Trace</td><td><code>aw trace check</code></td><td>检查 REQ、DSL、Plan、AT-T、Bug、Changelog 等是否断链。</td></tr>
             <tr><td>Auto Gate</td><td><code>aw gate pre-commit|task|pr|release</code></td><td>把 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release 串成自动门禁。</td></tr>
+            <tr><td>Context</td><td><code>aw context plan|gate|affected</code></td><td>任务级代码上下文计划：限制读取文件、symbol 和搜索次数，优先接入 CodeGraph，禁止无目标全仓扫描。</td></tr>
             <tr><td>Contract</td><td><code>aw contract change|test|gate</code></td><td>OpenAPI、Mock、Contract Test、Schema Diff、破坏性变更阻断。</td></tr>
             <tr><td>GitHub PR</td><td><code>aw github-pr branch|draft|review|gate</code></td><td>分支、PR 草稿、Review、CI/Release/Rollback 检查。</td></tr>
             <tr><td>Score</td><td><code>aw score record</code></td><td>对需求、DSL/Plan、任务确认、验证、Bug、文件索引、Contract、Git、Handoff 评分。</td></tr>
@@ -910,6 +911,9 @@ chmod +x scripts/aw scripts/*.sh
         </table>
         <pre><code>./scripts/aw hooks install
 ./scripts/aw gate pre-commit
+./scripts/aw context plan --task AT-T-FE-001
+./scripts/aw context gate --task AT-T-FE-001
+./scripts/aw context affected --task AT-T-FE-001
 ./scripts/aw contract gate
 ./scripts/aw github-pr gate
 ./scripts/aw score record --scope pr

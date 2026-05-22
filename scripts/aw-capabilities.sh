@@ -111,6 +111,12 @@ if $JSON; then
     "sync inbox",
     "sync status",
     "sync check",
+    "context",
+    "context init",
+    "context status",
+    "context plan",
+    "context gate",
+    "context affected",
     "gate",
     "gate pre-commit",
     "gate pr",
@@ -143,6 +149,7 @@ if $JSON; then
     "aw check all",
     "aw verify --task <AT-T> --run-e2e",
     "aw gate pr",
+    "aw context gate --task <AT-T>",
     "aw contract gate",
     "aw score record --scope pr",
     "aw handoff --check"
@@ -169,6 +176,7 @@ Core commands:
   verify, commit, changelog, handoff --write, handoff --check, memory chat, bug,
   audit, policy, policy gate, security, service-catalog, release, release gate --strict-report, report, report handoff, report release, report check, trace, trace check,
   metrics, metrics summary, ops, ops gate, agents, agents gate, sync, sync init, sync push, sync pull, sync baseline, sync board, sync event, sync change, sync inbox,
+  context, context init, context status, context plan, context gate, context affected,
   gate, gate pre-commit, gate pr, contract, contract change, contract test, contract gate,
   github-pr, github-pr branch, github-pr draft, github-pr gate, score, score record,
   recover, recover context, recover plan, recover sync,
@@ -181,6 +189,7 @@ Proof:
   aw check all
   aw verify --task <AT-T> --run-e2e
   aw gate pr
+  aw context gate --task <AT-T>
   aw contract gate
   aw score record --scope pr
   aw handoff --check

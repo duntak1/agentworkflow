@@ -104,6 +104,8 @@ print_task_paste() {
 
 ## 闸门
 - 勿改无关文件；DSL/Plan 真源见上路径。
+- 禁止无目标全仓扫描；写代码前必须先通过 \`./scripts/aw context gate --task ${id}\`。
+- 只读取 \`docs/context/tasks/CTX-${id}.md\` 中“允许读取文件”列出的文件。
 EOF
 
   local spec tp_rel
@@ -157,6 +159,9 @@ print_task_brief() {
 - 工程师确认前，不允许执行 \`aw task start ${id}\`，也不允许写业务代码。
 - 工程师确认后执行：
   \`./scripts/aw task confirm ${id} "已确认：<确认摘要>"\`
+  \`./scripts/aw context plan --task ${id}\`
+  审阅并确认 Context Plan 的允许读取文件后：
+  \`./scripts/aw context gate --task ${id}\`
   \`./scripts/aw task start ${id}\`
   \`./scripts/aw paste task\`
 EOF
@@ -245,6 +250,12 @@ case "$CMD" in
       echo "  then discuss with engineer and run: ./scripts/aw task confirm ${TASK_ID} \"已确认：...\"" >&2
       exit 1
     fi
+    "${SCRIPT_DIR}/aw-context.sh" gate --task "$TASK_ID" || {
+      echo "error: context plan required before coding for ${TASK_ID}" >&2
+      echo "  run: ./scripts/aw context plan --task ${TASK_ID}" >&2
+      echo "  review allowed files, then rerun: ./scripts/aw context gate --task ${TASK_ID}" >&2
+      exit 1
+    }
     aw_task_set_status "${ROOT}/${atomic}" "$TASK_ID" "进行中"
     aw_task_set_current "$TASK_ID"
     audit_task "$TASK_ID" "task start" "Marked task as 进行中 after requirement confirmation." "$atomic"
@@ -281,6 +292,7 @@ case "$CMD" in
       echo "error: unknown task $TASK_ID" >&2
       exit 1
     }
+    "${SCRIPT_DIR}/aw-context.sh" affected --task "$TASK_ID" || true
     verify_args=(--task "$TASK_ID")
     $RUN_E2E && verify_args+=(--run-e2e)
     verify_cmd="./scripts/aw verify --task ${TASK_ID}"

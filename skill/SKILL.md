@@ -36,6 +36,7 @@ Closed-loop management is mandatory for every large requirement and every AT-T:
 | Maintainability | `docs/ENGINEERING_RULES.md`, mature-solution choice, focused code comments, tests, and `docs/FILE_INDEX.md` stay current with the implementation |
 | Handoffability | `docs/handoff/PROJECT_HANDOFF.md`, `docs/memory/` when reusable, verification evidence, open risks, next steps, and commit/changelog status are current before context switch |
 | Harness control | `aw gate`, `aw contract`, `aw github-pr`, `aw agents claim`, `aw score`, and `aw recover` make hooks, API contracts, PRs, agent locks, delivery scoring, and recovery checkable |
+| Context control | `aw context` creates task-level Context Plans, enforces code-reading budgets, integrates optional CodeGraph, and prevents wasteful full-repo scans |
 
 Do not mark work done until these four properties have evidence or an explicit documented exception.
 
@@ -124,7 +125,7 @@ Proof path:
 | Plan change | During development, use `aw plan change --summary "..."` for scope notes, `aw plan task-add --title "..."` for same-scope new AT-T, and `aw task split <id> --into "A; B"` when a task is too large |
 | Engineering rules | `aw rules init` → `aw rules discover --write` to map key files → keep team defaults from frontend/backend/unified AI manuals, fill project-specific differences and comment principles → `aw rules review` → `aw check rules` |
 | Confirm | `aw confirm <dsl> <plan>` → `ENGINEERING_INDEX.md` (humans only) |
-| Dev | `aw status` → `aw next` → `aw task brief <id>` → discuss requirements → `aw task confirm <id> "已确认：..."` → `aw task start <id>` → `aw paste task` → `aw task complete <id>` |
+| Dev | `aw status` → `aw next` → `aw task brief <id>` → discuss requirements → `aw task confirm <id> "已确认：..."` → `aw context plan --task <id>` → review allowed files → `aw context gate --task <id>` → `aw task start <id>` → `aw paste task` → `aw task complete <id>` |
 | Test plans | `aw tp new` → `aw tp link <id> <TP>` → `aw check tp` |
 | Bug ledger | `aw bug add "summary" --source chat|review|runtime|prod --scope <id-or-module>`; every bug/suspected bug must be logged |
 | Requirements | `aw req new <slug> "title" --type 口述新增` and `aw req change <id> "summary"` both write `docs/requirements/INDEX.md`; use 需求类型 to distinguish spoken new requirements vs development changes |
@@ -142,6 +143,7 @@ Proof path:
 | Metrics | `aw metrics record ...` tracks DORA/flow signals; use `aw metrics summary` before release or handoff to summarize delivery health |
 | Ops | `aw ops slo|incident|incident-close|runbook ...` maintains SLO, incident, recovery, and runbook records; use `aw ops gate` before release/handoff |
 | Hook / Gate automation | `aw hooks install` enables Git hooks; `aw gate pre-commit|task|pr|release` runs lifecycle gates for DSL, REQ, TP, Contract, Agent locks, Trace, Score, and Release |
+| Code context | `aw context init|status|plan|query|impact|affected|gate` manages CodeGraph/file-index-backed task context, allowed-read files, symbol/impact lookup, and affected-test notes |
 | API contracts | `aw contract init|change|test|diff|gate` maintains OpenAPI, API changelog, mock-server notes, schema diff, and contract-test evidence for frontend/backend alignment |
 | GitHub PR loop | `aw github-pr branch|draft|review|gate` records branch policy, PR checklist, review outcomes, Contract/Score/Release readiness, and rollback notes |
 | Agents | `aw agents assign|claim|heartbeat|release|handoff|review ...` records roles, task locks, heartbeats, ownership, handoffs, and review outcomes; use `aw agents gate --strict` to block path conflicts or expired/missing locks |
@@ -172,6 +174,9 @@ Proof path:
 15. Frontend/backend API changes must go through `aw contract change` and `aw contract test`; breaking changes stay blocked until both sides confirm and the contract gate passes.
 16. Multi-agent implementation requires `aw agents claim` before coding and `aw agents heartbeat` during long work; missing, expired, or conflicting locks block strict gates.
 17. Before PR/release handoff, run `aw gate pr`, `aw github-pr gate`, `aw contract gate`, and `aw score record`; recover with `aw recover ...` instead of guessing when a gate fails.
+18. No aimless full-repo scans. Before business-code edits, create/read `docs/context/tasks/CTX-<AT-T>.md`; only read files listed there, and expand context only after recording the reason and engineer confirmation.
+19. Default context budget per AT-T is 8 business files, 20 symbols, and 5 precise searches. Do not read dependency/build/cache/generated/log directories such as `.git`, `node_modules`, `dist`, `build`, `coverage`, `.next`, `.nuxt`, `target`, `vendor`, `tmp`, or `logs`.
+20. Prefer CodeGraph / `aw context` symbol, caller/callee, impact, and affected-test queries over bulk file reads. If CodeGraph is unavailable, use `CODE_CONTEXT_INDEX`, `FILE_INDEX`, and precise `rg` as fallback.
 
 ## Cursor-only (optional)
 

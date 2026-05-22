@@ -46,6 +46,7 @@ Reference → DSL 已审 → Plan 可执行 → confirm → AT-T 任务 → veri
 | `aw dashboard` | 只读终端视图，集中显示当前状态、能力和机器可读入口 |
 | `aw memory add|search|inject` | 文件化跨会话记忆，记录可追踪事实、决策、偏好、模式和风险 |
 | `aw gate pre-commit|task|pr|release` | 自动 Gate：把 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release 检查串起来 |
+| `aw context plan|gate|affected` | 任务级代码上下文控制：禁止全仓扫描，按 CodeGraph / 索引生成最小读取范围和受影响测试 |
 | `aw contract change|test|gate` | 前后端契约系统：OpenAPI、Mock、Contract Test、Schema Diff、破坏性变更阻断 |
 | `aw github-pr branch|draft|review|gate` | GitHub PR 闭环：分支、PR 草稿、Review、CI/Release/Rollback 检查 |
 | `aw agents claim|heartbeat|release` | 多 Agent 任务锁和心跳：认领任务、续约状态、释放任务、冲突检测 |
