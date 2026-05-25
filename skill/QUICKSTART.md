@@ -49,6 +49,11 @@ chmod +x scripts/aw scripts/*.sh
 见 [reference.md](reference.md) 与安装后的 `agent-workflow/PRODUCT_INPUT_WORKFLOW.md`。
 
 ```bash
+aw project scan                         # 先扫描项目内容，判断全新 / 已有
+aw config init --project-stage 1|2       # 工程师确认后写入阶段
+aw config init --project-kind 1|2        # GitHub 仓库 / 本地 Git 仓库
+aw config init --build-target 1|2|3      # 前端 / 后端 / 前后端
+# 若 build-target=3 且前后端分仓 / 双项目：先 aw sync init <project-harness> ...，再拆 Plan
 aw dsl → aw check dsl → aw dsl review docs/dsl/DSL_DRAFT.md --write → aw approve dsl docs/dsl/DSL_DRAFT.md --plan
 aw dsl suite feature "Feature title"  # 复杂项目：多维 DSL 套件
 aw rules init && aw rules review && aw check rules

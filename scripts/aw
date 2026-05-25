@@ -40,6 +40,9 @@ case "$CMD" in
   remove)
     exec "${SCRIPT_DIR}/aw-remove.sh" "$@"
     ;;
+  project)
+    exec "${SCRIPT_DIR}/aw-project.sh" "$@"
+    ;;
   dsl)
     if [[ "${1:-}" == suite ]]; then
       shift

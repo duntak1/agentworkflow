@@ -32,6 +32,14 @@ if grep -qE 'lint：________________|test：________________|build：___________
 fi
 
 project_stage="$(awk -F'|' '/\*\*项目阶段\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "$CFG" 2>/dev/null || true)"
+scan_file="${ROOT}/docs/PROJECT_SCAN.md"
+scan_stage=""
+if [[ -f "$scan_file" ]]; then
+  scan_stage="$(awk -F'|' '/\*\*建议项目阶段\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "$scan_file" 2>/dev/null || true)"
+  ok "项目扫描: docs/PROJECT_SCAN.md (${scan_stage:-unknown})"
+else
+  warn "项目扫描 missing (run: ./scripts/aw project scan before DSL/Plan/task split)"
+fi
 case "$project_stage" in
   1|new|greenfield|fresh|全新|全新项目|新项目)
     ok "项目阶段: new"
@@ -93,6 +101,19 @@ case "$build_target" in
     warn "构建目标 not filled (choose: 1=前端项目 ./scripts/aw config init --build-target 1 OR 2=后端项目 ./scripts/aw config init --build-target 2 OR 3=前后端项目 ./scripts/aw config init --build-target 3)"
     ;;
 esac
+
+if [[ "$build_target" == "3" || "$build_target" == "fullstack" || "$build_target" == "full-stack" || "$build_target" == "both" || "$build_target" == "all" || "$build_target" == "前后端" || "$build_target" == "全栈" || "$build_target" == "前后端项目" ]]; then
+  if [[ -f "${ROOT}/docs/sync/SYNC_CONFIG.md" ]]; then
+    sync_harness="$(awk -F'|' '/\*\*同步中心\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3; exit }' "${ROOT}/docs/sync/SYNC_CONFIG.md" 2>/dev/null || true)"
+    if [[ -n "$sync_harness" && "$sync_harness" != *"____"* ]]; then
+      ok "同步中心: ${sync_harness}"
+    else
+      warn "同步中心 configured file exists but missing harness path"
+    fi
+  else
+    warn "fullstack build target requires sync-center decision before frontend/backend Plan split (run: ./scripts/aw sync init <project-harness> --project <name> --agent <agent> --role <frontend|backend>, or document AW_ALLOW_NO_SYNC=1 exception for true monorepo)"
+  fi
+fi
 
 for key in lint format typecheck test build e2e; do
   local_cmd=""

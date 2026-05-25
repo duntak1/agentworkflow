@@ -96,6 +96,8 @@ if [[ "$has_pkg" != yes || "$has_aw" != yes ]]; then
   next='Run: ~/.cursor/skills/agent-workflow/scripts/aw install .  (or from source repo: ./scripts/aw install .)'
 elif [[ ! -d "${ROOT}/reference" ]] || [[ ! -f "${ROOT}/docs/PROJECT_CONFIG.md" ]]; then
   next="./scripts/aw init"
+elif [[ ! -f "${ROOT}/docs/PROJECT_SCAN.md" ]]; then
+  next="./scripts/aw project scan → engineer confirms stage → aw config init --project-stage 1|2"
 elif [[ -z "$dsl_file" ]]; then
   next="Fill reference/ → ./scripts/aw dsl → aw paste dsl-write"
 elif [[ "$dsl_st" != "已审" ]]; then

@@ -54,6 +54,8 @@ COMMANDS=(
   "aw status --json"
   "aw capabilities"
   "aw capabilities --json"
+  "aw project scan"
+  "aw project gate"
   "aw file-index"
   "aw handoff --check"
   "aw handoff \"focus\" --write"

@@ -25,7 +25,7 @@ Works with **any** AI coding tool. Cursor Skill is **optional**; other tools use
 
 ## Solution shape
 
-`project stage selected → project kind + build target selected → if split frontend/backend: real repos + sync center ready → new project: Reference → DSL → Plan OR existing project: inventory → baseline → incremental DSL → incremental Plan → if split frontend/backend: shared DSL + collaboration Plan before local Plans → confirm → AT-T task → verify → changelog/git → handoff`
+`project content scanned → engineer confirms new/existing stage → project kind + build target selected → if split frontend/backend: real repos + sync center ready → new project: Reference → DSL → Plan OR existing project: inventory → baseline → incremental DSL → incremental Plan → if split frontend/backend: shared DSL + collaboration Plan before local Plans → confirm → AT-T task → verify → changelog/git → handoff`
 
 Closed-loop management is mandatory for every large requirement and every AT-T:
 
@@ -118,13 +118,14 @@ Proof path:
 
 | Step | Command |
 |------|---------|
-| Project stage | At startup, ask the engineer: `1 = new project` (`aw config init --project-stage 1`) or `2 = existing/brownfield project` (`aw config init --project-stage 2`). Do not generate DSL/Plan or code before this is confirmed |
+| Project scan | At startup and before build planning, run `aw project scan`; review `docs/PROJECT_SCAN.md` with the engineer. Do not ask new/existing from a blank slate; scan first, then ask for confirmation |
+| Project stage | After scan, ask the engineer to confirm `1 = new project` (`aw config init --project-stage 1`) or `2 = existing/brownfield project` (`aw config init --project-stage 2`). Do not generate DSL/Plan or code before this is confirmed |
 | Reference | edit `reference/manifest.yaml` + `inputs/` |
 | DSL | `aw dsl` → `aw dsl write` or `aw dsl apply` → `aw check dsl` → `aw dsl review` → `aw approve dsl --plan` |
 | DSL suite | `aw dsl suite <slug> "title"` → fill requirements/pages/interactions/events/boundaries/acceptance → `aw dsl review docs/dsl/DSL_<SLUG>/INDEX.md --write` → `aw approve dsl docs/dsl/DSL_<SLUG>/INDEX.md --plan` |
 | Project kind | Before task planning, ask the engineer to choose: `1 = GitHub repository` (`aw config init --project-kind 1 --github-url ...`) or `2 = local Git repository` (`aw config init --project-kind 2`); local Git repositories skip GitHub URL |
 | Build target | After DSL review and before Plan, ask the engineer to choose: `1 = frontend`, `2 = backend`, `3 = fullstack`, then run `aw config init --build-target 1|2|3` |
-| Split frontend/backend repos | Before Plan, ask whether frontend/backend are in one repo or two; if two, ask same computer vs different computers, real frontend repo path/GitHub URL, real backend repo path/GitHub URL, and `project-harness` path/GitHub URL. Do not generate local Plans until repos and sync center are ready |
+| Split frontend/backend repos | Before Plan, ask whether frontend/backend are in one repo or two; if two, ask same computer vs different computers, real frontend repo path/GitHub URL, real backend repo path/GitHub URL, and `project-harness` path/GitHub URL. `aw project gate` blocks Plan generation until repos and sync center are ready |
 | Sync center before local Plans | For split repos, put shared DSL in `project-harness/global/dsl/`, collaboration Plan in `project-harness/global/plans/`, then derive frontend/backend local Plans in each real code repo |
 | Plan | `aw plan <dsl>` → `aw paste plan-write` or `aw plan apply` → `aw approve plan` → `aw check plan` |
 | Plan change | During development, use `aw plan change --summary "..."` for scope notes, `aw plan task-add --title "..."` for same-scope new AT-T, and `aw task split <id> --into "A; B"` when a task is too large |
@@ -166,7 +167,8 @@ Proof path:
 2. Never `@` `ENGINEERING_INDEX.md`.
 3. Do not invent `reference/` or `docs/dsl/` paths.
 4. Truth: `agent-workflow/INVOCATION.md` after install.
-5. Before generating the development plan or AT-T task split, guide the engineer to choose project type and build target in `docs/PROJECT_CONFIG.md`: project type `1=GitHub repository` or `2=local Git repository`; build target `1=frontend`, `2=backend`, `3=fullstack`.
+5. Before generating DSL/Plan or AT-T task split, run `aw project scan`, summarize `docs/PROJECT_SCAN.md`, and let the engineer confirm whether the project is new or existing. Then guide the engineer to choose project type and build target in `docs/PROJECT_CONFIG.md`: project type `1=GitHub repository` or `2=local Git repository`; build target `1=frontend`, `2=backend`, `3=fullstack`.
+5a. If build target is `fullstack` and frontend/backend are split repos or dual projects, build the sync center first with `aw sync init <project-harness> --project ... --agent ... --role ...`. `aw plan`, `aw approve dsl --plan`, and `aw plan apply` are blocked until `aw project gate` passes. Shared DSL and collaboration Plan live in the sync center before local frontend/backend Plans are derived.
 6. Before every AT-T starts, clarify requirements with the engineer, ask until scope/acceptance/non-goals are explicit, and wait for confirmation. Do not guess.
 7. Record spoken new requirements and development changes in `docs/requirements/INDEX.md` with a 需求类型. If requirements change during development, stop coding and run `aw req change`; update DSL/Plan/ATOMIC before continuing.
 7a. Development-time plan changes: small same-goal changes update the active Plan/ATOMIC with `aw plan change` or `aw plan task-add`; oversized tasks use `aw task split`; major scope/architecture/delivery-batch changes generate a new Plan/ATOMIC and require approval/confirm again.

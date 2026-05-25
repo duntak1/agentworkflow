@@ -25,8 +25,11 @@ cd "${APP_DIR}"
 "${SCRIPT_DIR}/aw" install . --adapters
 chmod +x scripts/aw scripts/*.sh
 ./scripts/aw init
+./scripts/aw project scan
 ./scripts/aw config init \
   --project-stage "1" \
+  --project-kind "2" \
+  --build-target "1" \
   --language "shell" \
   --package-manager "none" \
   --frontend "shell" \

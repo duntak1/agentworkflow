@@ -117,6 +117,8 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw upgrade` | 刷新 package/scripts，保留业务 docs/reference |
 | `aw remove` | 预览移除 adapters/CI/package，`--execute` 后删除 |
 | `aw init` | 初始化 reference、DSL、Plan、TP 模板 |
+| `aw project scan` | 扫描当前项目内容，写入 `docs/PROJECT_SCAN.md`，给出全新 / 已有项目建议；Agent 必须复述给工程师确认 |
+| `aw project gate` | Plan 前硬闸门：未扫描、未确认项目阶段 / 类型 / 构建目标，或 fullstack 分仓未配置同步中心时阻断 |
 | `aw config init --project-stage 1|2` | 选择启动分流：1=全新项目，2=已有 / 存量项目；未选择前不得生成 DSL / Plan 或写业务代码 |
 | `aw dsl [A|B|C]` | 打印 DSL prompt |
 | `aw dsl suite <slug> "title"` | 生成多文件 DSL 套件：需求、页面、交互、事件、联动边界、验收 |
@@ -124,8 +126,8 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw dsl apply --file DSL.md` | 校验并写入 `docs/dsl/` |
 | `aw dsl list|use` | 多 DSL 仓库选择当前 DSL |
 | `aw approve dsl <file> [--plan] [--domain frontend|backend|...]` | DSL 状态设为已审；`--plan` 直接输出 Plan/ATOMIC 生成提示；`--domain` 定向拆任务 |
-| `aw plan <dsl> [--domain frontend|backend|...]` | 打印 Plan prompt，可只生成指定领域任务 |
-| `aw plan apply --plan-file PLAN.md --atomic-file ATOMIC.md --slug name` | 写入 Plan 与 ATOMIC |
+| `aw plan <dsl> [--domain frontend|backend|...]` | 打印 Plan prompt，可只生成指定领域任务；会先执行 project gate |
+| `aw plan apply --plan-file PLAN.md --atomic-file ATOMIC.md --slug name` | 写入 Plan 与 ATOMIC；会先执行 project gate |
 | `aw plan list|use` | 多 Plan 仓库选择当前 Plan |
 | `aw plan change --summary "..."` | 记录研发中计划变更，回写当前 Plan / ATOMIC 并自动审计 |
 | `aw plan task-add --title "..."` | 在当前 ATOMIC 追加同范围新任务 |
@@ -200,7 +202,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw check all|dsl|plan|config|req|tp|plugin` | 分项或聚合检查 |
 | `aw check plugin` | 校验 Codex plugin / marketplace metadata |
 | `aw check memory` | 校验 docs/memory 布局、字段与敏感信息 |
-| `aw config init --project-stage 1|2 --project-kind 1|2 --build-target 1|2|3` | 填写 PROJECT_CONFIG；项目阶段 1=全新项目、2=已有 / 存量项目；项目类型 1=GitHub 仓库（需 GitHub 地址）、2=本地 Git 仓库（跳过 GitHub 地址）；构建目标 1=前端、2=后端、3=前后端 |
+| `aw config init --project-stage 1|2 --project-kind 1|2 --build-target 1|2|3` | 填写 PROJECT_CONFIG；项目阶段必须先依据 `aw project scan` 和工程师确认；构建目标 3=前后端时，分仓/双项目必须先 `aw sync init` 建同步中心 |
 | `aw rules init|review|check` | 生成、审阅、校验工程规范 `docs/ENGINEERING_RULES.md`；默认固化团队前端/后端/统一 AI 执行规范清单，真实项目只补差异、关键文件和注释原则 |
 | `aw rules discover [--write]` | 扫描真实项目候选关键文件，并可回写 `docs/ENGINEERING_RULES.md` 的“关键文件”表 |
 | `aw ci install` | 安装 GitHub Actions workflow 模板 |

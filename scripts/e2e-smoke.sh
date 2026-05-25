@@ -53,6 +53,13 @@ grep -q 'scripts/aw' docs/FILE_INDEX.md || { echo "fail: FILE_INDEX missing scri
 grep -q 'scripts/generate-file-index.sh' docs/FILE_INDEX.md || { echo "fail: FILE_INDEX missing generator"; exit 1; }
 ./scripts/aw file-index
 grep -q '项目代码文件索引' docs/FILE_INDEX.md || { echo "fail: aw file-index did not generate detailed index"; exit 1; }
+rm -f docs/PROJECT_SCAN.md
+PLAN_SCAN_BLOCK="$(./scripts/aw plan docs/dsl/DSL_DRAFT.md 2>&1 >/dev/null || true)"
+case "$PLAN_SCAN_BLOCK" in *"missing project scan"*) ;; *) echo "fail: plan should require project scan"; echo "$PLAN_SCAN_BLOCK"; exit 1 ;; esac
+./scripts/aw project scan
+grep -q 'Project Scan' docs/PROJECT_SCAN.md || { echo "fail: project scan file"; exit 1; }
+PLAN_STAGE_BLOCK="$(./scripts/aw plan docs/dsl/DSL_DRAFT.md 2>&1 >/dev/null || true)"
+case "$PLAN_STAGE_BLOCK" in *"project stage is not confirmed"*) ;; *) echo "fail: plan should require confirmed project stage"; echo "$PLAN_STAGE_BLOCK"; exit 1 ;; esac
 ./scripts/aw config init --project-stage "1" --project-kind "1" --build-target "3" --github-url "https://github.com/example/e2e-app" --default-branch "main" --language "shell" --package-manager "none" --frontend "shell" --ui "none" --backend "none" --database "none" --lint "./scripts/aw check layout" --format "./scripts/aw check layout" --typecheck "./scripts/aw check layout" --test "./scripts/aw check tp" --build "./scripts/aw check plan" --e2e "./scripts/aw check tp"
 grep -q 'https://github.com/example/e2e-app' docs/PROJECT_CONFIG.md || { echo "fail: github url not written"; exit 1; }
 grep -Fq '| **项目阶段** | new |' docs/PROJECT_CONFIG.md || { echo "fail: project stage not written"; exit 1; }
@@ -125,6 +132,8 @@ grep -q 'e2e-review' docs/agents/AGENT_HANDOFFS.md || { echo "fail: agents hando
 ./scripts/aw agents review --reviewer "e2e-review" --type code --related AT-T0-000 --result pass --evidence "e2e"
 grep -q 'e2e-review' docs/agents/AGENT_REVIEWS.md || { echo "fail: agents review"; exit 1; }
 ./scripts/aw agents gate
+PLAN_SYNC_BLOCK="$(./scripts/aw plan docs/dsl/DSL_DRAFT.md 2>&1 >/dev/null || true)"
+case "$PLAN_SYNC_BLOCK" in *"requires sync center confirmation"*) ;; *) echo "fail: fullstack plan should require sync center"; echo "$PLAN_SYNC_BLOCK"; exit 1 ;; esac
 SYNC_HARNESS="${TMP}/project-harness"
 ./scripts/aw sync init "$SYNC_HARNESS" --project frontend --agent frontend-agent --role frontend
 ./scripts/aw sync push --task AT-T0-000 --note "frontend e2e snapshot"
@@ -233,14 +242,14 @@ case "$DSL_SUITE_PLAN_OUT" in *00-requirements.md*90-acceptance.md*) ;; *) echo 
 cp docs/PROJECT_CONFIG.md /tmp/aw-e2e-project-config.md
 sed 's#https://github.com/example/e2e-app#________________#' /tmp/aw-e2e-project-config.md > docs/PROJECT_CONFIG.md
 PLAN_GITHUB_WARN="$(./scripts/aw plan docs/dsl/DSL_DRAFT.md 2>&1 >/dev/null || true)"
-case "$PLAN_GITHUB_WARN" in *"GitHub 仓库地址未配置"*) ;; *) echo "fail: plan missing github url warning"; echo "$PLAN_GITHUB_WARN"; exit 1 ;; esac
+case "$PLAN_GITHUB_WARN" in *"GitHub 仓库地址未配置"*|*"GitHub 仓库地址未配置"*) ;; *) echo "fail: plan missing github url warning"; echo "$PLAN_GITHUB_WARN"; exit 1 ;; esac
 ./scripts/aw config init --project-kind 2 >/dev/null
 PLAN_LOCAL_WARN="$(./scripts/aw plan docs/dsl/DSL_DRAFT.md 2>&1 >/dev/null || true)"
-case "$PLAN_LOCAL_WARN" in *"GitHub 仓库地址未配置"*|*"项目类型未配置"*) echo "fail: local Git repository should skip github warning"; echo "$PLAN_LOCAL_WARN"; exit 1 ;; esac
+case "$PLAN_LOCAL_WARN" in *"GitHub 仓库地址未配置"*|*"项目类型未配置"*) echo "fail: local Git repository should skip github warning"; echo "$PLAN_LOCAL_WARN"; exit 1 ;; *) ;; esac
 awk -F'|' 'BEGIN { OFS="|" } /\*\*构建目标\*\*/ { print "| **构建目标** | ________________ |"; next } { print }' /tmp/aw-e2e-project-config.md > docs/PROJECT_CONFIG.md
 grep -Fq '| **构建目标** | ________________ |' docs/PROJECT_CONFIG.md || { echo "fail: build target placeholder not restored"; exit 1; }
 PLAN_TARGET_WARN="$(./scripts/aw plan docs/dsl/DSL_DRAFT.md 2>&1 >/dev/null || true)"
-case "$PLAN_TARGET_WARN" in *"构建目标未配置"*) ;; *) echo "fail: plan missing build target warning"; echo "$PLAN_TARGET_WARN"; exit 1 ;; esac
+case "$PLAN_TARGET_WARN" in *"build target is not confirmed"*) ;; *) echo "fail: plan missing build target warning"; echo "$PLAN_TARGET_WARN"; exit 1 ;; esac
 cp /tmp/aw-e2e-project-config.md docs/PROJECT_CONFIG.md
 
 cat > /tmp/aw-e2e-plan.md <<'EOF'

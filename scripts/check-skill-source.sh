@@ -28,6 +28,7 @@ need "VERSION"
 [[ -f "${ROOT}/agent-workflow/templates/agents/AGENT_ROLES.md" ]] && echo "ok  templates/agents/AGENT_ROLES.md" || { echo "missing  templates/agents/AGENT_ROLES.md"; ERR=1; }
 [[ -f "${ROOT}/scripts/aw-report.sh" ]] && echo "ok  scripts/aw-report.sh" || { echo "missing  scripts/aw-report.sh"; ERR=1; }
 [[ -f "${ROOT}/scripts/aw-trace.sh" ]] && echo "ok  scripts/aw-trace.sh" || { echo "missing  scripts/aw-trace.sh"; ERR=1; }
+[[ -f "${ROOT}/scripts/aw-project.sh" ]] && echo "ok  scripts/aw-project.sh" || { echo "missing  scripts/aw-project.sh"; ERR=1; }
 
 if [[ -f "${ROOT}/.codex-plugin/plugin.json" ]]; then
   echo "ok  .codex-plugin/plugin.json"

@@ -5,15 +5,17 @@
 ## 流程闸门
 
 1. **未 init**：先建议人类运行 `./scripts/aw init`（工具无关，见 `INVOCATION.md`）。
-2. **DSL 状态非 `已审`**：只改 DSL/REQ/Reference/Plan 文档，**不写业务代码**。
-3. **Plan 状态非 `可执行`**：可拆任务文档，不开始实现 AT-T*。
-4. **任务确认后**：人类运行 `./scripts/aw confirm <dsl> <plan>` 生成 `ENGINEERING_INDEX.md`；**不要**把该文件加入 Agent 上下文。
-5. **审阅落章**：`aw approve dsl` / `aw approve plan` 改元数据状态（勿手改漏字段）。
-6. 工程师说“执行研发任务 / 开始开发 / 做下一个任务”时，不得直接写代码。必须先 `aw next` → `aw task brief <AT-T>`，像真实研发一样和工程师刨根问底确认需求、范围、验收、异常态、联动边界、非目标和风险；工程师确认后执行 `aw task confirm <AT-T> "已确认：..."`，再 `aw context plan --task <AT-T>` → `aw context gate --task <AT-T>` → `aw task start <AT-T>` → `aw paste task` 绑定单任务。
-7. 口述新增需求和研发中变更都必须写入 `docs/requirements/INDEX.md`，用“需求类型”区分。口述新增用 `aw req new <slug> "标题" --type 口述新增`；研发中变更立即暂停编码，运行 `aw req change <AT-T> "摘要" --impact "..." --acceptance "..."`，并回写 REQ、DSL、Plan、ATOMIC，重新 `aw task brief` / `aw task confirm` 后才能继续。
-8. 完成后：运行 `aw task complete <id>`；它会自动 `verify`，通过才标记完成，失败则写 `docs/handoff/AI_BUG_LOG.md` 并保持 `进行中`。
-9. **Git**：pre-commit 在 DSL 非已审时拦截 `frontend/`、`src/` 等业务路径（`SKIP_DSL_GATE=1` 可跳过）。
-10. **闭环管理**：进入下一大需求 / AT-T 前，必须确认完整性、可追溯性、可维护性、可交接性都有证据；缺口要补齐，或写入 REQ / Bug / Handoff 的例外、责任人和后续动作。
+2. **未扫描项目**：先运行 `./scripts/aw project scan`，复述 `docs/PROJECT_SCAN.md` 的全新 / 已有项目建议和依据，再让工程师确认项目阶段。
+3. **Plan 前置 Gate**：`aw project gate` 未通过前不得生成 Plan 或 AT-T。必须确认项目阶段、项目类型、构建目标；前后端分仓 / 双项目必须先 `aw sync init` 建同步中心。
+4. **DSL 状态非 `已审`**：只改 DSL/REQ/Reference/Plan 文档，**不写业务代码**。
+5. **Plan 状态非 `可执行`**：可拆任务文档，不开始实现 AT-T*。
+6. **任务确认后**：人类运行 `./scripts/aw confirm <dsl> <plan>` 生成 `ENGINEERING_INDEX.md`；**不要**把该文件加入 Agent 上下文。
+7. **审阅落章**：`aw approve dsl` / `aw approve plan` 改元数据状态（勿手改漏字段）。
+8. 工程师说“执行研发任务 / 开始开发 / 做下一个任务”时，不得直接写代码。必须先 `aw next` → `aw task brief <AT-T>`，像真实研发一样和工程师刨根问底确认需求、范围、验收、异常态、联动边界、非目标和风险；工程师确认后执行 `aw task confirm <AT-T> "已确认：..."`，再 `aw context plan --task <AT-T>` → `aw context gate --task <AT-T>` → `aw task start <AT-T>` → `aw paste task` 绑定单任务。
+9. 口述新增需求和研发中变更都必须写入 `docs/requirements/INDEX.md`，用“需求类型”区分。口述新增用 `aw req new <slug> "标题" --type 口述新增`；研发中变更立即暂停编码，运行 `aw req change <AT-T> "摘要" --impact "..." --acceptance "..."`，并回写 REQ、DSL、Plan、ATOMIC，重新 `aw task brief` / `aw task confirm` 后才能继续。
+10. 完成后：运行 `aw task complete <id>`；它会自动 `verify`，通过才标记完成，失败则写 `docs/handoff/AI_BUG_LOG.md` 并保持 `进行中`。
+11. **Git**：pre-commit 在 DSL 非已审时拦截 `frontend/`、`src/` 等业务路径（`SKIP_DSL_GATE=1` 可跳过）。
+12. **闭环管理**：进入下一大需求 / AT-T 前，必须确认完整性、可追溯性、可维护性、可交接性都有证据；缺口要补齐，或写入 REQ / Bug / Handoff 的例外、责任人和后续动作。
 
 ## DSL vs 实现
 

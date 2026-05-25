@@ -132,6 +132,7 @@ case "$KIND" in
     echo "${rel}" > "${ROOT}/docs/.aw-active-dsl"
     echo "ok: DSL 状态 → 已审 (${rel})"
     if $NEXT_PLAN; then
+      aw_require_planning_intake_ready
       if [[ -n "$PLAN_DOMAIN" ]]; then
         "${SCRIPT_DIR}/draft-plan.sh" "${rel}" --domain "$PLAN_DOMAIN"
       else

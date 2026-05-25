@@ -120,6 +120,36 @@ aw_detect_git_origin_url() {
   git -C "$(aw_repo_root)" remote get-url origin 2>/dev/null || true
 }
 
+aw_project_scan_file() {
+  echo "$(aw_repo_root)/docs/PROJECT_SCAN.md"
+}
+
+aw_project_scan_stage() {
+  local scan
+  scan="$(aw_project_scan_file)"
+  [[ -f "$scan" ]] || return 1
+  awk -F'|' '/\*\*建议项目阶段\*\*/ {gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit}' "$scan"
+}
+
+aw_sync_configured() {
+  local root cfg harness project
+  root="$(aw_repo_root)"
+  cfg="${root}/docs/sync/SYNC_CONFIG.md"
+  [[ -f "$cfg" ]] || return 1
+  harness="$(awk -F'|' '/\*\*同步中心\*\*/ {gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3; exit}' "$cfg" 2>/dev/null || true)"
+  project="$(awk -F'|' '/\*\*项目名\*\*/ {gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3; exit}' "$cfg" 2>/dev/null || true)"
+  [[ -n "$harness" && "$harness" != *"____"* && -n "$project" && "$project" != *"____"* ]] || return 1
+  [[ -d "$harness" ]] || return 1
+}
+
+aw_print_project_scan_guidance() {
+  echo "请先扫描项目内容并让工程师确认新/老项目判断：" >&2
+  echo "  ./scripts/aw project scan" >&2
+  echo "然后根据 docs/PROJECT_SCAN.md 执行：" >&2
+  echo "  ./scripts/aw config init --project-stage 1   # 全新项目" >&2
+  echo "  ./scripts/aw config init --project-stage 2   # 已有 / 存量项目" >&2
+}
+
 aw_project_kind() {
   local kind
   kind="$(aw_project_config_field "项目类型" 2>/dev/null || true)"
@@ -202,6 +232,59 @@ aw_warn_build_target_before_planning() {
   echo "warn: 构建目标未配置；生成研发计划/任务拆分前请先选择 1=前端项目、2=后端项目、3=前后端项目。" >&2
   aw_print_build_target_guidance
   echo "" >&2
+}
+
+aw_require_planning_intake_ready() {
+  local root scan stage configured_stage target
+  root="$(aw_repo_root)"
+  scan="$(aw_project_scan_file)"
+  stage="$(aw_project_stage)"
+  target="$(aw_build_target)"
+  if [[ ! -f "$scan" ]]; then
+    echo "error: missing project scan; Plan generation is blocked." >&2
+    aw_print_project_scan_guidance
+    return 1
+  fi
+  if [[ -z "$stage" ]]; then
+    echo "error: project stage is not confirmed; Plan generation is blocked." >&2
+    aw_print_project_scan_guidance
+    return 1
+  fi
+  configured_stage="$(aw_project_scan_stage 2>/dev/null || true)"
+  if [[ -n "$configured_stage" && "$configured_stage" != "$stage" ]]; then
+    echo "warn: project scan suggests '${configured_stage}', but PROJECT_CONFIG is '${stage}'. Ensure engineer explicitly confirmed this override." >&2
+  fi
+  if [[ -z "$(aw_project_kind)" ]]; then
+    echo "error: project kind is not confirmed; Plan generation is blocked." >&2
+    aw_print_project_kind_guidance
+    return 1
+  fi
+  if [[ -z "$target" ]]; then
+    echo "error: build target is not confirmed; Plan generation is blocked." >&2
+    aw_print_build_target_guidance
+    return 1
+  fi
+  if [[ "$target" == "fullstack" ]]; then
+    if [[ "${AW_ALLOW_NO_SYNC:-}" == "1" ]]; then
+      echo "warn: AW_ALLOW_NO_SYNC=1 set; skipping fullstack sync-center gate." >&2
+      return 0
+    fi
+    if ! aw_sync_configured; then
+      echo "error: fullstack / frontend-backend planning requires sync center confirmation before local Plan split." >&2
+      echo "请先和工程师确认：" >&2
+      echo "  1) 前后端是否同一仓库还是分仓 / 双项目" >&2
+      echo "  2) 同一台电脑开发还是不同电脑开发" >&2
+      echo "  3) 前端真实项目路径 / GitHub 地址" >&2
+      echo "  4) 后端真实项目路径 / GitHub 地址" >&2
+      echo "  5) 同步中心 project-harness 的本地路径 / GitHub 地址" >&2
+      echo "然后在真实前端/后端项目中执行：" >&2
+      echo "  ./scripts/aw sync init <project-harness> --project <frontend|backend> --agent <agent-name> --role <frontend|backend>" >&2
+      echo "同步中心建立后，先在 project-harness/global/dsl 放共享 DSL，在 project-harness/global/plans 放协作 Plan，再拆本地前端/后端 Plan。" >&2
+      echo "如果这是单仓 fullstack 且工程师明确不需要同步中心，可临时设置 AW_ALLOW_NO_SYNC=1 作为人工例外。" >&2
+      return 1
+    fi
+  fi
+  return 0
 }
 
 aw_print_project_kind_guidance() {

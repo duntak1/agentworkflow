@@ -37,6 +37,7 @@ done
 
 [[ -n "$PLAN_IN" && -f "$PLAN_IN" ]] || { echo "error: --plan-file is required" >&2; usage 1; }
 [[ -n "$ATOMIC_IN" && -f "$ATOMIC_IN" ]] || { echo "error: --atomic-file is required" >&2; usage 1; }
+aw_require_planning_intake_ready
 
 if [[ -z "$DSL_FILE" ]]; then
   DSL_FILE="$(aw_resolve_dsl_file 2>/dev/null || true)"

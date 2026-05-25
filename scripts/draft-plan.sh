@@ -89,9 +89,8 @@ if ! grep -qE '已审' "$FULL" 2>/dev/null; then
   echo "warning: DSL may not be reviewed (expected 状态 = 已审 in metadata)" >&2
 fi
 
+aw_require_planning_intake_ready
 aw_warn_github_url_before_planning
-aw_warn_project_stage_before_planning
-aw_warn_build_target_before_planning
 
 PROMPT_FILE="${TEMPLATES}/prompts/PROMPT-PLAN.md"
 PROJECT_STAGE="$(aw_project_stage)"

@@ -31,6 +31,7 @@ if $JSON; then
   "version": "${VERSION}",
   "pipeline": [
     "Project stage selected",
+    "Project content scanned",
     "Project kind/build target selected",
     "Reference",
     "DSL reviewed",
@@ -57,6 +58,9 @@ if $JSON; then
     "doctor",
     "demo",
     "init",
+    "project",
+    "project scan",
+    "project gate",
     "status",
     "capabilities",
     "dashboard",
@@ -174,13 +178,13 @@ cat <<EOF
 version: ${VERSION}
 
 Pipeline:
-  Project stage selected -> Project kind/build target selected -> Reference or baseline -> DSL reviewed -> Plan executable -> confirm -> AT-T task -> verify -> changelog/git -> handoff
+  Project content scanned -> Project stage selected -> Project kind/build target selected -> Sync center ready when needed -> Reference or baseline -> DSL reviewed -> Plan executable -> confirm -> AT-T task -> verify -> changelog/git -> handoff
 
 Adapters:
   Claude Code, Codex, Copilot / VS Code, Cursor, Windsurf, Cline, Continue, Any chat
 
 Core commands:
-  install, setup, doctor, demo, init, status, capabilities, dashboard, dsl, dsl review, plan, approve,
+  install, setup, doctor, demo, init, project, project scan, project gate, status, capabilities, dashboard, dsl, dsl review, plan, approve,
   confirm, index, check, config, ci, atomic, req, tp, next, task, task split, paste,
   plan change, plan task-add,
   verify, commit, changelog, handoff --write, handoff --check, memory chat, bug,

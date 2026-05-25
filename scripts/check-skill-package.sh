@@ -63,6 +63,7 @@ need "scripts/aw-dsl-apply.sh"
 need "scripts/aw-plan-apply.sh"
 need "scripts/aw-plan-change.sh"
 need "scripts/aw-config.sh"
+need "scripts/aw-project.sh"
 need "scripts/aw-ci.sh"
 need "scripts/aw-dsl-select.sh"
 need "scripts/aw-plan-select.sh"
@@ -123,7 +124,7 @@ else
   ERR=1
 fi
 
-for cmd in "doctor" "demo" "dashboard" "status --json" "capabilities" "capabilities --json" "memory" "memory chat" "bug" "changelog" "audit" "policy" "policy gate" "security" "security scan" "service-catalog" "service-catalog discover" "release" "release gate" "release gate --strict-report" "release flag-check" "report handoff" "report release" "report check" "metrics" "metrics summary" "ops" "ops gate" "agents" "agents gate" "agents gate --strict" "sync" "sync init" "sync push" "sync pull" "sync baseline" "sync board" "sync event" "sync change" "sync inbox" "trace check" "plan change" "plan task-add" "task split" "rules discover" "file-index" "setup" "upgrade" "remove"; do
+for cmd in "doctor" "demo" "dashboard" "status --json" "capabilities" "capabilities --json" "project scan" "project gate" "memory" "memory chat" "bug" "changelog" "audit" "policy" "policy gate" "security" "security scan" "service-catalog" "service-catalog discover" "release" "release gate" "release gate --strict-report" "release flag-check" "report handoff" "report release" "report check" "metrics" "metrics summary" "ops" "ops gate" "agents" "agents gate" "agents gate --strict" "sync" "sync init" "sync push" "sync pull" "sync baseline" "sync board" "sync event" "sync change" "sync inbox" "trace check" "plan change" "plan task-add" "task split" "rules discover" "file-index" "setup" "upgrade" "remove"; do
   if grep -q "aw ${cmd}" "${SKILL_DIR}/SKILL.md" "${SKILL_DIR}/reference.md" 2>/dev/null; then
     echo "ok  docs mention aw ${cmd}"
   else

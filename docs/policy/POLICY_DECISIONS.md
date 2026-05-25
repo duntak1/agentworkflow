@@ -12,5 +12,6 @@
 
 | 时间 | 类型 | 关联 | 决策 | 风险 / 原因 | 后续动作 | 确认人 |
 |------|------|------|------|-------------|----------|--------|
+| 2026-05-25 00:00:00 | high_risk_change | project-intake-gate | Enforce project scan and sync-center readiness before Plan generation. | Core planning workflow changed; blocks `aw plan`, `aw approve dsl --plan`, and `aw plan apply` until intake prerequisites pass. | Run e2e smoke, check-aw-all, reinstall local Codex skill, and push to GitHub. | user direction |
 | 2026-05-22 16:50:00 | high_risk_change | task-confirmation-gate | Enforce hard task-start gate in CLI, Skill, Invocation, Agent rules, manual, and tests. | Core workflow behavior changed; prevents agents from bypassing engineer confirmation and context gate before coding. | Run e2e smoke, check-aw-all, reinstall local Codex skill, and push to GitHub. | user direction |
 | 2026-05-20 14:57:33 | Engineering Harness enhancement | EH-P0-001..EH-P1-003 | Use lightweight file+CLI control plane before building a standalone management system. | Docs and CLI checks must stay synchronized. | Validate with e2e-smoke and check-aw-all. | user direction |

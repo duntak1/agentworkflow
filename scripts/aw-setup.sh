@@ -42,6 +42,7 @@ elif $DO_ADAPTERS; then
 fi
 
 "${SCRIPT_DIR}/init-project.sh"
+"${SCRIPT_DIR}/aw-project.sh" scan
 $DO_CI && "${SCRIPT_DIR}/aw-ci.sh" install
 $DO_HOOKS && "${SCRIPT_DIR}/install-git-hooks.sh"
 
