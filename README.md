@@ -67,8 +67,8 @@ chmod +x scripts/aw scripts/*.sh
 ./scripts/aw setup
 ./scripts/aw project scan
 ./scripts/aw config init --project-stage 1 # 1=全新项目，2=已有/存量项目；先看 docs/PROJECT_SCAN.md 再确认
-./scripts/aw config init --project-kind 1 --github-url https://github.com/<owner>/<repo>
-# 本地 Git 仓库可用：./scripts/aw config init --project-kind 2
+./scripts/aw config init --project-kind 1 --repo-url https://github.com/<owner>/<repo>
+# 代码托管平台：1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup
 ./scripts/aw config init --build-target 1 # 1=前端，2=后端，3=前后端
 ./scripts/aw status
 ./scripts/aw dashboard

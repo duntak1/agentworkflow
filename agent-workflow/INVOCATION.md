@@ -13,7 +13,7 @@
 ## 一句话流程
 
 ```text
-install/init → aw project scan 扫描项目内容 → 工程师确认项目阶段（全新 / 已有）→ 选择项目类型（GitHub 仓库 / 本地 Git 仓库）+ 构建目标（前端/后端/前后端）→ 若双项目则先确认真实前端仓库 / 后端仓库 / 同步中心并执行 aw sync init → 全新项目走 reference → DSL → Plan；已有项目走现状盘点 → 一期基线 → 增量 DSL → 增量 Plan；双项目先共享 DSL / 协作 Plan，再派生本地 Plan → DSL 已审 / Plan 可执行 → aw confirm → ENGINEERING_INDEX.md → aw next → AICODING 写代码 → verify → CHANGELOG/Git → handoff
+install/init → aw project scan 扫描项目内容 → 工程师确认项目阶段（全新 / 已有）→ 选择代码托管平台（GitHub/GitLab/Bitbucket/Gitee/GitCode/Gitea/Forgejo/GitLab CE/Gerrit/云效 Codeup/本地 Git）+ 构建目标（前端/后端/前后端）→ 若双项目则先确认真实前端仓库 / 后端仓库 / 同步中心并执行 aw sync init → 全新项目走 reference → DSL → Plan；已有项目走现状盘点 → 一期基线 → 增量 DSL → 增量 Plan；双项目先共享 DSL / 协作 Plan，再派生本地 Plan → DSL 已审 / Plan 可执行 → aw confirm → ENGINEERING_INDEX.md → aw next → AICODING 写代码 → verify → CHANGELOG/Git → handoff
 ```
 
 ## 闭环管理目标
@@ -46,8 +46,8 @@ chmod +x scripts/aw scripts/*.sh
 ./scripts/aw status --json # 可选：机器可读状态
 ./scripts/aw capabilities --json # 可选：机器可读能力摘要
 ./scripts/aw config init --project-stage 1 # 1=全新项目；2=已有/存量项目；必须先依据 PROJECT_SCAN 和工程师确认
-./scripts/aw config init --project-kind 1 --github-url https://github.com/<owner>/<repo> # 1=GitHub 仓库
-# 或：./scripts/aw config init --project-kind 2 # 2 = 本地 Git 仓库，无需 GitHub 地址
+./scripts/aw config init --project-kind 1 --repo-url https://github.com/<owner>/<repo> # 1=GitHub
+# 2=本地 Git，无需远程仓库地址；3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup
 ./scripts/aw config init --build-target 1 # 1=前端项目；2=后端项目；3=前后端项目
 ./scripts/aw rules init && ./scripts/aw rules discover --write && ./scripts/aw rules review # 工程规范：保留团队固定清单，补项目差异
 ./scripts/aw dsl          # L1 prompt；L2: aw paste dsl-write；L3: aw dsl apply
@@ -90,10 +90,10 @@ chmod +x scripts/aw scripts/*.sh
 | DSL 工程师审阅 | `aw dsl review <dsl> --write` |
 | 生成 Plan | `aw approve dsl <dsl> --plan` / `生成 Plan` / `aw plan`（须 DSL 已审） |
 | 研发中计划变更 | 小变更用 `aw plan change --summary "..."`；同范围新增任务用 `aw plan task-add --title "..."`；任务过大用 `aw task split <AT-T> --into "A; B"`；大范围变化新建 Plan / ATOMIC 后重新 approve/confirm |
-| 选择项目类型 | 项目阶段确认后执行 `aw config init --project-kind 1 --github-url ...` 或 `aw config init --project-kind 2`；1 = GitHub 仓库，2 = 本地 Git 仓库 |
+| 选择项目类型 | 项目阶段确认后询问工程师使用哪种代码托管平台，再执行 `aw config init --project-kind <n> --repo-url <url>`；1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup；2 不需要 `--repo-url` |
 | 选择构建目标 | DSL 已审后、Plan 生成前执行 `aw config init --build-target 1|2|3`；1=前端项目，2=后端项目，3=前后端项目 |
-| 双项目拓扑确认 | 构建目标为前后端且前后端分仓时，先确认前端真实仓库、后端真实仓库、同电脑 / 不同电脑、同步中心路径 / GitHub 地址；未确认前不得拆本地 Plan |
-| 同步中心建设 | 同电脑用本地 `project-harness`；不同电脑先创建并 clone 独立 GitHub `project-harness` 仓库；前后端分别执行 `aw sync init <harness> --project ... --agent ... --role ...` |
+| 双项目拓扑确认 | 构建目标为前后端且前后端分仓时，先确认前端真实仓库、后端真实仓库、同电脑 / 不同电脑、同步中心路径 / 远程仓库地址；未确认前不得拆本地 Plan |
+| 同步中心建设 | 同电脑用本地 `project-harness`；不同电脑先创建并 clone 独立远程 `project-harness` 仓库；前后端分别执行 `aw sync init <harness> --project ... --agent ... --role ...` |
 | 双项目 Plan 拆分 | DSL 已审后，先写 `project-harness/global/plans/` 协作 Plan，再派生 `project-frontend/docs/plans/` 和 `project-backend/docs/plans/` 本地 Plan |
 | 定向生成任务 | `aw approve dsl <dsl> --plan --domain frontend` / `--domain backend` |
 | 任务确认 | `任务确认` / `aw confirm` → 生成 `ENGINEERING_INDEX.md` |
@@ -141,7 +141,7 @@ chmod +x scripts/aw scripts/*.sh
 | Plugin 校验 | `aw check plugin` |
 | Memory 校验 | `aw check memory` |
 | 项目配置 | `aw check config`（占位符检测） |
-| 项目配置填写 | `aw config init --project-kind 1|2 --build-target 1|2|3 --lint ...` |
+| 项目配置填写 | `aw config init --project-kind <n> --repo-url <url> --build-target 1|2|3 --lint ...` |
 | CI 模板 | `aw ci install` |
 | 项目代码文件索引 | `aw file-index` → `docs/FILE_INDEX.md`（新增 / 删除 / 重命名前端、后端、共享、测试、运行配置代码文件时刷新；脚本/模板/文档只是辅助索引） |
 | Plan 落盘 | `aw paste plan-write` / `aw plan write` / `aw plan apply` |
@@ -166,7 +166,7 @@ Agent 应：**先读本文 + `PRODUCT_INPUT_WORKFLOW.md`**，再执行对应 `sc
 
 前后端分成两个项目时，先读 [`CROSS_PROJECT_SYNC.md`](./CROSS_PROJECT_SYNC.md)：共享 DSL / 协作 Plan 放在同步中心 `global/dsl/` 和 `global/plans/`，共享任务看板放在 `global/plans/TASK_BOARD.md`，本项目 DSL / Plan 是执行派生；`aw sync pull` 只导入对方快照到 `docs/sync/inbox/`，不得直接覆盖本项目 DSL / Plan / 代码；接口、字段、权限、错误码或阻塞变化必须在本项目重新通过 REQ / Bug / Handoff 落账后再 `aw sync push`。
 
-双项目从 DSL 进入 Plan 前，Agent 必须先引导工程师完成真实代码仓库与同步中心建设：前端仓库、后端仓库、同步中心都要有明确本地路径；不同电脑协作时，同步中心必须是单独 GitHub 仓库，双方都先 `git pull` 最新 harness 后再拆 Plan。若仓库未准备好，Agent 只能继续引导建仓 / 初始化 / `aw sync init`，不能生成本地 Plan。
+双项目从 DSL 进入 Plan 前，Agent 必须先引导工程师完成真实代码仓库与同步中心建设：前端仓库、后端仓库、同步中心都要有明确本地路径；不同电脑协作时，同步中心必须是单独远程 Git 仓库，双方都先 `git pull` 最新 harness 后再拆 Plan。若仓库未准备好，Agent 只能继续引导建仓 / 初始化 / `aw sync init`，不能生成本地 Plan。
 
 写入 REQ / Bug / TP / DSL / Plan 的 CLI 命令成功后会自动以扫描模式刷新 `ENGINEERING_INDEX.md`；这不等同于 `aw confirm`，不会改变任务确认状态。
 

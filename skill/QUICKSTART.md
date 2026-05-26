@@ -51,7 +51,8 @@ chmod +x scripts/aw scripts/*.sh
 ```bash
 aw project scan                         # 先扫描项目内容，判断全新 / 已有
 aw config init --project-stage 1|2       # 工程师确认后写入阶段
-aw config init --project-kind 1|2        # GitHub 仓库 / 本地 Git 仓库
+aw config init --project-kind <n> --repo-url <url>
+# n: 1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup；2 不需要 --repo-url
 aw config init --build-target 1|2|3      # 前端 / 后端 / 前后端
 # 若 build-target=3 且前后端分仓 / 双项目：先 aw sync init <project-harness> ...，再拆 Plan
 aw dsl → aw check dsl → aw dsl review docs/dsl/DSL_DRAFT.md --write → aw approve dsl docs/dsl/DSL_DRAFT.md --plan

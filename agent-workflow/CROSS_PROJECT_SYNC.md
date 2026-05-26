@@ -23,8 +23,8 @@
 ```text
 确认前后端双项目
 → 确认同电脑 / 不同电脑
-→ 确认前端真实代码仓库路径 + GitHub 地址
-→ 确认后端真实代码仓库路径 + GitHub 地址
+→ 确认前端真实代码仓库路径 + 远程仓库地址
+→ 确认后端真实代码仓库路径 + 远程仓库地址
 → 确认或创建 project-harness 同步中心
 → 前后端分别安装 agentworkflow 并 aw init / aw config init
 → 前后端分别 aw sync init 到同一个 project-harness
@@ -36,9 +36,9 @@
 闸门：
 
 - 前端真实仓库、后端真实仓库、同步中心未确认前，不得生成本地 Plan。
-- 不同电脑开发时，`project-harness` 必须是单独 GitHub 仓库；双方先 clone / pull 最新同步中心，再拆 Plan。
+- 不同电脑开发时，`project-harness` 必须是单独远程 Git 仓库；双方先 clone / pull 最新同步中心，再拆 Plan。
 - 双项目不能各自独立拆完全分离的 Plan。必须先有 `global/plans/` 协作 Plan，再派生本地 Plan。
-- 如果 DSL 已审但真实代码仓库还没创建，Agent 应继续引导工程师创建仓库、配置 GitHub 地址和初始化 workflow，而不是把计划写进临时目录。
+- 如果 DSL 已审但真实代码仓库还没创建，Agent 应继续引导工程师创建仓库、配置 远程仓库地址和初始化 workflow，而不是把计划写进临时目录。
 
 ## 核心概念
 

@@ -30,8 +30,8 @@ Pull imports other project snapshots into docs/sync/inbox/ for reading only.
 It never overwrites local DSL, Plan, source code, or ledgers.
 Baseline shows the shared DSL/Plan locations in the harness. They are edited by explicit engineer approval, not by push/pull.
 Board regenerates a shared cross-project task board from pushed frontend/backend ATOMIC task snapshots.
-Event records any cross-project event, writes appropriate local ledgers, pushes the snapshot, refreshes the board, and prints GitHub Harness commit guidance.
-Change records a development-time requirement change, writes cross-agent handoff, pushes the snapshot, refreshes the board, and prints GitHub Harness commit guidance.
+Event records any cross-project event, writes appropriate local ledgers, pushes the snapshot, refreshes the board, and prints Remote Harness commit guidance.
+Change records a development-time requirement change, writes cross-agent handoff, pushes the snapshot, refreshes the board, and prints Remote Harness commit guidance.
 Inbox summarizes peer manifests/events pulled into docs/sync/inbox.
 EOF
   exit "${1:-0}"
@@ -479,7 +479,7 @@ print_harness_git_guidance() {
   local harness="$1" project="$2" task="$3" summary="$4" type="$5"
   cat <<EOF
 
-== GitHub Harness checkpoint ==
+== Remote Harness checkpoint ==
 If this project-harness is shared across computers, ask the engineer before running:
 
 cd "${harness}"

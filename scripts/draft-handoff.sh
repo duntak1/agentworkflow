@@ -117,7 +117,7 @@ fi
 project_stage="$(project_field_or_dash "项目阶段")"
 project_kind="$(project_field_or_dash "项目类型")"
 build_target="$(project_field_or_dash "构建目标")"
-github_url="$(project_field_or_dash "GitHub 仓库地址")"
+repo_url="$(project_field_or_dash "远程仓库地址")"
 lint_cmd="$(aw_parse_project_config_cmd lint 2>/dev/null || true)"
 test_cmd="$(aw_parse_project_config_cmd test 2>/dev/null || true)"
 build_cmd="$(aw_parse_project_config_cmd build 2>/dev/null || true)"
@@ -151,7 +151,7 @@ ${FOCUS:-（填写）}
 | 项目阶段 | ${project_stage} |
 | 项目类型 | ${project_kind} |
 | 构建目标 | ${build_target} |
-| GitHub 仓库地址 | ${github_url} |
+| 远程仓库地址 | ${repo_url} |
 | Git branch | ${git_branch} |
 | Git HEAD | ${git_head} |
 

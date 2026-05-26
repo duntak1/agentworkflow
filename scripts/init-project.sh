@@ -115,6 +115,7 @@ if [[ ! -f "${ROOT}/docs/PROJECT_CONFIG.md" ]]; then
 | **同步中心** | 未配置 |
 | **前后端拓扑** | 待确认 |
 | **Issue 系统** | GitHub Issues |
+| **远程仓库地址** | ________________ |
 | **GitHub 仓库地址** | ________________ |
 | **默认分支** | main |
 | **语言** | ________________ |
@@ -126,7 +127,7 @@ if [[ ! -f "${ROOT}/docs/PROJECT_CONFIG.md" ]]; then
 | **工程规范** | docs/ENGINEERING_RULES.md |
 
 > 项目阶段：`new` = 全新项目，从 reference → DSL → Plan 开始；`existing` = 已有 / 存量项目，先盘点现状、回填一期基线，再生成增量 DSL / Plan。
-> 项目类型：`github` = GitHub 仓库，必须配置 GitHub 仓库地址；`local-git` = 本地 Git 仓库，跳过 GitHub 仓库地址。
+> 项目类型：必须由工程师确认代码托管平台。`1/github`、`3/gitlab`、`4/bitbucket`、`5/gitee`、`6/gitcode`、`7/gitea`、`8/forgejo`、`9/gitlab-ce`、`10/gerrit`、`11/codeup` 需要配置远程仓库地址；`2/local-git` = 本地 Git 仓库，跳过远程仓库地址。`GitHub 仓库地址` 为兼容旧版本保留，新增项目优先使用 `远程仓库地址`。
 > 项目扫描：启动后必须先运行 `aw project scan`，由 Agent 依据项目内容判断全新 / 已有，再让工程师确认写入项目阶段。
 > 同步中心：构建目标为 `fullstack` 且前后端分仓 / 双项目开发时，必须先用 `aw sync init <project-harness> ...` 建立同步中心，再生成共享 DSL / 协作 Plan / 本地 Plan。
 

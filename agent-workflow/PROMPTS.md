@@ -17,13 +17,13 @@
 当前是项目启动接入阶段，不要写业务代码。
 请先问我并等待回答：
 1. 这是全新项目，还是已有 / 存量项目？
-2. 这是 GitHub 项目，还是本地 Git 项目？
+2. 这个项目使用哪种代码托管平台：1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=阿里云云效 Codeup？
 3. 构建目标是仅前端、仅后端，还是前后端项目？
 
 得到回答后：
 - 如果是全新项目，执行 aw config init --project-stage 1，并继续“全新项目接入”流程
 - 如果是已有 / 存量项目，执行 aw config init --project-stage 2，并继续“非全新项目接入”流程
-- 如果是 GitHub 项目，继续配置 --project-kind 1 --github-url
+- 如果是远程代码仓库，继续配置 --project-kind <n> --repo-url
 - 如果是本地 Git 项目，继续配置 --project-kind 2
 
 在我确认项目阶段前，不要生成 DSL、不要生成 Plan、不要修改业务代码。
@@ -40,7 +40,7 @@
 2. 执行 aw status、aw check config、aw rules review
 3. 如果没有初始化，执行 aw init
 4. 确认 docs/PROJECT_CONFIG.md 中项目阶段为 new；如果没有，执行 aw config init --project-stage 1
-5. 引导我确认：这是 GitHub 项目还是本地 Git 项目；构建目标是前端、后端还是前后端
+5. 引导我确认：这是 使用哪种代码托管平台；构建目标是前端、后端还是前后端
 6. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
 最后输出缺失项清单和下一步建议。
 ```
@@ -59,7 +59,7 @@
 2. 执行 aw status、aw check config、aw rules review
 3. 如果没有初始化，执行 aw init，但不得覆盖业务代码
 4. 确认 docs/PROJECT_CONFIG.md 中项目阶段为 existing；如果没有，执行 aw config init --project-stage 2
-5. 引导我确认：GitHub 项目还是本地 Git 项目；构建目标是前端、后端还是前后端；当前是维护、Bug 修复、二期开发还是联调阶段
+5. 引导我确认：使用哪种代码托管平台；构建目标是前端、后端还是前后端；当前是维护、Bug 修复、二期开发还是联调阶段
 6. 读取 package.json / pom.xml / build.gradle / README / 启动脚本 / 路由 / API 目录 / 测试目录等入口文件，禁止全仓无目标读取
 7. 执行 aw context plan、aw file-index、aw service-catalog discover --write
 8. 输出项目事实盘点：技术栈、启动命令、测试命令、主要模块、接口入口、已知风险、缺失配置
@@ -133,7 +133,7 @@ DSL 必须区分：
 ```text
 DSL 已确认。
 请先检查 docs/PROJECT_CONFIG.md：
-1. 项目类型是 GitHub 还是本地 Git
+1. 项目类型是 代码托管平台
 2. 构建目标是前端、后端还是前后端
 3. lint/test/build/e2e 命令是否配置
 然后按 DSL 生成研发 Plan 和 ATOMIC_TASKS。
@@ -150,14 +150,14 @@ DSL 已确认。
 请先问我并等待确认：
 1. 前端和后端是同一个仓库，还是两个独立代码仓库？
 2. 如果是两个仓库，是同一台电脑开发，还是不同电脑开发？
-3. 前端真实项目路径和 GitHub 地址是什么？
-4. 后端真实项目路径和 GitHub 地址是什么？
+3. 前端真实项目路径和 远程仓库地址是什么？
+4. 后端真实项目路径和 远程仓库地址是什么？
 5. 是否已经有同步中心 project-harness？
-6. 如果不同电脑开发，project-harness 的 GitHub 仓库地址是什么？两端是否都已 clone？
+6. 如果不同电脑开发，project-harness 的 远程仓库地址是什么？两端是否都已 clone？
 
 确认后请按场景执行：
 - 同电脑双项目：引导我准备 project-frontend、project-backend、project-harness 三个本地目录。
-- 不同电脑双项目：引导我先创建独立 GitHub 仓库 project-harness，并在每台电脑 clone。
+- 不同电脑双项目：引导我先创建独立远程 Git 仓库 project-harness，并在每台电脑 clone。
 - 分别在前端和后端真实代码仓库安装 agentworkflow、执行 aw init、aw config init。
 - 分别执行 aw sync init，把前端和后端注册到同一个 project-harness。
 
@@ -174,7 +174,7 @@ DSL 已确认。
 前端项目路径：/path/workspace/project-frontend
 后端项目路径：/path/workspace/project-backend
 同步中心路径：/path/workspace/project-harness
-同步中心 GitHub 地址：git@github.com:owner/project-harness.git 或 https://github.com/owner/project-harness
+同步中心 远程仓库地址：git@github.com:owner/project-harness.git 或 https://github.com/owner/project-harness
 开发方式：同一台电脑 / 不同电脑
 
 请按顺序完成：
@@ -306,7 +306,7 @@ Plan 未确认前不要写业务代码。
 
 ```text
 使用 agentworkflow 的跨电脑双项目同步。
-同步中心是单独 GitHub 仓库 project-harness。
+同步中心是单独远程 Git 仓库 project-harness。
 本机本地路径：/path/workspace/project-harness
 当前项目路径：/path/workspace/project-frontend-or-backend
 当前会话是 frontend-agent 或 backend-agent。

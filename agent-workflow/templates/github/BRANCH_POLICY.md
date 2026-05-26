@@ -11,6 +11,6 @@
 
 ## Gate
 
-- 新分支前：确认项目类型、GitHub URL、DSL/Plan 状态。
+- 新分支前：确认项目类型、remote repository URL、DSL/Plan 状态。
 - PR 前：运行 `aw github-pr gate`。
 - 合并前：确认 CI、review、release、rollback、contract、score。

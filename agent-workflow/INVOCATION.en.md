@@ -10,8 +10,8 @@ install/init -> reference/ -> DSL reviewed -> choose project kind + build target
 
 Project kind:
 
-- `1 = GitHub repository`: run `aw config init --project-kind 1 --github-url https://github.com/<owner>/<repo>`.
-- `2 = local Git repository`: run `aw config init --project-kind 2`; GitHub URL is skipped.
+- Choose repository provider before planning: `1=GitHub`, `2=local Git`, `3=GitLab`, `4=Bitbucket`, `5=Gitee`, `6=GitCode`, `7=Gitea`, `8=Forgejo`, `9=GitLab CE`, `10=Gerrit`, `11=Alibaba Cloud Codeup`.
+- For remote providers, run `aw config init --project-kind <n> --repo-url <repository-url>`; local Git uses `aw config init --project-kind 2`.
 
 Build target:
 
@@ -38,7 +38,7 @@ If any item is missing, fix it before continuing or document the exception, owne
 ./scripts/aw install . --adapters
 ./scripts/aw init
 ./scripts/aw memory inject
-./scripts/aw config init --project-kind 1 --github-url https://github.com/<owner>/<repo>
+./scripts/aw config init --project-kind 1 --repo-url https://github.com/<owner>/<repo>
 # or: ./scripts/aw config init --project-kind 2
 ./scripts/aw config init --build-target 1
 ./scripts/aw rules init && ./scripts/aw rules discover --write && ./scripts/aw rules review # Keep team defaults; fill project differences.
@@ -125,7 +125,7 @@ When the user asks to remember the conversation:
 |---------|---------|
 | `aw status` | Show DSL, Plan, confirm state, ATOMIC, current AT-T |
 | `aw check all` | Run layout, DSL, Plan, config, rules, REQ, TP, docs, plugin, memory checks |
-| `aw config init` | Fill project kind, build target, GitHub URL, stack, and verification commands |
+| `aw config init` | Fill project kind, build target, remote repository URL, stack, and verification commands |
 | `aw rules init|discover|review|check` | Generate/discover/review/check engineering rules with team frontend/backend/unified AI defaults plus project-specific differences |
 | `aw dsl suite` | Create multi-file DSL for requirements, pages, interactions, events, boundaries, and acceptance |
 | `aw dsl review --write` | Generate engineer DSL review package before approval |

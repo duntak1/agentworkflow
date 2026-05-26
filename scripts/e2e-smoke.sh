@@ -64,7 +64,12 @@ case "$PLAN_STAGE_BLOCK" in *"project stage is not confirmed"*) ;; *) echo "fail
 grep -q 'https://github.com/example/e2e-app' docs/PROJECT_CONFIG.md || { echo "fail: github url not written"; exit 1; }
 grep -Fq '| **项目阶段** | new |' docs/PROJECT_CONFIG.md || { echo "fail: project stage not written"; exit 1; }
 grep -Fq '| **项目类型** | github |' docs/PROJECT_CONFIG.md || { echo "fail: project kind not written"; exit 1; }
+grep -Fq '| **远程仓库地址** | https://github.com/example/e2e-app |' docs/PROJECT_CONFIG.md || { echo "fail: repo url not written"; exit 1; }
 grep -Fq '| **构建目标** | fullstack |' docs/PROJECT_CONFIG.md || { echo "fail: build target not written"; exit 1; }
+./scripts/aw config init --project-kind 3 --repo-url "https://gitlab.com/example/e2e-app" >/dev/null
+grep -Fq '| **项目类型** | gitlab |' docs/PROJECT_CONFIG.md || { echo "fail: gitlab project kind not written"; exit 1; }
+grep -Fq '| **远程仓库地址** | https://gitlab.com/example/e2e-app |' docs/PROJECT_CONFIG.md || { echo "fail: gitlab repo url not written"; exit 1; }
+./scripts/aw config init --project-kind "1" --github-url "https://github.com/example/e2e-app" >/dev/null
 ./scripts/aw check config
 ./scripts/aw changelog add --type Changed --message "E2E direct changelog entry"
 CHANGELOG_PATH="$(./scripts/aw changelog path)"
@@ -240,12 +245,12 @@ case "$DSL_SUITE_PLAN_OUT" in *00-requirements.md*90-acceptance.md*) ;; *) echo 
 ./scripts/aw dsl use docs/dsl/DSL_DRAFT.md
 
 cp docs/PROJECT_CONFIG.md /tmp/aw-e2e-project-config.md
-sed 's#https://github.com/example/e2e-app#________________#' /tmp/aw-e2e-project-config.md > docs/PROJECT_CONFIG.md
+sed 's#https://github.com/example/e2e-app#________________#g' /tmp/aw-e2e-project-config.md > docs/PROJECT_CONFIG.md
 PLAN_GITHUB_WARN="$(./scripts/aw plan docs/dsl/DSL_DRAFT.md 2>&1 >/dev/null || true)"
-case "$PLAN_GITHUB_WARN" in *"GitHub 仓库地址未配置"*|*"GitHub 仓库地址未配置"*) ;; *) echo "fail: plan missing github url warning"; echo "$PLAN_GITHUB_WARN"; exit 1 ;; esac
+case "$PLAN_GITHUB_WARN" in *"远程仓库地址未配置"*|*"远程仓库地址未配置"*) ;; *) echo "fail: plan missing remote repo url warning"; echo "$PLAN_GITHUB_WARN"; exit 1 ;; esac
 ./scripts/aw config init --project-kind 2 >/dev/null
 PLAN_LOCAL_WARN="$(./scripts/aw plan docs/dsl/DSL_DRAFT.md 2>&1 >/dev/null || true)"
-case "$PLAN_LOCAL_WARN" in *"GitHub 仓库地址未配置"*|*"项目类型未配置"*) echo "fail: local Git repository should skip github warning"; echo "$PLAN_LOCAL_WARN"; exit 1 ;; *) ;; esac
+case "$PLAN_LOCAL_WARN" in *"远程仓库地址未配置"*|*"项目类型未配置"*) echo "fail: local Git repository should skip remote repo warning"; echo "$PLAN_LOCAL_WARN"; exit 1 ;; *) ;; esac
 awk -F'|' 'BEGIN { OFS="|" } /\*\*构建目标\*\*/ { print "| **构建目标** | ________________ |"; next } { print }' /tmp/aw-e2e-project-config.md > docs/PROJECT_CONFIG.md
 grep -Fq '| **构建目标** | ________________ |' docs/PROJECT_CONFIG.md || { echo "fail: build target placeholder not restored"; exit 1; }
 PLAN_TARGET_WARN="$(./scripts/aw plan docs/dsl/DSL_DRAFT.md 2>&1 >/dev/null || true)"

@@ -652,17 +652,19 @@ chmod +x scripts/aw scripts/*.sh
 ./scripts/aw init
 ./scripts/aw status
 ./scripts/aw dashboard</code></pre>
-        <h3>配置项目类型与构建目标</h3>
-        <pre><code># GitHub 仓库
-./scripts/aw config init --project-kind 1 --github-url https://github.com/owner/repo
+        <h3>配置代码托管平台与构建目标</h3>
+        <pre><code># 先询问工程师使用哪种代码托管平台
+# 1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode
+# 7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup
+./scripts/aw config init --project-kind 1 --repo-url https://github.com/owner/repo
 
-# 或本地 Git 仓库
+# 本地 Git 仓库不需要远程地址
 ./scripts/aw config init --project-kind 2
 
 # 构建目标：1=前端，2=后端，3=前后端
 ./scripts/aw config init --build-target 1</code></pre>
         <div class="warn callout">
-          <strong>注意：</strong>这些配置不是装饰信息。后续 Plan 拆分、验证命令、GitHub 引导、任务执行都会读取 <code>docs/PROJECT_CONFIG.md</code>。
+          <strong>注意：</strong>这些配置不是装饰信息。后续 Plan 拆分、验证命令、远程仓库引导、任务执行都会读取 <code>docs/PROJECT_CONFIG.md</code>。
         </div>
       </section>
 
@@ -675,7 +677,7 @@ chmod +x scripts/aw scripts/*.sh
             <tr><td>仅前端项目</td><td><code>project-frontend/</code></td><td>只生成前端 DSL/Plan/AT-T，重点确认页面、路由、状态、接口契约、组件和验收。</td><td>使用 <code>19.6</code> 提示词，构建目标选 <code>1=前端项目</code>。</td></tr>
             <tr><td>仅后端项目</td><td><code>project-backend/</code></td><td>只生成后端 DSL/Plan/AT-T，重点确认接口、权限、错误码、事务、数据表、消息和验收。</td><td>使用 <code>19.8</code> 提示词，构建目标选 <code>2=后端项目</code>。</td></tr>
             <tr><td>同电脑前后端两个项目</td><td><code>project-frontend/</code><br><code>project-backend/</code><br><code>project-harness/</code></td><td>前后端各自开发，各自维护本项目事实，通过本地同步中心交换 handoff、REQ、Bug、接口契约。</td><td>使用 <code>19.10</code> 提示词，分别在两个项目会话中声明项目路径和同步中心路径。</td></tr>
-            <tr><td>不同电脑前后端两个项目</td><td>两端各有本地项目；<code>project-harness</code> 是单独 GitHub 仓库。</td><td>每端先拉取 GitHub Harness，再 <code>aw sync pull</code>、<code>aw sync inbox</code>、<code>aw sync board</code>；跨端事项用 <code>aw sync event</code>，经确认后提交 Harness。</td><td>使用 <code>19.11</code> 提示词，先准备 GitHub Harness 仓库。</td></tr>
+            <tr><td>不同电脑前后端两个项目</td><td>两端各有本地项目；<code>project-harness</code> 是单独远程 Git 仓库。</td><td>每端先拉取 远程 Harness，再 <code>aw sync pull</code>、<code>aw sync inbox</code>、<code>aw sync board</code>；跨端事项用 <code>aw sync event</code>，经确认后提交 Harness。</td><td>使用 <code>19.11</code> 提示词，先准备 远程 Harness 仓库。</td></tr>
           </tbody>
         </table>
         <div class="callout">
@@ -687,7 +689,7 @@ chmod +x scripts/aw scripts/*.sh
         <h2>5. 真实产品研发路径</h2>
         <p>真实项目不要从“写代码”开始，而是从需求输入、工程化确认、任务拆分、研发执行、联调验证、发布交接一路闭环。下面是推荐路径。</p>
         <div class="flow">
-          <div class="step"><strong>0. 项目准备</strong><span>安装 skill、配置项目类型、构建目标、GitHub/本地 Git</span></div><div class="arrow">→</div>
+          <div class="step"><strong>0. 项目准备</strong><span>安装 skill、配置项目类型、构建目标、代码托管平台</span></div><div class="arrow">→</div>
           <div class="step"><strong>1. 需求输入</strong><span>PRD、原型、接口、旧系统、约束进入 reference</span></div><div class="arrow">→</div>
           <div class="step"><strong>2. 规格冻结</strong><span>生成 DSL suite，工程师审阅并确认已审</span></div><div class="arrow">→</div>
           <div class="step"><strong>3. 研发计划</strong><span>按前端/后端/全栈拆 Plan 与 AT-T</span></div><div class="arrow">→</div>
@@ -971,7 +973,7 @@ chmod +x scripts/aw scripts/*.sh
 
       <section id="sync">
         <h2>15. 前后端双项目同步</h2>
-        <p>当前后端在两个项目或两台电脑上时，用第三个目录或 GitHub 仓库作为同步中心。同步中心不只保存前后端快照，还应保存一份前后端共同确认的共享 DSL 和协作 Plan，避免两边各自拆分后产生歧义。</p>
+        <p>当前后端在两个项目或两台电脑上时，用第三个目录或远程 Git 仓库作为同步中心。同步中心不只保存前后端快照，还应保存一份前后端共同确认的共享 DSL 和协作 Plan，避免两边各自拆分后产生歧义。</p>
         <div class="flow">
           <div class="step"><strong>同步基线</strong><span>读取 global DSL / Plan / TASK_BOARD</span></div><div class="arrow">→</div>
           <div class="step"><strong>拉取收件箱</strong><span>sync pull + sync inbox</span></div><div class="arrow">→</div>
@@ -983,7 +985,7 @@ chmod +x scripts/aw scripts/*.sh
         <pre><code>workspace/
   project-frontend/
   project-backend/
-  project-harness/   # 唯一同步中心，可是 GitHub 仓库
+  project-harness/   # 唯一同步中心，可是远程 Git 仓库
     global/
       dsl/            # 共享 DSL 基线
       plans/          # 协作 Plan 基线
@@ -1055,7 +1057,7 @@ cd workspace/project-backend
 # 事件发布后同步共享任务视图
 ./scripts/aw sync board</code></pre>
         <div class="warn callout">
-          <strong>两台电脑时：</strong><code>project-harness</code> 建议是单独 GitHub 仓库。<code>aw sync event</code> 和 <code>aw sync push</code> 只写本地 harness 目录，仍需要在 harness 仓库里 <code>git add</code>、<code>git commit</code>、<code>git push</code>；另一台电脑先 <code>git pull</code>，再 <code>aw sync pull</code>、<code>aw sync inbox</code>、<code>aw sync board</code>。Git 提交和推送必须先问工程师。
+          <strong>两台电脑时：</strong><code>project-harness</code> 建议是单独远程 Git 仓库。<code>aw sync event</code> 和 <code>aw sync push</code> 只写本地 harness 目录，仍需要在 harness 仓库里 <code>git add</code>、<code>git commit</code>、<code>git push</code>；另一台电脑先 <code>git pull</code>，再 <code>aw sync pull</code>、<code>aw sync inbox</code>、<code>aw sync board</code>。Git 提交和推送必须先问工程师。
         </div>
       </section>
 
@@ -1078,7 +1080,7 @@ cd workspace/project-backend
         <table>
           <thead><tr><th>时间点</th><th>工程师说什么</th><th>Agent 必须返回什么</th><th>落盘证据</th></tr></thead>
           <tbody>
-            <tr><td>新项目第一轮</td><td>说明项目路径、项目类型、本地 Git 或 GitHub、构建目标。</td><td>配置结果、缺失项、下一步，不写业务代码。</td><td><code>docs/PROJECT_CONFIG.md</code></td></tr>
+            <tr><td>新项目第一轮</td><td>说明项目路径、项目类型、本地 Git 或远程代码托管平台、构建目标。</td><td>配置结果、缺失项、下一步，不写业务代码。</td><td><code>docs/PROJECT_CONFIG.md</code></td></tr>
             <tr><td>需求输入后</td><td>要求生成 DSL suite。</td><td>需求/页面/交互/事件/边界/验收的多文件 DSL，列出待确认问题。</td><td><code>docs/dsl/DSL_*/</code></td></tr>
             <tr><td>DSL 已确认</td><td>指定生成前端、后端或全栈 Plan。</td><td>Plan、ATOMIC_TASKS、风险、验证方式，等待确认。</td><td><code>docs/plans/</code></td></tr>
             <tr><td>每个子任务开始前</td><td>让 Agent brief 当前 AT-T，并追问需求边界。</td><td>需求沟通包、非目标、验收、风险、需要确认的问题。</td><td><code>task confirm</code> 记录</td></tr>
@@ -1122,14 +1124,14 @@ cd workspace/project-backend
 1. 检查是否已安装 scripts/aw；没有则说明需要从 agentworkflow 源码安装
 2. 执行 aw status、aw check config、aw rules review
 3. 如果没有初始化，执行 aw init
-4. 引导我确认：这是 GitHub 项目还是本地 Git 项目；构建目标是前端、后端还是前后端
+4. 引导我确认：使用哪种代码托管平台；构建目标是前端、后端还是前后端
 5. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
 最后输出缺失项清单和下一步建议。</code></pre>
         <h3>19.2 GitHub / 本地 Git 配置引导</h3>
         <pre><code>使用 agentworkflow 配置项目来源。
 请先问我并等待回答：
-1. 这是 GitHub 项目还是本地 Git 项目？
-2. 如果是 GitHub 项目，仓库地址是什么？
+1. 使用哪种代码托管平台？
+2. 使用哪种代码托管平台？1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup；如果不是本地 Git，远程仓库地址是什么？
 3. 当前分支是什么？是否允许后续在大需求完成后询问提交？
 确认后更新 docs/PROJECT_CONFIG.md。
 不要自动提交 Git。</code></pre>
@@ -1156,7 +1158,7 @@ cd workspace/project-backend
         <h3>19.5 DSL 审核后生成计划</h3>
         <pre><code>DSL 已确认。
 请先检查 docs/PROJECT_CONFIG.md：
-1. 项目类型是 GitHub 还是本地 Git
+1. 项目类型是否已选择代码托管平台
 2. 构建目标是前端、后端还是前后端
 3. lint/test/build/e2e 命令是否配置
 然后按 DSL 生成研发 Plan 和 ATOMIC_TASKS。
@@ -1248,9 +1250,9 @@ Plan 确认后再执行 aw confirm 生成 ENGINEERING_INDEX.md，并确认 docs/
 读取 docs/sync/inbox/frontend 后再 task brief。
 遇到页面字段、交互、联动边界不明确时，使用 aw sync event --type question 或 --type contract，不要只写聊天结论。
 完成任务后 aw task complete、更新 SERVICE_CATALOG；如果影响前端，用 aw sync event --type complete/change/contract/handoff 发布事件，再问我是否提交 Git 或同步中心版本。</code></pre>
-        <h3>19.11 不同电脑：前后端两个项目 + GitHub Harness</h3>
+        <h3>19.11 不同电脑：前后端两个项目 + 远程 Harness</h3>
         <pre><code>使用 agentworkflow 的跨电脑双项目同步。
-同步中心是单独 GitHub 仓库 project-harness。
+同步中心是单独远程 Git 仓库 project-harness。
 本机本地路径：/path/workspace/project-harness
 前端项目路径：/path/workspace/project-frontend
 后端项目路径：/path/workspace/project-backend
@@ -1271,7 +1273,7 @@ Plan 确认后再执行 aw confirm 生成 ENGINEERING_INDEX.md，并确认 docs/
 4. 进入 project-harness 前先告诉我本次同步事件和影响范围
 5. 如需 git add / commit / push，同步中心 Git 提交前必须问我确认。</code></pre>
         <pre><code>使用 agentworkflow 的跨电脑双项目同步。
-同步中心是单独 GitHub 仓库 project-harness。
+同步中心是单独远程 Git 仓库 project-harness。
 本机本地路径：/path/workspace/project-harness
 前端项目路径：/path/workspace/project-frontend
 后端项目路径：/path/workspace/project-backend
@@ -1438,7 +1440,7 @@ handoff   普通交接
         <h3>这些动作会自动后台执行吗？</h3>
         <p>不会。它不是后台服务。Codex 在执行 AgentWorkflow 流程时可以自动调用命令，但必须在当前任务回合中执行。</p>
         <h3>同步中心在哪里？</h3>
-        <p>本地同一台电脑时，建议与前后端项目平级：<code>workspace/project-harness</code>。两台电脑时，建议做成单独 GitHub 仓库。</p>
+        <p>本地同一台电脑时，建议与前后端项目平级：<code>workspace/project-harness</code>。两台电脑时，建议做成单独远程 Git 仓库。</p>
         <h3>pull 会覆盖本项目文件吗？</h3>
         <p>不会。它只写入 <code>docs/sync/inbox/&lt;peer&gt;/</code>，作为只读收件箱。</p>
         <h3>什么时候需要工程师确认？</h3>

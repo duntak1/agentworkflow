@@ -202,7 +202,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw check all|dsl|plan|config|req|tp|plugin` | 分项或聚合检查 |
 | `aw check plugin` | 校验 Codex plugin / marketplace metadata |
 | `aw check memory` | 校验 docs/memory 布局、字段与敏感信息 |
-| `aw config init --project-stage 1|2 --project-kind 1|2 --build-target 1|2|3` | 填写 PROJECT_CONFIG；项目阶段必须先依据 `aw project scan` 和工程师确认；构建目标 3=前后端时，分仓/双项目必须先 `aw sync init` 建同步中心 |
+| `aw config init --project-stage 1|2 --project-kind <n> --repo-url <url> --build-target 1|2|3` | 填写 PROJECT_CONFIG；项目阶段必须先依据 `aw project scan` 和工程师确认；代码托管平台支持 1=GitHub、2=本地 Git、3=GitLab、4=Bitbucket、5=Gitee、6=GitCode、7=Gitea、8=Forgejo、9=GitLab CE、10=Gerrit、11=云效 Codeup；构建目标 3=前后端时，分仓/双项目必须先 `aw sync init` 建同步中心 |
 | `aw rules init|review|check` | 生成、审阅、校验工程规范 `docs/ENGINEERING_RULES.md`；默认固化团队前端/后端/统一 AI 执行规范清单，真实项目只补差异、关键文件和注释原则 |
 | `aw rules discover [--write]` | 扫描真实项目候选关键文件，并可回写 `docs/ENGINEERING_RULES.md` 的“关键文件”表 |
 | `aw ci install` | 安装 GitHub Actions workflow 模板 |

@@ -157,8 +157,29 @@ aw_project_kind() {
   case "$kind" in
     1|git|github) echo "github" ;;
     2|local|local-git|local_git|本地|本地git|本地项目) echo "local-git" ;;
+    3|gitlab|gitlab.com) echo "gitlab" ;;
+    4|bitbucket|bitbucket-cloud) echo "bitbucket" ;;
+    5|gitee|码云) echo "gitee" ;;
+    6|gitcode) echo "gitcode" ;;
+    7|gitea) echo "gitea" ;;
+    8|forgejo) echo "forgejo" ;;
+    9|gitlab-ce|gitlab_ce|self-hosted-gitlab|private-gitlab|私有gitlab|自托管gitlab) echo "gitlab-ce" ;;
+    10|gerrit) echo "gerrit" ;;
+    11|codeup|aliyun-codeup|云效|阿里云云效) echo "codeup" ;;
     *) echo "" ;;
   esac
+}
+
+aw_project_kind_requires_remote() {
+  local kind="$1"
+  [[ -n "$kind" && "$kind" != "local-git" ]]
+}
+
+aw_remote_repo_url_configured() {
+  local url github_url
+  url="$(aw_project_config_field "远程仓库地址" 2>/dev/null || true)"
+  github_url="$(aw_project_config_field "GitHub 仓库地址" 2>/dev/null || true)"
+  [[ -n "$url" && "$url" != *"____"* ]] || [[ -n "$github_url" && "$github_url" != *"____"* ]]
 }
 
 aw_project_stage() {
@@ -274,9 +295,9 @@ aw_require_planning_intake_ready() {
       echo "请先和工程师确认：" >&2
       echo "  1) 前后端是否同一仓库还是分仓 / 双项目" >&2
       echo "  2) 同一台电脑开发还是不同电脑开发" >&2
-      echo "  3) 前端真实项目路径 / GitHub 地址" >&2
-      echo "  4) 后端真实项目路径 / GitHub 地址" >&2
-      echo "  5) 同步中心 project-harness 的本地路径 / GitHub 地址" >&2
+      echo "  3) 前端真实项目路径 / 远程仓库地址" >&2
+      echo "  4) 后端真实项目路径 / 远程仓库地址" >&2
+      echo "  5) 同步中心 project-harness 的本地路径 / 远程仓库地址" >&2
       echo "然后在真实前端/后端项目中执行：" >&2
       echo "  ./scripts/aw sync init <project-harness> --project <frontend|backend> --agent <agent-name> --role <frontend|backend>" >&2
       echo "同步中心建立后，先在 project-harness/global/dsl 放共享 DSL，在 project-harness/global/plans 放协作 Plan，再拆本地前端/后端 Plan。" >&2
@@ -291,23 +312,36 @@ aw_print_project_kind_guidance() {
   local origin
   origin="$(aw_detect_git_origin_url)"
   echo "请先确认项目类型：" >&2
-  echo "  1) GitHub 仓库：./scripts/aw config init --project-kind 1 --github-url https://github.com/<owner>/<repo>" >&2
-  echo "  2) 本地 Git 仓库：./scripts/aw config init --project-kind 2" >&2
-  if [[ -n "$origin" && "$origin" == *github.com* ]]; then
-    echo "检测到 GitHub origin，可直接使用：" >&2
-    echo "  ./scripts/aw config init --project-kind 1 --github-url \"${origin}\"" >&2
+  echo "  1) GitHub：./scripts/aw config init --project-kind 1 --repo-url https://github.com/<owner>/<repo>" >&2
+  echo "  2) 本地 Git：./scripts/aw config init --project-kind 2" >&2
+  echo "  3) GitLab.com：./scripts/aw config init --project-kind 3 --repo-url https://gitlab.com/<group>/<repo>" >&2
+  echo "  4) Bitbucket：./scripts/aw config init --project-kind 4 --repo-url https://bitbucket.org/<workspace>/<repo>" >&2
+  echo "  5) Gitee：./scripts/aw config init --project-kind 5 --repo-url https://gitee.com/<owner>/<repo>" >&2
+  echo "  6) GitCode：./scripts/aw config init --project-kind 6 --repo-url <gitcode-url>" >&2
+  echo "  7) Gitea：./scripts/aw config init --project-kind 7 --repo-url <gitea-url>" >&2
+  echo "  8) Forgejo：./scripts/aw config init --project-kind 8 --repo-url <forgejo-url>" >&2
+  echo "  9) GitLab CE：./scripts/aw config init --project-kind 9 --repo-url <self-hosted-gitlab-url>" >&2
+  echo "  10) Gerrit：./scripts/aw config init --project-kind 10 --repo-url <gerrit-url>" >&2
+  echo "  11) 阿里云云效 Codeup：./scripts/aw config init --project-kind 11 --repo-url <codeup-url>" >&2
+  if [[ -n "$origin" ]]; then
+    echo "检测到 git origin，可按实际平台选择编号并复用地址：" >&2
+    echo "  ${origin}" >&2
+  fi
+}
+
+aw_print_remote_repo_url_guidance() {
+  local origin
+  origin="$(aw_detect_git_origin_url)"
+  echo "当前项目类型需要远程仓库地址。开始任务拆分或写代码前，请先记录真实远程仓库地址：" >&2
+  if [[ -n "$origin" ]]; then
+    echo "  ./scripts/aw config init --repo-url \"${origin}\"" >&2
+  else
+    echo "  ./scripts/aw config init --repo-url <repository-url>" >&2
   fi
 }
 
 aw_print_github_url_guidance() {
-  local origin
-  origin="$(aw_detect_git_origin_url)"
-  echo "当前项目类型为 GitHub 仓库，但 GitHub 仓库地址未配置。开始任务拆分或写代码前，请先记录 GitHub 仓库地址：" >&2
-  if [[ -n "$origin" && "$origin" == *github.com* ]]; then
-    echo "  ./scripts/aw config init --project-kind 1 --github-url \"${origin}\"" >&2
-  else
-    echo "  ./scripts/aw config init --project-kind 1 --github-url https://github.com/<owner>/<repo>" >&2
-  fi
+  aw_print_remote_repo_url_guidance
 }
 
 aw_warn_github_url_before_planning() {
@@ -318,15 +352,16 @@ aw_warn_github_url_before_planning() {
   fi
   if [[ -z "$kind" ]]; then
     echo "" >&2
-    echo "warn: 项目类型未配置；生成研发计划/任务拆分前请先选择 1=GitHub 仓库 或 2=本地 Git 仓库。" >&2
+    echo "warn: 项目类型未配置；生成研发计划/任务拆分前请先选择代码托管平台或本地 Git。" >&2
     aw_print_project_kind_guidance
     echo "" >&2
     return 0
   fi
-  aw_github_url_configured && return 0
+  aw_project_kind_requires_remote "$kind" || return 0
+  aw_remote_repo_url_configured && return 0
   echo "" >&2
-  echo "warn: GitHub 仓库地址未配置；生成研发计划/任务拆分前建议先补齐。若这是本地 Git 仓库，请改为 --project-kind 2。" >&2
-  aw_print_github_url_guidance
+  echo "warn: 远程仓库地址未配置；生成研发计划/任务拆分前建议先补齐。若这是纯本地 Git 仓库，请改为 --project-kind 2。" >&2
+  aw_print_remote_repo_url_guidance
   echo "" >&2
 }
 
@@ -337,13 +372,14 @@ aw_require_github_url_before_coding() {
     return 0
   fi
   if [[ -z "$kind" ]]; then
-    echo "error: 项目类型未配置；代码编写前必须先选择 1=GitHub 仓库 或 2=本地 Git 仓库。" >&2
+    echo "error: 项目类型未配置；代码编写前必须先选择代码托管平台或本地 Git。" >&2
     aw_print_project_kind_guidance
     return 1
   fi
-  aw_github_url_configured && return 0
-  echo "error: 当前项目类型为 GitHub 仓库，但 GitHub 仓库地址未配置；代码编写前必须先完成 GitHub 仓库地址配置。" >&2
-  aw_print_github_url_guidance
+  aw_project_kind_requires_remote "$kind" || return 0
+  aw_remote_repo_url_configured && return 0
+  echo "error: 当前项目类型为 ${kind}，但远程仓库地址未配置；代码编写前必须先完成远程仓库地址配置。" >&2
+  aw_print_remote_repo_url_guidance
   return 1
 }
 

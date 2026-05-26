@@ -158,7 +158,7 @@ print_task_brief() {
 ## Agent 规则
 - 不要猜需求；有疑问就列问题并等待工程师回答。
 - 若 \`docs/PROJECT_CONFIG.md\` 未选择项目阶段，先让工程师选择：1=全新项目，2=已有 / 存量项目。已有项目必须先确认现状基线和本次增量边界。
-- 若 \`docs/PROJECT_CONFIG.md\` 未选择项目类型，先让工程师选择：1=GitHub 仓库（需 GitHub 地址），2=本地 Git 仓库（跳过 GitHub 配置）。
+- 若 \`docs/PROJECT_CONFIG.md\` 未选择项目类型，先让工程师选择代码托管平台：1=GitHub、2=本地 Git、3=GitLab、4=Bitbucket、5=Gitee、6=GitCode、7=Gitea、8=Forgejo、9=GitLab CE、10=Gerrit、11=阿里云云效 Codeup；非本地 Git 需记录远程仓库地址。
 - 工程师确认前，不允许执行 \`aw task start ${id}\`，也不允许写业务代码。
 - 工程师确认后执行：
   \`./scripts/aw task confirm ${id} "已确认：<确认摘要>"\`
