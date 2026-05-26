@@ -1122,15 +1122,16 @@ cd workspace/project-backend
 当前是新项目接入阶段，不要写业务代码。
 请按顺序完成：
 1. 检查是否已安装 scripts/aw；没有则说明需要从 agentworkflow 源码安装
-2. 执行 aw status、aw check config、aw rules review
+2. 执行 aw project scan，复述 docs/PROJECT_SCAN.md 的全新/已有判断依据
 3. 如果没有初始化，执行 aw init
-4. 引导我确认：使用哪种代码托管平台；构建目标是前端、后端还是前后端
-5. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
+4. 引导我确认项目阶段，并立即询问是否建立同步中心：1=建立/使用，2=不建立，3=稍后决定（Plan 阻断）
+5. 引导我确认：使用哪种代码托管平台；构建目标是前端、后端还是前后端
+6. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
 最后输出缺失项清单和下一步建议。</code></pre>
-        <h3>19.2 GitHub / 本地 Git 配置引导</h3>
+        <h3>19.2 代码托管与同步中心配置引导</h3>
         <pre><code>使用 agentworkflow 配置项目来源。
 请先问我并等待回答：
-1. 使用哪种代码托管平台？
+1. 是否建立同步中心 project-harness？1=建立/使用，2=不建立，3=稍后决定（Plan 阻断）
 2. 使用哪种代码托管平台？1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup；如果不是本地 Git，远程仓库地址是什么？
 3. 当前分支是什么？是否允许后续在大需求完成后询问提交？
 确认后更新 docs/PROJECT_CONFIG.md。
@@ -1143,7 +1144,7 @@ cd workspace/project-backend
 如果是前后端项目，请继续确认：
 - 是同一个仓库，还是前后端两个项目？
 - 如果是两个项目，是否在同一台电脑？
-- 是否需要 project-harness 同步中心？
+- 是否建立 project-harness 同步中心？1=建立/使用，2=不建立，3=稍后决定（Plan 阻断）
 确认后再进入 DSL 生成。</code></pre>
         <h3>19.4 需求输入与 DSL 生成</h3>
         <pre><code>使用 agentworkflow 生成 DSL。

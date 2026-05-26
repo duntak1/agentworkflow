@@ -14,7 +14,7 @@ shift || true
 usage() {
   cat <<'EOF'
 Usage:
-  aw config init [--project-stage 1|2] [--project-kind provider] [--build-target 1|2|3] [--repo-url url] [--github-url url] [--default-branch branch] [--issue-system name] [--language lang] [--package-manager pm] [--frontend stack] [--ui library] [--backend stack] [--database db] [--lint cmd] [--format cmd] [--typecheck cmd] [--test cmd] [--build cmd] [--e2e cmd]
+  aw config init [--project-stage 1|2] [--project-kind provider] [--build-target 1|2|3] [--sync-center 1|2|3] [--sync-center-path path] [--repo-url url] [--github-url url] [--default-branch branch] [--issue-system name] [--language lang] [--package-manager pm] [--frontend stack] [--ui library] [--backend stack] [--database db] [--lint cmd] [--format cmd] [--typecheck cmd] [--test cmd] [--build cmd] [--e2e cmd]
 
 Project stage:
   1 = new       Brand-new project; start from reference -> DSL -> Plan.
@@ -35,6 +35,11 @@ Project kind:
   11 = codeup     Alibaba Cloud Yunxiao Codeup repository.
 
 Remote providers require 远程仓库地址 before planning/coding.
+
+Sync center:
+  1 = create/use sync center now; run aw sync init when path is ready.
+  2 = no sync center for this project; allowed only after engineer confirmation.
+  3 = decide later; Plan generation will stay blocked until changed to 1 or 2.
 
 Fills docs/PROJECT_CONFIG.md placeholders. Omitted commands are auto-detected
 from package.json when possible, otherwise left as placeholders.
@@ -88,6 +93,8 @@ case "$CMD" in
     project_stage=""
     project_kind=""
     build_target=""
+    sync_center=""
+    sync_center_path=""
     repo_url=""
     github_url=""
     default_branch=""
@@ -138,6 +145,19 @@ case "$CMD" in
             3|fullstack|full-stack|both|all|前后端|全栈|前后端项目) build_target="fullstack" ;;
             *) echo "error: --build-target must be 1(frontend), 2(backend), or 3(fullstack)" >&2; exit 1 ;;
           esac
+          shift 2
+          ;;
+        --sync-center|--sync|--harness-decision)
+          case "$(echo "${2:-}" | tr '[:upper:]' '[:lower:]')" in
+            1|yes|y|true|create|use|enabled|需要|建立|创建|使用|配置) sync_center="required" ;;
+            2|no|n|false|none|skip|disabled|不要|不需要|不建|无需) sync_center="not-needed" ;;
+            3|later|defer|pending|待定|稍后|后续确认) sync_center="pending" ;;
+            *) echo "error: --sync-center must be 1(required), 2(not-needed), or 3(pending)" >&2; exit 1 ;;
+          esac
+          shift 2
+          ;;
+        --sync-center-path|--harness|--harness-path)
+          sync_center_path="${2:-}"
           shift 2
           ;;
         --repo-url|--remote-url) repo_url="${2:-}"; shift 2 ;;
@@ -197,6 +217,14 @@ case "$CMD" in
         3|fullstack|full-stack|both|all|前后端|全栈|前后端项目) build_target="fullstack" ;;
       esac
     fi
+    if [[ -z "$sync_center" ]]; then
+      current_sync="$(awk -F'|' '/\*\*同步中心\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "$CFG" 2>/dev/null || true)"
+      case "$current_sync" in
+        required|yes|需要|建立|创建|使用|配置) sync_center="required" ;;
+        not-needed|not_needed|none|no|不需要|不建|无需) sync_center="not-needed" ;;
+        pending|待定|稍后|后续确认) sync_center="pending" ;;
+      esac
+    fi
     if [[ -n "$project_kind" && "$project_kind" != "local-git" && -z "$repo_url" ]]; then
       repo_url="$(detect_git_remote_url)"
     fi
@@ -212,6 +240,8 @@ case "$CMD" in
     replace_field "项目阶段" "$project_stage"
     replace_field "项目类型" "$project_kind"
     replace_field "构建目标" "$build_target"
+    replace_field "同步中心" "$sync_center"
+    replace_field "同步中心路径" "$sync_center_path"
     replace_field "远程仓库地址" "$repo_url"
     replace_field "GitHub 仓库地址" "$github_url"
     replace_field "默认分支" "$default_branch"

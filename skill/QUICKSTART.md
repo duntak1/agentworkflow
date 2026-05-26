@@ -51,6 +51,7 @@ chmod +x scripts/aw scripts/*.sh
 ```bash
 aw project scan                         # 先扫描项目内容，判断全新 / 已有
 aw config init --project-stage 1|2       # 工程师确认后写入阶段
+aw config init --sync-center 1|2|3       # 1=建立/使用同步中心，2=不建立，3=稍后决定且 Plan 阻断
 aw config init --project-kind <n> --repo-url <url>
 # n: 1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup；2 不需要 --repo-url
 aw config init --build-target 1|2|3      # 前端 / 后端 / 前后端

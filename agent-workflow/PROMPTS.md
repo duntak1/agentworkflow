@@ -15,18 +15,22 @@
 使用 agentworkflow。
 当前项目路径：/path/to/project
 当前是项目启动接入阶段，不要写业务代码。
-请先问我并等待回答：
-1. 这是全新项目，还是已有 / 存量项目？
-2. 这个项目使用哪种代码托管平台：1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=阿里云云效 Codeup？
-3. 构建目标是仅前端、仅后端，还是前后端项目？
+请先执行 aw project scan，复述 docs/PROJECT_SCAN.md 的判断依据，然后问我并等待回答：
+1. 是否认可扫描结论：这是全新项目，还是已有 / 存量项目？
+2. 是否建立同步中心 project-harness？1=建立 / 使用，2=不建立，3=稍后决定（Plan 阻断）
+3. 这个项目使用哪种代码托管平台：1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=阿里云云效 Codeup？
+4. 构建目标是仅前端、仅后端，还是前后端项目？
 
 得到回答后：
 - 如果是全新项目，执行 aw config init --project-stage 1，并继续“全新项目接入”流程
 - 如果是已有 / 存量项目，执行 aw config init --project-stage 2，并继续“非全新项目接入”流程
+- 如果建立 / 使用同步中心，执行 aw config init --sync-center 1 --sync-center-path <project-harness路径>，并引导 aw sync init
+- 如果不建立同步中心，执行 aw config init --sync-center 2
+- 如果稍后决定，执行 aw config init --sync-center 3，并说明 Plan 会阻断到决策完成
 - 如果是远程代码仓库，继续配置 --project-kind <n> --repo-url
 - 如果是本地 Git 项目，继续配置 --project-kind 2
 
-在我确认项目阶段前，不要生成 DSL、不要生成 Plan、不要修改业务代码。
+在我确认项目阶段和同步中心决策前，不要生成 DSL、不要生成 Plan、不要修改业务代码。
 ```
 
 ## 全新项目接入

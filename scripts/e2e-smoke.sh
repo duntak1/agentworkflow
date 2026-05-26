@@ -61,9 +61,13 @@ grep -q 'Project Scan' docs/PROJECT_SCAN.md || { echo "fail: project scan file";
 PLAN_STAGE_BLOCK="$(./scripts/aw plan docs/dsl/DSL_DRAFT.md 2>&1 >/dev/null || true)"
 case "$PLAN_STAGE_BLOCK" in *"project stage is not confirmed"*) ;; *) echo "fail: plan should require confirmed project stage"; echo "$PLAN_STAGE_BLOCK"; exit 1 ;; esac
 ./scripts/aw config init --project-stage "1" --project-kind "1" --build-target "3" --github-url "https://github.com/example/e2e-app" --default-branch "main" --language "shell" --package-manager "none" --frontend "shell" --ui "none" --backend "none" --database "none" --lint "./scripts/aw check layout" --format "./scripts/aw check layout" --typecheck "./scripts/aw check layout" --test "./scripts/aw check tp" --build "./scripts/aw check plan" --e2e "./scripts/aw check tp"
+PLAN_SYNC_DECISION_BLOCK="$(./scripts/aw plan docs/dsl/DSL_DRAFT.md 2>&1 >/dev/null || true)"
+case "$PLAN_SYNC_DECISION_BLOCK" in *"sync center decision is not confirmed"*) ;; *) echo "fail: plan should require sync center decision"; echo "$PLAN_SYNC_DECISION_BLOCK"; exit 1 ;; esac
+./scripts/aw config init --sync-center "1" --sync-center-path "${TMP}/project-harness" >/dev/null
 grep -q 'https://github.com/example/e2e-app' docs/PROJECT_CONFIG.md || { echo "fail: github url not written"; exit 1; }
 grep -Fq '| **项目阶段** | new |' docs/PROJECT_CONFIG.md || { echo "fail: project stage not written"; exit 1; }
 grep -Fq '| **项目类型** | github |' docs/PROJECT_CONFIG.md || { echo "fail: project kind not written"; exit 1; }
+grep -Fq '| **同步中心** | required |' docs/PROJECT_CONFIG.md || { echo "fail: sync center decision not written"; exit 1; }
 grep -Fq '| **远程仓库地址** | https://github.com/example/e2e-app |' docs/PROJECT_CONFIG.md || { echo "fail: repo url not written"; exit 1; }
 grep -Fq '| **构建目标** | fullstack |' docs/PROJECT_CONFIG.md || { echo "fail: build target not written"; exit 1; }
 ./scripts/aw config init --project-kind 3 --repo-url "https://gitlab.com/example/e2e-app" >/dev/null

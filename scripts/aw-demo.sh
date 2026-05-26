@@ -29,6 +29,7 @@ chmod +x scripts/aw scripts/*.sh
 ./scripts/aw config init \
   --project-stage "1" \
   --project-kind "2" \
+  --sync-center "2" \
   --build-target "1" \
   --language "shell" \
   --package-manager "none" \

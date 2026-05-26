@@ -655,7 +655,7 @@
           </tbody>
         </table>
         <div class="callout">
-          <strong>最短上手提示词：</strong>“使用 agentworkflow。当前项目路径是 X。请先不要写代码，先执行 aw project scan 扫描项目内容，复述你判断这是全新还是已有项目的依据，再引导我确认项目阶段、项目形态、真实代码仓库和是否需要同步中心，然后按手册流程继续。”
+          <strong>最短上手提示词：</strong>“使用 agentworkflow。当前项目路径是 X。请先不要写代码，先执行 aw project scan 扫描项目内容，复述你判断这是全新还是已有项目的依据，再引导我确认项目阶段，并立即让我选择是否建立同步中心，然后确认项目形态和真实代码仓库，然后按手册流程继续。”
         </div>
       </section>
 
@@ -705,7 +705,7 @@ chmod +x scripts/aw scripts/*.sh
           </tbody>
         </table>
         <div class="warn callout">
-          <strong>硬闸门：</strong><code>aw plan</code>、<code>aw approve dsl --plan</code>、<code>aw plan apply</code> 会先执行 <code>aw project gate</code>。没有 <code>docs/PROJECT_SCAN.md</code>、没有确认项目阶段 / 项目类型 / 构建目标，或前后端分仓未配置同步中心，Plan 会被阻断。
+          <strong>硬闸门：</strong><code>aw plan</code>、<code>aw approve dsl --plan</code>、<code>aw plan apply</code> 会先执行 <code>aw project gate</code>。没有 <code>docs/PROJECT_SCAN.md</code>、没有确认项目阶段 / 同步中心决策 / 项目类型 / 构建目标，或前后端分仓未配置同步中心，Plan 会被阻断。
         </div>
       </section>
 
@@ -1255,17 +1255,21 @@ cd workspace/project-backend
 
 然后问我并等待回答：
 1. 是否认可扫描结论：这是全新项目，还是已有 / 存量项目？
-2. 这个项目使用哪种代码托管平台：1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=阿里云云效 Codeup？
-3. 构建目标是仅前端、仅后端，还是前后端项目？
+2. 是否建立同步中心 project-harness？1=建立 / 使用，2=不建立，3=稍后决定（Plan 阻断）
+3. 这个项目使用哪种代码托管平台：1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=阿里云云效 Codeup？
+4. 构建目标是仅前端、仅后端，还是前后端项目？
 
 得到回答后：
 - 如果是全新项目，执行 aw config init --project-stage 1，并继续 19.1a 全新项目接入流程
 - 如果是已有 / 存量项目，执行 aw config init --project-stage 2，并继续 19.1b 非全新项目接入流程
+- 如果建立 / 使用同步中心，执行 aw config init --sync-center 1 --sync-center-path &lt;project-harness路径&gt;，并引导 aw sync init
+- 如果不建立同步中心，执行 aw config init --sync-center 2
+- 如果稍后决定，执行 aw config init --sync-center 3，并说明 Plan 会阻断到决策完成
 - 如果是远程代码仓库，继续配置 --project-kind <n> --repo-url
 - 如果是本地 Git 项目，继续配置 --project-kind 2
 
-在我确认项目阶段前，不要生成 DSL、不要生成 Plan、不要修改业务代码。
-如果我选择前后端项目且是分仓 / 双项目，Plan 前必须先引导我建立同步中心。</code></pre>
+在我确认项目阶段和同步中心决策前，不要生成 DSL、不要生成 Plan、不要修改业务代码。
+无论是否为前后端项目，接入阶段都必须先问我是否建立同步中心并记录选择；如果我选择稍后决定，Plan 必须阻断；如果我选择前后端项目且是分仓 / 双项目，Plan 前必须完成 aw sync init。</code></pre>
         <h3>19.1a 全新项目接入：先不要写代码</h3>
         <pre><code>使用 agentworkflow。
 当前项目路径：/path/to/project
@@ -1277,7 +1281,7 @@ cd workspace/project-backend
 4. 如果没有初始化，执行 aw init
 5. 确认 docs/PROJECT_CONFIG.md 中项目阶段为 new；如果没有，执行 aw config init --project-stage 1
 6. 引导我确认：使用哪种代码托管平台；构建目标是前端、后端还是前后端
-7. 如果是前后端分仓 / 双项目，引导我先 aw sync init 建同步中心
+7. 无论项目形态如何，都先问我是否建立同步中心；如果我选择建立，引导 aw sync init；如果我选择不建，记录 --sync-center 2；如果稍后决定，记录 --sync-center 3 并阻断 Plan
 8. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
 最后输出缺失项清单和下一步建议。</code></pre>
         <h3>19.1b 非全新项目接入：先盘点现状</h3>
@@ -1293,7 +1297,7 @@ cd workspace/project-backend
 3. 执行 aw status、aw check config、aw rules review
 4. 如果没有初始化，执行 aw init，但不得覆盖业务代码
 5. 引导我确认：使用哪种代码托管平台；构建目标是前端、后端还是前后端；当前是维护、Bug 修复、二期开发还是联调阶段
-6. 如果是前后端分仓 / 双项目，引导我先 aw sync init 建同步中心
+6. 无论项目形态如何，都先问我是否建立同步中心；如果我选择建立，引导 aw sync init；如果我选择不建，记录 --sync-center 2；如果稍后决定，记录 --sync-center 3 并阻断 Plan
 7. 读取 package.json / pom.xml / build.gradle / README / 启动脚本 / 路由 / API 目录 / 测试目录等入口文件，禁止全仓无目标读取
 8. 执行 aw context plan、aw file-index、aw service-catalog discover --write
 9. 输出项目事实盘点：技术栈、启动命令、测试命令、主要模块、接口入口、已知风险、缺失配置
@@ -1340,7 +1344,7 @@ cd workspace/project-backend
 如果是前后端项目，请继续确认：
 - 是同一个仓库，还是前后端两个项目？
 - 如果是两个项目，是否在同一台电脑？
-- 是否需要 project-harness 同步中心？
+- 是否建立 project-harness 同步中心？1=建立/使用，2=不建立，3=稍后决定（Plan 阻断）
 确认后再进入 DSL 生成。</code></pre>
         <h3>19.4 需求输入与 DSL 生成</h3>
         <pre><code>使用 agentworkflow 生成 DSL。

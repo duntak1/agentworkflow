@@ -46,6 +46,8 @@ if exists "docs/PROJECT_CONFIG.md"; then
   build_target="$(awk -F'|' '/\*\*构建目标\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "${ROOT}/docs/PROJECT_CONFIG.md" 2>/dev/null || true)"
   repo_url="$(awk -F'|' '/\*\*远程仓库地址\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3; exit }' "${ROOT}/docs/PROJECT_CONFIG.md" 2>/dev/null || true)"
   github_url="$(awk -F'|' '/\*\*GitHub 仓库地址\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3; exit }' "${ROOT}/docs/PROJECT_CONFIG.md" 2>/dev/null || true)"
+  sync_decision="$(awk -F'|' '/\*\*同步中心\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "${ROOT}/docs/PROJECT_CONFIG.md" 2>/dev/null || true)"
+  sync_path="$(awk -F'|' '/\*\*同步中心路径\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3; exit }' "${ROOT}/docs/PROJECT_CONFIG.md" 2>/dev/null || true)"
   origin_url="$(git -C "$ROOT" remote get-url origin 2>/dev/null || true)"
   case "$project_stage" in
     1|new|greenfield|fresh|全新|全新项目|新项目) ok "project stage new" ;;
@@ -79,6 +81,19 @@ if exists "docs/PROJECT_CONFIG.md"; then
   else
     warn "remote repo URL not recorded for ${project_kind} repository (run: ./scripts/aw config init --project-kind ${project_kind} --repo-url <repository-url>)"
   fi
+  case "$sync_decision" in
+    required|yes|需要|建立|创建|使用|配置)
+      if [[ -n "$sync_path" && "$sync_path" != *"____"* ]]; then
+        ok "sync center decision required (${sync_path})"
+      else
+        ok "sync center decision required"
+        warn "sync center path not recorded"
+      fi
+      ;;
+    not-needed|not_needed|none|no|不需要|不建|无需) ok "sync center decision not-needed" ;;
+    pending|待定|稍后|后续确认|未配置|""|*____*) warn "sync center decision pending (ask engineer before Plan)" ;;
+    *) warn "sync center decision unknown (${sync_decision})" ;;
+  esac
   case "$build_target" in
     1|frontend|front|fe|前端|前端项目) ok "build target frontend" ;;
     2|backend|back|be|server|api|后端|后端项目) ok "build target backend" ;;

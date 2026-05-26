@@ -123,6 +123,28 @@ elif [[ -z "$repo_url" || "$repo_url" == *"____"* ]]; then
   fi
 fi
 
+sync_decision="$(awk -F'|' '/\*\*同步中心\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "$CFG" 2>/dev/null || true)"
+sync_path="$(awk -F'|' '/\*\*同步中心路径\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3; exit }' "$CFG" 2>/dev/null || true)"
+case "$sync_decision" in
+  required|yes|需要|建立|创建|使用|配置)
+    if [[ -n "$sync_path" && "$sync_path" != *"____"* ]]; then
+      ok "同步中心决策: required (${sync_path})"
+    else
+      ok "同步中心决策: required"
+      warn "同步中心路径 not filled (run: ./scripts/aw config init --sync-center 1 --sync-center-path <project-harness-path>)"
+    fi
+    ;;
+  not-needed|not_needed|none|no|不需要|不建|无需)
+    ok "同步中心决策: not-needed"
+    ;;
+  pending|待定|稍后|后续确认|未配置|""|*____*)
+    warn "同步中心决策 pending (startup must ask engineer: 1=建立同步中心, 2=不建立, 3=稍后决定；Plan will block while pending)"
+    ;;
+  *)
+    warn "同步中心决策 unknown: ${sync_decision}"
+    ;;
+esac
+
 build_target="$(awk -F'|' '/\*\*构建目标\*\*/ { gsub(/^[ \t]+|[ \t]+$/, "", $3); print tolower($3); exit }' "$CFG" 2>/dev/null || true)"
 case "$build_target" in
   1|frontend|front|fe|前端|前端项目)

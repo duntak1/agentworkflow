@@ -142,6 +142,26 @@ aw_sync_configured() {
   [[ -d "$harness" ]] || return 1
 }
 
+aw_sync_center_decision() {
+  local value
+  value="$(aw_project_config_field "同步中心" 2>/dev/null || true)"
+  value="$(echo "$value" | tr '[:upper:]' '[:lower:]')"
+  case "$value" in
+    required|yes|需要|建立|创建|使用|配置) echo "required" ;;
+    not-needed|not_needed|none|no|不需要|不建|无需) echo "not-needed" ;;
+    pending|待定|稍后|后续确认|未配置|""|*____*) echo "" ;;
+    *) echo "" ;;
+  esac
+}
+
+aw_print_sync_center_guidance() {
+  echo "请先让工程师决定是否建立同步中心：" >&2
+  echo "  1) 建立 / 使用同步中心：./scripts/aw config init --sync-center 1 --sync-center-path <project-harness-path>" >&2
+  echo "     若路径已确定，继续执行：./scripts/aw sync init <project-harness-path> --project <name> --agent <agent-name> --role <frontend|backend|fullstack>" >&2
+  echo "  2) 不建立同步中心：./scripts/aw config init --sync-center 2" >&2
+  echo "  3) 稍后决定：./scripts/aw config init --sync-center 3  # Plan 会保持阻断，直到改成 1 或 2" >&2
+}
+
 aw_print_project_scan_guidance() {
   echo "请先扫描项目内容并让工程师确认新/老项目判断：" >&2
   echo "  ./scripts/aw project scan" >&2
@@ -278,6 +298,11 @@ aw_require_planning_intake_ready() {
   if [[ -z "$(aw_project_kind)" ]]; then
     echo "error: project kind is not confirmed; Plan generation is blocked." >&2
     aw_print_project_kind_guidance
+    return 1
+  fi
+  if [[ -z "$(aw_sync_center_decision)" ]]; then
+    echo "error: sync center decision is not confirmed; Plan generation is blocked." >&2
+    aw_print_sync_center_guidance
     return 1
   fi
   if [[ -z "$target" ]]; then

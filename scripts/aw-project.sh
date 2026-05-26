@@ -129,7 +129,11 @@ scan_project() {
 2. 工程师确认项目阶段后执行：
    - 全新项目：\`./scripts/aw config init --project-stage 1\`
    - 已有 / 存量项目：\`./scripts/aw config init --project-stage 2\`
-3. 工程师确认代码托管平台和构建目标后执行：
+3. 立即询问工程师是否建立同步中心：
+   - 建立 / 使用同步中心：\`./scripts/aw config init --sync-center 1 --sync-center-path <project-harness路径>\`
+   - 不建立同步中心：\`./scripts/aw config init --sync-center 2\`
+   - 稍后决定：\`./scripts/aw config init --sync-center 3\`（Plan 会保持阻断，直到改成 1 或 2）
+4. 工程师确认代码托管平台和构建目标后执行：
    - GitHub：\`./scripts/aw config init --project-kind 1 --repo-url <url>\`
    - 本地 Git：\`./scripts/aw config init --project-kind 2\`
    - GitLab.com：\`./scripts/aw config init --project-kind 3 --repo-url <url>\`
@@ -142,10 +146,10 @@ scan_project() {
    - Gerrit：\`./scripts/aw config init --project-kind 10 --repo-url <url>\`
    - 阿里云云效 Codeup：\`./scripts/aw config init --project-kind 11 --repo-url <url>\`
    - 构建目标：\`./scripts/aw config init --build-target 1|2|3\`
-4. 如果构建目标是前后端项目，并且前后端分仓 / 双项目开发，必须先建立同步中心：
+5. 如果构建目标是前后端项目，并且前后端分仓 / 双项目开发，必须先建立同步中心：
    - 同电脑：\`./scripts/aw sync init <本地project-harness路径> --project <frontend|backend> --agent <agent-name> --role <frontend|backend>\`
    - 不同电脑：先创建 / clone 独立远程 \`project-harness\` 仓库，再执行同样的 \`aw sync init\`
-5. 未完成项目扫描、阶段确认、构建目标确认、必要同步中心配置前，\`aw plan\` / \`aw approve dsl --plan\` / \`aw plan apply\` 必须阻断。
+6. 未完成项目扫描、阶段确认、同步中心决策、构建目标确认、必要同步中心配置前，\`aw plan\` / \`aw approve dsl --plan\` / \`aw plan apply\` 必须阻断。
 EOF
   echo "written: docs/PROJECT_SCAN.md"
   echo "suggested project stage: ${stage} (${confidence})"
