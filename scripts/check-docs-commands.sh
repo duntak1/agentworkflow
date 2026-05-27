@@ -57,6 +57,7 @@ COMMANDS=(
   "aw project scan"
   "aw project gate"
   "aw file-index"
+  "aw compact"
   "aw handoff --check"
   "aw handoff \"focus\" --write"
   "aw memory"

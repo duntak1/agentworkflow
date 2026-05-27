@@ -5,7 +5,7 @@ This repository uses `agent-workflow` as the source of truth for Claude Code, Op
 ## Flow
 
 ```text
-install/init -> reference/ -> DSL reviewed -> choose project kind + build target -> Plan executable -> aw confirm -> ENGINEERING_INDEX.md -> aw next -> code one AT-T -> verify -> changelog/git -> handoff
+install/init -> reference/ -> DSL reviewed -> choose project kind + build target -> Plan executable -> aw confirm -> ENGINEERING_INDEX.md -> aw next -> code one AT-T -> verify -> changelog/git -> compact / handoff
 ```
 
 Project kind:
@@ -96,21 +96,31 @@ Do not read `ENGINEERING_INDEX.md` into AI context.
 
 | Layer | Purpose |
 |-------|---------|
+| Compact | One-shot Codex/new-chat continuity: `aw compact "focus" --write --snapshot` |
 | Handoff | Current goal, status, blockers, next steps: `aw handoff "focus" --write` |
 | Memory | Stable decisions, preferences, recurring risks: `aw memory add` |
 | Chat memory | Summarized conversation continuity: `aw memory chat` |
 | Requirements | Formal spoken requirements and changes: `aw req new|change` |
 
-Before switching tools or opening a new chat:
+Codex native context compaction cannot be listened to directly by the skill. AgentWorkflow's linkage command is `aw compact`; run it before Codex compaction, tool/model switches, long pauses, new chats, or after a large requirement / AT-T batch:
 
 ```bash
-./scripts/aw handoff "current focus" --write
-./scripts/aw handoff --check
+./scripts/aw compact "current focus" --write --snapshot
 ```
+
+It writes/checks `docs/handoff/PROJECT_HANDOFF.md`, writes `docs/handoff/LAST_AUTO_SNAPSHOT.md`, and writes `docs/handoff/PASTE_IN_NEW_CHAT.txt`.
 
 When the user asks to remember the conversation:
 
 ```bash
+./scripts/aw compact "current focus" --write --snapshot \
+  --memory-summary "conversation summary" \
+  --memory-decisions "confirmed decisions" \
+  --memory-todos "follow-ups" \
+  --memory-open "open questions" \
+  --memory-related "REQ / DSL / Plan / AT-T / paths"
+
+# or directly:
 ./scripts/aw memory chat <slug> "title" \
   --summary "conversation summary" \
   --decisions "confirmed decisions" \
@@ -137,6 +147,7 @@ When the user asks to remember the conversation:
 | `aw task split` | Split an oversized AT-T into follow-up AT-T rows |
 | `aw tp new/link/show/list` | Manage test plans |
 | `aw verify --task <AT-T> --run-e2e` | Execute configured task/e2e verification |
+| `aw compact "focus" --write --snapshot` | One-shot context compaction for Codex/new chat: handoff, snapshot, paste block, optional memory |
 | `aw handoff --check` | Validate cross-session handoff snapshot |
 | `aw memory chat` | Store summarized chat context |
 | `aw audit init|add|check` | Record AI actions, decisions, commands, results, evidence, and confirmations |

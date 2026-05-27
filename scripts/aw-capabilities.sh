@@ -40,7 +40,7 @@ if $JSON; then
     "AT-T task",
     "verify",
     "changelog/git",
-    "handoff"
+    "compact/handoff"
   ],
   "adapters": [
     "Claude Code",
@@ -80,6 +80,7 @@ if $JSON; then
     "tp",
     "bug",
     "changelog",
+    "compact",
     "memory chat",
     "next",
     "task",
@@ -166,7 +167,8 @@ if $JSON; then
     "aw context gate --task <AT-T>",
     "aw contract gate",
     "aw score record --scope pr",
-    "aw handoff --check"
+    "aw handoff --check",
+    "aw compact --write --snapshot"
   ]
 }
 EOF
@@ -178,7 +180,7 @@ cat <<EOF
 version: ${VERSION}
 
 Pipeline:
-  Project content scanned -> Project stage selected -> Project kind/build target selected -> Sync center ready when needed -> Reference or baseline -> DSL reviewed -> Plan executable -> confirm -> AT-T task -> verify -> changelog/git -> handoff
+  Project content scanned -> Project stage selected -> Project kind/build target selected -> Sync center ready when needed -> Reference or baseline -> DSL reviewed -> Plan executable -> confirm -> AT-T task -> verify -> changelog/git -> compact/handoff
 
 Adapters:
   Claude Code, Codex, Copilot / VS Code, Cursor, Windsurf, Cline, Continue, Any chat
@@ -187,7 +189,7 @@ Core commands:
   install, setup, doctor, demo, init, project, project scan, project gate, status, capabilities, dashboard, dsl, dsl review, plan, approve,
   confirm, index, check, config, ci, atomic, req, tp, next, task, task split, paste,
   plan change, plan task-add,
-  verify, commit, changelog, handoff --write, handoff --check, memory chat, bug,
+  verify, commit, changelog, compact, handoff --write, handoff --check, memory chat, bug,
   audit, policy, policy gate, security, service-catalog, release, release gate --strict-report, report, report handoff, report release, report check, trace, trace check,
   metrics, metrics summary, ops, ops gate, agents, agents gate, sync, sync init, sync push, sync pull, sync baseline, sync board, sync event, sync change, sync inbox,
   context, context init, context status, context plan, context enrich, context gate, context affected,
@@ -210,6 +212,7 @@ Proof:
   aw contract gate
   aw score record --scope pr
   aw handoff --check
+  aw compact --write --snapshot
   aw report handoff --write
   aw report check --strict
 EOF

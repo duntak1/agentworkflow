@@ -220,6 +220,9 @@ EOF
   handoff)
     exec "${SCRIPT_DIR}/draft-handoff.sh" "$@"
     ;;
+  compact)
+    exec "${SCRIPT_DIR}/aw-compact.sh" "$@"
+    ;;
   hooks)
     exec "${SCRIPT_DIR}/install-git-hooks.sh" "$@"
     ;;
@@ -390,6 +393,7 @@ agent-workflow CLI v${AW_CLI_VERSION} (any AI tool)
   aw paste task        Full single-task prompt for Agent
   aw verify [--task] [--run-e2e]   Run PROJECT_CONFIG / task Verify commands
   aw handoff [focus] [--write|--check]  Print/write/check PROJECT_HANDOFF
+  aw compact [focus] [--write] [--snapshot] [--memory-summary "..."]  One-shot context compaction for Codex/new chat
   aw hooks             Install .githooks (pre-commit)
   aw adapters [--all]  IDE rules: claude/codex/copilot/cursor/windsurf/cline/continue
   aw sync-skill        Install ~/.cursor/skills/agent-workflow (Cursor only)

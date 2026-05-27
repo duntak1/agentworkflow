@@ -34,6 +34,7 @@ need "scripts/aw-dsl-suite.sh"
 need "scripts/aw-demo.sh"
 need "scripts/aw-capabilities.sh"
 need "scripts/aw-dashboard.sh"
+need "scripts/aw-compact.sh"
 need "scripts/aw-memory.sh"
 need "scripts/aw-bug.sh"
 need "scripts/aw-req.sh"
@@ -124,7 +125,7 @@ else
   ERR=1
 fi
 
-for cmd in "doctor" "demo" "dashboard" "status --json" "capabilities" "capabilities --json" "project scan" "project gate" "memory" "memory chat" "bug" "changelog" "audit" "policy" "policy gate" "security" "security scan" "service-catalog" "service-catalog discover" "release" "release gate" "release gate --strict-report" "release flag-check" "report handoff" "report release" "report check" "metrics" "metrics summary" "ops" "ops gate" "agents" "agents gate" "agents gate --strict" "sync" "sync init" "sync push" "sync pull" "sync baseline" "sync board" "sync event" "sync change" "sync inbox" "trace check" "plan change" "plan task-add" "task split" "rules discover" "file-index" "setup" "upgrade" "remove"; do
+for cmd in "doctor" "demo" "dashboard" "status --json" "capabilities" "capabilities --json" "project scan" "project gate" "compact" "memory" "memory chat" "bug" "changelog" "audit" "policy" "policy gate" "security" "security scan" "service-catalog" "service-catalog discover" "release" "release gate" "release gate --strict-report" "release flag-check" "report handoff" "report release" "report check" "metrics" "metrics summary" "ops" "ops gate" "agents" "agents gate" "agents gate --strict" "sync" "sync init" "sync push" "sync pull" "sync baseline" "sync board" "sync event" "sync change" "sync inbox" "trace check" "plan change" "plan task-add" "task split" "rules discover" "file-index" "setup" "upgrade" "remove"; do
   if grep -q "aw ${cmd}" "${SKILL_DIR}/SKILL.md" "${SKILL_DIR}/reference.md" 2>/dev/null; then
     echo "ok  docs mention aw ${cmd}"
   else
@@ -158,6 +159,13 @@ if grep -q 'memory)' "${SKILL_DIR}/scripts/aw" 2>/dev/null; then
   echo "ok  aw routes memory"
 else
   echo "missing  aw memory route"
+  ERR=1
+fi
+
+if grep -q 'compact)' "${SKILL_DIR}/scripts/aw" 2>/dev/null; then
+  echo "ok  aw routes compact"
+else
+  echo "missing  aw compact route"
   ERR=1
 fi
 

@@ -377,6 +377,14 @@ grep -q 'e2e handoff' docs/handoff/PROJECT_HANDOFF.md || { echo "fail: handoff -
 grep -q 'ok  handoff contains: ## 当前目标' /tmp/aw-e2e-handoff-write.out || { echo "fail: handoff --write did not run check"; cat /tmp/aw-e2e-handoff-write.out; exit 1; }
 HANDOFF_CHECK_OUT="$(./scripts/aw handoff --check)"
 case "$HANDOFF_CHECK_OUT" in *"ok  handoff contains: ## 当前目标"*);; *) echo "fail: handoff --check"; echo "$HANDOFF_CHECK_OUT"; exit 1 ;; esac
+COMPACT_OUT="$(./scripts/aw compact "e2e compact checkpoint" --write --snapshot --memory-summary "E2E compact summary." --memory-decisions "Use aw compact for Codex/new chat continuity." --memory-todos "Continue e2e." --memory-open "None." --memory-related "AT-T1-001")"
+case "$COMPACT_OUT" in *"written: docs/handoff/PASTE_IN_NEW_CHAT.txt"*) ;; *) echo "fail: compact output"; echo "$COMPACT_OUT"; exit 1 ;; esac
+[[ -f docs/handoff/PROJECT_HANDOFF.md ]] || { echo "fail: compact handoff"; exit 1; }
+[[ -f docs/handoff/LAST_AUTO_SNAPSHOT.md ]] || { echo "fail: compact snapshot"; exit 1; }
+[[ -f docs/handoff/PASTE_IN_NEW_CHAT.txt ]] || { echo "fail: compact paste"; exit 1; }
+grep -q 'e2e compact checkpoint' docs/handoff/PROJECT_HANDOFF.md || { echo "fail: compact focus missing"; exit 1; }
+grep -q 'aw memory inject' docs/handoff/PASTE_IN_NEW_CHAT.txt || { echo "fail: compact paste missing resume command"; exit 1; }
+grep -Rqi 'E2E compact summary' docs/memory/entries || { echo "fail: compact memory"; exit 1; }
 PASTE_OUT="$(./scripts/aw paste task)"
 case "$PASTE_OUT" in *关联测试计划*) ;;
 *) 

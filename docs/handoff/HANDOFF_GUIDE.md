@@ -146,6 +146,24 @@ Claude Code 一类工具的 **compact**：丢掉逐轮闲聊，保留**决策、
 
 任务完成后 `aw task complete <AT-T>` 会提示同时做两件事：询问是否提交当前分支，以及刷新 handoff 快照。
 
+## Codex：一键工程化压缩
+
+Codex 原生上下文压缩不能被 skill 直接监听。需要切换模型、新开会话、长时间暂停、上下文明显变长，或完成一个大需求 / AT-T 批次时，运行：
+
+```bash
+./scripts/aw compact "本轮目标" --write --snapshot
+```
+
+它会更新并检查 `PROJECT_HANDOFF.md`，生成 `LAST_AUTO_SNAPSHOT.md` 和 `PASTE_IN_NEW_CHAT.txt`。如果本轮聊天里有需要长期记住的摘要，可追加：
+
+```bash
+./scripts/aw compact "本轮目标" --write --snapshot \
+  --memory-summary "聊天摘要" \
+  --memory-decisions "已确认决定" \
+  --memory-todos "待办" \
+  --memory-open "待确认问题"
+```
+
 ## Cursor：将近占满时自动提醒
 
 若使用 Cursor，可启用 **`.cursor/hooks.json`**：在 `preCompact` 且 **`context_usage_percent` ≥ 95%**（默认，可调）时自动生成 `LAST_AUTO_SNAPSHOT.md` / `PASTE_IN_NEW_CHAT.txt` 并通过 **`user_message`** 提示新开窗口。详见 [`CURSOR_CONTEXT_HOOK.md`](./CURSOR_CONTEXT_HOOK.md)。

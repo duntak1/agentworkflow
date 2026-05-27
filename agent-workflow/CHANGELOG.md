@@ -11,6 +11,8 @@
 
 ### Added
 
+- Add `aw compact` for Codex/new-chat context continuity, including handoff write/check, `LAST_AUTO_SNAPSHOT`, `PASTE_IN_NEW_CHAT`, and optional chat memory persistence.
+
 - Add `aw project scan|gate` so project intake scans real files before asking engineers to confirm new/existing stage, and blocks Plan generation until stage, project kind, build target, and required sync-center setup are complete.
 
 - Add a beginner tutorial and frontend/backend repository topology gate so engineers must confirm real code repos, same-computer vs cross-computer development, and `project-harness` readiness before shared/local Plan generation.

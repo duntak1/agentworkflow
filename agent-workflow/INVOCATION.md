@@ -84,6 +84,7 @@ chmod +x scripts/aw scripts/*.sh
 | 机器状态 | `aw status --json` |
 | 升级 | `aw upgrade` |
 | 移除集成 | `aw remove` |
+| 工程化上下文压缩 | `aw compact "本轮目标" --write --snapshot` |
 | 记忆 | `aw memory add/search/inject`；记住聊天用 `aw memory chat` |
 | 工程规范 | `aw rules init|discover|review|check`（默认带团队前端/后端/统一 AI 规范清单，项目内补差异） |
 | 生成 DSL | `生成 DSL` / `aw dsl` |
@@ -180,6 +181,22 @@ Agent 应：**先读本文 + `PRODUCT_INPUT_WORKFLOW.md`**，再执行对应 `sc
 | Memory | 长期复用：稳定事实、决策、偏好、流程、风险、聊天摘要 | `docs/memory/` / `aw memory add|chat|search|inject` |
 
 规则：Handoff 写过程状态；Memory 写可复用结论和聊天摘要。只有当 Handoff 里的结论未来会反复用，才提炼成 `aw memory add`。当用户要求记住聊天时，使用 `aw memory chat` 保存摘要、决策、待办、待确认和关联对象；不要把整段 Handoff、完整逐字聊天或 secret 写入 Memory。
+
+Codex 原生上下文压缩无法由 skill 直接监听。AgentWorkflow 的联动入口是 `aw compact`：在上下文变长、切换模型、新开会话、长时间暂停、完成一个大需求或 AT-T 批次时，先执行：
+
+```bash
+./scripts/aw compact "本轮目标" --write --snapshot
+```
+
+它会更新并检查 `docs/handoff/PROJECT_HANDOFF.md`，生成 `docs/handoff/LAST_AUTO_SNAPSHOT.md` 和 `docs/handoff/PASTE_IN_NEW_CHAT.txt`。如果需要记住聊天摘要，加：
+
+```bash
+./scripts/aw compact "本轮目标" --write --snapshot \
+  --memory-summary "本轮讨论摘要" \
+  --memory-decisions "已确认决定" \
+  --memory-todos "后续待办" \
+  --memory-open "待确认问题"
+```
 
 `aw handoff "focus"` 会自动读取当前 DSL / Plan / ATOMIC / 任务 / REQ / Bug / 项目配置 / Git 状态并输出可审阅草稿。推荐先看草稿：
 

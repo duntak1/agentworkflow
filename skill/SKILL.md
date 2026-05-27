@@ -52,6 +52,7 @@ Context continuity has two lanes:
 | Memory (`docs/memory/`) | Stable decisions, preferences, reusable procedures, recurring risks, summarized chat episodes | Raw chat logs or transient task status |
 
 Promote handoff conclusions into memory only when they are likely to be reused across future tasks. Do not store secrets.
+Use `aw compact "focus" --write --snapshot` before Codex context compaction, new chats, model switches, long pauses, or after a large requirement/AT-T batch. It writes/checks handoff, creates `docs/handoff/LAST_AUTO_SNAPSHOT.md`, writes `docs/handoff/PASTE_IN_NEW_CHAT.txt`, and can persist a chat episode with `--memory-summary "..."`.
 When the user asks to remember a conversation, use `aw memory chat` to store a concise episode summary with decisions, follow-ups, open questions, and related REQ/DSL/Plan/AT-T paths; formal requirements still go through `aw req new|change`.
 
 New session resume flow:
@@ -138,6 +139,7 @@ Proof path:
 | Requirements | `aw req new <slug> "title" --type 口述新增` and `aw req change <id> "summary"` both write `docs/requirements/INDEX.md`; use 需求类型 to distinguish spoken new requirements vs development changes |
 | File index | Update `docs/FILE_INDEX.md` when adding/deleting/renaming business files so human engineers can find files to review or hand-edit |
 | Commit checkpoint | After every large requirement / AT-T completes, ask the engineer whether to commit the current branch for rollback; `aw commit --task <id> --changelog "..."` records `[Unreleased]` and suggests, `--execute` only after confirmation |
+| Compact | `aw compact "focus" --write --snapshot`; use before Codex/new chat/model switch to update handoff, write `LAST_AUTO_SNAPSHOT.md`, write `PASTE_IN_NEW_CHAT.txt`, and optionally save chat Memory with `--memory-summary` |
 | Handoff | run `aw handoff "focus"` for a draft, `aw handoff "focus" --write` after review to backup + overwrite `docs/handoff/PROJECT_HANDOFF.md`, and `aw handoff --check` before new sessions |
 | Memory | `aw memory add <slug> "title" --body "..."`; for conversation continuity use `aw memory chat <slug> "title" --summary "..."`; then `aw memory inject` |
 | Closed-loop check | Before moving to the next large requirement / AT-T, run `aw trace check` where useful and confirm completeness, traceability, maintainability, and handoffability evidence; document any exception in Bug / REQ / handoff |
@@ -186,6 +188,7 @@ Proof path:
 18. No aimless full-repo scans. Before business-code edits, create/read `docs/context/tasks/CTX-<AT-T>.md`; only read files listed there, and expand context only after recording the reason and engineer confirmation.
 19. Default context budget per AT-T is 8 business files, 20 symbols, and 5 precise searches. Do not read dependency/build/cache/generated/log directories such as `.git`, `node_modules`, `dist`, `build`, `coverage`, `.next`, `.nuxt`, `target`, `vendor`, `tmp`, or `logs`.
 20. Prefer CodeGraph / `aw context` symbol, caller/callee, impact, and affected-test queries over bulk file reads. If CodeGraph is unavailable, use `CODE_CONTEXT_INDEX`, `FILE_INDEX`, and precise `rg` as fallback.
+21. Before context switch, Codex native context compaction, new chat, model switch, long pause, or after a large requirement / AT-T batch, run `aw compact "focus" --write --snapshot`; add `--memory-summary` when the chat contains reusable decisions or follow-ups.
 
 ## Cursor-only (optional)
 

@@ -79,6 +79,7 @@ aw tp new <slug> "title"    # optional §11 用例
 aw tp link AT-T1-001 <TP>   # Verify 列追加 TP:path
 aw memory add decision "Use shadcn table" --type procedural --source "PLAN_xxx" --body "Reusable table pattern for this repo."
 aw memory inject            # 新会话注入记忆摘要
+aw compact "完成 AT-T1-001" --write --snapshot  # Codex / 新会话前一键压缩 handoff + paste block
 ```
 
 定向拆任务：

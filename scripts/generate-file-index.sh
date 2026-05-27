@@ -63,6 +63,7 @@ desc_of() {
     scripts/init-project.sh) echo "初始化业务仓 reference、docs、模板、配置、FILE_INDEX、Bug 流水等基础文件。" ;;
     scripts/generate-engineering-index.sh) echo "生成 ENGINEERING_INDEX.md，人类工程师交付路径聚合索引。" ;;
     scripts/generate-file-index.sh) echo "生成 docs/FILE_INDEX.md，面向工程师手动优化代码的项目代码文件索引。" ;;
+    scripts/aw-compact.sh) echo "一键工程化上下文压缩：写 handoff、自动快照、新会话粘贴块和可选聊天 Memory。" ;;
     scripts/aw-task.sh) echo "AT-T 子任务生命周期：brief、confirm、start、blocked、complete、done、paste。" ;;
     scripts/aw-req.sh) echo "统一需求入口：口述新增和研发中变更记录到 REQ，并回写 DSL/Plan/ATOMIC。" ;;
     scripts/aw-bug.sh) echo "Bug / 疑似 Bug 记录入口，统一写入 AI_BUG_LOG。" ;;

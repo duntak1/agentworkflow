@@ -981,19 +981,20 @@ cd /path/workspace/project-backend
         <table>
           <thead><tr><th>功能</th><th>用途</th><th>命令</th></tr></thead>
           <tbody>
+            <tr><td>Compact</td><td>Codex / 新会话前一键工程化上下文压缩：更新 handoff、生成快照和新会话粘贴块。</td><td><code>aw compact "focus" --write --snapshot</code></td></tr>
             <tr><td>Handoff</td><td>当前目标、进度、阻塞、下一步、风险。</td><td><code>aw handoff "focus" --write</code></td></tr>
             <tr><td>Memory</td><td>长期复用的稳定结论、偏好、流程、风险。</td><td><code>aw memory add</code></td></tr>
             <tr><td>Chat Memory</td><td>保存聊天摘要、决策、待办、待确认，不保存逐字全文。</td><td><code>aw memory chat</code></td></tr>
           </tbody>
         </table>
-        <pre><code>./scripts/aw handoff "用户中心前端开发进度" --write
-./scripts/aw handoff --check
-./scripts/aw memory chat user-center-discussion "用户中心讨论" \
-  --summary "讨论了用户列表字段和状态枚举" \
-  --decisions "status 使用 enabled|disabled" \
-  --todos "后端确认 avatarUrl 空值规则" \
-  --open "权限失败错误码待确认" \
-  --related "AT-T1-001"</code></pre>
+        <pre><code>./scripts/aw compact "用户中心前端开发进度" --write --snapshot \
+  --memory-summary "讨论了用户列表字段和状态枚举" \
+  --memory-decisions "status 使用 enabled|disabled" \
+  --memory-todos "后端确认 avatarUrl 空值规则" \
+  --memory-open "权限失败错误码待确认" \
+  --memory-related "AT-T1-001"
+
+# 新会话使用 docs/handoff/PASTE_IN_NEW_CHAT.txt 作为启动提示。</code></pre>
       </section>
 
       <section id="rules">
@@ -1233,7 +1234,7 @@ cd workspace/project-backend
             <tr><td>索引</td><td><code>aw index</code> · <code>aw file-index</code> · <code>ENGINEERING_INDEX.md</code> · <code>docs/FILE_INDEX.md</code></td></tr>
             <tr><td>任务</td><td><code>aw next</code> · <code>aw task brief</code> · <code>aw task confirm</code> · <code>aw task start</code> · <code>aw task complete</code></td></tr>
             <tr><td>质量</td><td><code>aw verify</code> · <code>aw tp</code> · <code>aw bug</code> · <code>aw req change</code></td></tr>
-            <tr><td>交接</td><td><code>aw handoff --write</code> · <code>aw memory chat</code> · <code>aw report handoff --write</code></td></tr>
+            <tr><td>交接</td><td><code>aw compact --write --snapshot</code> · <code>aw handoff --write</code> · <code>aw memory chat</code> · <code>aw report handoff --write</code></td></tr>
             <tr><td>治理</td><td><code>aw audit</code> · <code>aw policy</code> · <code>aw security</code> · <code>aw service-catalog</code> · <code>aw release</code></td></tr>
             <tr><td>团队</td><td><code>aw agents assign</code> · <code>aw agents handoff</code> · <code>aw agents review</code> · <code>aw agents gate</code></td></tr>
             <tr><td>跨项目</td><td><code>aw sync init</code> · <code>aw sync pull</code> · <code>aw sync inbox</code> · <code>aw sync push</code> · <code>aw sync board</code> · <code>aw sync event</code> · <code>aw sync change</code> · <code>aw sync check</code></td></tr>

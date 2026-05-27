@@ -96,6 +96,8 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 
 从 Handoff 提炼 Memory 的标准：未来 2 次以上任务可能复用；有明确来源；能用一句话说明。否则保留在 Handoff。
 
+`aw compact "focus" --write --snapshot` 是 Codex / 新会话前的一键工程化上下文压缩：更新并检查 `PROJECT_HANDOFF.md`，生成 `docs/handoff/LAST_AUTO_SNAPSHOT.md` 和 `docs/handoff/PASTE_IN_NEW_CHAT.txt`。带 `--memory-summary "..."` 时，会同步写入聊天摘要 Memory。
+
 `aw handoff "focus"` 会自动读取当前 DSL / Plan / ATOMIC / 任务 / REQ / Bug / 项目配置 / Git 状态并输出 handoff 草稿。审阅后可用 `aw handoff "focus" --write` 备份旧文件并覆盖 `docs/handoff/PROJECT_HANDOFF.md`；新开会话前用 `aw handoff --check` 检查必备章节、体积和疑似 secret。
 
 当用户要求“记住这段聊天”时，用 `aw memory chat <slug> "标题" --summary "..." --decisions "..." --todos "..." --open "..." --related "..."` 记录聊天摘要。聊天里形成的正式需求仍用 `aw req new|change`，当前进度仍用 `aw handoff --write`。
@@ -146,6 +148,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw verify --task <AT-T>` | 执行 Verify 列与 PROJECT_CONFIG |
 | `aw verify --run-e2e` | 对 TP 项执行 e2e/playwright 命令 |
 | `aw verify --task <AT-T> --run-e2e` | TP 关联项触发 PROJECT_CONFIG 的 e2e/playwright 命令 |
+| `aw compact "focus" --write --snapshot` | 一键上下文压缩：写 handoff、自动快照、新会话粘贴块，可选 Memory |
 | `aw handoff "focus"` | 生成当前上下文压缩草稿 |
 | `aw handoff "focus" --write` | 备份并覆盖写入 `docs/handoff/PROJECT_HANDOFF.md` |
 | `aw handoff --check` | 检查交接快照是否具备关键章节、无明显 secret、未塞入工程索引正文 |
