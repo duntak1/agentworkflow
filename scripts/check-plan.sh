@@ -100,7 +100,7 @@ check_plan() {
   ok "atomic file ${atomic_rel}"
 
   local count=0 empty_verify=0
-  local line id domain ver nf
+  local line id domain ver st nf
   while IFS= read -r line; do
     [[ "$line" =~ ^\|[[:space:]]*AT-T ]] || continue
     count=$((count + 1))
@@ -108,6 +108,7 @@ check_plan() {
     id="$(echo "$line" | awk -F'|' '{gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2}')"
     if [[ "$nf" -ge 8 ]]; then
       domain="$(echo "$line" | awk -F'|' '{gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3}')"
+      st="$(echo "$line" | awk -F'|' '{gsub(/^[ \t]+|[ \t]+$/, "", $5); print $5}')"
       ver="$(echo "$line" | awk -F'|' '{gsub(/^[ \t]+|[ \t]+$/, "", $7); print $7}' | tr -d '`')"
       case "$domain" in
         Frontend|Backend|Fullstack|QA|Docs|Ops|Data) ;;
@@ -115,8 +116,16 @@ check_plan() {
       esac
     else
       domain="—"
+      st="$(echo "$line" | awk -F'|' '{gsub(/^[ \t]+|[ \t]+$/, "", $4); print $4}')"
       ver="$(echo "$line" | awk -F'|' '{gsub(/^[ \t]+|[ \t]+$/, "", $6); print $6}' | tr -d '`')"
       warn "AT-T ${id}: no domain column (recommended: Frontend/Backend/Fullstack/QA/Docs/Ops/Data)"
+    fi
+    if [[ "$st" == "进行中" || "$st" == "已完成" ]]; then
+      if aw_task_require_requirement_confirmed "$id" >/dev/null 2>&1; then
+        ok "AT-T ${id}: requirement confirmation present"
+      else
+        fail "AT-T ${id}: status ${st} but requirement discussion is not confirmed; run aw task brief ${id} then aw task confirm ${id} \"已确认：范围=...；验收=...；非目标=...\""
+      fi
     fi
     if [[ -z "$ver" || "$ver" == "—" || "$ver" == "-" ]]; then
       empty_verify=$((empty_verify + 1))

@@ -137,7 +137,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw req change <AT-T> "summary" --impact "..." --acceptance "..."` | 记录研发中需求变更到统一需求表，并回写 DSL / Plan / ATOMIC |
 | `aw next` | 输出下一条 AT-T |
 | `aw task brief <AT-T>` | 输出子任务开始前的需求沟通包 |
-| `aw task confirm <AT-T> "summary"` | 工程师确认需求已问清楚；未确认不能 `start` |
+| `aw task confirm <AT-T> "已确认：范围=...；验收=...；非目标=..."` | 工程师确认需求已问清楚；摘要缺少范围 / 验收 / 非目标会被拒绝；未确认不能 `start` / `complete` |
 | `aw task start|blocked|complete|done|show` | AT-T 生命周期 |
 | `aw task blocked <AT-T>` | 标记任务阻塞 |
 | `aw task split <AT-T> --into "A; B"` | 将过大的任务拆成后续 AT-T，并阻塞原任务 |

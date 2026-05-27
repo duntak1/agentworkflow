@@ -305,7 +305,11 @@ if ./scripts/aw task start AT-T1-001; then
 fi
 BRIEF_OUT="$(./scripts/aw task brief AT-T1-001)"
 case "$BRIEF_OUT" in *"子任务需求沟通包"*AT-T1-001*) ;; *) echo "fail: task brief"; echo "$BRIEF_OUT"; exit 1 ;; esac
-./scripts/aw task confirm AT-T1-001 "已确认：e2e 范围、验收、非目标清楚"
+if ./scripts/aw task confirm AT-T1-001 "已确认：e2e"; then
+  echo "fail: weak task confirmation should be rejected"
+  exit 1
+fi
+./scripts/aw task confirm AT-T1-001 "已确认：范围=e2e 任务生命周期；验收=layout 检查通过并能生成任务提示；非目标=不实现真实业务功能"
 ./scripts/aw req new spoken-export "口述新增：导出按钮需要权限控制" --type 口述新增 --impact "页面按钮、后端权限" --acceptance "无权限不可见"
 grep -q '需求类型' docs/requirements/INDEX.md || { echo "fail: req index missing type column"; exit 1; }
 grep -q '口述新增' docs/requirements/INDEX.md || { echo "fail: spoken req type missing"; exit 1; }
@@ -332,7 +336,7 @@ if ./scripts/aw task start AT-T1-001; then
   exit 1
 fi
 ./scripts/aw task brief AT-T1-001 >/dev/null
-./scripts/aw task confirm AT-T1-001 "已确认：研发中变更已回写，空态验收清楚"
+./scripts/aw task confirm AT-T1-001 "已确认：范围=研发中空态变更已回写；验收=空数据时显示明确空态；非目标=不改导出和权限模型"
 ./scripts/aw context plan --task AT-T1-001
 ./scripts/aw context gate --task AT-T1-001
 ./scripts/aw task start AT-T1-001
@@ -347,6 +351,17 @@ grep -q 'task split' docs/audit/AGENT_TRACE.md || { echo "fail: task split audit
 ./scripts/aw task start AT-T1-001
 TASK_PASTE_OUT="$(./scripts/aw paste task)"
 case "$TASK_PASTE_OUT" in *AT-T1-001*) ;; *) echo "fail: paste task"; echo "$TASK_PASTE_OUT"; exit 1 ;; esac
+cp docs/plans/ATOMIC_TASKS_E2E.md /tmp/aw-e2e-atomic-confirmation-check.md
+awk -F'|' 'BEGIN { OFS="|" } /AT-T1-002/ { print "| AT-T1-002 | QA | 手动置为进行中未确认 | 进行中 | — | ./scripts/aw check layout |"; next } { print }' /tmp/aw-e2e-atomic-confirmation-check.md > docs/plans/ATOMIC_TASKS_E2E.md
+if ./scripts/aw check plan; then
+  echo "fail: check plan should reject in-progress task without requirement confirmation"
+  exit 1
+fi
+mv /tmp/aw-e2e-atomic-confirmation-check.md docs/plans/ATOMIC_TASKS_E2E.md
+if ./scripts/aw gate task --task AT-T1-002; then
+  echo "fail: gate task should reject task without requirement confirmation"
+  exit 1
+fi
 ./scripts/aw tp new e2e "e2e smoke TP"
 TP_FILE="$(ls docs/quality/test-plans/TP-*e2e*.md 2>/dev/null | head -1)"
 [[ -n "$TP_FILE" ]] || { echo "fail: tp not created"; exit 1; }
@@ -383,7 +398,7 @@ grep -q 'E2E commit helper changelog entry' "$CHANGELOG_PATH" || { echo "fail: a
 cat >> docs/plans/ATOMIC_TASKS_E2E.md <<'EOF'
 | AT-T1-099 | QA | 故意失败任务 | 待办 |  | false |
 EOF
-./scripts/aw task confirm AT-T1-099 "已确认：故意失败用于验证 Bug 流水"
+./scripts/aw task confirm AT-T1-099 "已确认：范围=故意失败任务用于验证 Bug 流水；验收=false 验证失败后写入 AI_BUG_LOG；非目标=不修复该故意失败命令"
 ./scripts/aw context plan --task AT-T1-099
 ./scripts/aw context gate --task AT-T1-099
 ./scripts/aw task start AT-T1-099

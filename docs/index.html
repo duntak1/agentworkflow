@@ -819,13 +819,13 @@ chmod +x scripts/aw scripts/*.sh
         <pre><code>./scripts/aw next
 ./scripts/aw task brief AT-T1-001
 # 工程师确认后
-./scripts/aw task confirm AT-T1-001 "已确认：范围、验收、非目标、接口字段。"
+./scripts/aw task confirm AT-T1-001 "已确认：范围=用户列表筛选；验收=筛选后列表和分页正确；非目标=不改导出和权限模型"
 ./scripts/aw task start AT-T1-001
 ./scripts/aw paste task
 # 编码完成后
 ./scripts/aw task complete AT-T1-001</code></pre>
         <div class="danger callout">
-          <strong>禁止：</strong>没有 <code>task confirm</code> 就开始写代码。需求不清楚时，Agent 必须继续追问，不能靠猜。
+          <strong>禁止：</strong>没有结构化 <code>task confirm</code> 就开始写代码。确认摘要必须包含范围 / 验收 / 非目标；需求不清楚时，Agent 必须继续追问，不能靠猜。
         </div>
       </section>
 

@@ -65,7 +65,7 @@ aw confirm docs/dsl/DSL_DRAFT.md docs/plans/PLAN_xxx.md
 aw status              # shows current AT-T when one is active
 aw next
 aw task brief AT-T1-001       # 开始前先沟通需求，不允许猜
-aw task confirm AT-T1-001 "已确认：范围、验收、非目标清楚"
+aw task confirm AT-T1-001 "已确认：范围=用户列表筛选；验收=筛选后列表和分页正确；非目标=不改导出和权限模型"
 aw context plan --task AT-T1-001
 aw context gate --task AT-T1-001
 aw req new export-permission "口述新增：导出按钮需要权限控制" --type 口述新增 --impact "页面按钮、后端权限" --acceptance "无权限不可见"

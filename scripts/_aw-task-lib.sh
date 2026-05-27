@@ -316,6 +316,48 @@ aw_task_requirement_confirmed() {
   grep -qE "^${task_id}[[:space:]]" "$f"
 }
 
+aw_task_requirement_confirm_summary() {
+  local task_id="$1"
+  local f
+  f="$(aw_task_requirement_confirm_path)"
+  [[ -f "$f" ]] || return 1
+  awk -F'\t' -v id="$task_id" '$1 == id { print $3; found = 1; exit } END { exit(found ? 0 : 1) }' "$f"
+}
+
+aw_task_confirmation_summary_valid() {
+  local summary="$1"
+  local lowered len
+  lowered="$(echo "$summary" | tr '[:upper:]' '[:lower:]')"
+  len="${#summary}"
+  [[ "$len" -ge 12 ]] || return 1
+  [[ "$lowered" == *"已确认"* || "$lowered" == *"confirmed"* ]] || return 1
+  [[ "$lowered" == *"范围"* || "$lowered" == *"scope"* ]] || return 1
+  [[ "$lowered" == *"验收"* || "$lowered" == *"acceptance"* ]] || return 1
+  [[ "$lowered" == *"非目标"* || "$lowered" == *"不做"* || "$lowered" == *"不包含"* || "$lowered" == *"non-goal"* || "$lowered" == *"non goal"* ]] || return 1
+  return 0
+}
+
+aw_task_require_requirement_confirmed() {
+  local task_id="$1"
+  if ! aw_task_requirement_confirmed "$task_id"; then
+    echo "error: requirement discussion not confirmed for ${task_id}" >&2
+    echo "  required flow:" >&2
+    echo "    ./scripts/aw task brief ${task_id}" >&2
+    echo "    discuss with engineer until scope / acceptance / non-goals are explicit" >&2
+    echo "    ./scripts/aw task confirm ${task_id} \"已确认：范围=...；验收=...；非目标=...\"" >&2
+    return 1
+  fi
+  local summary
+  summary="$(aw_task_requirement_confirm_summary "$task_id" 2>/dev/null || true)"
+  if ! aw_task_confirmation_summary_valid "$summary"; then
+    echo "error: requirement confirmation for ${task_id} is incomplete" >&2
+    echo "  confirmation must include: 已确认 + 范围/scope + 验收/acceptance + 非目标/non-goals" >&2
+    echo "  rerun: ./scripts/aw task confirm ${task_id} \"已确认：范围=...；验收=...；非目标=...\"" >&2
+    return 1
+  fi
+  return 0
+}
+
 aw_task_mark_requirement_confirmed() {
   local task_id="$1" summary="$2"
   local f tmp now

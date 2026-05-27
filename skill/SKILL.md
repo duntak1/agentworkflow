@@ -42,7 +42,7 @@ Do not mark work done until these four properties have evidence or an explicit d
 
 Use `aw setup` for first-time project setup and `aw demo` when you need to prove the full install-to-verify path in a temporary repo.
 
-When the user says “执行研发任务”, “开始开发”, “做下一个任务”, or equivalent, do **not** start coding immediately. First run or present `aw next` and `aw task brief <id>`, ask requirement questions, wait for the engineer's explicit confirmation, then record it with `aw task confirm <id> "已确认：..."`. Only after `aw context plan`, `aw context gate`, and `aw task start` may you request or use `aw paste task`.
+When the user says “执行研发任务”, “开始开发”, “做下一个任务”, or equivalent, do **not** start coding immediately. First run or present `aw next` and `aw task brief <id>`, ask requirement questions, wait for the engineer's explicit confirmation, then record it with `aw task confirm <id> "已确认：范围=...；验收=...；非目标=..."`. Only after `aw context plan`, `aw context gate`, and `aw task start` may you request or use `aw paste task`.
 
 Context continuity has two lanes:
 
@@ -132,7 +132,7 @@ Proof path:
 | Plan change | During development, use `aw plan change --summary "..."` for scope notes, `aw plan task-add --title "..."` for same-scope new AT-T, and `aw task split <id> --into "A; B"` when a task is too large |
 | Engineering rules | `aw rules init` → `aw rules discover --write` to map key files → keep team defaults from frontend/backend/unified AI manuals, fill project-specific differences and comment principles → `aw rules review` → `aw check rules` |
 | Confirm | `aw confirm <dsl> <plan>` → `ENGINEERING_INDEX.md` (humans only) |
-| Dev | `aw status` → `aw next` → `aw task brief <id>` → discuss requirements → `aw task confirm <id> "已确认：..."` → `aw context plan --task <id>` → review allowed files → `aw context gate --task <id>` → `aw task start <id>` → `aw paste task` → `aw task complete <id>` |
+| Dev | `aw status` → `aw next` → `aw task brief <id>` → discuss requirements → `aw task confirm <id> "已确认：范围=...；验收=...；非目标=..."` → `aw context plan --task <id>` → review allowed files → `aw context gate --task <id>` → `aw task start <id>` → `aw paste task` → `aw task complete <id>` |
 | Test plans | `aw tp new` → `aw tp link <id> <TP>` → `aw check tp` |
 | Bug ledger | `aw bug add "summary" --source chat|review|runtime|prod --scope <id-or-module>`; every bug/suspected bug must be logged |
 | Requirements | `aw req new <slug> "title" --type 口述新增` and `aw req change <id> "summary"` both write `docs/requirements/INDEX.md`; use 需求类型 to distinguish spoken new requirements vs development changes |

@@ -363,7 +363,7 @@ cd workspace/project-backend
 工程师确认后：
 
 ```bash
-./scripts/aw task confirm <AT-T> "已确认：..."
+./scripts/aw task confirm <AT-T> "已确认：范围=...；验收=...；非目标=..."
 ./scripts/aw task start <AT-T>
 ```
 

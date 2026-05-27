@@ -52,7 +52,7 @@ If any item is missing, fix it before continuing or document the exception, owne
 ./scripts/aw confirm docs/dsl/DSL_DRAFT.md docs/plans/PLAN_feature.md
 ./scripts/aw next
 ./scripts/aw task brief AT-T1-001
-./scripts/aw task confirm AT-T1-001 "confirmed: scope, acceptance, non-goals"
+./scripts/aw task confirm AT-T1-001 "confirmed: scope=...; acceptance=...; non-goals=..."
 ./scripts/aw context plan --task AT-T1-001
 ./scripts/aw context gate --task AT-T1-001
 ./scripts/aw task start AT-T1-001
@@ -66,7 +66,7 @@ If any item is missing, fix it before continuing or document the exception, owne
 2. Before Plan generation, choose project kind and build target in `docs/PROJECT_CONFIG.md`.
 3. Do not start AT-T implementation until Plan metadata status is `可执行` and `aw confirm <dsl> <plan>` has run.
 4. When the engineer says "execute development task", "start development", or "do the next task", do not code immediately. First run `aw next` and `aw task brief <AT-T>`, ask requirement questions, and wait for explicit engineer confirmation.
-5. Before every AT-T coding prompt, the hard gate is `aw task confirm` → `aw context plan` → `aw context gate` → `aw task start` → `aw paste task`. If any step is missing, do not read broadly, generate a coding prompt, or edit business code.
+5. Before every AT-T coding prompt, the hard gate is `aw task confirm` with scope / acceptance / non-goals → `aw context plan` → `aw context gate` → `aw task start` → `aw paste task`. If any step is missing, do not read broadly, generate a coding prompt, or edit business code.
 6. Record spoken requirements with `aw req new`; record development-time changes with `aw req change`, then re-run task brief/confirm/context gate.
 7. Every bug or suspected bug must be logged with `aw bug add` or by `aw task complete` on failed verification.
 8. `ENGINEERING_INDEX.md` is for humans; do not paste it into AI context.

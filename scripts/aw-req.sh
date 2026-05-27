@@ -199,7 +199,7 @@ case "$CMD" in
 - [ ] Plan 已回写：${plan_rel}
 - [ ] ATOMIC 已回写：${atomic_rel}
 - [ ] 已重新执行 \`aw task brief ${TASK_ID}\`
-- [ ] 工程师已重新确认：\`aw task confirm ${TASK_ID} "已确认：..."\`
+- [ ] 工程师已重新确认：\`aw task confirm ${TASK_ID} "已确认：范围=...；验收=...；非目标=..."\`
 EOF
 
     append_req_index_row "$req_dir" "$req_id" "$req_base" "$SUMMARY" "研发中变更" "研发中变更" "${TASK_ID} · 已回写 DSL/Plan/ATOMIC"
@@ -209,7 +209,7 @@ EOF
 - 变更：${SUMMARY}
 - 影响：${IMPACT}
 - 验收：${ACCEPTANCE}
-- 要求：继续编码前重新 \`aw task brief ${TASK_ID}\` 并由工程师 \`aw task confirm ${TASK_ID} \"已确认：...\"\`。"
+- 要求：继续编码前重新 \`aw task brief ${TASK_ID}\` 并由工程师 \`aw task confirm ${TASK_ID} \"已确认：范围=...；验收=...；非目标=...\"\`。"
     append_section "${ROOT}/${dsl_rel}" "研发中需求变更回写 · ${req_id}" "$change_body"
     append_section "${ROOT}/${plan_rel}" "研发中需求变更回写 · ${req_id}" "$change_body"
     append_section "${ROOT}/${atomic_rel}" "研发中需求变更回写 · ${req_id}" "$change_body"
@@ -222,7 +222,7 @@ EOF
     echo "Updated: ${atomic_rel}"
     echo "reset: ${TASK_ID} requirement confirmation"
     aw_refresh_engineering_index
-    echo "next: ./scripts/aw task brief ${TASK_ID} → discuss → ./scripts/aw task confirm ${TASK_ID} \"已确认：...\""
+    echo "next: ./scripts/aw task brief ${TASK_ID} → discuss → ./scripts/aw task confirm ${TASK_ID} \"已确认：范围=...；验收=...；非目标=...\""
     ;;
   -h|--help|help)
     usage 0

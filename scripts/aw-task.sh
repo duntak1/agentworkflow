@@ -25,7 +25,7 @@ Usage:
   aw task              Show next task (same as aw next)
   aw task show [id]    Show one AT-T* row
   aw task brief <id>   Print pre-coding requirement discussion brief
-  aw task confirm <id> "summary"  Mark requirement discussion confirmed
+  aw task confirm <id> "已确认：范围=...；验收=...；非目标=..."  Mark requirement discussion confirmed
   aw task start <id>   Mark 进行中 (requires requirement confirmation)
   aw task blocked <id> Mark 阻塞
   aw task done <id>    Mark 已完成; optional --verify runs checks first
@@ -161,7 +161,7 @@ print_task_brief() {
 - 若 \`docs/PROJECT_CONFIG.md\` 未选择项目类型，先让工程师选择代码托管平台：1=GitHub、2=本地 Git、3=GitLab、4=Bitbucket、5=Gitee、6=GitCode、7=Gitea、8=Forgejo、9=GitLab CE、10=Gerrit、11=阿里云云效 Codeup；非本地 Git 需记录远程仓库地址。
 - 工程师确认前，不允许执行 \`aw task start ${id}\`，也不允许写业务代码。
 - 工程师确认后执行：
-  \`./scripts/aw task confirm ${id} "已确认：<确认摘要>"\`
+  \`./scripts/aw task confirm ${id} "已确认：范围=<本次做什么>；验收=<怎么判断通过>；非目标=<本次不做什么>"\`
   \`./scripts/aw context plan --task ${id}\`
   审阅并确认 Context Plan 的允许读取文件后：
   \`./scripts/aw context gate --task ${id}\`
@@ -187,7 +187,7 @@ case "$CMD" in
     echo "Verify: ${ver:-—}"
     echo ""
     echo "Brief:  ./scripts/aw task brief ${id}"
-    echo "Confirm after discussion: ./scripts/aw task confirm ${id} \"已确认：...\""
+    echo "Confirm after discussion: ./scripts/aw task confirm ${id} \"已确认：范围=...；验收=...；非目标=...\""
     echo "Start:  ./scripts/aw task start ${id}"
     ;;
   show)
@@ -224,9 +224,15 @@ case "$CMD" in
     print_task_brief "$id" "$domain" "$title" "$st" "$dep" "$ver"
     ;;
   confirm)
-    [[ -n "$TASK_ID" ]] || { echo "error: aw task confirm <AT-T...> \"summary\"" >&2; exit 1; }
+    [[ -n "$TASK_ID" ]] || { echo "error: aw task confirm <AT-T...> \"已确认：范围=...；验收=...；非目标=...\"" >&2; exit 1; }
     SUMMARY="${1:-}"
     [[ -n "$SUMMARY" ]] || { echo "error: confirmation summary required" >&2; exit 1; }
+    if ! aw_task_confirmation_summary_valid "$SUMMARY"; then
+      echo "error: confirmation summary is too weak" >&2
+      echo "  must include: 已确认 + 范围/scope + 验收/acceptance + 非目标/non-goals" >&2
+      echo "  example: ./scripts/aw task confirm ${TASK_ID} \"已确认：范围=用户列表筛选；验收=筛选后列表和分页正确；非目标=不改导出和权限模型\"" >&2
+      exit 1
+    fi
     aw_gate_coding_ready || exit 1
     atomic="$(aw_resolve_atomic_tasks_file)" || exit 1
     aw_task_get_row "${ROOT}/${atomic}" "$TASK_ID" >/dev/null || {
@@ -241,18 +247,13 @@ case "$CMD" in
   start)
     [[ -n "$TASK_ID" ]] || { echo "error: aw task start <AT-T...>" >&2; exit 1; }
     aw_gate_coding_ready || exit 1
-    aw_require_github_url_before_coding || exit 1
     atomic="$(aw_resolve_atomic_tasks_file)" || exit 1
     aw_task_get_row "${ROOT}/${atomic}" "$TASK_ID" >/dev/null || {
       echo "error: unknown task $TASK_ID" >&2
       exit 1
     }
-    if ! aw_task_requirement_confirmed "$TASK_ID"; then
-      echo "error: requirement discussion not confirmed for ${TASK_ID}" >&2
-      echo "  run: ./scripts/aw task brief ${TASK_ID}" >&2
-      echo "  then discuss with engineer and run: ./scripts/aw task confirm ${TASK_ID} \"已确认：...\"" >&2
-      exit 1
-    fi
+    aw_task_require_requirement_confirmed "$TASK_ID" || exit 1
+    aw_require_github_url_before_coding || exit 1
     "${SCRIPT_DIR}/aw-context.sh" gate --task "$TASK_ID" || {
       echo "error: context plan required before coding for ${TASK_ID}" >&2
       echo "  run: ./scripts/aw context plan --task ${TASK_ID}" >&2
@@ -295,6 +296,7 @@ case "$CMD" in
       echo "error: unknown task $TASK_ID" >&2
       exit 1
     }
+    aw_task_require_requirement_confirmed "$TASK_ID" || exit 1
     "${SCRIPT_DIR}/aw-context.sh" affected --task "$TASK_ID" || true
     verify_args=(--task "$TASK_ID")
     $RUN_E2E && verify_args+=(--run-e2e)
@@ -333,6 +335,7 @@ case "$CMD" in
       echo "error: unknown task $TASK_ID" >&2
       exit 1
     }
+    aw_task_require_requirement_confirmed "$TASK_ID" || exit 1
     if $RUN_VERIFY; then
       "${SCRIPT_DIR}/aw-verify.sh" --task "$TASK_ID" || exit 1
     fi
@@ -353,7 +356,7 @@ case "$CMD" in
       echo "    ./scripts/aw next" >&2
       echo "    ./scripts/aw task brief <AT-T>" >&2
       echo "    discuss with engineer until requirements are clear" >&2
-      echo "    ./scripts/aw task confirm <AT-T> \"已确认：...\"" >&2
+      echo "    ./scripts/aw task confirm <AT-T> \"已确认：范围=...；验收=...；非目标=...\"" >&2
       echo "    ./scripts/aw context plan --task <AT-T>" >&2
       echo "    ./scripts/aw context gate --task <AT-T>" >&2
       echo "    ./scripts/aw task start <AT-T>" >&2
@@ -364,12 +367,7 @@ case "$CMD" in
       echo "error: current task not found: ${cid}" >&2
       exit 1
     }
-    if ! aw_task_requirement_confirmed "$cid"; then
-      echo "error: requirement discussion not confirmed for ${cid}; coding prompt is blocked" >&2
-      echo "  run: ./scripts/aw task brief ${cid}" >&2
-      echo "  then discuss and run: ./scripts/aw task confirm ${cid} \"已确认：...\"" >&2
-      exit 1
-    fi
+    aw_task_require_requirement_confirmed "$cid" || exit 1
     "${SCRIPT_DIR}/aw-context.sh" gate --task "$cid" >/dev/null || {
       echo "error: context gate not passed for ${cid}; coding prompt is blocked" >&2
       echo "  run: ./scripts/aw context plan --task ${cid}" >&2

@@ -940,7 +940,7 @@ cd /path/workspace/project-backend
         <pre><code>./scripts/aw next
 ./scripts/aw task brief AT-T1-001
 # 工程师确认后
-./scripts/aw task confirm AT-T1-001 "已确认：范围、验收、非目标、接口字段。"
+./scripts/aw task confirm AT-T1-001 "已确认：范围=用户列表筛选；验收=筛选后列表和分页正确；非目标=不改导出和权限模型"
 ./scripts/aw context plan --task AT-T1-001
 # 工程师审阅允许读取文件后
 ./scripts/aw context gate --task AT-T1-001
@@ -949,7 +949,7 @@ cd /path/workspace/project-backend
 # 编码完成后
 ./scripts/aw task complete AT-T1-001</code></pre>
         <div class="danger callout">
-          <strong>硬闸门：</strong>工程师说“执行研发任务 / 开始开发 / 做下一个任务”时，Agent 必须先执行 <code>aw next</code> 和 <code>aw task brief &lt;AT-T&gt;</code>，追问需求并等待确认。没有 <code>task confirm</code>、<code>context gate</code> 和 <code>task start</code>，<code>aw paste task</code> 不会输出编码提示，也不允许写业务代码。
+          <strong>硬闸门：</strong>工程师说“执行研发任务 / 开始开发 / 做下一个任务”时，Agent 必须先执行 <code>aw next</code> 和 <code>aw task brief &lt;AT-T&gt;</code>，追问需求并等待确认。没有结构化 <code>task confirm</code>（范围 / 验收 / 非目标齐全）、<code>context gate</code> 和 <code>task start</code>，<code>aw paste task</code> 不会输出编码提示，<code>aw check plan</code> / <code>aw gate task</code> 也会暴露手改状态绕过流程的问题。
         </div>
       </section>
 
@@ -1475,7 +1475,7 @@ Plan 未确认前不要写业务代码。</code></pre>
 2. aw next
 3. aw task brief &lt;AT-T&gt;
 4. 向我确认页面结构、字段、交互、权限、接口 mock/真实接口、验收标准
-5. 我确认后执行 aw task confirm、aw context plan、aw context gate、aw task start
+5. 我确认后执行结构化 aw task confirm（范围 / 验收 / 非目标齐全）、aw context plan、aw context gate、aw task start
 确认前不要写代码。
 完成后：
 1. aw task complete &lt;AT-T&gt;
@@ -1503,7 +1503,7 @@ Plan 未确认前不要写业务代码。</code></pre>
 2. aw next
 3. aw task brief &lt;AT-T&gt;
 4. 向我确认接口路径、入参、出参、权限、错误码、事务、数据表、验收标准
-5. 我确认后执行 aw task confirm、aw context plan、aw context gate、aw task start
+5. 我确认后执行结构化 aw task confirm（范围 / 验收 / 非目标齐全）、aw context plan、aw context gate、aw task start
 确认前不要写代码。
 完成后：
 1. aw task complete &lt;AT-T&gt;
@@ -1568,7 +1568,7 @@ Plan 未确认前不要写业务代码。</code></pre>
 4. 执行 aw sync inbox --from backend
 5. 执行 aw sync board
 6. aw task brief 当前 AT-T，并向我确认需求
-7. 我确认后执行 aw task confirm、aw context plan、aw context gate、aw task start
+7. 我确认后执行结构化 aw task confirm（范围 / 验收 / 非目标齐全）、aw context plan、aw context gate、aw task start
 
 完成任务后：
 1. aw task complete 当前 AT-T
@@ -1590,7 +1590,7 @@ Plan 未确认前不要写业务代码。</code></pre>
 4. 执行 aw sync inbox --from frontend
 5. 执行 aw sync board
 6. aw task brief 当前 AT-T，并向我确认接口、权限、字段、错误码
-7. 我确认后执行 aw task confirm、aw context plan、aw context gate、aw task start
+7. 我确认后执行结构化 aw task confirm（范围 / 验收 / 非目标齐全）、aw context plan、aw context gate、aw task start
 
 完成任务后：
 1. aw task complete 当前 AT-T

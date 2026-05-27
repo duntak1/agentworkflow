@@ -90,6 +90,10 @@ EOF
 ./scripts/aw plan apply --plan-file "$DEMO_PLAN" --atomic-file "$DEMO_ATOMIC" --slug DEMO
 ./scripts/aw approve plan docs/plans/PLAN_DEMO.md
 ./scripts/aw confirm docs/dsl/DSL_DRAFT.md docs/plans/PLAN_DEMO.md
+./scripts/aw task brief AT-T1-001 >/dev/null
+./scripts/aw task confirm AT-T1-001 "已确认：范围=演示 aw demo 的最小任务流；验收=layout 与 TP/e2e 检查通过；非目标=不实现真实业务功能"
+./scripts/aw context plan --task AT-T1-001
+./scripts/aw context gate --task AT-T1-001
 ./scripts/aw task start AT-T1-001
 ./scripts/aw tp new demo "demo TP"
 TP_FILE="$(ls docs/quality/test-plans/TP-*demo*.md 2>/dev/null | head -1)"

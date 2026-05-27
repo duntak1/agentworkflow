@@ -5,6 +5,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=_aw-lib.sh
 source "${SCRIPT_DIR}/_aw-lib.sh"
+# shellcheck source=_aw-task-lib.sh
+source "${SCRIPT_DIR}/_aw-task-lib.sh"
 
 ROOT="$(aw_repo_root)"
 CMD="${1:-check}"
@@ -88,8 +90,9 @@ case "$CMD" in
       esac
     done
     ERR=0
-    run_or_mark "coding gates" bash -c 'source "'"${SCRIPT_DIR}"'/_aw-task-lib.sh"; aw_gate_coding_ready'
+    run_or_mark "coding gates" bash -c 'source "'"${SCRIPT_DIR}"'/_aw-lib.sh"; source "'"${SCRIPT_DIR}"'/_aw-task-lib.sh"; aw_gate_coding_ready'
     if [[ -n "$TASK_ID" ]]; then
+      run_or_mark "requirement confirmation" aw_task_require_requirement_confirmed "$TASK_ID"
       run_or_mark "context" "${SCRIPT_DIR}/aw-context.sh" gate --task "$TASK_ID"
       run_or_mark "task lock" "${SCRIPT_DIR}/aw-agents.sh" lock-check --task "$TASK_ID"
     fi

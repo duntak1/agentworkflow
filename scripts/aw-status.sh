@@ -109,7 +109,7 @@ elif [[ "$plan_st" != "可执行" ]]; then
 elif [[ "$confirmed" == "—" ]]; then
   next="./scripts/aw confirm ${dsl_file} ${plan_file}"
 elif aw_gate_coding_ready 2>/dev/null; then
-  next="./scripts/aw next → aw task brief <id> → aw task confirm <id> \"已确认：...\" → aw context plan --task <id> → aw context gate --task <id> → aw task start <id> → aw paste task → aw task complete <id>"
+  next="./scripts/aw next → aw task brief <id> → aw task confirm <id> \"已确认：范围=...；验收=...；非目标=...\" → aw context plan --task <id> → aw context gate --task <id> → aw task start <id> → aw paste task → aw task complete <id>"
 else
   next="./scripts/aw next (after gates pass)"
 fi

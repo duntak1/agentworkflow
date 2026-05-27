@@ -194,7 +194,7 @@ case "$CMD" in
 硬闸门：不要直接写代码。
 1. 先运行 ./scripts/aw next 查看候选 AT-T
 2. 运行 ./scripts/aw task brief <AT-T>，向工程师追问需求、边界、验收、异常态、非目标
-3. 工程师确认后运行 ./scripts/aw task confirm <AT-T> "已确认：..."
+3. 工程师确认后运行 ./scripts/aw task confirm <AT-T> "已确认：范围=用户列表筛选；验收=筛选后列表和分页正确；非目标=不改导出和权限模型"
 4. 再运行 ./scripts/aw context plan --task <AT-T>、./scripts/aw context gate --task <AT-T>、./scripts/aw task start <AT-T>
 5. 只有这些步骤完成后，才能运行 ./scripts/aw paste task 获取编码提示
 
@@ -271,7 +271,7 @@ EOF
 硬闸门：不要直接写代码。
 1. 先运行 ./scripts/aw next 查看候选 AT-T
 2. 运行 ./scripts/aw task brief <AT-T>，向工程师追问需求、边界、验收、异常态、非目标
-3. 工程师确认后运行 ./scripts/aw task confirm <AT-T> "已确认：..."
+3. 工程师确认后运行 ./scripts/aw task confirm <AT-T> "已确认：范围=用户列表筛选；验收=筛选后列表和分页正确；非目标=不改导出和权限模型"
 4. 再运行 ./scripts/aw context plan --task <AT-T>、./scripts/aw context gate --task <AT-T>、./scripts/aw task start <AT-T>
 5. 只有这些步骤完成后，才能运行 ./scripts/aw paste task 获取编码提示
 

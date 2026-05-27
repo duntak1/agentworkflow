@@ -21,13 +21,13 @@
 
 **领域枚举：** Frontend / Backend / Fullstack / QA / Docs / Ops / Data。用于路由任务归属和并行执行；不要求前后端强行拆分，跨边界任务标 `Fullstack`。
 
-**状态枚举：** 待办 / 进行中 / 已完成 / 阻塞
+**状态枚举：** 待办 / 进行中 / 已完成 / 阻塞。不要手改为 `进行中` 或 `已完成` 绕过流程；`aw check plan` 会检查对应 AT-T 是否已有需求确认记录。
 
 ---
 
 ## AI 执行协议（摘要）
 
-1. `./scripts/aw next` → `./scripts/aw task brief <AT-T…>` → 和工程师沟通需求 → `./scripts/aw task confirm <AT-T…> "已确认：..."` → `./scripts/aw context plan --task <AT-T…>` → `./scripts/aw context gate --task <AT-T…>` → `./scripts/aw task start <AT-T…>` → `./scripts/aw paste task` → 阶段 A→E 写码。
+1. `./scripts/aw next` → `./scripts/aw task brief <AT-T…>` → 和工程师沟通需求 → `./scripts/aw task confirm <AT-T…> "已确认：范围=...；验收=...；非目标=..."` → `./scripts/aw context plan --task <AT-T…>` → `./scripts/aw context gate --task <AT-T…>` → `./scripts/aw task start <AT-T…>` → `./scripts/aw paste task` → 阶段 A→E 写码。
 2. 只改当前 AT-T* 范围；不猜需求；研发中需求变更先 `./scripts/aw req change <id> "摘要"`，回写 DSL / Plan / ATOMIC 并重新确认。
 3. 验证与完成：`./scripts/aw task complete <id>`。
 4. `task complete` 通过才会标记完成；失败会写 `docs/handoff/AI_BUG_LOG.md` 并保持 `进行中`。

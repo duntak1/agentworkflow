@@ -99,8 +99,8 @@ chmod +x scripts/aw scripts/*.sh
 | 双项目 Plan 拆分 | DSL 已审后，先写 `project-harness/global/plans/` 协作 Plan，再派生 `project-frontend/docs/plans/` 和 `project-backend/docs/plans/` 本地 Plan |
 | 定向生成任务 | `aw approve dsl <dsl> --plan --domain frontend` / `--domain backend` |
 | 任务确认 | `任务确认` / `aw confirm` → 生成 `ENGINEERING_INDEX.md` |
-| 研发 | `aw next` → `aw task brief` → 需求沟通确认 → `aw task confirm` → `aw context plan` → `aw context gate` → `aw task start` → `aw paste task` → `aw task complete` |
-| 子任务需求确认 | `aw task brief <AT-T>` → 工程师确认后 `aw task confirm <AT-T> "已确认：..."` |
+| 研发 | `aw next` → `aw task brief` → 需求沟通确认 → `aw task confirm`（范围 / 验收 / 非目标齐全） → `aw context plan` → `aw context gate` → `aw task start` → `aw paste task` → `aw task complete` |
+| 子任务需求确认 | `aw task brief <AT-T>` → 工程师确认后 `aw task confirm <AT-T> "已确认：范围=...；验收=...；非目标=..."` |
 | 口述新增需求 | `aw req new <slug> "标题" --type 口述新增 --impact "..." --acceptance "..."` |
 | 研发中需求变更 | `aw req change <AT-T> "摘要" --impact "..." --acceptance "..."` → 回写 REQ / DSL / Plan / ATOMIC → 重新 brief/confirm |
 | 阻塞任务 | `aw task blocked <AT-T>` |
@@ -158,7 +158,7 @@ chmod +x scripts/aw scripts/*.sh
 
 Agent 应：**先读本文 + `PRODUCT_INPUT_WORKFLOW.md`**，再执行对应 `scripts/aw` 子命令或等价步骤。
 
-当工程师说“执行研发任务 / 开始开发 / 做下一个任务”时，Agent 的第一步必须是输出或执行 `aw next` 与 `aw task brief <AT-T>`，然后像真实研发一样追问需求、边界、验收、异常态、联动、非目标和风险。工程师明确确认前，不得写业务代码，不得生成编码提示，不得调用 `aw paste task`。确认后必须记录 `aw task confirm <AT-T> "已确认：..."`，再执行 `aw context plan`、`aw context gate`、`aw task start`。
+当工程师说“执行研发任务 / 开始开发 / 做下一个任务”时，Agent 的第一步必须是输出或执行 `aw next` 与 `aw task brief <AT-T>`，然后像真实研发一样追问需求、边界、验收、异常态、联动、非目标和风险。工程师明确确认前，不得写业务代码，不得生成编码提示，不得调用 `aw paste task`。确认后必须记录 `aw task confirm <AT-T> "已确认：范围=...；验收=...；非目标=..."`，再执行 `aw context plan`、`aw context gate`、`aw task start`。
 
 启动 AgentWorkflow 时，Agent 必须先运行 `aw project scan` 扫描项目内容，生成并阅读 `docs/PROJECT_SCAN.md`，再把“建议项目阶段、判断依据、前端/后端线索、同步中心状态”复述给工程师确认。确认后写入 `docs/PROJECT_CONFIG.md`：全新项目用 `aw config init --project-stage 1`；已有 / 存量项目用 `aw config init --project-stage 2`。随后必须立即询问工程师是否建立同步中心，并用 `aw config init --sync-center 1|2|3` 记录。未扫描、未确认项目阶段、未记录同步中心决策前，不得生成 DSL / Plan，不得写业务代码。
 
