@@ -7,19 +7,20 @@
   <style>
     :root {
       color-scheme: dark;
-      --bg: #07090f;
-      --bg-soft: #0b1018;
-      --panel: #101722;
-      --panel-2: #151f2e;
-      --panel-3: #1b2636;
-      --line: #273244;
-      --line-2: #344155;
+      --bg: #080711;
+      --bg-soft: #100b1f;
+      --panel: #151026;
+      --panel-2: #1d1534;
+      --panel-3: #291b46;
+      --line: #35264f;
+      --line-2: #4c3573;
       --text: #e8eef8;
       --muted: #98a7bb;
       --muted-2: #738196;
-      --blue: #67e8f9;
+      --blue: #c084fc;
       --green: #86efac;
       --violet: #a78bfa;
+      --pink: #f0abfc;
       --yellow: #fde68a;
       --red: #fb7185;
       --code: #05070c;
@@ -31,8 +32,9 @@
     body {
       margin: 0;
       background:
-        radial-gradient(circle at 50% 0%, rgba(103, 232, 249, .14), transparent 28%),
-        linear-gradient(180deg, #07090f 0%, #0a0f17 52%, #07090f 100%);
+        radial-gradient(circle at 20% 0%, rgba(168, 85, 247, .28), transparent 30%),
+        radial-gradient(circle at 75% 8%, rgba(217, 70, 239, .16), transparent 28%),
+        linear-gradient(180deg, #080711 0%, #100b1f 52%, #070711 100%);
       color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
       line-height: 1.64;
@@ -104,9 +106,9 @@
       display: grid;
       place-items: center;
       border-radius: 8px;
-      border: 1px solid rgba(103, 232, 249, .34);
-      background: linear-gradient(135deg, rgba(103, 232, 249, .18), rgba(167, 139, 250, .24));
-      color: #dffbff;
+      border: 1px solid rgba(216, 180, 254, .44);
+      background: linear-gradient(135deg, rgba(168, 85, 247, .38), rgba(236, 72, 153, .22));
+      color: #faf5ff;
       font-size: 13px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
@@ -149,11 +151,11 @@
       font-weight: 650;
       text-decoration: none;
     }
-    .btn:hover { border-color: rgba(103, 232, 249, .38); text-decoration: none; }
+    .btn:hover { border-color: rgba(216, 180, 254, .42); text-decoration: none; }
     .btn.primary {
-      border-color: rgba(103, 232, 249, .4);
-      background: rgba(8, 145, 178, .18);
-      color: #cffafe;
+      border-color: rgba(216, 180, 254, .5);
+      background: linear-gradient(135deg, rgba(124, 58, 237, .32), rgba(192, 38, 211, .2));
+      color: #f5d0fe;
     }
     aside {
       position: sticky;
@@ -199,8 +201,10 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(rgba(103, 232, 249, .045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(103, 232, 249, .045) 1px, transparent 1px);
+        radial-gradient(circle at 22% 22%, rgba(168, 85, 247, .34), transparent 24%),
+        radial-gradient(circle at 78% 38%, rgba(236, 72, 153, .18), transparent 24%),
+        linear-gradient(rgba(216, 180, 254, .052) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(216, 180, 254, .052) 1px, transparent 1px);
       background-size: 80px 80px;
       mask-image: radial-gradient(circle at 52% 34%, black 0%, transparent 72%);
       pointer-events: none;
@@ -219,10 +223,10 @@
       gap: 8px;
       margin-bottom: 22px;
       padding: 7px 12px;
-      border: 1px solid rgba(103, 232, 249, .28);
+      border: 1px solid rgba(216, 180, 254, .38);
       border-radius: 999px;
-      background: rgba(8, 145, 178, .12);
-      color: #a5f3fc;
+      background: rgba(88, 28, 135, .28);
+      color: #f5d0fe;
       font-size: 13px;
       font-weight: 720;
     }
@@ -231,8 +235,8 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 20px rgba(134, 239, 172, .8);
+      background: var(--pink);
+      box-shadow: 0 0 20px rgba(240, 171, 252, .8);
     }
     h1, h2, h3 { letter-spacing: 0; }
     h1 {
@@ -257,7 +261,7 @@
     .hero-card {
       border: 1px solid rgba(148, 163, 184, .2);
       border-radius: 10px;
-      background: linear-gradient(180deg, rgba(16, 23, 34, .94), rgba(9, 13, 21, .96));
+      background: linear-gradient(180deg, rgba(28, 20, 48, .96), rgba(10, 8, 20, .96));
       box-shadow: var(--shadow);
       overflow: hidden;
     }
@@ -280,7 +284,7 @@
       color: #cad6e5;
       font-size: 13px;
     }
-    .terminal-line span:first-child { color: var(--blue); }
+    .terminal-line span:first-child { color: #e879f9; }
     section {
       padding: 54px 0 0;
       scroll-margin-top: 82px;
@@ -334,7 +338,7 @@
       font-size: 12px;
       font-weight: 700;
     }
-    .tag.blue { border-color: rgba(103, 232, 249, .32); color: #a5f3fc; }
+    .tag.blue { border-color: rgba(216, 180, 254, .34); color: #f5d0fe; }
     .tag.green { border-color: rgba(134, 239, 172, .32); color: #bbf7d0; }
     .tag.violet { border-color: rgba(167, 139, 250, .34); color: #ddd6fe; }
     .tag.yellow { border-color: rgba(253, 230, 138, .35); color: #fef3c7; }
@@ -369,8 +373,8 @@
       align-items: center;
       justify-content: center;
       border-radius: 8px;
-      background: rgba(103, 232, 249, .12);
-      color: var(--blue);
+      background: rgba(168, 85, 247, .18);
+      color: #e9d5ff;
       font-style: normal;
       font-weight: 800;
     }
@@ -431,10 +435,10 @@
       position: absolute;
       top: 10px;
       right: 10px;
-      border: 1px solid rgba(103, 232, 249, .3);
+      border: 1px solid rgba(216, 180, 254, .34);
       border-radius: 7px;
-      background: rgba(8, 145, 178, .16);
-      color: #cffafe;
+      background: rgba(88, 28, 135, .24);
+      color: #f5d0fe;
       padding: 5px 9px;
       font-size: 12px;
       cursor: pointer;
@@ -450,6 +454,98 @@
       border-top: 1px solid rgba(148, 163, 184, .16);
       color: var(--muted);
       font-size: 14px;
+    }
+    .diagram {
+      margin-top: 20px;
+      padding: 18px;
+      border: 1px solid rgba(216, 180, 254, .18);
+      border-radius: 10px;
+      background:
+        linear-gradient(180deg, rgba(30, 20, 52, .78), rgba(13, 10, 24, .76)),
+        radial-gradient(circle at 20% 0%, rgba(168, 85, 247, .12), transparent 28%);
+      overflow-x: auto;
+    }
+    .diagram-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 14px;
+      color: #f5d0fe;
+      font-weight: 760;
+    }
+    .diagram-title::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e879f9;
+      box-shadow: 0 0 18px rgba(232, 121, 249, .75);
+    }
+    .diagram-row {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(135px, 1fr));
+      gap: 18px;
+      min-width: 900px;
+    }
+    .diagram-row.five { grid-template-columns: repeat(5, minmax(145px, 1fr)); min-width: 780px; }
+    .diagram-row.four { grid-template-columns: repeat(4, minmax(160px, 1fr)); min-width: 700px; }
+    .diagram-node {
+      position: relative;
+      min-height: 104px;
+      padding: 14px;
+      border: 1px solid rgba(216, 180, 254, .22);
+      border-radius: 10px;
+      background: rgba(15, 11, 27, .82);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+    }
+    .diagram-node:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -15px;
+      top: 40%;
+      color: #c084fc;
+      font-weight: 900;
+    }
+    .diagram-node strong {
+      display: block;
+      color: #fff7ff;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    .diagram-node span {
+      display: block;
+      color: #aeb9cb;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .swimlane {
+      display: grid;
+      gap: 10px;
+      min-width: 860px;
+    }
+    .lane {
+      display: grid;
+      grid-template-columns: 120px repeat(4, minmax(150px, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+    .lane-label {
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: rgba(88, 28, 135, .3);
+      color: #f5d0fe;
+      font-weight: 760;
+      font-size: 13px;
+    }
+    .lane-cell {
+      min-height: 58px;
+      padding: 10px;
+      border: 1px solid rgba(216, 180, 254, .16);
+      border-radius: 8px;
+      background: rgba(15, 11, 27, .68);
+      color: #cbd5e1;
+      font-size: 12px;
     }
     @media (max-width: 1180px) {
       .shell { grid-template-columns: 1fr; }
@@ -598,6 +694,17 @@
           <div class="step"><em>5</em><strong>研发执行</strong><span>每个 AT-T 先沟通确认，再上下文白名单，再编码、测试、记录 Bug。</span></div>
           <div class="step"><em>6</em><strong>交付闭环</strong><span>trace、policy、contract、score、handoff、Git / VCS 和 release 记录。</span></div>
         </div>
+        <div class="diagram">
+          <div class="diagram-title">产品全生命周期流程图</div>
+          <div class="diagram-row">
+            <div class="diagram-node"><strong>产品输入</strong><span>PRD / UI / Pencil / 竞品 / 技术资料进入 reference 或同步中心。</span></div>
+            <div class="diagram-node"><strong>需求结构化</strong><span>PM Agent 生成 DSL Suite，覆盖需求、页面、交互、事件、边界、验收。</span></div>
+            <div class="diagram-node"><strong>工程计划</strong><span>DSL 审核后拆 Global Plan、前端 Plan、后台 Plan、后端 Plan、共同任务。</span></div>
+            <div class="diagram-node"><strong>任务派发</strong><span>任务进入 assignment / TASK_BOARD，研发 Agent 认领并检查依赖。</span></div>
+            <div class="diagram-node"><strong>开发联调</strong><span>按 AT-T 执行，接口通过 contract / mock / schema diff 对齐。</span></div>
+            <div class="diagram-node"><strong>验收发布</strong><span>trace、policy、security、release、score、handoff、Git 形成闭环。</span></div>
+          </div>
+        </div>
       </section>
 
       <section id="roles">
@@ -649,6 +756,32 @@
             <tr><td><code>global/dispatch/</code></td><td>任务派发表、状态看板、阻塞、问题、交接事件。</td><td>产品 Agent 监控，各端回写。</td></tr>
           </tbody>
         </table>
+        <div class="diagram">
+          <div class="diagram-title">产品 / 前端 / 后端同步泳道</div>
+          <div class="swimlane">
+            <div class="lane">
+              <div class="lane-label">产品 Agent</div>
+              <div class="lane-cell">收集 PRD / UI / Pencil</div>
+              <div class="lane-cell">生成共享 DSL</div>
+              <div class="lane-cell">拆全局 Plan 与派发表</div>
+              <div class="lane-cell">监控看板、变更、阻塞</div>
+            </div>
+            <div class="lane">
+              <div class="lane-label">前端 Agent</div>
+              <div class="lane-cell">pull 同步中心</div>
+              <div class="lane-cell">认领页面 / 交互任务</div>
+              <div class="lane-cell">按 contract 联调</div>
+              <div class="lane-cell">回写完成 / 问题 / handoff</div>
+            </div>
+            <div class="lane">
+              <div class="lane-label">后端 Agent</div>
+              <div class="lane-cell">pull 同步中心</div>
+              <div class="lane-cell">认领接口 / 数据 / 权限任务</div>
+              <div class="lane-cell">更新 OpenAPI / mock / test</div>
+              <div class="lane-cell">回写完成 / schema diff / 风险</div>
+            </div>
+          </div>
+        </div>
         <div class="callout good">同步原则：<code>aw sync pull</code> 只把对方快照导入本项目 <code>docs/sync/inbox/</code>，它是只读收件箱；本项目是否采纳，必须通过 REQ / Bug / Plan / Handoff 落账。</div>
       </section>
 
@@ -686,6 +819,16 @@
             </table>
           </div>
         </div>
+        <div class="diagram">
+          <div class="diagram-title">DSL 审核到 Plan 派发流程图</div>
+          <div class="diagram-row five">
+            <div class="diagram-node"><strong>参考输入</strong><span>manifest + PRD + UI + 技术约束，分批读取，避免上下文爆炸。</span></div>
+            <div class="diagram-node"><strong>DSL Suite</strong><span>需求 / 页面 / 交互 / 事件 / 边界 / 验收六类文档。</span></div>
+            <div class="diagram-node"><strong>工程师审核</strong><span>确认缺口、歧义、非目标、验收口径，执行 aw approve dsl。</span></div>
+            <div class="diagram-node"><strong>Plan 拆分</strong><span>生成全局计划、端侧计划、共同任务、依赖和测试计划。</span></div>
+            <div class="diagram-node"><strong>任务派发</strong><span>Plan 审核后才写 assignment / TASK_BOARD，研发 Agent 再认领。</span></div>
+          </div>
+        </div>
         <div class="callout">关键确认点：DSL 审核后才引导生成 Plan；Plan 审核后才引导前端 / 后端 / 后台前端认领任务。没有审核，不进入编码。</div>
       </section>
 
@@ -703,6 +846,17 @@
           <div class="step"><em>D</em><strong>context gate</strong><span>只读取白名单文件。</span></div>
           <div class="step"><em>E</em><strong>编码验证</strong><span>改代码、跑测试、记 Bug。</span></div>
           <div class="step"><em>F</em><strong>完成同步</strong><span>任务状态、handoff、看板、Git 决策。</span></div>
+        </div>
+        <div class="diagram">
+          <div class="diagram-title">单个 AT-T 研发任务流程图</div>
+          <div class="diagram-row">
+            <div class="diagram-node"><strong>找任务</strong><span>aw next 找出当前可执行任务和阻塞依赖。</span></div>
+            <div class="diagram-node"><strong>读 Brief</strong><span>aw task brief 输出范围、验收、风险、跨端依赖。</span></div>
+            <div class="diagram-node"><strong>问清楚</strong><span>工程师确认范围、异常态、非目标、接口和权限影响。</span></div>
+            <div class="diagram-node"><strong>控上下文</strong><span>aw context plan / gate 只授权读取白名单文件。</span></div>
+            <div class="diagram-node"><strong>写代码</strong><span>小步修改，跑 lint / typecheck / test / build，Bug 全记录。</span></div>
+            <div class="diagram-node"><strong>完成闭环</strong><span>task complete、FILE_INDEX、handoff、sync board、Git 决策。</span></div>
+          </div>
         </div>
       </section>
 
@@ -726,6 +880,16 @@
             <tr><td>VCS 闸门</td><td>提交 / PR / MR / CR 前</td><td>没有版本记录、测试证据、回滚说明。</td></tr>
           </tbody>
         </table>
+        <div class="diagram">
+          <div class="diagram-title">研发中需求变更闭环图</div>
+          <div class="diagram-row five">
+            <div class="diagram-node"><strong>变更提出</strong><span>口述新增 / 研发中变更 / Bug 派生需求都先记录类型。</span></div>
+            <div class="diagram-node"><strong>REQ 落账</strong><span>aw req new 或 aw req change，关联原 DSL / Plan / AT-T。</span></div>
+            <div class="diagram-node"><strong>回更真源</strong><span>更新 DSL、Plan、ATOMIC、TASK_BOARD，不直接跳到代码。</span></div>
+            <div class="diagram-node"><strong>同步影响</strong><span>涉及跨端则更新 contract、mock、schema diff、sync event。</span></div>
+            <div class="diagram-node"><strong>重新确认</strong><span>工程师确认新范围后，再进入 context gate 和编码。</span></div>
+          </div>
+        </div>
       </section>
 
       <section id="token">
@@ -739,6 +903,15 @@
           <div class="card"><span class="tag blue">默认预算</span><h3>6 / 12 / 3</h3><p>每个 AT-T 最多 6 个业务文件、12 个 symbol、3 次精准搜索。超预算必须说明原因并等待确认。</p></div>
           <div class="card"><span class="tag green">读取顺序</span><h3>摘要优先</h3><p><code>aw status --json</code>、<code>aw next</code>、<code>aw task brief</code>、<code>aw context plan</code>、<code>aw sync inbox</code>。</p></div>
           <div class="card"><span class="tag violet">新会话恢复</span><h3>handoff + memory</h3><p><code>aw compact</code> 生成新会话粘贴摘要，<code>aw memory</code> 保存长期可复用决策。</p></div>
+        </div>
+        <div class="diagram">
+          <div class="diagram-title">上下文读取流程图</div>
+          <div class="diagram-row four">
+            <div class="diagram-node"><strong>先读状态</strong><span>aw status --json / aw next / aw task brief。</span></div>
+            <div class="diagram-node"><strong>生成白名单</strong><span>aw context plan 生成 CTX-AT-T，列出允许文件。</span></div>
+            <div class="diagram-node"><strong>工程师确认</strong><span>超出 6 文件 / 12 symbol / 3 搜索前必须说明原因。</span></div>
+            <div class="diagram-node"><strong>按需展开</strong><span>只读白名单文件和相关 symbol，不读整仓和 HTML 手册。</span></div>
+          </div>
         </div>
       </section>
 
