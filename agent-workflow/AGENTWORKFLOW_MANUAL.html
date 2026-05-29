@@ -239,6 +239,18 @@
       text-align: center;
       padding-top: 122px;
     }
+    .hero-copy {
+      position: relative;
+      padding: 22px 30px 6px;
+    }
+    .hero-copy::before {
+      content: "";
+      position: absolute;
+      inset: -28px -70px -20px;
+      background: radial-gradient(ellipse at center, rgba(3, 7, 20, .62) 0%, rgba(3, 7, 20, .34) 42%, transparent 72%);
+      pointer-events: none;
+      z-index: -1;
+    }
     .eyebrow {
       display: inline-flex;
       align-items: center;
@@ -267,13 +279,17 @@
       font-size: clamp(48px, 6.2vw, 76px);
       line-height: 1.06;
       font-weight: 820;
-      text-shadow: 0 0 34px rgba(8, 12, 24, .9);
+      color: #f8fbff;
+      text-shadow:
+        0 2px 18px rgba(0, 0, 0, .62),
+        0 0 26px rgba(132, 170, 255, .18);
     }
     .grad-text {
       color: transparent;
-      background: linear-gradient(90deg, #ffffff 0%, #b9ccff 42%, #6f91ff 100%);
+      background: linear-gradient(90deg, #ffffff 0%, #f6fbff 48%, #dceaff 76%, #b8d3ff 100%);
       -webkit-background-clip: text;
       background-clip: text;
+      filter: drop-shadow(0 1px 10px rgba(60, 102, 190, .18));
     }
     .lead {
       max-width: 660px;
@@ -734,7 +750,7 @@
     <main>
       <section id="home" class="hero">
         <div class="hero-grid">
-          <div>
+          <div class="hero-copy">
             <div class="eyebrow">v1.5 · Engineering Harness Workflow Skill</div>
             <h1>把 AI 研发变成<br><span class="grad-text">可确认的工程系统</span></h1>
             <p class="lead">AgentWorkflow 将复杂的产品、前端、后端协作，压缩成清晰发光的研发结构：Reference → DSL → Plan → AT-T → Verify → Handoff。启动只需要说 <code>启动 aw</code> 或 <code>@aw</code>。</p>
