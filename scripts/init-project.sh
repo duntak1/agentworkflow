@@ -229,6 +229,7 @@ aw_copy_if_missing "${TEMPLATES}/github/BRANCH_POLICY.md" "${ROOT}/docs/github/B
 aw_copy_if_missing "${TEMPLATES}/score/DELIVERY_SCORE.md" "${ROOT}/docs/score/DELIVERY_SCORE.md"
 aw_copy_if_missing "${TEMPLATES}/recovery/RECOVERY_PLAYBOOK.md" "${ROOT}/docs/recovery/RECOVERY_PLAYBOOK.md"
 aw_copy_if_missing "${TEMPLATES}/context/CONTEXT_CONFIG.md" "${ROOT}/docs/context/CONTEXT_CONFIG.md"
+aw_copy_if_missing "${TEMPLATES}/context/CODE_MAP.md" "${ROOT}/docs/context/CODE_MAP.md"
 aw_copy_if_missing "${TEMPLATES}/context/CODE_CONTEXT_INDEX.md" "${ROOT}/docs/context/CODE_CONTEXT_INDEX.md"
 aw_copy_if_missing "${TEMPLATES}/context/CONTEXT_PLAN_TEMPLATE.md" "${ROOT}/docs/context/CONTEXT_PLAN_TEMPLATE.md"
 

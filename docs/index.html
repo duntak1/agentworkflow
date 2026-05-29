@@ -743,10 +743,11 @@
         <a href="#dev">08. 研发执行</a>
         <a href="#gates">09. 硬闸门</a>
         <a href="#token">10. Token 预算</a>
-        <a href="#index">11. 工程师索引</a>
-        <a href="#prompts">12. 提示词大全</a>
-        <a href="#commands">13. 常用命令</a>
-        <a href="#faq">14. FAQ</a>
+        <a href="#code-map">11. 代码地图</a>
+        <a href="#index">12. 工程师索引</a>
+        <a href="#prompts">13. 提示词大全</a>
+        <a href="#commands">14. 常用命令</a>
+        <a href="#faq">15. FAQ</a>
       </nav>
     </aside>
 
@@ -1064,7 +1065,7 @@
         </div>
         <div class="grid cols-3">
           <div class="card"><span class="tag blue">默认预算</span><h3>6 / 12 / 3</h3><p>每个 AT-T 最多 6 个业务文件、12 个 symbol、3 次精准搜索。超预算必须说明原因并等待确认。</p></div>
-          <div class="card"><span class="tag green">读取顺序</span><h3>摘要优先</h3><p><code>aw status --json</code>、<code>aw next</code>、<code>aw task brief</code>、<code>aw context plan</code>、<code>aw sync inbox</code>。</p></div>
+          <div class="card"><span class="tag green">读取顺序</span><h3>摘要优先</h3><p><code>aw status --json</code>、<code>aw next</code>、<code>aw task brief</code>、<code>aw code-map query</code>、<code>aw context plan</code>、<code>aw sync inbox</code>。</p></div>
           <div class="card"><span class="tag violet">新会话恢复</span><h3>handoff + memory</h3><p><code>aw compact</code> 生成新会话粘贴摘要，<code>aw memory</code> 保存长期可复用决策。</p></div>
         </div>
         <div class="diagram">
@@ -1076,6 +1077,40 @@
             <div class="diagram-node"><strong>按需展开</strong><span>只读白名单文件和相关 symbol，不读整仓和 HTML 手册。</span></div>
           </div>
         </div>
+      </section>
+
+      <section id="code-map">
+        <div class="section-head">
+          <div>
+            <h2>代码地图：先定位，再读取</h2>
+            <p>代码地图是专门解决“AI 一改代码就扫全仓”的能力。它把项目压缩成模块、入口、Symbol、路由/API、import 线索和测试映射，让 Agent 先查地图，再生成任务级 Context Plan。</p>
+          </div>
+        </div>
+        <div class="grid cols-3">
+          <div class="card"><span class="tag blue">生成地图</span><h3><code>aw code-map build</code></h3><p>生成 <code>docs/context/CODE_MAP.md</code>，默认跳过依赖、构建、缓存、日志目录，输出模块和 Symbol 索引。</p></div>
+          <div class="card"><span class="tag green">精准查询</span><h3><code>query / impact</code></h3><p>通过 <code>aw code-map query "keyword"</code> 和 <code>aw code-map impact "symbol"</code> 找相关文件、调用线索、路由和测试。</p></div>
+          <div class="card"><span class="tag violet">进入闸门</span><h3>Context Plan</h3><p>代码地图只是定位索引，不授权全文读取。真正编码前仍要生成 <code>CTX-AT-T</code> 并让工程师确认白名单。</p></div>
+        </div>
+        <table>
+          <thead><tr><th>文件 / 命令</th><th>作用</th><th>边界</th></tr></thead>
+          <tbody>
+            <tr><td><code>docs/context/CODE_MAP.md</code></td><td>AI 面向的代码地图：模块、入口、Symbol、路由/API、测试映射、依赖线索。</td><td>定位用，不等于可以读取全文。</td></tr>
+            <tr><td><code>docs/context/CODE_CONTEXT_INDEX.md</code></td><td>人工可补充的上下文索引，记录更准的模块、页面、后端入口和测试关系。</td><td>作为 CODE_MAP 的补充。</td></tr>
+            <tr><td><code>docs/FILE_INDEX.md</code></td><td>人类工程师文件索引，方便查找 AI 写过或需要手改的代码文件。</td><td>给人看，不让 Agent 默认全文读取。</td></tr>
+            <tr><td><code>aw context plan --task</code></td><td>把地图查询结果转成当前任务允许读取的文件白名单。</td><td>工程师确认后才读文件。</td></tr>
+          </tbody>
+        </table>
+        <div class="diagram">
+          <div class="diagram-title">代码地图读取流程图</div>
+          <div class="diagram-row five">
+            <div class="diagram-node"><strong>构建地图</strong><span>aw code-map build 生成模块、入口、Symbol、路由、测试和 import 线索。</span></div>
+            <div class="diagram-node"><strong>查询定位</strong><span>aw code-map query / impact，只看索引和少量命中。</span></div>
+            <div class="diagram-node"><strong>生成白名单</strong><span>aw context plan 把候选文件写入 CTX-AT-T。</span></div>
+            <div class="diagram-node"><strong>工程师确认</strong><span>确认范围、文件、扩大理由和读取预算。</span></div>
+            <div class="diagram-node"><strong>按需读代码</strong><span>只打开白名单文件，改完跑 affected / verify。</span></div>
+          </div>
+        </div>
+        <div class="callout good">推荐节奏：已有项目接入后先跑 <code>aw code-map build</code>；每个 AT-T 开始前先 <code>aw code-map query</code>，再 <code>aw context plan</code>。如果安装了外部 CodeGraph，会自动作为增强后端；没安装也能用内置地图工作。</div>
       </section>
 
       <section id="index">
@@ -1164,27 +1199,34 @@ DSL 和共享 Plan 放同步中心，本地 Plan 只作为执行派生。</code>
 请先运行或输出 aw next 和 aw task brief。
 然后向我确认：范围、验收、非目标、异常态、跨端依赖、接口/字段/权限影响。
 我明确确认前，不要写代码。
-确认后再生成 context plan、执行 context gate，并只读取白名单文件。</code></pre></div>
+确认后先用 aw code-map query / impact 定位相关模块，
+再生成 context plan、执行 context gate，并只读取白名单文件。</code></pre></div>
 
-          <div class="prompt"><h3>11. 需求变更同步</h3><pre><code>当前有需求变更：
+          <div class="prompt"><h3>11. 构建代码地图</h3><pre><code>启动 aw 的代码地图能力。
+请先运行 aw code-map build，生成 docs/context/CODE_MAP.md。
+然后针对当前需求执行 aw code-map query "&lt;需求关键词/路由/symbol&gt;"。
+只根据代码地图输出候选模块、入口文件、相关 symbol、路由/API 和测试映射。
+不要因为查询不足就全仓扫描；需要扩大上下文时先说明原因并等待我确认。</code></pre></div>
+
+          <div class="prompt"><h3>12. 需求变更同步</h3><pre><code>当前有需求变更：
 变更内容：&lt;描述&gt;
 影响范围：&lt;页面/接口/权限/数据/任务&gt;
 请先记录为 REQ change，不要直接改代码。
 然后回更 DSL、Plan、ATOMIC_TASKS、TASK_BOARD。
 如果影响前后端契约，请同步更新 OpenAPI / mock / contract test / schema diff。</code></pre></div>
 
-          <div class="prompt"><h3>12. 完成任务</h3><pre><code>完成当前 AT-T。
+          <div class="prompt"><h3>13. 完成任务</h3><pre><code>完成当前 AT-T。
 请执行 aw task complete。
 如果测试失败，记录 AI_BUG_LOG，并保持任务未完成。
 如果通过，更新 handoff、FILE_INDEX、TASK_BOARD、CHANGELOG。
 然后问我是否提交当前项目 Git，以及是否提交同步中心 Git。</code></pre></div>
 
-          <div class="prompt"><h3>13. 新会话恢复</h3><pre><code>使用 aw 恢复上下文。
+          <div class="prompt"><h3>14. 新会话恢复</h3><pre><code>使用 aw 恢复上下文。
 请先执行 aw handoff --check、aw memory inject、aw status --json、aw next。
 只总结当前阶段、阻塞、下一步。
 不要读取 HTML 手册，不要全文读取 ENGINEERING_INDEX.md，不要全仓扫描。</code></pre></div>
 
-          <div class="prompt"><h3>14. 发布前检查</h3><pre><code>准备发布前检查。
+          <div class="prompt"><h3>15. 发布前检查</h3><pre><code>准备发布前检查。
 请执行 trace、policy、security、contract、release、score、handoff 检查。
 汇总未关闭 Bug、未确认需求变更、未同步任务、未提交版本记录、回滚方案。
 如有阻塞项，不要建议发布。</code></pre></div>
@@ -1212,6 +1254,11 @@ DSL 和共享 Plan 放同步中心，本地 Plan 只作为执行派生。</code>
 ./scripts/aw context plan --task AT-T1-001
 ./scripts/aw context gate --task AT-T1-001
 ./scripts/aw task complete AT-T1-001</code></pre></div>
+          <div class="card"><h3>代码地图</h3><pre><code>./scripts/aw code-map init
+./scripts/aw code-map build
+./scripts/aw code-map query "user list"
+./scripts/aw code-map impact "UserService"
+./scripts/aw code-map gate --task AT-T1-001</code></pre></div>
           <div class="card"><h3>同步中心</h3><pre><code>./scripts/aw sync init /path/to/project-harness
 ./scripts/aw sync pull --from all
 ./scripts/aw sync inbox --from backend

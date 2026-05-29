@@ -67,7 +67,17 @@ Use this lean order:
 ./scripts/aw context gate --task <AT-T>
 ```
 
-Read only files listed in `docs/context/tasks/CTX-<AT-T>.md`. Prefer CodeGraph / `aw context` symbol, caller/callee, impact, and affected-test queries. If CodeGraph is unavailable, use `CODE_CONTEXT_INDEX`, `FILE_INDEX`, and precise `rg`.
+Read only files listed in `docs/context/tasks/CTX-<AT-T>.md`. Prefer CodeGraph / `aw code-map` / `aw context` symbol, caller/callee, impact, and affected-test queries. If CodeGraph is unavailable, use `CODE_MAP`, `CODE_CONTEXT_INDEX`, `FILE_INDEX`, and precise `rg`.
+
+Before coding in existing or large projects, build/query the code map instead of scanning the repo:
+
+```bash
+./scripts/aw code-map build
+./scripts/aw code-map query "<feature|symbol|route>"
+./scripts/aw code-map impact "<symbol|route>"
+```
+
+`CODE_MAP.md` is a locator index, not permission to read full files. Convert findings into the task Context Plan and wait for confirmation before opening file contents.
 
 ## Required Gates
 

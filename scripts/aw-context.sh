@@ -14,6 +14,7 @@ CTX_DIR="${ROOT}/docs/context"
 TASK_DIR="${CTX_DIR}/tasks"
 CONFIG="${CTX_DIR}/CONTEXT_CONFIG.md"
 INDEX="${CTX_DIR}/CODE_CONTEXT_INDEX.md"
+CODE_MAP="${CTX_DIR}/CODE_MAP.md"
 CMD="${1:-check}"
 shift || true
 
@@ -37,6 +38,7 @@ EOF
 ensure_context() {
   mkdir -p "$CTX_DIR" "$TASK_DIR"
   [[ -f "$CONFIG" ]] || cp "${TEMPLATES}/context/CONTEXT_CONFIG.md" "$CONFIG"
+  [[ -f "$CODE_MAP" ]] || cp "${TEMPLATES}/context/CODE_MAP.md" "$CODE_MAP"
   [[ -f "$INDEX" ]] || cp "${TEMPLATES}/context/CODE_CONTEXT_INDEX.md" "$INDEX"
 }
 
@@ -101,6 +103,7 @@ ctx_candidate_files_for_task() {
   fi
 
   {
+    [[ -f "$CODE_MAP" ]] && awk -F'|' 'NF > 3 {for(i=1;i<=NF;i++){if($i ~ /\//){gsub(/^[ \t`]+|[ \t`]+$/, "", $i); print $i}}}' "$CODE_MAP"
     [[ -f "$INDEX" ]] && awk -F'|' 'NF > 3 {for(i=1;i<=NF;i++){if($i ~ /\//){gsub(/^[ \t`]+|[ \t`]+$/, "", $i); print $i}}}' "$INDEX"
     [[ -f "${ROOT}/docs/FILE_INDEX.md" ]] && awk -F'|' 'NF > 3 {gsub(/^[ \t`]+|[ \t`]+$/, "", $2); if($2 ~ /\//) print $2}' "${ROOT}/docs/FILE_INDEX.md"
   } | while IFS= read -r file; do
@@ -178,10 +181,11 @@ case "$CMD" in
       echo "ok  codegraph: $(command -v codegraph)"
       codegraph status 2>/dev/null || true
     else
-      echo "warn  codegraph not installed; fallback: CODE_CONTEXT_INDEX + FILE_INDEX + precise rg" >&2
-      echo "      install/use codegraph when large projects need symbol graph context" >&2
+      echo "warn  codegraph not installed; fallback: CODE_MAP + CODE_CONTEXT_INDEX + FILE_INDEX + precise rg" >&2
+      echo "      run aw code-map build; install/use codegraph when large projects need deeper symbol graph context" >&2
     fi
     [[ -f "$CONFIG" ]] && echo "ok  $(ctx_rel "$CONFIG")"
+    [[ -f "$CODE_MAP" ]] && echo "ok  $(ctx_rel "$CODE_MAP")"
     [[ -f "$INDEX" ]] && echo "ok  $(ctx_rel "$INDEX")"
     [[ -f "${ROOT}/docs/FILE_INDEX.md" ]] && echo "ok  docs/FILE_INDEX.md" || echo "warn  docs/FILE_INDEX.md missing; run aw file-index" >&2
     ;;
@@ -330,7 +334,7 @@ PY
       if ctx_codegraph_available; then
         echo "| CodeGraph impact | $(codegraph impact "$query" 2>/dev/null | head -10 | tr '\n' ';' | sed 's/|/ /g') |"
       else
-        echo "| CodeGraph | unavailable; fallback to CODE_CONTEXT_INDEX / FILE_INDEX / precise rg |"
+        echo "| CodeGraph | unavailable; fallback to CODE_MAP / CODE_CONTEXT_INDEX / FILE_INDEX / precise rg |"
       fi
       echo "| Affected files | $(ctx_allowed_files "$OUT" | tr '\n' ';' | sed 's/;$//') |"
       echo "| Affected tests | run aw context affected --task ${TASK} after code changes |"

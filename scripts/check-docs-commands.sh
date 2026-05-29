@@ -59,6 +59,7 @@ COMMANDS=(
   "aw project scan"
   "aw project gate"
   "aw file-index"
+  "aw code-map"
   "aw compact"
   "aw handoff --check"
   "aw handoff \"focus\" --write"

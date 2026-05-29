@@ -161,6 +161,9 @@ EOF
   context)
     exec "${SCRIPT_DIR}/aw-context.sh" "$@"
     ;;
+  code-map)
+    exec "${SCRIPT_DIR}/aw-code-map.sh" "$@"
+    ;;
   watch)
     exec "${SCRIPT_DIR}/aw-watch.sh" "$@"
     ;;
@@ -398,6 +401,7 @@ agent-workflow CLI v${AW_CLI_VERSION} (any AI tool)
   aw confirm <dsl> <plan>   Task confirmed (DSL 已审 + Plan 可执行) → ENGINEERING_INDEX.md
   aw index [dsl] [plan]     Scan-only ENGINEERING_INDEX refresh (not task confirm)
   aw file-index             Generate docs/FILE_INDEX.md with project code file descriptions
+  aw code-map init|build|query|impact|affected|gate  Build/query code map before reading code
   aw dev                    Print A→E dev paste block (same as paste dev)
   aw check [all|layout|dsl|plan|config|rules|req|tp|docs|plugin|memory|changelog|audit|policy|security|service-catalog|release|sync|vcs]
   aw config init       Fill docs/PROJECT_CONFIG.md stage/kind/target/commands

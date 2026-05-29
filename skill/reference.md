@@ -104,6 +104,8 @@ AW_SKILL_REF=v1.5.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 
 `docs/FILE_INDEX.md` is the human-facing project code file index for manual code review and optimization. Generate it with `aw file-index`; it prioritizes frontend business code, backend business code, shared code, tests, and runtime/build configuration, with scripts/templates/workflow docs kept as auxiliary sections. Refresh it whenever project code files are added, deleted, or renamed so engineers can quickly locate AI-written files that need review or manual edits.
 
+`docs/context/CODE_MAP.md` is the AI-facing code map. Generate it with `aw code-map build`; query it with `aw code-map query "symbol"` and `aw code-map impact "symbol"`. It records module paths, entry files, symbols, routes/API candidates, import clues, and inferred tests so Agent can locate code without scanning the whole project. It is a locator index, not authorization to read full files; task coding still requires `aw context plan --task <AT-T>` and `aw context gate --task <AT-T>`.
+
 | 功能 | 存放 | 适合记录 | 不适合记录 |
 |------|------|----------|------------|
 | Handoff | `docs/handoff/PROJECT_HANDOFF.md` | 当前目标、阶段进度、阻塞、下一步、待确认 | 长期偏好、可复用模式、历史聊天全文 |
@@ -198,7 +200,8 @@ AW_SKILL_REF=v1.5.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw agents gate --strict` | 严格协作门禁：发现 allowed paths 重叠时阻断，要求先 handoff 或重新分配边界 |
 | `aw gate init|check|pre-commit|task|pr|release` | 自动 Gate 聚合 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release 等关键检查 |
 | `aw gate file-index` | 新增 / 删除 / 重命名业务文件时，若未刷新 `docs/FILE_INDEX.md` 则阻断 |
-| `aw context init|status|plan|query|impact|affected|gate|budget` | 任务级代码上下文控制：禁止无目标全仓扫描，按 CodeGraph / CODE_CONTEXT_INDEX / FILE_INDEX 生成最小读取范围和 affected 分析 |
+| `aw context init|status|plan|query|impact|affected|gate|budget` | 任务级代码上下文控制：禁止无目标全仓扫描，按 CodeGraph / CODE_MAP / CODE_CONTEXT_INDEX / FILE_INDEX 生成最小读取范围和 affected 分析 |
+| `aw code-map init|build|query|impact|affected|gate` | 代码地图：生成模块 / 入口 / Symbol / 路由 API / import / 测试映射索引，先定位再生成 Context Plan |
 | `aw context enrich --task <AT-T>` | 自动用 CodeGraph / 精准 rg / 索引补全 Context Plan 的 Symbol 和影响范围 |
 | `aw verify --affected --task <AT-T>` | 先写入 affected analysis，再执行任务验证 |
 | `aw contract init|change|test|diff|gate|check` | 前后端契约系统：OpenAPI、API 变更、Mock、Contract Test、Schema Diff、破坏性变更阻断；配置同步中心后 `aw contract change` 自动发布 contract 事件 |

@@ -52,6 +52,7 @@ need "scripts/aw-agents.sh"
 need "scripts/aw-sync.sh"
 need "scripts/aw-pm.sh"
 need "scripts/aw-vcs.sh"
+need "scripts/aw-code-map.sh"
 need "scripts/check-file-index-sync.sh"
 need "scripts/generate-file-index.sh"
 need "scripts/_aw-bug-lib.sh"
@@ -94,6 +95,8 @@ need "templates/ops/RUNBOOKS.md"
 need "templates/agents/AGENT_ROLES.md"
 need "templates/agents/AGENT_HANDOFFS.md"
 need "templates/agents/AGENT_REVIEWS.md"
+need "templates/context/CODE_MAP.md"
+need "templates/context/CODE_CONTEXT_INDEX.md"
 need "templates/SERVICE_CATALOG.md"
 need "package/INVOCATION.md"
 need "package/INVOCATION.en.md"
@@ -134,7 +137,7 @@ else
   ERR=1
 fi
 
-for cmd in "doctor" "demo" "dashboard" "status --json" "capabilities" "capabilities --json" "project scan" "project gate" "compact" "memory" "memory chat" "bug" "changelog" "audit" "policy" "policy gate" "security" "security scan" "service-catalog" "service-catalog discover" "release" "release gate" "release gate --strict-report" "release flag-check" "report handoff" "report release" "report check" "metrics" "metrics summary" "ops" "ops gate" "agents" "agents gate" "agents gate --strict" "sync" "sync init" "sync push" "sync pull" "sync gate" "sync baseline" "sync board" "sync event" "sync change" "sync inbox" "pm" "pm init" "pm intake-check" "pm plan" "pm dashboard" "pm assignments" "pm gate" "pm design" "pm dispatch" "vcs" "vcs gate" "trace check" "plan change" "plan task-add" "task split" "task checkpoint" "rules discover" "file-index" "setup" "upgrade" "remove"; do
+for cmd in "doctor" "demo" "dashboard" "status --json" "capabilities" "capabilities --json" "project scan" "project gate" "compact" "memory" "memory chat" "bug" "changelog" "audit" "policy" "policy gate" "security" "security scan" "service-catalog" "service-catalog discover" "release" "release gate" "release gate --strict-report" "release flag-check" "report handoff" "report release" "report check" "metrics" "metrics summary" "ops" "ops gate" "agents" "agents gate" "agents gate --strict" "sync" "sync init" "sync push" "sync pull" "sync gate" "sync baseline" "sync board" "sync event" "sync change" "sync inbox" "pm" "pm init" "pm intake-check" "pm plan" "pm dashboard" "pm assignments" "pm gate" "pm design" "pm dispatch" "vcs" "vcs gate" "trace check" "plan change" "plan task-add" "task split" "task checkpoint" "rules discover" "file-index" "code-map" "setup" "upgrade" "remove"; do
   if grep -q "aw ${cmd}" "${SKILL_DIR}/SKILL.md" "${SKILL_DIR}/reference.md" 2>/dev/null; then
     echo "ok  docs mention aw ${cmd}"
   else

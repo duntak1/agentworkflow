@@ -29,6 +29,8 @@ need "VERSION"
 [[ -f "${ROOT}/scripts/aw-report.sh" ]] && echo "ok  scripts/aw-report.sh" || { echo "missing  scripts/aw-report.sh"; ERR=1; }
 [[ -f "${ROOT}/scripts/aw-trace.sh" ]] && echo "ok  scripts/aw-trace.sh" || { echo "missing  scripts/aw-trace.sh"; ERR=1; }
 [[ -f "${ROOT}/scripts/aw-project.sh" ]] && echo "ok  scripts/aw-project.sh" || { echo "missing  scripts/aw-project.sh"; ERR=1; }
+[[ -f "${ROOT}/scripts/aw-code-map.sh" ]] && echo "ok  scripts/aw-code-map.sh" || { echo "missing  scripts/aw-code-map.sh"; ERR=1; }
+[[ -f "${ROOT}/agent-workflow/templates/context/CODE_MAP.md" ]] && echo "ok  templates/context/CODE_MAP.md" || { echo "missing  templates/context/CODE_MAP.md"; ERR=1; }
 
 if [[ -f "${ROOT}/.codex-plugin/plugin.json" ]]; then
   echo "ok  .codex-plugin/plugin.json"
@@ -122,6 +124,13 @@ if grep -q 'aw report handoff' "${SKILL_SRC}/SKILL.md" "${ROOT}/skill/reference.
   echo "ok  report docs documented"
 else
   echo "missing  report docs"
+  ERR=1
+fi
+
+if grep -q 'aw code-map' "${SKILL_SRC}/SKILL.md" "${ROOT}/skill/reference.md" "${ROOT}/agent-workflow/INVOCATION.md" 2>/dev/null && grep -q 'CODE_MAP' "${SKILL_SRC}/SKILL.md" "${ROOT}/skill/reference.md" 2>/dev/null; then
+  echo "ok  code-map docs documented"
+else
+  echo "missing  code-map docs"
   ERR=1
 fi
 

@@ -49,7 +49,7 @@
 
 ## 阶段 A — 想清楚再写（Think Before Coding）
 
-**强制前置：** 每个 AT-T 子任务开始写代码前，先运行 `./scripts/aw task brief <AT-T>` 输出需求沟通包。Agent 必须像真实研发一样追问用户问题、边界、验收、异常态、联动和非目标；不允许猜测需求。工程师明确确认后，运行 `./scripts/aw task confirm <AT-T> "已确认：范围=...；验收=...；非目标=..."`，再 `./scripts/aw context plan --task <AT-T>`、`./scripts/aw context gate --task <AT-T>`、`./scripts/aw task start <AT-T>`。没有这些记录，或确认摘要缺少范围 / 验收 / 非目标，`./scripts/aw paste task`、`aw task complete` 和 `aw gate task` 会阻断，Agent 不得写业务代码。
+**强制前置：** 每个 AT-T 子任务开始写代码前，先运行 `./scripts/aw task brief <AT-T>` 输出需求沟通包。Agent 必须像真实研发一样追问用户问题、边界、验收、异常态、联动和非目标；不允许猜测需求。工程师明确确认后，先用 `./scripts/aw code-map build` / `./scripts/aw code-map query "<关键词>"` / `./scripts/aw code-map impact "<symbol>"` 定位模块、入口、Symbol、路由和测试，再运行 `./scripts/aw task confirm <AT-T> "已确认：范围=...；验收=...；非目标=..."`、`./scripts/aw context plan --task <AT-T>`、`./scripts/aw context gate --task <AT-T>`、`./scripts/aw task start <AT-T>`。没有这些记录，或确认摘要缺少范围 / 验收 / 非目标，`./scripts/aw paste task`、`aw task complete` 和 `aw gate task` 会阻断，Agent 不得写业务代码。
 
 **目的：** 不让 AI（也不让自己）在模糊需求上盲写。
 

@@ -36,6 +36,7 @@
 | [`aw-confirm.sh`](./aw-confirm.sh) | 任务确认 + 生成 `ENGINEERING_INDEX.md` |
 | [`generate-engineering-index.sh`](./generate-engineering-index.sh) | 仅刷新工程师索引 |
 | [`generate-file-index.sh`](./generate-file-index.sh) | 生成 `docs/FILE_INDEX.md`，代码优先覆盖前端、后端、共享、测试和运行配置文件说明 |
+| [`aw-code-map.sh`](./aw-code-map.sh) | 生成 / 查询 `docs/context/CODE_MAP.md`，用于模块、入口、Symbol、路由/API、import 和测试映射定位，避免 AI 全仓扫描 |
 | [`install-aw-adapters.sh`](./install-aw-adapters.sh) | IDE 适配：`aw adapters --all`（Claude/Codex/Copilot/Cursor/Windsurf/Cline/Continue） |
 | [`sync-skill.sh`](./sync-skill.sh) | 同步到 `~/.cursor/skills/agent-workflow/` |
 | [`check-skill-source.sh`](./check-skill-source.sh) | 校验仓库 `skill/` 真源 |

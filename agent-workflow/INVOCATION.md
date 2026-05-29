@@ -139,7 +139,8 @@ chmod +x scripts/aw scripts/*.sh
 | 发布闭环 | `aw release record ...` 记录环境、发布、验证、回滚、CHANGELOG/tag；`aw release flag ...` 记录 Feature Flag |
 | 发布门禁 | `aw release gate [--run-verify] [--run-security] [--strict-policy] [--strict-report]` 聚合 CHANGELOG、Policy、Security、Service Catalog、环境、Ops、Agents、Metrics、报告门禁与可选验证 |
 | 自动 Gate | `aw gate pre-commit|task|pr|release` 聚合 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release；`aw hooks install` 可接入 Git hooks |
-| 代码上下文控制 | `aw context init|status|plan|query|impact|affected|gate` 生成任务级 Context Plan，限制读取文件和 symbol，优先接入 CodeGraph，避免无目标全仓扫描 |
+| 代码地图 | `aw code-map build|query|impact|affected|gate` 生成 / 查询 `docs/context/CODE_MAP.md`，先定位模块、入口、Symbol、路由和测试，再决定读取范围 |
+| 代码上下文控制 | `aw context init|status|plan|query|impact|affected|gate` 生成任务级 Context Plan，限制读取文件和 symbol，优先接入 CodeGraph / CODE_MAP，避免无目标全仓扫描 |
 | 上下文自动补全 | `aw context enrich --task <AT-T>` 自动补全 Symbol / 影响范围；`aw verify --affected --task <AT-T>` 先写入 affected analysis 再验证 |
 | 前后端契约 | `aw contract init|change|test|diff|gate` 维护 OpenAPI、API 变更、Mock、Contract Test、Schema Diff 和破坏性变更阻断 |
 | 契约自动化 | `aw contract diff --write|breaking-check|sync` 自动记录 OpenAPI diff、检测破坏性变更候选，并发布契约同步事件；配置同步中心后 `aw contract change` 自动发布 contract 事件 |
