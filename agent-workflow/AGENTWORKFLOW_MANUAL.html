@@ -633,9 +633,9 @@
 
       <section id="quick-tutorial">
         <h2>1.1 新手完整教程</h2>
-        <p>第一次使用时，不要从命令开始背。工程师只要按下面路径回答问题、确认文件、批准计划即可；Agent 负责把每一步落到项目文件里。</p>
+        <p>第一次使用时，不要从命令开始背。工程师只要在对话里说 <code>启动 aw</code> 或 <code>@aw</code>，Agent 必须先询问角色，再按下面路径回答问题、确认文件、批准计划；Agent 负责把每一步落到项目文件里。</p>
         <div class="flow">
-          <div class="step"><strong>1. 启动分流</strong><span>确认全新 / 已有，单项目 / 双项目</span></div><div class="arrow">→</div>
+          <div class="step"><strong>1. 启动分流</strong><span>启动 aw / @aw，先确认角色</span></div><div class="arrow">→</div>
           <div class="step"><strong>2. 仓库准备</strong><span>确认真实代码仓库和同步中心</span></div><div class="arrow">→</div>
           <div class="step"><strong>3. 需求输入</strong><span>PRD、原型、接口、旧系统材料进入 reference</span></div><div class="arrow">→</div>
           <div class="step"><strong>4. DSL 审核</strong><span>需求、页面、交互、事件、边界、验收确认</span></div><div class="arrow">→</div>
@@ -645,6 +645,7 @@
         <table>
           <thead><tr><th>你要告诉 Agent 什么</th><th>Agent 会做什么</th><th>你要确认什么</th></tr></thead>
           <tbody>
+            <tr><td>说 <code>启动 aw</code> 或 <code>@aw</code>。</td><td>声明进入 AgentWorkflow，并先问角色：<code>1=产品</code>、<code>2=前端</code>、<code>3=后端</code>、<code>4=全栈</code>。</td><td>选择角色。全栈表示前后端代码默认在同一仓库下。</td></tr>
             <tr><td>当前项目路径。</td><td>先执行 <code>aw project scan</code>，根据项目内容生成 <code>docs/PROJECT_SCAN.md</code>，判断全新 / 已有项目。</td><td>Agent 必须先复述扫描依据，再由工程师确认项目阶段。</td></tr>
             <tr><td>这是全新项目还是已有项目。</td><td>按扫描结果和工程师确认写入 <code>PROJECT_CONFIG</code> 的项目阶段，并选择全新流程或存量流程。</td><td>没有扫描和确认前，不允许生成 DSL / Plan 或写代码。</td></tr>
             <tr><td>这是仅前端、仅后端、单仓前后端，还是前后端两个项目。</td><td>写入构建目标，并决定是否需要同步中心。</td><td>如果是两个项目，必须确认真实前端仓库、后端仓库和同步中心。</td></tr>
@@ -655,7 +656,7 @@
           </tbody>
         </table>
         <div class="callout">
-          <strong>最短上手提示词：</strong>“使用 agentworkflow。当前项目路径是 X。请先不要写代码，先执行 aw project scan 扫描项目内容，复述你判断这是全新还是已有项目的依据，再引导我确认项目阶段，并立即让我选择是否建立同步中心，然后确认项目形态和真实代码仓库，然后按手册流程继续。”
+          <strong>最短上手提示词：</strong>“启动 aw。当前项目路径是 X。请先不要写代码，先问我角色：1 产品、2 前端、3 后端、4 全栈；我确认后再执行 aw project scan，复述你判断这是全新还是已有项目的依据，再引导我确认项目阶段、同步中心、项目形态和真实代码仓库，然后按手册流程继续。”
         </div>
       </section>
 
@@ -665,6 +666,7 @@
           <thead><tr><th>角色</th><th>负责什么</th><th>不能省略的动作</th></tr></thead>
           <tbody>
             <tr><td>工程师 / 产品负责人</td><td>提供需求、确认 DSL、确认计划、确认子任务边界、确认高风险操作和 Git 提交。</td><td>确认关键业务规则、权限、金额、数据口径、接口契约、发布风险。</td></tr>
+            <tr><td>全栈工程师</td><td>在一个仓库内同时负责前端和后端代码，Plan 仍拆出 frontend/backend/fullstack AT-T。</td><td>默认不强制同步中心；只有分仓、不同电脑或 PM 三端协作时才建立同步中心。</td></tr>
             <tr><td>Codex / Agent</td><td>读取项目文件，生成 DSL/Plan，拆任务，执行代码修改，跑验证，记录 Bug/变更/Handoff。</td><td>不得猜需求；不得越过 DSL/Plan/AT-T；不得自动 Git 提交。</td></tr>
             <tr><td>Reviewer Agent</td><td>只读代码并记录评审，不直接修改业务代码。</td><td>使用 <code>aw agents review</code> 留痕，阻塞项必须写清楚。</td></tr>
             <tr><td>Tester Agent</td><td>维护测试计划、验证命令、复测和失败记录。</td><td>测试失败必须进入 <code>AI_BUG_LOG.md</code>。</td></tr>
@@ -680,6 +682,7 @@
 
 cd /path/to/your-project
 chmod +x scripts/aw scripts/*.sh
+./scripts/aw start
 ./scripts/aw init
 ./scripts/aw project scan
 ./scripts/aw status
@@ -717,6 +720,7 @@ chmod +x scripts/aw scripts/*.sh
           <tbody>
             <tr><td>仅前端项目</td><td><code>project-frontend/</code></td><td>只生成前端 DSL/Plan/AT-T，重点确认页面、路由、状态、接口契约、组件和验收。</td><td>使用 <code>19.6</code> 提示词，构建目标选 <code>1=前端项目</code>。</td></tr>
             <tr><td>仅后端项目</td><td><code>project-backend/</code></td><td>只生成后端 DSL/Plan/AT-T，重点确认接口、权限、错误码、事务、数据表、消息和验收。</td><td>使用 <code>19.8</code> 提示词，构建目标选 <code>2=后端项目</code>。</td></tr>
+            <tr><td>全栈单仓项目</td><td><code>project-app/</code></td><td>前后端代码在一个仓库下，构建目标为 <code>3=前后端项目</code>；Plan 拆 frontend/backend/fullstack 任务，但不默认建立同步中心。</td><td>说 <code>启动 aw</code> 或 <code>@aw</code>，角色选择 <code>4=全栈</code>。</td></tr>
             <tr><td>非全新 / 存量项目</td><td>已有一期代码、已有需求或已进入研发阶段的项目。</td><td>先做项目盘点、事实基线、代码索引、已有需求回填，再为“下一期 / 当前增量需求”生成 DSL 和 Plan。</td><td>使用 <code>19.1b</code>、<code>19.1c</code> 提示词；禁止把存量代码当成新项目重建。</td></tr>
             <tr><td>同电脑前后端两个项目</td><td><code>project-frontend/</code><br><code>project-backend/</code><br><code>project-harness/</code></td><td>前后端各自开发，各自维护本项目事实，通过本地同步中心交换 handoff、REQ、Bug、接口契约。</td><td>使用 <code>19.10</code> 提示词，分别在两个项目会话中声明项目路径和同步中心路径。</td></tr>
             <tr><td>不同电脑前后端两个项目</td><td>两端各有本地项目；<code>project-harness</code> 是单独远程 Git 仓库。</td><td>每端先拉取 远程 Harness，再 <code>aw sync pull</code>、<code>aw sync inbox</code>、<code>aw sync board</code>；跨端事项用 <code>aw sync event</code>，经确认后提交 Harness。</td><td>使用 <code>19.11</code> 提示词，先准备 远程 Harness 仓库。</td></tr>
@@ -1245,19 +1249,43 @@ cd workspace/project-backend
 
       <section id="prompts">
         <h2>19. 提示词大全</h2>
-        <p>下面的提示词按真实项目场景组织。复制后替换路径、任务 ID、项目名即可。建议工程师在每个新会话第一条消息中给出“项目形态 + 路径 + 当前阶段”。</p>
+        <p>下面的提示词按真实项目场景组织。复制后替换路径、任务 ID、项目名即可。最短启动只需要说 <code>启动 aw</code> 或 <code>@aw</code>；Agent 必须先问角色，再继续扫描项目。</p>
+        <h3>19.0 最短启动：启动 aw / @aw</h3>
+        <pre><code>启动 aw。
+当前项目路径：/path/to/project
+
+请先不要写业务代码，也不要生成 DSL / Plan。
+你的第一步必须是问我角色：
+1. 产品
+2. 前端
+3. 后端
+4. 全栈
+
+角色确认后再继续：
+1. 执行 aw project scan
+2. 阅读 docs/PROJECT_SCAN.md
+3. 复述项目是全新 / 已有的判断依据、前端线索、后端线索、同步中心状态
+4. 让我确认项目阶段
+5. 按角色和项目拓扑询问是否建立同步中心
+
+如果我选择 4=全栈：
+- 默认前端和后端代码在同一个仓库下
+- 构建目标默认是 3=前后端项目 / fullstack
+- 不默认强制建立同步中心
+- 只有我确认前后端分仓、不同电脑协作或 PM 三端协作时，才引导建立同步中心</code></pre>
         <h3>19.1 启动分流：先判断全新项目还是已有项目</h3>
-        <pre><code>使用 agentworkflow。
+        <pre><code>启动 aw。
 当前项目路径：/path/to/project
 当前是项目启动接入阶段，不要写业务代码。
 请先执行：
-1. aw project scan
-2. 阅读 docs/PROJECT_SCAN.md
-3. 复述你判断“全新 / 已有项目”的依据、前端线索、后端线索、同步中心状态
+1. 先问我角色：1=产品，2=前端，3=后端，4=全栈
+2. 角色确认后执行 aw project scan
+3. 阅读 docs/PROJECT_SCAN.md
+4. 复述你判断“全新 / 已有项目”的依据、前端线索、后端线索、同步中心状态
 
 然后问我并等待回答：
 1. 是否认可扫描结论：这是全新项目，还是已有 / 存量项目？
-2. 是否建立同步中心 project-harness？1=建立 / 使用，2=不建立，3=稍后决定（Plan 阻断）
+2. 是否建立同步中心 project-harness？1=建立 / 使用，2=不建立，3=稍后决定（Plan 阻断）。如果我是全栈且前后端在一个仓库下，允许选择不建立
 3. 这个项目使用哪种代码托管平台：1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=阿里云云效 Codeup？
 4. 构建目标是仅前端、仅后端，还是前后端项目？
 
@@ -1271,7 +1299,7 @@ cd workspace/project-backend
 - 如果是本地 Git 项目，继续配置 --project-kind 2
 
 在我确认项目阶段和同步中心决策前，不要生成 DSL、不要生成 Plan、不要修改业务代码。
-无论是否为前后端项目，接入阶段都必须先问我是否建立同步中心并记录选择；如果我选择稍后决定，Plan 必须阻断；如果我选择前后端项目且是分仓 / 双项目，Plan 前必须完成 aw sync init。</code></pre>
+无论是否为前后端项目，接入阶段都必须先问我是否建立同步中心并记录选择；如果我选择稍后决定，Plan 必须阻断；如果我选择前后端项目且是分仓 / 双项目，Plan 前必须完成 aw sync init；如果我选择全栈单仓，默认不强制同步中心。</code></pre>
         <h3>19.1a 全新项目接入：先不要写代码</h3>
         <pre><code>使用 agentworkflow。
 当前项目路径：/path/to/project

@@ -19,6 +19,31 @@ elif [[ -f "${SCRIPT_DIR}/../VERSION" ]]; then
 fi
 
 case "$CMD" in
+  start)
+    cat <<'EOF'
+== AgentWorkflow 启动 ==
+
+对话里可以直接说：启动 aw 或 @aw。
+
+首次启动先确认工程师角色：
+1. 产品：进入 PM / 参考资料 / DSL / Plan / 派发 / 看板流程
+2. 前端：进入前端实现 Agent 流程
+3. 后端：进入后端实现 Agent 流程
+4. 全栈：默认前后端代码在同一仓库，按 fullstack 单仓流程；不默认强制创建同步中心
+
+角色确认后的固定顺序：
+1. ./scripts/aw project scan
+2. 复述 docs/PROJECT_SCAN.md，确认全新项目还是已有项目
+3. ./scripts/aw config init --project-stage 1|2
+4. 询问是否建立同步中心：1=建立/使用，2=不建立，3=稍后决定且 Plan 阻断
+5. 确认代码托管平台和构建目标
+
+注意：
+- 产品 / 三端协作 / 前后端分仓 / 不同电脑协作：需要同步中心或 PM 同步中心。
+- 全栈单仓：前后端代码在一个仓库下，构建目标默认 3=fullstack；同步中心可选择不建立。
+- 未完成角色、项目阶段、同步中心决策、项目类型、构建目标确认前，不生成 DSL/Plan，不写业务代码。
+EOF
+    ;;
   init)
     exec "${SCRIPT_DIR}/init-project.sh" "$@"
     ;;
@@ -347,6 +372,7 @@ EOF
     cat <<EOF
 agent-workflow CLI v${AW_CLI_VERSION} (any AI tool)
 
+  aw start            Print startup role router for 启动 aw / @aw
   aw install [path]    Copy agent-workflow/ + scripts/ into target repo
   aw setup             One-shot setup (install/init/adapters/ci/status/doctor)
   aw doctor            Diagnose install, gates, adapters, CI, config

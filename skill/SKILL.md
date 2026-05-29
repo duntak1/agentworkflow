@@ -5,9 +5,9 @@ description: >-
   for Claude Code, Codex, Copilot, Cursor, Windsurf, Cline, Continue, or any chat.
   Uses aw CLI, gates business code until DSL is reviewed, supports config setup,
   task lifecycle, TP/e2e verification, and multi-IDE adapters. Use for
-  agent-workflow, aw init, 按 AI 工作流, 生成 DSL/Plan, 任务确认, verify, tp,
-  config, Windsurf, Cline, Copilot, or DSL gates.
-argument-hint: "setup | doctor | demo | capabilities | dashboard | memory | audit | policy | security | service-catalog | release | report | install | init | adapters | status | dsl | plan | confirm | config | task | verify | tp | commit | upgrade | remove"
+  agent-workflow, 启动 aw, @aw, aw start, aw init, 按 AI 工作流, 生成 DSL/Plan,
+  任务确认, verify, tp, config, Windsurf, Cline, Copilot, or DSL gates.
+argument-hint: "start | setup | doctor | demo | capabilities | dashboard | memory | audit | policy | security | service-catalog | release | report | install | init | adapters | status | dsl | plan | confirm | config | task | verify | tp | commit | upgrade | remove"
 ---
 
 # agent-workflow（工具无关）
@@ -25,7 +25,7 @@ Works with **any** AI coding tool. Cursor Skill is **optional**; other tools use
 
 ## Solution shape
 
-`project content scanned → engineer confirms new/existing stage → engineer chooses sync center now / not needed / later → project kind + build target selected → if split frontend/backend: real repos + sync center ready → new project: Reference → DSL → Plan OR existing project: inventory → baseline → incremental DSL → incremental Plan → if split frontend/backend: shared DSL + collaboration Plan before local Plans → confirm → AT-T task → verify → changelog/git → handoff`
+`启动 aw / @aw → engineer chooses role (product / frontend / backend / fullstack) → project content scanned → engineer confirms new/existing stage → sync center decision based on role/topology → project kind + build target selected → if split frontend/backend: real repos + sync center ready → new project: Reference → DSL → Plan OR existing project: inventory → baseline → incremental DSL → incremental Plan → if split frontend/backend: shared DSL + collaboration Plan before local Plans → confirm → AT-T task → verify → changelog/git → handoff`
 
 Closed-loop management is mandatory for every large requirement and every AT-T:
 
@@ -119,14 +119,16 @@ Proof path:
 
 | Step | Command |
 |------|---------|
+| Startup trigger | When the user says `启动 aw`, `@aw`, `aw start`, or `使用 agentworkflow`, start AgentWorkflow and do not code. Present the role question first: `1=产品`, `2=前端`, `3=后端`, `4=全栈` |
+| Engineer role | Record the route in the conversation before scanning. `产品` uses PM Agent (`aw pm start`) and usually a PM sync center; `前端` / `后端` use implementation routes and require sync center when another side is separate; `全栈` means frontend/backend code is in one repository by default, build target `3=fullstack`, and sync center is optional unless the engineer confirms split repos, different computers, or PM-managed collaboration |
 | Project scan | At startup and before build planning, run `aw project scan`; review `docs/PROJECT_SCAN.md` with the engineer. Do not ask new/existing from a blank slate; scan first, then ask for confirmation |
 | Project stage | After scan, ask the engineer to confirm `1 = new project` (`aw config init --project-stage 1`) or `2 = existing/brownfield project` (`aw config init --project-stage 2`). Do not generate DSL/Plan or code before this is confirmed |
-| Sync center decision | Immediately after project stage confirmation, ask whether to establish a sync center: `1=use/create sync center` (`aw config init --sync-center 1 --sync-center-path <path>`), `2=not needed` (`aw config init --sync-center 2`), or `3=decide later` (`aw config init --sync-center 3`, Plan remains blocked) |
+| Sync center decision | Immediately after project stage confirmation, ask whether to establish a sync center: `1=use/create sync center` (`aw config init --sync-center 1 --sync-center-path <path>`), `2=not needed` (`aw config init --sync-center 2`), or `3=decide later` (`aw config init --sync-center 3`, Plan remains blocked). For `全栈` same-repo work, `2=not needed` is valid; for split repos / different computers / PM-managed three-side work, use or create a sync center |
 | Reference | edit `reference/manifest.yaml` + `inputs/` |
 | DSL | `aw dsl` → `aw dsl write` or `aw dsl apply` → `aw check dsl` → `aw dsl review` → `aw approve dsl --plan`; if PM sync center is configured, approval must guide `aw pm plan --write` before dispatch |
 | DSL suite | `aw dsl suite <slug> "title"` → fill requirements/pages/interactions/events/boundaries/acceptance → `aw dsl review docs/dsl/DSL_<SLUG>/INDEX.md --write` → `aw approve dsl docs/dsl/DSL_<SLUG>/INDEX.md --plan`; PM/three-side projects then run `aw pm plan --write` |
 | Project kind | Before task planning, ask the engineer to choose the repository provider: `1=GitHub`, `2=local Git`, `3=GitLab`, `4=Bitbucket`, `5=Gitee`, `6=GitCode`, `7=Gitea`, `8=Forgejo`, `9=GitLab CE`, `10=Gerrit`, `11=Alibaba Cloud Codeup`; remote providers use `aw config init --project-kind <n> --repo-url <url>`, local Git skips remote URL |
-| Build target | After DSL review and before Plan, ask the engineer to choose: `1 = frontend`, `2 = backend`, `3 = fullstack`, then run `aw config init --build-target 1|2|3` |
+| Build target | After DSL review and before Plan, ask the engineer to choose: `1 = frontend`, `2 = backend`, `3 = fullstack`, then run `aw config init --build-target 1|2|3`. If startup role is `全栈`, default to `3=fullstack` unless the engineer says this is a split frontend/backend setup |
 | Split frontend/backend repos | Before Plan, ask whether frontend/backend are in one repo or two; if two, ask same computer vs different computers, real frontend repo path/repository URL, real backend repo path/repository URL, and `project-harness` path/repository URL. `aw project gate` blocks Plan generation until repos and sync center are ready |
 | Sync center before local Plans | For split repos, put shared DSL in `project-harness/global/dsl/`, collaboration Plan in `project-harness/global/plans/`, then derive frontend/backend local Plans in each real code repo |
 | PM Agent lifecycle | For product-led or three-side projects, use `aw pm start` and `aw pm init <project-harness>` so PM Agent manages `global/references/`, Pencil design files, `global/dsl/`, `global/plans/`, `global/dispatch/`, `global/dashboard/`, lifecycle gates, and three-side task assignments before implementation agents claim work |
@@ -179,9 +181,10 @@ Proof path:
 2. Never `@` `ENGINEERING_INDEX.md`.
 3. Do not invent `reference/` or `docs/dsl/` paths.
 4. Truth: `agent-workflow/INVOCATION.md` after install.
-5. Before generating DSL/Plan or AT-T task split, run `aw project scan`, summarize `docs/PROJECT_SCAN.md`, and let the engineer confirm whether the project is new or existing. Immediately ask whether to establish a sync center and record the answer with `aw config init --sync-center 1|2|3`; `3=pending` blocks Plan. Then guide the engineer to choose code hosting provider and build target in `docs/PROJECT_CONFIG.md`: `1=GitHub`, `2=local Git`, `3=GitLab`, `4=Bitbucket`, `5=Gitee`, `6=GitCode`, `7=Gitea`, `8=Forgejo`, `9=GitLab CE`, `10=Gerrit`, `11=Codeup`; build target `1=frontend`, `2=backend`, `3=fullstack`. For every non-local provider, record `--repo-url <url>`.
-5a. If build target is `fullstack` and frontend/backend are split repos or dual projects, build the sync center first with `aw sync init <project-harness> --project ... --agent ... --role ...`. `aw plan`, `aw approve dsl --plan`, and `aw plan apply` are blocked until `aw project gate` passes. Shared DSL and collaboration Plan live in the sync center before local frontend/backend Plans are derived.
-5b. For product-led work, three-side projects, or PM-operated workflows, initialize PM Agent control with `aw pm init <project-harness> --project ... --agent pm-agent --role pm` before DSL/Plan. PM Agent is responsible for `global/references/`, Pencil design intake, lifecycle boards, shared DSL/Plan, task dispatch, and change intake. PM users should start with `aw pm start` rather than memorizing low-level commands.
+5. When the user says `启动 aw`, `@aw`, `aw start`, or equivalent, first declare that AgentWorkflow is active and ask the engineer's role: `1=产品`, `2=前端`, `3=后端`, `4=全栈`. Do not skip this question on first startup in a project/session.
+5a. Before generating DSL/Plan or AT-T task split, run `aw project scan`, summarize `docs/PROJECT_SCAN.md`, and let the engineer confirm whether the project is new or existing. Immediately ask whether to establish a sync center and record the answer with `aw config init --sync-center 1|2|3`; `3=pending` blocks Plan. Then guide the engineer to choose code hosting provider and build target in `docs/PROJECT_CONFIG.md`: `1=GitHub`, `2=local Git`, `3=GitLab`, `4=Bitbucket`, `5=Gitee`, `6=GitCode`, `7=Gitea`, `8=Forgejo`, `9=GitLab CE`, `10=Gerrit`, `11=Codeup`; build target `1=frontend`, `2=backend`, `3=fullstack`. For every non-local provider, record `--repo-url <url>`.
+5b. If startup role is `全栈`, assume frontend/backend code is in one repository and configure build target `3=fullstack` by default. In this same-repo route, sync center is optional and `--sync-center 2` is valid after engineer confirmation. If the engineer later says frontend/backend are split repos, dual projects, different computers, or PM-managed three-side collaboration, build the sync center first with `aw sync init <project-harness> --project ... --agent ... --role ...`. `aw plan`, `aw approve dsl --plan`, and `aw plan apply` are blocked until `aw project gate` passes. Shared DSL and collaboration Plan live in the sync center before local frontend/backend Plans are derived.
+5c. For product-led work, three-side projects, or PM-operated workflows, initialize PM Agent control with `aw pm init <project-harness> --project ... --agent pm-agent --role pm` before DSL/Plan. PM Agent is responsible for `global/references/`, Pencil design intake, lifecycle boards, shared DSL/Plan, task dispatch, and change intake. PM users should start with `aw pm start` rather than memorizing low-level commands.
 6. Before every AT-T starts, clarify requirements with the engineer, ask until scope/acceptance/non-goals are explicit, and wait for confirmation. Do not guess.
 7. Record spoken new requirements and development changes in `docs/requirements/INDEX.md` with a 需求类型. If requirements change during development, stop coding and run `aw req change`; update DSL/Plan/ATOMIC before continuing.
 7a. Development-time plan changes: small same-goal changes update the active Plan/ATOMIC with `aw plan change` or `aw plan task-add`; oversized tasks use `aw task split`; major scope/architecture/delivery-batch changes generate a new Plan/ATOMIC and require approval/confirm again.

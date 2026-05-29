@@ -6,6 +6,19 @@
 - **CLI：** `scripts/aw` — 所有 IDE 共用
 - **Skill：** 仅 Cursor 可选；Windsurf/Cline/Codex 等用各自规则文件
 
+## 启动入口
+
+对话里可以直接说 `启动 aw` 或 `@aw`。Agent 必须先询问工程师角色：
+
+| 角色 | 后续路线 |
+|------|----------|
+| `1=产品` | 进入 PM Agent 路线，优先 `aw pm start`，管理参考资料、Pencil、DSL、Plan、派发和看板 |
+| `2=前端` | 进入前端实现路线；若后端在独立仓库或不同电脑，先建同步中心 |
+| `3=后端` | 进入后端实现路线；若前端在独立仓库或不同电脑，先建同步中心 |
+| `4=全栈` | 默认前后端代码在同一仓库，构建目标为 `3=fullstack`；同步中心不强制，除非工程师确认分仓、不同电脑或 PM 三端协作 |
+
+终端可运行 `aw start` 查看同样的启动路由说明。角色、项目阶段、同步中心决策、项目类型和构建目标确认前，不生成 DSL / Plan，不写业务代码。
+
 ## 编码原则
 
 | 原则 | 防止的问题 |
@@ -108,6 +121,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 
 | 命令 | 用途 |
 |------|------|
+| `aw start` | 打印 `启动 aw` / `@aw` 的角色路由说明：产品、前端、后端、全栈 |
 | `aw install [path] --adapters` | 装入流程包与 IDE 入口 |
 | `aw setup` | 一键执行 install/init/adapters/CI/status/doctor |
 | `aw doctor` | 诊断安装、闸门、适配器、CI、配置 |
@@ -222,7 +236,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw check all|dsl|plan|config|req|tp|plugin` | 分项或聚合检查 |
 | `aw check plugin` | 校验 Codex plugin / marketplace metadata |
 | `aw check memory` | 校验 docs/memory 布局、字段与敏感信息 |
-| `aw config init --project-stage 1|2 --sync-center 1|2|3 --project-kind <n> --repo-url <url> --build-target 1|2|3` | 填写 PROJECT_CONFIG；项目阶段必须先依据 `aw project scan` 和工程师确认；启动接入时必须询问是否建立同步中心，1=建立/使用、2=不建立、3=稍后决定且 Plan 阻断；代码托管平台支持 1=GitHub、2=本地 Git、3=GitLab、4=Bitbucket、5=Gitee、6=GitCode、7=Gitea、8=Forgejo、9=GitLab CE、10=Gerrit、11=云效 Codeup；构建目标 3=前后端时，分仓/双项目必须先 `aw sync init` 建同步中心 |
+| `aw config init --project-stage 1|2 --sync-center 1|2|3 --project-kind <n> --repo-url <url> --build-target 1|2|3` | 填写 PROJECT_CONFIG；项目阶段必须先依据 `aw project scan` 和工程师确认；启动接入时必须询问是否建立同步中心，1=建立/使用、2=不建立、3=稍后决定且 Plan 阻断；代码托管平台支持 1=GitHub、2=本地 Git、3=GitLab、4=Bitbucket、5=Gitee、6=GitCode、7=Gitea、8=Forgejo、9=GitLab CE、10=Gerrit、11=云效 Codeup；全栈角色默认构建目标 3=前后端单仓，分仓/双项目/不同电脑才必须先 `aw sync init` 建同步中心 |
 | `aw rules init|review|check` | 生成、审阅、校验工程规范 `docs/ENGINEERING_RULES.md`；默认固化团队前端/后端/统一 AI 执行规范清单，真实项目只补差异、关键文件和注释原则 |
 | `aw rules discover [--write]` | 扫描真实项目候选关键文件，并可回写 `docs/ENGINEERING_RULES.md` 的“关键文件”表 |
 | `aw ci install` | 安装 GitHub Actions workflow 模板 |

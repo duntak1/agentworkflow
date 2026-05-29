@@ -560,9 +560,12 @@
       <p>本地 HTML 使用手册 · 工程化流程版 · 面向工程师与 Agent</p>
       <nav>
         <a href="#overview">1. 这是什么</a>
+        <a href="#quick-tutorial">1.1 新手完整教程</a>
         <a href="#roles">2. 工程师与 Agent 分工</a>
         <a href="#install">3. 安装与初始化</a>
         <a href="#scenario-router">4. 按场景选择路线</a>
+        <a href="#existing-project">4.1 非全新项目接入</a>
+        <a href="#repo-topology">4.2 仓库与同步中心</a>
         <a href="#product-path">5. 真实产品研发路径</a>
         <a href="#full-flow">6. 总流程图</a>
         <a href="#reference">7. Reference 与 DSL</a>
@@ -628,12 +631,42 @@
         </div>
       </section>
 
+      <section id="quick-tutorial">
+        <h2>1.1 新手完整教程</h2>
+        <p>第一次使用时，不要从命令开始背。工程师只要在对话里说 <code>启动 aw</code> 或 <code>@aw</code>，Agent 必须先询问角色，再按下面路径回答问题、确认文件、批准计划；Agent 负责把每一步落到项目文件里。</p>
+        <div class="flow">
+          <div class="step"><strong>1. 启动分流</strong><span>启动 aw / @aw，先确认角色</span></div><div class="arrow">→</div>
+          <div class="step"><strong>2. 仓库准备</strong><span>确认真实代码仓库和同步中心</span></div><div class="arrow">→</div>
+          <div class="step"><strong>3. 需求输入</strong><span>PRD、原型、接口、旧系统材料进入 reference</span></div><div class="arrow">→</div>
+          <div class="step"><strong>4. DSL 审核</strong><span>需求、页面、交互、事件、边界、验收确认</span></div><div class="arrow">→</div>
+          <div class="step"><strong>5. Plan 拆分</strong><span>共享协作 Plan 或本地执行 Plan</span></div><div class="arrow">→</div>
+          <div class="step"><strong>6. 研发闭环</strong><span>brief → confirm → code → verify → handoff</span></div>
+        </div>
+        <table>
+          <thead><tr><th>你要告诉 Agent 什么</th><th>Agent 会做什么</th><th>你要确认什么</th></tr></thead>
+          <tbody>
+            <tr><td>说 <code>启动 aw</code> 或 <code>@aw</code>。</td><td>声明进入 AgentWorkflow，并先问角色：<code>1=产品</code>、<code>2=前端</code>、<code>3=后端</code>、<code>4=全栈</code>。</td><td>选择角色。全栈表示前后端代码默认在同一仓库下。</td></tr>
+            <tr><td>当前项目路径。</td><td>先执行 <code>aw project scan</code>，根据项目内容生成 <code>docs/PROJECT_SCAN.md</code>，判断全新 / 已有项目。</td><td>Agent 必须先复述扫描依据，再由工程师确认项目阶段。</td></tr>
+            <tr><td>这是全新项目还是已有项目。</td><td>按扫描结果和工程师确认写入 <code>PROJECT_CONFIG</code> 的项目阶段，并选择全新流程或存量流程。</td><td>没有扫描和确认前，不允许生成 DSL / Plan 或写代码。</td></tr>
+            <tr><td>这是仅前端、仅后端、单仓前后端，还是前后端两个项目。</td><td>写入构建目标，并决定是否需要同步中心。</td><td>如果是两个项目，必须确认真实前端仓库、后端仓库和同步中心。</td></tr>
+            <tr><td>前后端是否同一台电脑开发。</td><td>同电脑用本地 <code>project-harness</code>；不同电脑引导创建远程 <code>project-harness</code> 仓库。</td><td>远程仓库地址、分支、提交权限和同步节奏。</td></tr>
+            <tr><td>需求材料在哪里。</td><td>读取 <code>reference/manifest.yaml</code> 和 <code>reference/inputs/</code>，生成 DSL suite。</td><td>DSL 是否覆盖需求、页面、交互、事件、接口边界和验收。</td></tr>
+            <tr><td>DSL 已确认。</td><td>单项目生成本地 Plan；双项目先生成同步中心协作 Plan，再派生前端 / 后端本地 Plan。</td><td>Plan 是否可执行、依赖是否清楚、任务是否落在真实仓库。</td></tr>
+            <tr><td>Plan 已确认。</td><td>执行 <code>aw confirm</code>，之后每个 AT-T 先 brief 再编码。</td><td>每个任务开始前的需求问题、验收方式、高风险改动和 Git 提交。</td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <strong>最短上手提示词：</strong>“启动 aw。当前项目路径是 X。请先不要写代码，先问我角色：1 产品、2 前端、3 后端、4 全栈；我确认后再执行 aw project scan，复述你判断这是全新还是已有项目的依据，再引导我确认项目阶段、同步中心、项目形态和真实代码仓库，然后按手册流程继续。”
+        </div>
+      </section>
+
       <section id="roles">
         <h2>2. 工程师与 Agent 分工</h2>
         <table>
           <thead><tr><th>角色</th><th>负责什么</th><th>不能省略的动作</th></tr></thead>
           <tbody>
             <tr><td>工程师 / 产品负责人</td><td>提供需求、确认 DSL、确认计划、确认子任务边界、确认高风险操作和 Git 提交。</td><td>确认关键业务规则、权限、金额、数据口径、接口契约、发布风险。</td></tr>
+            <tr><td>全栈工程师</td><td>在一个仓库内同时负责前端和后端代码，Plan 仍拆出 frontend/backend/fullstack AT-T。</td><td>默认不强制同步中心；只有分仓、不同电脑或 PM 三端协作时才建立同步中心。</td></tr>
             <tr><td>Codex / Agent</td><td>读取项目文件，生成 DSL/Plan，拆任务，执行代码修改，跑验证，记录 Bug/变更/Handoff。</td><td>不得猜需求；不得越过 DSL/Plan/AT-T；不得自动 Git 提交。</td></tr>
             <tr><td>Reviewer Agent</td><td>只读代码并记录评审，不直接修改业务代码。</td><td>使用 <code>aw agents review</code> 留痕，阻塞项必须写清楚。</td></tr>
             <tr><td>Tester Agent</td><td>维护测试计划、验证命令、复测和失败记录。</td><td>测试失败必须进入 <code>AI_BUG_LOG.md</code>。</td></tr>
@@ -649,33 +682,46 @@
 
 cd /path/to/your-project
 chmod +x scripts/aw scripts/*.sh
+./scripts/aw start
 ./scripts/aw init
+./scripts/aw project scan
 ./scripts/aw status
 ./scripts/aw dashboard</code></pre>
-        <h3>配置代码托管平台与构建目标</h3>
-        <pre><code># 先询问工程师使用哪种代码托管平台
+        <h3>配置项目阶段、代码托管平台与构建目标</h3>
+        <pre><code># 先扫描，再询问工程师使用哪种代码托管平台
+./scripts/aw project scan
+# 工程师根据 docs/PROJECT_SCAN.md 确认后
+./scripts/aw config init --project-stage 1 --project-kind 1 --repo-url https://github.com/owner/repo
+
 # 1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode
 # 7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup
-./scripts/aw config init --project-kind 1 --repo-url https://github.com/owner/repo
-
 # 本地 Git 仓库不需要远程地址
-./scripts/aw config init --project-kind 2
+./scripts/aw config init --project-stage 2 --project-kind 2
 
 # 构建目标：1=前端，2=后端，3=前后端
 ./scripts/aw config init --build-target 1</code></pre>
+        <table>
+          <thead><tr><th>启动时必须先问</th><th>配置值</th><th>后续路线</th></tr></thead>
+          <tbody>
+            <tr><td>扫描结果建议全新项目，工程师确认。</td><td><code>aw project scan</code> → <code>--project-stage 1</code> / <code>new</code></td><td>走全新项目流程：reference → DSL suite → DSL 审核 → Plan → confirm → 开发。</td></tr>
+            <tr><td>扫描结果建议已有 / 存量项目，工程师确认。</td><td><code>aw project scan</code> → <code>--project-stage 2</code> / <code>existing</code></td><td>走存量项目流程：现状盘点 → 一期基线回填 → 增量 DSL → 增量 Plan → confirm → 开发。</td></tr>
+          </tbody>
+        </table>
         <div class="warn callout">
-          <strong>注意：</strong>这些配置不是装饰信息。后续 Plan 拆分、验证命令、远程仓库引导、任务执行都会读取 <code>docs/PROJECT_CONFIG.md</code>。
+          <strong>硬闸门：</strong><code>aw plan</code>、<code>aw approve dsl --plan</code>、<code>aw plan apply</code> 会先执行 <code>aw project gate</code>。没有 <code>docs/PROJECT_SCAN.md</code>、没有确认项目阶段 / 同步中心决策 / 项目类型 / 构建目标，或前后端分仓未配置同步中心，Plan 会被阻断。
         </div>
       </section>
 
       <section id="scenario-router">
         <h2>4. 按场景选择路线</h2>
-        <p>开始真实项目之前，先让工程师选择项目形态。不同形态的目录、Agent 角色、同步方式和提示词不同，不能混用。</p>
+        <p>开始真实项目之前，Agent 必须先扫描项目内容，再让工程师选择项目形态。不同形态的目录、Agent 角色、同步方式和提示词不同，不能混用。</p>
         <table>
           <thead><tr><th>项目场景</th><th>推荐目录</th><th>Agent 会做什么</th><th>工程师怎么启动</th></tr></thead>
           <tbody>
             <tr><td>仅前端项目</td><td><code>project-frontend/</code></td><td>只生成前端 DSL/Plan/AT-T，重点确认页面、路由、状态、接口契约、组件和验收。</td><td>使用 <code>19.6</code> 提示词，构建目标选 <code>1=前端项目</code>。</td></tr>
             <tr><td>仅后端项目</td><td><code>project-backend/</code></td><td>只生成后端 DSL/Plan/AT-T，重点确认接口、权限、错误码、事务、数据表、消息和验收。</td><td>使用 <code>19.8</code> 提示词，构建目标选 <code>2=后端项目</code>。</td></tr>
+            <tr><td>全栈单仓项目</td><td><code>project-app/</code></td><td>前后端代码在一个仓库下，构建目标为 <code>3=前后端项目</code>；Plan 拆 frontend/backend/fullstack 任务，但不默认建立同步中心。</td><td>说 <code>启动 aw</code> 或 <code>@aw</code>，角色选择 <code>4=全栈</code>。</td></tr>
+            <tr><td>非全新 / 存量项目</td><td>已有一期代码、已有需求或已进入研发阶段的项目。</td><td>先做项目盘点、事实基线、代码索引、已有需求回填，再为“下一期 / 当前增量需求”生成 DSL 和 Plan。</td><td>使用 <code>19.1b</code>、<code>19.1c</code> 提示词；禁止把存量代码当成新项目重建。</td></tr>
             <tr><td>同电脑前后端两个项目</td><td><code>project-frontend/</code><br><code>project-backend/</code><br><code>project-harness/</code></td><td>前后端各自开发，各自维护本项目事实，通过本地同步中心交换 handoff、REQ、Bug、接口契约。</td><td>使用 <code>19.10</code> 提示词，分别在两个项目会话中声明项目路径和同步中心路径。</td></tr>
             <tr><td>不同电脑前后端两个项目</td><td>两端各有本地项目；<code>project-harness</code> 是单独远程 Git 仓库。</td><td>每端先拉取 远程 Harness，再 <code>aw sync pull</code>、<code>aw sync inbox</code>、<code>aw sync board</code>；跨端事项用 <code>aw sync event</code>，经确认后提交 Harness。</td><td>使用 <code>19.11</code> 提示词，先准备 远程 Harness 仓库。</td></tr>
           </tbody>
@@ -685,25 +731,103 @@ chmod +x scripts/aw scripts/*.sh
         </div>
       </section>
 
+      <section id="existing-project">
+        <h2>4.1 非全新项目接入</h2>
+        <p>如果项目已经开发过一期，或者已经进入研发阶段，不要按“空白新项目”处理。AgentWorkflow 的第一步是把现状变成可追溯基线：代码在哪里、已经实现了什么、哪些需求已经完成、哪些 Bug 和变更遗留、下一期要做什么。</p>
+        <div class="flow">
+          <div class="step"><strong>0. 冻结现状</strong><span>不先改代码，先识别项目阶段和仓库状态</span></div><div class="arrow">→</div>
+          <div class="step"><strong>1. 安装初始化</strong><span>aw install/init/config/rules，不覆盖业务代码</span></div><div class="arrow">→</div>
+          <div class="step"><strong>2. 事实盘点</strong><span>扫描目录、脚本、模块、接口、测试、配置、Git 状态</span></div><div class="arrow">→</div>
+          <div class="step"><strong>3. 回填基线</strong><span>生成 FILE_INDEX、SERVICE_CATALOG、Handoff、一期基线 REQ</span></div><div class="arrow">→</div>
+          <div class="step"><strong>4. 增量 DSL</strong><span>只为下一期 / 当前需求生成 DSL suite</span></div><div class="arrow">→</div>
+          <div class="step"><strong>5. 增量 Plan</strong><span>只拆未完成任务，保留既有实现边界</span></div>
+        </div>
+        <table>
+          <thead><tr><th>步骤</th><th>Agent 必须做</th><th>禁止做</th><th>关键产物</th></tr></thead>
+          <tbody>
+            <tr><td>接入判断</td><td>先执行 <code>aw project scan</code>，再询问项目是否已有生产代码、一期是否完成、当前要做维护还是二期。</td><td>不扫描就直接生成新项目 DSL。</td><td><code>docs/PROJECT_SCAN.md</code>、<code>docs/PROJECT_CONFIG.md</code></td></tr>
+            <tr><td>代码盘点</td><td>优先用 <code>aw context plan</code>、<code>aw file-index</code>、<code>aw service-catalog discover</code> 做目标化索引。</td><td>全仓无目标读取所有文件。</td><td><code>docs/FILE_INDEX.md</code>、<code>docs/SERVICE_CATALOG.md</code></td></tr>
+            <tr><td>一期基线</td><td>把已完成能力、入口、接口、已知风险、未关闭 Bug 写入 Handoff / Memory / REQ。</td><td>把历史事实混进新增需求，导致验收边界不清。</td><td><code>PROJECT_HANDOFF.md</code>、<code>docs/memory/</code>、<code>docs/requirements/</code></td></tr>
+            <tr><td>增量需求</td><td>为下一期或当前变更生成增量 DSL，明确“复用现有实现 / 需要改造 / 不改动”。</td><td>重写已有页面、接口、表结构或权限模型。</td><td><code>docs/dsl/DSL_*/</code></td></tr>
+            <tr><td>增量计划</td><td>只拆新增、变更、修复、联调任务；每个 AT-T 关联受影响文件和验证命令。</td><td>把已完成的一期能力重新拆成待开发任务。</td><td><code>docs/plans/</code>、<code>ATOMIC_TASKS</code></td></tr>
+          </tbody>
+        </table>
+        <div class="warn callout">
+          <strong>存量项目铁律：</strong>先建立“当前真实状态”，再生成“下一步计划”。如果代码事实、已有需求和增量需求冲突，必须先问工程师确认，不能让 Agent 选择一个看起来顺眼的版本。
+        </div>
+      </section>
+
+      <section id="repo-topology">
+        <h2>4.2 仓库与同步中心准备</h2>
+        <p>从“构建项目”进入“拆研发计划”之前，Agent 必须先确认真实项目代码仓库。尤其是前后端双项目，不能只在一个临时目录里拆 Plan；Plan 必须落到真实前端仓库、真实后端仓库和唯一同步中心上。</p>
+        <div class="flow">
+          <div class="step"><strong>确认拓扑</strong><span>单项目 / 双项目 / 同电脑 / 不同电脑</span></div><div class="arrow">→</div>
+          <div class="step"><strong>确认仓库</strong><span>前端仓库、后端仓库、同步中心</span></div><div class="arrow">→</div>
+          <div class="step"><strong>安装 workflow</strong><span>各代码仓库执行 aw install / init / config</span></div><div class="arrow">→</div>
+          <div class="step"><strong>同步中心初始化</strong><span>aw sync init / baseline / board</span></div><div class="arrow">→</div>
+          <div class="step"><strong>DSL 已审</strong><span>共享 DSL 进入 global/dsl</span></div><div class="arrow">→</div>
+          <div class="step"><strong>Plan 拆分</strong><span>先协作 Plan，再本地派生 Plan</span></div>
+        </div>
+        <table>
+          <thead><tr><th>工程师选择</th><th>Agent 必须引导</th><th>Plan 拆分规则</th></tr></thead>
+          <tbody>
+            <tr><td>单前端项目</td><td>确认前端真实仓库路径 / 远程仓库地址，安装并初始化。</td><td>只在前端项目生成本地 DSL / Plan / AT-T。</td></tr>
+            <tr><td>单后端项目</td><td>确认后端真实仓库路径 / 远程仓库地址，安装并初始化。</td><td>只在后端项目生成本地 DSL / Plan / AT-T。</td></tr>
+            <tr><td>同仓前后端项目</td><td>确认 monorepo 路径、前端目录、后端目录、启动和验证命令。</td><td>一个 Plan 可拆 frontend / backend / contract / integration 任务，但仍在同一仓库确认。</td></tr>
+            <tr><td>同电脑前后端两个项目</td><td>确认 <code>project-frontend</code>、<code>project-backend</code>、本地 <code>project-harness</code> 三个路径。</td><td>共享 DSL / 协作 Plan 放同步中心；前端 / 后端各自生成本地派生 Plan。</td></tr>
+            <tr><td>不同电脑前后端两个项目</td><td>引导工程师先创建独立远程 <code>project-harness</code> 仓库，两端 clone 到本地。</td><td>同步中心远程仓库是真源；每次共享 DSL / 协作 Plan / 事件变更后都提示是否提交并 push。</td></tr>
+          </tbody>
+        </table>
+        <h3>双项目仓库准备清单</h3>
+        <pre><code># 1. 前端真实代码仓库
+cd /path/workspace/project-frontend
+/path/to/agentworkflow/scripts/aw install . --adapters
+./scripts/aw init
+./scripts/aw config init --project-stage 1 --project-kind 1 --repo-url https://github.com/owner/frontend
+./scripts/aw config init --build-target 1
+
+# 2. 后端真实代码仓库
+cd /path/workspace/project-backend
+/path/to/agentworkflow/scripts/aw install . --adapters
+./scripts/aw init
+./scripts/aw config init --project-stage 1 --project-kind 1 --repo-url https://github.com/owner/backend
+./scripts/aw config init --build-target 2
+
+# 3. 同步中心：同电脑可以是本地目录；不同电脑必须是单独远程 Git 仓库
+mkdir -p /path/workspace/project-harness
+cd /path/workspace/project-frontend
+./scripts/aw sync init ../project-harness --project frontend --agent frontend-agent --role frontend
+cd /path/workspace/project-backend
+./scripts/aw sync init ../project-harness --project backend --agent backend-agent --role backend</code></pre>
+        <div class="warn callout">
+          <strong>Plan 前置闸门：</strong>如果没有项目扫描、前端 / 后端真实仓库或同步中心还没确认，Agent 只能继续引导工程师建仓和初始化，不能直接生成本地 Plan。双项目必须先有同步中心协作 Plan，再派生本地 Plan。
+        </div>
+      </section>
+
       <section id="product-path">
         <h2>5. 真实产品研发路径</h2>
         <p>真实项目不要从“写代码”开始，而是从需求输入、工程化确认、任务拆分、研发执行、联调验证、发布交接一路闭环。下面是推荐路径。</p>
         <div class="flow">
-          <div class="step"><strong>0. 项目准备</strong><span>安装 skill、配置项目类型、构建目标、代码托管平台</span></div><div class="arrow">→</div>
-          <div class="step"><strong>1. 需求输入</strong><span>PRD、原型、接口、旧系统、约束进入 reference</span></div><div class="arrow">→</div>
-          <div class="step"><strong>2. 规格冻结</strong><span>生成 DSL suite，工程师审阅并确认已审</span></div><div class="arrow">→</div>
-          <div class="step"><strong>3. 研发计划</strong><span>按前端/后端/全栈拆 Plan 与 AT-T</span></div><div class="arrow">→</div>
-          <div class="step"><strong>4. 任务执行</strong><span>每个 AT-T 先 brief，确认后编码</span></div><div class="arrow">→</div>
-          <div class="step"><strong>5. 联调验证</strong><span>verify、TP、Bug、REQ change、sync</span></div><div class="arrow">→</div>
-          <div class="step"><strong>6. 发布交接</strong><span>report、release gate、handoff、Git 提交</span></div>
+          <div class="step"><strong>0. 项目扫描</strong><span>aw project scan 判断全新 / 已有项目</span></div><div class="arrow">→</div>
+          <div class="step"><strong>1. 项目准备</strong><span>安装 skill、配置项目类型、构建目标、代码托管平台</span></div><div class="arrow">→</div>
+          <div class="step"><strong>2. 仓库拓扑</strong><span>确认单项目 / 双项目 / 同电脑 / 不同电脑</span></div><div class="arrow">→</div>
+          <div class="step"><strong>3. 需求输入</strong><span>PRD、原型、接口、旧系统、约束进入 reference</span></div><div class="arrow">→</div>
+          <div class="step"><strong>4. 规格冻结</strong><span>生成 DSL suite，工程师审阅并确认已审</span></div><div class="arrow">→</div>
+          <div class="step"><strong>5. 研发计划</strong><span>单项目本地 Plan；双项目先协作 Plan 再本地派生</span></div><div class="arrow">→</div>
+          <div class="step"><strong>6. 任务执行</strong><span>每个 AT-T 先 brief，确认后编码</span></div><div class="arrow">→</div>
+          <div class="step"><strong>7. 联调验证</strong><span>verify、TP、Bug、REQ change、sync</span></div><div class="arrow">→</div>
+          <div class="step"><strong>8. 发布交接</strong><span>report、release gate、handoff、Git 提交</span></div>
         </div>
         <table>
           <thead><tr><th>阶段</th><th>工程师做什么</th><th>Agent 做什么</th><th>关键产物</th></tr></thead>
           <tbody>
-            <tr><td>项目准备</td><td>告诉 Agent 项目路径、仓库类型、构建目标、前后端形态。</td><td>执行 <code>aw init</code>、<code>aw config init</code>、<code>aw rules init</code>。</td><td><code>PROJECT_CONFIG.md</code>、<code>ENGINEERING_RULES.md</code></td></tr>
+            <tr><td>项目扫描</td><td>告诉 Agent 项目路径。</td><td>执行 <code>aw project scan</code>，复述扫描依据，让工程师确认全新 / 已有项目。</td><td><code>PROJECT_SCAN.md</code></td></tr>
+            <tr><td>项目准备</td><td>确认仓库类型、构建目标、前后端形态。</td><td>执行 <code>aw init</code>、<code>aw config init</code>、<code>aw rules init</code>。</td><td><code>PROJECT_CONFIG.md</code>、<code>ENGINEERING_RULES.md</code></td></tr>
+            <tr><td>仓库拓扑</td><td>确认真实前端仓库、后端仓库、同步中心；不同电脑时确认 远程 Harness 仓库。</td><td>引导完成 <code>aw sync init</code>、<code>sync baseline</code>、<code>sync board</code>，未准备好前不拆 Plan。</td><td><code>project-harness</code>、<code>global/dsl</code>、<code>global/plans</code></td></tr>
+            <tr><td>存量接入</td><td>说明项目已完成阶段、当前分支、一期范围、下一期目标。</td><td>先生成事实基线、代码索引、服务目录、Handoff，再处理增量需求。</td><td><code>FILE_INDEX</code>、<code>SERVICE_CATALOG</code>、<code>PROJECT_HANDOFF</code></td></tr>
             <tr><td>需求输入</td><td>上传 PRD、原型、接口文档、现有代码说明。</td><td>读取 <code>reference/manifest.yaml</code>，不编造路径。</td><td><code>reference/inputs/</code></td></tr>
             <tr><td>规格冻结</td><td>审 DSL，确认需求、页面、交互、事件、边界、验收。</td><td>生成 DSL suite 和 review 包。</td><td><code>docs/dsl/DSL_*/</code></td></tr>
-            <tr><td>研发计划</td><td>确认生成前端、后端或全栈计划。</td><td>生成 Plan 和 ATOMIC_TASKS，等待审批。</td><td><code>docs/plans/</code></td></tr>
+            <tr><td>研发计划</td><td>确认生成前端、后端或全栈计划；双项目先确认协作 Plan。</td><td>单项目生成本地 Plan；双项目先写同步中心协作 Plan，再生成前端 / 后端派生 Plan。</td><td><code>docs/plans/</code>、<code>project-harness/global/plans</code></td></tr>
             <tr><td>任务执行</td><td>每个任务开始前确认需求问题。</td><td><code>task brief</code> 后等待确认，再写代码。</td><td>代码 diff、<code>ATOMIC_TASKS</code></td></tr>
             <tr><td>联调验证</td><td>确认接口、权限、字段、异常态和验收。</td><td>跑验证，记录 Bug / REQ change / Handoff / sync。</td><td><code>TP</code>、<code>AI_BUG_LOG</code>、<code>REQ</code></td></tr>
             <tr><td>发布交接</td><td>确认是否提交 Git、是否发布、是否交接。</td><td>生成 report、release gate、handoff、changelog。</td><td><code>reports</code>、<code>CHANGELOG</code>、<code>PROJECT_HANDOFF</code></td></tr>
@@ -813,6 +937,7 @@ chmod +x scripts/aw scripts/*.sh
           <div class="step"><strong>aw next</strong><span>找下一项 AT-T</span></div><div class="arrow">→</div>
           <div class="step"><strong>task brief</strong><span>输出需求沟通包</span></div><div class="arrow">→</div>
           <div class="step"><strong>工程师确认</strong><span>问清边界和验收</span></div><div class="arrow">→</div>
+          <div class="step"><strong>context gate</strong><span>限制允许读取文件</span></div><div class="arrow">→</div>
           <div class="step"><strong>task start</strong><span>进入编码</span></div><div class="arrow">→</div>
           <div class="step"><strong>task complete</strong><span>验证并更新状态</span></div>
         </div>
@@ -820,12 +945,15 @@ chmod +x scripts/aw scripts/*.sh
 ./scripts/aw task brief AT-T1-001
 # 工程师确认后
 ./scripts/aw task confirm AT-T1-001 "已确认：范围=用户列表筛选；验收=筛选后列表和分页正确；非目标=不改导出和权限模型"
+./scripts/aw context plan --task AT-T1-001
+# 工程师审阅允许读取文件后
+./scripts/aw context gate --task AT-T1-001
 ./scripts/aw task start AT-T1-001
 ./scripts/aw paste task
 # 编码完成后
 ./scripts/aw task complete AT-T1-001</code></pre>
         <div class="danger callout">
-          <strong>禁止：</strong>没有结构化 <code>task confirm</code> 就开始写代码。确认摘要必须包含范围 / 验收 / 非目标；需求不清楚时，Agent 必须继续追问，不能靠猜。
+          <strong>硬闸门：</strong>工程师说“执行研发任务 / 开始开发 / 做下一个任务”时，Agent 必须先执行 <code>aw next</code> 和 <code>aw task brief &lt;AT-T&gt;</code>，追问需求并等待确认。没有结构化 <code>task confirm</code>（范围 / 验收 / 非目标齐全）、<code>context gate</code> 和 <code>task start</code>，<code>aw paste task</code> 不会输出编码提示，<code>aw check plan</code> / <code>aw gate task</code> 也会暴露手改状态绕过流程的问题。
         </div>
       </section>
 
@@ -976,12 +1104,16 @@ chmod +x scripts/aw scripts/*.sh
       <section id="sync">
         <h2>15. 前后端双项目同步</h2>
         <p>当前后端在两个项目或两台电脑上时，用第三个目录或远程 Git 仓库作为同步中心。同步中心不只保存前后端快照，还应保存一份前后端共同确认的共享 DSL 和协作 Plan，避免两边各自拆分后产生歧义。</p>
+        <div class="danger callout">
+          <strong>Plan 前置规则：</strong>双项目场景下，完成 DSL 后不能让前端和后端各自直接拆本地 Plan。Agent 必须先确认前端真实仓库、后端真实仓库和同步中心是否已经建好；不同电脑时必须先引导创建并 clone GitHub <code>project-harness</code> 仓库。同步中心就绪后，先生成 <code>global/plans</code> 协作 Plan，再派生前端 / 后端本地 Plan。
+        </div>
         <div class="flow">
-          <div class="step"><strong>同步基线</strong><span>读取 global DSL / Plan / TASK_BOARD</span></div><div class="arrow">→</div>
-          <div class="step"><strong>拉取收件箱</strong><span>sync pull + sync inbox</span></div><div class="arrow">→</div>
-          <div class="step"><strong>事件发布</strong><span>sync event 记录 complete/change/contract 等</span></div><div class="arrow">→</div>
-          <div class="step"><strong>人工确认 Git</strong><span>工程师确认后提交 project-harness</span></div><div class="arrow">→</div>
-          <div class="step"><strong>对方采纳</strong><span>pull/inbox/board 后回写本地事实</span></div>
+          <div class="step"><strong>拓扑确认</strong><span>本地双项目 / 同电脑 / 不同电脑</span></div><div class="arrow">→</div>
+          <div class="step"><strong>仓库就绪</strong><span>前端、后端、project-harness</span></div><div class="arrow">→</div>
+          <div class="step"><strong>共享 DSL</strong><span>global/dsl 共同事实</span></div><div class="arrow">→</div>
+          <div class="step"><strong>协作 Plan</strong><span>global/plans 跨端计划</span></div><div class="arrow">→</div>
+          <div class="step"><strong>本地派生</strong><span>前端 / 后端各自执行 Plan</span></div><div class="arrow">→</div>
+          <div class="step"><strong>事件同步</strong><span>sync event / inbox / board</span></div>
         </div>
         <h3>推荐目录</h3>
         <pre><code>workspace/
@@ -1117,24 +1249,120 @@ cd workspace/project-backend
 
       <section id="prompts">
         <h2>19. 提示词大全</h2>
-        <p>下面的提示词按真实项目场景组织。复制后替换路径、任务 ID、项目名即可。建议工程师在每个新会话第一条消息中给出“项目形态 + 路径 + 当前阶段”。</p>
-        <h3>19.1 新项目接入：先不要写代码</h3>
+        <p>下面的提示词按真实项目场景组织。复制后替换路径、任务 ID、项目名即可。最短启动只需要说 <code>启动 aw</code> 或 <code>@aw</code>；Agent 必须先问角色，再继续扫描项目。</p>
+        <h3>19.0 最短启动：启动 aw / @aw</h3>
+        <pre><code>启动 aw。
+当前项目路径：/path/to/project
+
+请先不要写业务代码，也不要生成 DSL / Plan。
+你的第一步必须是问我角色：
+1. 产品
+2. 前端
+3. 后端
+4. 全栈
+
+角色确认后再继续：
+1. 执行 aw project scan
+2. 阅读 docs/PROJECT_SCAN.md
+3. 复述项目是全新 / 已有的判断依据、前端线索、后端线索、同步中心状态
+4. 让我确认项目阶段
+5. 按角色和项目拓扑询问是否建立同步中心
+
+如果我选择 4=全栈：
+- 默认前端和后端代码在同一个仓库下
+- 构建目标默认是 3=前后端项目 / fullstack
+- 不默认强制建立同步中心
+- 只有我确认前后端分仓、不同电脑协作或 PM 三端协作时，才引导建立同步中心</code></pre>
+        <h3>19.1 启动分流：先判断全新项目还是已有项目</h3>
+        <pre><code>启动 aw。
+当前项目路径：/path/to/project
+当前是项目启动接入阶段，不要写业务代码。
+请先执行：
+1. 先问我角色：1=产品，2=前端，3=后端，4=全栈
+2. 角色确认后执行 aw project scan
+3. 阅读 docs/PROJECT_SCAN.md
+4. 复述你判断“全新 / 已有项目”的依据、前端线索、后端线索、同步中心状态
+
+然后问我并等待回答：
+1. 是否认可扫描结论：这是全新项目，还是已有 / 存量项目？
+2. 是否建立同步中心 project-harness？1=建立 / 使用，2=不建立，3=稍后决定（Plan 阻断）。如果我是全栈且前后端在一个仓库下，允许选择不建立
+3. 这个项目使用哪种代码托管平台：1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=阿里云云效 Codeup？
+4. 构建目标是仅前端、仅后端，还是前后端项目？
+
+得到回答后：
+- 如果是全新项目，执行 aw config init --project-stage 1，并继续 19.1a 全新项目接入流程
+- 如果是已有 / 存量项目，执行 aw config init --project-stage 2，并继续 19.1b 非全新项目接入流程
+- 如果建立 / 使用同步中心，执行 aw config init --sync-center 1 --sync-center-path &lt;project-harness路径&gt;，并引导 aw sync init
+- 如果不建立同步中心，执行 aw config init --sync-center 2
+- 如果稍后决定，执行 aw config init --sync-center 3，并说明 Plan 会阻断到决策完成
+- 如果是远程代码仓库，继续配置 --project-kind <n> --repo-url
+- 如果是本地 Git 项目，继续配置 --project-kind 2
+
+在我确认项目阶段和同步中心决策前，不要生成 DSL、不要生成 Plan、不要修改业务代码。
+无论是否为前后端项目，接入阶段都必须先问我是否建立同步中心并记录选择；如果我选择稍后决定，Plan 必须阻断；如果我选择前后端项目且是分仓 / 双项目，Plan 前必须完成 aw sync init；如果我选择全栈单仓，默认不强制同步中心。</code></pre>
+        <h3>19.1a 全新项目接入：先不要写代码</h3>
         <pre><code>使用 agentworkflow。
 当前项目路径：/path/to/project
-当前是新项目接入阶段，不要写业务代码。
+当前是全新项目接入阶段，不要写业务代码。
 请按顺序完成：
 1. 检查是否已安装 scripts/aw；没有则说明需要从 agentworkflow 源码安装
-2. 执行 aw project scan，复述 docs/PROJECT_SCAN.md 的全新/已有判断依据
-3. 如果没有初始化，执行 aw init
-4. 引导我确认项目阶段，并立即询问是否建立同步中心：1=建立/使用，2=不建立，3=稍后决定（Plan 阻断）
-5. 引导我确认：使用哪种代码托管平台；构建目标是前端、后端还是前后端
-6. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
+2. 执行 aw project scan，并让我确认扫描结论为全新项目
+3. 执行 aw status、aw check config、aw rules review
+4. 如果没有初始化，执行 aw init
+5. 确认 docs/PROJECT_CONFIG.md 中项目阶段为 new；如果没有，执行 aw config init --project-stage 1
+6. 引导我确认：使用哪种代码托管平台；构建目标是前端、后端还是前后端
+7. 无论项目形态如何，都先问我是否建立同步中心；如果我选择建立，引导 aw sync init；如果我选择不建，记录 --sync-center 2；如果稍后决定，记录 --sync-center 3 并阻断 Plan
+8. 检查 reference/inputs/ 和 reference/manifest.yaml 是否存在
 最后输出缺失项清单和下一步建议。</code></pre>
-        <h3>19.2 代码托管与同步中心配置引导</h3>
+        <h3>19.1b 非全新项目接入：先盘点现状</h3>
+        <pre><code>使用 agentworkflow。
+当前项目路径：/path/to/existing-project
+这是非全新项目，已经有一期代码 / 已进入研发阶段。
+当前目标不是重建项目，而是把 AgentWorkflow 接入现有项目。
+
+请先不要写业务代码，也不要生成新增需求的 Plan。
+请按顺序完成：
+1. 检查 scripts/aw 是否已安装；没有则说明安装方式
+2. 执行 aw project scan，并让我确认扫描结论为已有 / 存量项目
+3. 执行 aw status、aw check config、aw rules review
+4. 如果没有初始化，执行 aw init，但不得覆盖业务代码
+5. 引导我确认：使用哪种代码托管平台；构建目标是前端、后端还是前后端；当前是维护、Bug 修复、二期开发还是联调阶段
+6. 无论项目形态如何，都先问我是否建立同步中心；如果我选择建立，引导 aw sync init；如果我选择不建，记录 --sync-center 2；如果稍后决定，记录 --sync-center 3 并阻断 Plan
+7. 读取 package.json / pom.xml / build.gradle / README / 启动脚本 / 路由 / API 目录 / 测试目录等入口文件，禁止全仓无目标读取
+8. 执行 aw context plan、aw file-index、aw service-catalog discover --write
+9. 输出项目事实盘点：技术栈、启动命令、测试命令、主要模块、接口入口、已知风险、缺失配置
+
+最后给出：
+- 现状基线是否足够
+- 还需要我补充哪些一期文档或口述说明
+- 下一步是否进入“一期基线回填”或“增量 DSL 生成”。</code></pre>
+        <h3>19.1c 非全新项目：一期基线回填</h3>
+        <pre><code>使用 agentworkflow 为存量项目回填一期基线。
+当前项目路径：/path/to/existing-project
+一期需求状态：已完成 / 部分完成 / 不确定
+下一步目标：维护 / Bug 修复 / 二期开发 / 联调
+
+请基于现有代码、README、接口文档、测试、Git 状态和我补充的口述说明，生成“当前真实状态”：
+1. 已实现能力清单
+2. 已有页面 / 模块 / 接口 / 数据模型 / 权限边界
+3. 已知 Bug、技术债、风险和未确认事项
+4. 当前可运行命令和失败命令
+5. 不应被二期误改的稳定边界
+
+请落盘或建议落盘到：
+- docs/handoff/PROJECT_HANDOFF.md
+- docs/FILE_INDEX.md
+- docs/SERVICE_CATALOG.md
+- docs/requirements/ 中的一期基线 REQ
+- docs/memory/ 中可复用的稳定结论
+
+完成后不要写业务代码。
+请问我是否确认这份一期基线；确认后再为下一期 / 当前增量需求生成 DSL。</code></pre>
+        <h3>19.2 代码托管平台配置引导</h3>
         <pre><code>使用 agentworkflow 配置项目来源。
 请先问我并等待回答：
-1. 是否建立同步中心 project-harness？1=建立/使用，2=不建立，3=稍后决定（Plan 阻断）
-2. 使用哪种代码托管平台？1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup；如果不是本地 Git，远程仓库地址是什么？
+1. 使用哪种代码托管平台？1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=阿里云云效 Codeup。
+2. 如果不是本地 Git，远程仓库地址是什么？
 3. 当前分支是什么？是否允许后续在大需求完成后询问提交？
 确认后更新 docs/PROJECT_CONFIG.md。
 不要自动提交 Git。</code></pre>
@@ -1158,15 +1386,115 @@ cd workspace/project-backend
 2. 仍需工程师确认的问题
 3. 不允许进入研发的阻塞项
 不要写业务代码，不要编造 reference 路径。</code></pre>
+        <h3>19.4b 非全新项目：增量 DSL 生成</h3>
+        <pre><code>使用 agentworkflow 为存量项目生成增量 DSL。
+当前项目路径：/path/to/existing-project
+已确认的一期基线：docs/handoff/PROJECT_HANDOFF.md、docs/FILE_INDEX.md、docs/SERVICE_CATALOG.md、docs/requirements/
+本次增量需求：&lt;写清楚二期需求 / 维护需求 / Bug 修复目标&gt;
+
+请先读取一期基线和必要入口文件，再生成多文件 DSL suite。
+DSL 必须区分：
+1. 已有能力：只引用，不重新设计
+2. 本次新增：需要实现
+3. 本次变更：说明从旧行为改成什么
+4. 本次修复：说明复现、期望、验收
+5. 不改动边界：页面、接口、表结构、权限、数据口径、兼容性
+6. 受影响文件候选：只列候选，不全仓扫描
+
+生成后请列出：
+- 与一期基线冲突的地方
+- 需要工程师确认的问题
+- 不允许进入研发的阻塞项
+不要直接生成 Plan，等待我确认 DSL。</code></pre>
         <h3>19.5 DSL 审核后生成计划</h3>
         <pre><code>DSL 已确认。
 请先检查 docs/PROJECT_CONFIG.md：
-1. 项目类型是否已选择代码托管平台
+1. 项目类型是否已选择代码托管平台，且非本地 Git 时是否已有远程仓库地址
 2. 构建目标是前端、后端还是前后端
 3. lint/test/build/e2e 命令是否配置
 然后按 DSL 生成研发 Plan 和 ATOMIC_TASKS。
 生成后不要直接写代码，等待我确认 Plan。
 Plan 确认后再执行 aw confirm 生成 ENGINEERING_INDEX.md，并确认 docs/FILE_INDEX.md 已刷新。</code></pre>
+        <h3>19.5a 前后端双项目：DSL/Plan 前置引导</h3>
+        <pre><code>使用 agentworkflow。
+当前准备进入前后端双项目的 DSL / Plan 阶段。
+请先不要生成 Plan，不要写业务代码。
+
+请先问我并等待确认：
+1. 前端和后端是同一个仓库，还是两个独立代码仓库？
+2. 如果是两个仓库，是同一台电脑开发，还是不同电脑开发？
+3. 前端真实项目路径和 远程仓库地址是什么？
+4. 后端真实项目路径和 远程仓库地址是什么？
+5. 是否已经有同步中心 project-harness？
+6. 如果不同电脑开发，project-harness 的 远程仓库地址是什么？两端是否都已 clone？
+
+确认后请按场景执行：
+- 同电脑双项目：引导我准备 project-frontend、project-backend、project-harness 三个本地目录。
+- 不同电脑双项目：引导我先创建独立远程 Git 仓库 project-harness，并在每台电脑 clone。
+- 分别在前端和后端真实代码仓库安装 agentworkflow、执行 aw init、aw project scan、aw config init。
+- 分别执行 aw sync init，把前端和后端注册到同一个 project-harness。
+
+完成前置准备前，不要拆本地 Plan。
+完成后输出：前端仓库、后端仓库、同步中心、下一步 DSL / Plan 拆分路径。</code></pre>
+        <h3>19.5b 前后端双项目：同步中心建设</h3>
+        <pre><code>使用 agentworkflow 建设前后端同步中心。
+
+项目信息：
+前端项目路径：/path/workspace/project-frontend
+后端项目路径：/path/workspace/project-backend
+同步中心路径：/path/workspace/project-harness
+同步中心远程仓库地址：填写 GitHub、GitLab、Gitee、Codeup 或自托管 Git 服务中的真实仓库 URL
+开发方式：同一台电脑 / 不同电脑
+
+请按顺序完成：
+1. 检查前端和后端是否是真实代码仓库，而不是临时目录
+2. 检查两个项目是否已安装 agentworkflow；没有则引导安装
+3. 前端执行 aw config init --build-target 1；后端执行 aw config init --build-target 2
+4. 前端执行 aw sync init &lt;harness&gt; --project frontend --agent frontend-agent --role frontend
+5. 后端执行 aw sync init &lt;harness&gt; --project backend --agent backend-agent --role backend
+6. 执行 aw sync baseline 和 aw sync board
+7. 如果是不同电脑开发，提醒我提交并 push project-harness；Git 操作前必须问我确认
+
+最后输出同步中心目录结构、共享 DSL 路径、协作 Plan 路径、TASK_BOARD 路径。</code></pre>
+        <h3>19.5c 前后端双项目：DSL 已审后拆 Plan</h3>
+        <pre><code>前后端共享 DSL 已确认。
+请不要让前端和后端各自直接独立拆 Plan。
+
+请先检查：
+1. project-harness/global/dsl 是否已有共享 DSL 基线
+2. 前端真实代码仓库是否已初始化 agentworkflow
+3. 后端真实代码仓库是否已初始化 agentworkflow
+4. project-harness 是否已经完成 aw sync init / baseline / board
+5. 如果不同电脑开发，project-harness 是否已 git pull 到最新
+
+然后按顺序生成：
+1. 同步中心协作 Plan：写入 project-harness/global/plans/
+   - 跨端里程碑
+   - 接口契约和 Mock 顺序
+   - 前后端依赖关系
+   - 联调检查点
+   - 阻塞处理规则
+2. 前端本地派生 Plan：写入 project-frontend/docs/plans/
+   - 只拆页面、路由、组件、状态、API client、前端测试任务
+3. 后端本地派生 Plan：写入 project-backend/docs/plans/
+   - 只拆接口、权限、数据、事务、消息、后端测试任务
+4. 刷新 project-harness/global/plans/TASK_BOARD.md
+
+生成后等待我确认协作 Plan 和两个本地 Plan。
+Plan 未确认前不要写业务代码。</code></pre>
+        <h3>19.5d 非全新项目：增量 Plan 生成</h3>
+        <pre><code>存量项目的增量 DSL 已确认。
+请基于已审 DSL、一期基线和代码索引生成增量 Plan。
+
+计划必须满足：
+1. 只拆本次新增 / 变更 / 修复 / 联调任务，不把一期已完成能力重新拆为待开发
+2. 每个 AT-T 写清楚受影响文件候选、不可改动边界、验证命令、回滚风险
+3. 如果需要修改已有接口、DTO、数据库、权限或公共组件，必须标记为高风险并要求工程师确认
+4. 如果是前后端分项目，必须同步到 project-harness 的 global/dsl、global/plans、TASK_BOARD
+5. 如果信息不足，先列问题，不要猜测拆任务
+
+生成后不要写代码。
+等待我确认 Plan；确认后再执行 aw confirm，并刷新 ENGINEERING_INDEX.md 和 docs/FILE_INDEX.md。</code></pre>
         <h3>19.6 仅前端项目：完整开发会话</h3>
         <pre><code>你是 frontend-agent。
 当前是仅前端项目：/path/project-frontend
@@ -1177,6 +1505,7 @@ Plan 确认后再执行 aw confirm 生成 ENGINEERING_INDEX.md，并确认 docs/
 2. aw next
 3. aw task brief &lt;AT-T&gt;
 4. 向我确认页面结构、字段、交互、权限、接口 mock/真实接口、验收标准
+5. 我确认后执行结构化 aw task confirm（范围 / 验收 / 非目标齐全）、aw context plan、aw context gate、aw task start
 确认前不要写代码。
 完成后：
 1. aw task complete &lt;AT-T&gt;
@@ -1204,6 +1533,7 @@ Plan 确认后再执行 aw confirm 生成 ENGINEERING_INDEX.md，并确认 docs/
 2. aw next
 3. aw task brief &lt;AT-T&gt;
 4. 向我确认接口路径、入参、出参、权限、错误码、事务、数据表、验收标准
+5. 我确认后执行结构化 aw task confirm（范围 / 验收 / 非目标齐全）、aw context plan、aw context gate、aw task start
 确认前不要写代码。
 完成后：
 1. aw task complete &lt;AT-T&gt;
@@ -1268,6 +1598,7 @@ Plan 确认后再执行 aw confirm 生成 ENGINEERING_INDEX.md，并确认 docs/
 4. 执行 aw sync inbox --from backend
 5. 执行 aw sync board
 6. aw task brief 当前 AT-T，并向我确认需求
+7. 我确认后执行结构化 aw task confirm（范围 / 验收 / 非目标齐全）、aw context plan、aw context gate、aw task start
 
 完成任务后：
 1. aw task complete 当前 AT-T
@@ -1289,6 +1620,7 @@ Plan 确认后再执行 aw confirm 生成 ENGINEERING_INDEX.md，并确认 docs/
 4. 执行 aw sync inbox --from frontend
 5. 执行 aw sync board
 6. aw task brief 当前 AT-T，并向我确认接口、权限、字段、错误码
+7. 我确认后执行结构化 aw task confirm（范围 / 验收 / 非目标齐全）、aw context plan、aw context gate、aw task start
 
 完成任务后：
 1. aw task complete 当前 AT-T

@@ -27,6 +27,7 @@ if [[ ! -f "${ROOT}/skill/reference.md" ]]; then
 fi
 
 COMMANDS=(
+  "aw start"
   "aw dsl apply"
   "aw dsl suite"
   "aw dsl review"

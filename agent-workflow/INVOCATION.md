@@ -13,7 +13,7 @@
 ## 一句话流程
 
 ```text
-install/init → aw project scan 扫描项目内容 → 工程师确认项目阶段（全新 / 已有）→ 立即询问是否建立同步中心（建立 / 不建 / 稍后决定）→ 若 PM / 产品主导或三端协作，先 `aw pm start` + `aw pm init <project-harness>` 建立 PM 同步中心 → 选择代码托管平台（GitHub/GitLab/Bitbucket/Gitee/GitCode/Gitea/Forgejo/GitLab CE/Gerrit/云效 Codeup/本地 Git）+ 构建目标（前端/后端/前后端）→ 若双项目则先确认真实前端仓库 / 后端仓库 / 同步中心并执行 aw sync init → 全新项目走 reference/PM references → DSL → Plan；已有项目走现状盘点 → 一期基线 → 增量 DSL → 增量 Plan；双项目/三端项目先共享 DSL / 协作 Plan / PM dispatch，再派生本地 Plan → DSL 已审 / Plan 可执行 → aw confirm → ENGINEERING_INDEX.md → aw next → AICODING 写代码 → verify → CHANGELOG/Git → handoff
+启动 aw / @aw → 询问工程师角色（1 产品 / 2 前端 / 3 后端 / 4 全栈）→ install/init → aw project scan 扫描项目内容 → 工程师确认项目阶段（全新 / 已有）→ 按角色和拓扑询问是否建立同步中心（建立 / 不建 / 稍后决定；全栈单仓可不建）→ 若 PM / 产品主导或三端协作，先 `aw pm start` + `aw pm init <project-harness>` 建立 PM 同步中心 → 选择代码托管平台（GitHub/GitLab/Bitbucket/Gitee/GitCode/Gitea/Forgejo/GitLab CE/Gerrit/云效 Codeup/本地 Git）+ 构建目标（前端/后端/前后端；全栈角色默认前后端在同一仓库）→ 若双项目则先确认真实前端仓库 / 后端仓库 / 同步中心并执行 aw sync init → 全新项目走 reference/PM references → DSL → Plan；已有项目走现状盘点 → 一期基线 → 增量 DSL → 增量 Plan；双项目/三端项目先共享 DSL / 协作 Plan / PM dispatch，再派生本地 Plan → DSL 已审 / Plan 可执行 → aw confirm → ENGINEERING_INDEX.md → aw next → AICODING 写代码 → verify → CHANGELOG/Git → handoff
 ```
 
 ## 闭环管理目标
@@ -71,6 +71,7 @@ chmod +x scripts/aw scripts/*.sh
 
 | 意图 | 示例 |
 |------|------|
+| 启动 AgentWorkflow | `启动 aw` / `@aw` / `aw start`。Agent 必须先声明已进入 AgentWorkflow，然后询问角色：`1=产品`、`2=前端`、`3=后端`、`4=全栈`；未确认角色前不得生成 DSL / Plan 或写业务代码 |
 | 初始化 | `按 agent-workflow 初始化` / `aw init`；启动后必须先 `aw project scan` 扫描项目内容，再问工程师确认：这是全新项目还是已有 / 存量项目 |
 | 项目扫描 | `aw project scan` 生成 `docs/PROJECT_SCAN.md`，Agent 先复述扫描依据和建议阶段，再让工程师确认 |
 | 选择项目阶段 | `aw config init --project-stage 1` = 全新项目；`aw config init --project-stage 2` = 已有 / 存量项目。未扫描、未确认前不得生成 DSL / Plan 或写业务代码 |
@@ -94,7 +95,7 @@ chmod +x scripts/aw scripts/*.sh
 | 研发中计划变更 | 小变更用 `aw plan change --summary "..."`；同范围新增任务用 `aw plan task-add --title "..."`；任务过大用 `aw task split <AT-T> --into "A; B"`；大范围变化新建 Plan / ATOMIC 后重新 approve/confirm |
 | 选择项目类型 | 项目阶段确认后询问工程师使用哪种代码托管平台，再执行 `aw config init --project-kind <n> --repo-url <url>`；1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup；2 不需要 `--repo-url` |
 | 同步中心决策 | 项目阶段确认后立即询问工程师是否建立同步中心：`aw config init --sync-center 1 --sync-center-path <path>` = 建立 / 使用，`--sync-center 2` = 不建立，`--sync-center 3` = 稍后决定且 Plan 保持阻断 |
-| 选择构建目标 | DSL 已审后、Plan 生成前执行 `aw config init --build-target 1|2|3`；1=前端项目，2=后端项目，3=前后端项目 |
+| 选择构建目标 | DSL 已审后、Plan 生成前执行 `aw config init --build-target 1|2|3`；1=前端项目，2=后端项目，3=前后端项目。启动角色为 `全栈` 时默认前后端代码在同一仓库，优先配置 `3=前后端项目`，不默认强制同步中心 |
 | 双项目拓扑确认 | 构建目标为前后端且前后端分仓时，先确认前端真实仓库、后端真实仓库、同电脑 / 不同电脑、同步中心路径 / 远程仓库地址；未确认前不得拆本地 Plan |
 | 同步中心建设 | 同电脑用本地 `project-harness`；不同电脑先创建并 clone 独立远程 `project-harness` 仓库；前后端分别执行 `aw sync init <harness> --project ... --agent ... --role ...` |
 | PM 产品生命周期 | `aw pm start` 进入 PM 向导；`aw pm init <harness>` 创建 PM 同步中心；`aw pm intake-check --write` 体检资料；`aw pm design import/link/change` 管理 Pencil；`aw pm dispatch/dashboard/gate` 派发三端任务、刷新看板、检查生命周期 |
@@ -167,7 +168,7 @@ Agent 应：**先读本文 + `PRODUCT_INPUT_WORKFLOW.md`**，再执行对应 `sc
 
 当工程师说“执行研发任务 / 开始开发 / 做下一个任务”时，Agent 的第一步必须是输出或执行 `aw next` 与 `aw task brief <AT-T>`，然后像真实研发一样追问需求、边界、验收、异常态、联动、非目标和风险。工程师明确确认前，不得写业务代码，不得生成编码提示，不得调用 `aw paste task`。确认后必须记录 `aw task confirm <AT-T> "已确认：范围=...；验收=...；非目标=..."`，再执行 `aw context plan`、`aw context gate`、`aw task start`。
 
-启动 AgentWorkflow 时，Agent 必须先运行 `aw project scan` 扫描项目内容，生成并阅读 `docs/PROJECT_SCAN.md`，再把“建议项目阶段、判断依据、前端/后端线索、同步中心状态”复述给工程师确认。确认后写入 `docs/PROJECT_CONFIG.md`：全新项目用 `aw config init --project-stage 1`；已有 / 存量项目用 `aw config init --project-stage 2`。随后必须立即询问工程师是否建立同步中心，并用 `aw config init --sync-center 1|2|3` 记录。未扫描、未确认项目阶段、未记录同步中心决策前，不得生成 DSL / Plan，不得写业务代码。
+启动 AgentWorkflow 时，工程师可以只说 `启动 aw` 或 `@aw`。Agent 第一反应不是扫描也不是写代码，而是声明进入 AgentWorkflow，并询问工程师角色：`1=产品`、`2=前端`、`3=后端`、`4=全栈`。角色确认后，Agent 才运行 `aw project scan` 扫描项目内容，生成并阅读 `docs/PROJECT_SCAN.md`，再把“建议项目阶段、判断依据、前端/后端线索、同步中心状态”复述给工程师确认。确认后写入 `docs/PROJECT_CONFIG.md`：全新项目用 `aw config init --project-stage 1`；已有 / 存量项目用 `aw config init --project-stage 2`。随后按角色和项目拓扑询问工程师是否建立同步中心，并用 `aw config init --sync-center 1|2|3` 记录。`全栈` 角色默认前后端代码在同一仓库，构建目标为 `3=fullstack`，同步中心可以选择不建立；如果工程师确认前后端分仓、不同电脑或 PM 管理三端协作，则必须建立同步中心。未确认角色、未扫描、未确认项目阶段、未记录同步中心决策前，不得生成 DSL / Plan，不得写业务代码。
 
 生成 Plan 或拆 AT-T 前必须通过 `aw project gate`：已完成项目扫描；项目阶段、同步中心决策、项目类型、构建目标已确认；若同步中心决策为 `pending` 必须阻断；若构建目标为前后端且前后端分仓 / 双项目，必须先引导工程师建立同步中心并执行 `aw sync init <project-harness> --project ... --agent ... --role ...`。未通过 gate 时，`aw plan`、`aw approve dsl --plan`、`aw plan apply` 必须阻断。
 
