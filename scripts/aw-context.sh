@@ -28,7 +28,7 @@ Usage:
   aw context impact "symbol or keyword"
   aw context affected [--task AT-T...]
   aw context gate --task AT-T...
-  aw context budget --task AT-T... [--max-files 8] [--max-symbols 20] [--max-search 5]
+  aw context budget --task AT-T... [--max-files 6] [--max-symbols 12] [--max-search 3]
   aw context check
 EOF
   exit "${1:-0}"
@@ -187,8 +187,8 @@ case "$CMD" in
     ;;
   plan)
     TASK=""
-    MAX_FILES="$(ctx_field "Max Files Per Task" "8" 2>/dev/null || echo 8)"
-    MAX_SYMBOLS="$(ctx_field "Max Symbols Per Task" "20" 2>/dev/null || echo 20)"
+    MAX_FILES="$(ctx_field "Max Files Per Task" "6" 2>/dev/null || echo 6)"
+    MAX_SYMBOLS="$(ctx_field "Max Symbols Per Task" "12" 2>/dev/null || echo 12)"
     while [[ $# -gt 0 ]]; do
       case "$1" in
         --task) TASK="${2:-}"; shift 2 ;;
@@ -383,7 +383,7 @@ PY
     fi
     allowed_count="$(awk -F'|' '/^\| [^|]+ \| [^|]+ \| (no|yes) \|/ && $2 !~ /文件/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); if ($2 != "待补充") print $2}' "$OUT" | wc -l | tr -d ' ')"
     max_files="$(awk -F'|' '/\| Max files \|/ {gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3; exit}' "$OUT")"
-    [[ -z "$max_files" ]] && max_files=8
+    [[ -z "$max_files" ]] && max_files=6
     if [[ "$allowed_count" -eq 0 ]]; then
       echo "block: context plan has no allowed files" >&2
       err=1

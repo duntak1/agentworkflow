@@ -11,6 +11,8 @@
 
 ### Added
 
+- Add token-budget mode: lean runtime Skill instructions, staged context reading, tighter default AT-T budgets, DSL/Plan split-reading guidance, and sync inbox summary-first rules.
+
 - Add short startup triggers `启动 aw` / `@aw` and `aw start`, with first-launch role routing for 产品 / 前端 / 后端 / 全栈 and a fullstack same-repo path that does not force a sync center.
 
 - Add hard delivery gates for task completion checkpoints, sync pull freshness, FILE_INDEX refresh, and provider-neutral VCS PR/MR/CR workflows across GitHub/GitLab/Bitbucket/Gitee/GitCode/Gitea/Forgejo/GitLab CE/Gerrit/Codeup.

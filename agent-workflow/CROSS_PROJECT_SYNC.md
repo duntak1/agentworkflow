@@ -334,7 +334,7 @@ cd workspace/project-backend
 ```text
 使用 agentworkflow。
 当前项目是 frontend，使用 agent 团队和 aw sync。
-开始任务前先执行 aw sync pull --from backend，读取 docs/sync/inbox/backend。
+开始任务前先执行 aw sync pull --from backend，再用 aw sync inbox --from backend 查看摘要。只读取 docs/sync/inbox/backend 中与当前 AT-T、接口、阻塞或契约相关的事件，不要读取整个 inbox。
 如果后端接口、字段、权限、错误码不明确，先记录阻塞，不要猜。
 完成任务后写 handoff / bug / req，再执行 aw sync push --task 当前 AT-T。
 ```
@@ -344,7 +344,7 @@ cd workspace/project-backend
 ```text
 使用 agentworkflow。
 当前项目是 backend，使用 agent 团队和 aw sync。
-开始任务前先执行 aw sync pull --from frontend，读取 docs/sync/inbox/frontend。
+开始任务前先执行 aw sync pull --from frontend，再用 aw sync inbox --from frontend 查看摘要。只读取 docs/sync/inbox/frontend 中与当前 AT-T、接口、阻塞或契约相关的事件，不要读取整个 inbox。
 如果前端字段、页面交互、联动边界不明确，先记录阻塞，不要猜。
 完成任务后写接口契约、handoff / bug / req，再执行 aw sync push --task 当前 AT-T。
 ```

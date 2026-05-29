@@ -10,6 +10,7 @@
 【输入】
 - 规格：@reference/inputs/ 与 @docs/requirements/ 中本轮 REQ。
 - 骨架：@docs/dsl/DSL_SPEC_TEMPLATE.md；按路由拆页时用 @docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md。
+- 省 token：每轮最多读取 3 个 reference 输入文件；大型材料先生成摘要 / 待确认清单，再分批补充 DSL。
 
 【输出必须包含】
 1. 元数据：名称、短标识、版本、关联 REQ、状态（草稿）。
@@ -54,6 +55,7 @@
 【输入】
 - 源码：仅 @reference/source/ 或 manifest 中列出的真实路径。
 - 可选范围：@docs/requirements/ REQ。
+- 省 token：先读 manifest 和目录/入口摘要，只读取与本轮 DSL 相关的源码文件；禁止把参考源码整仓塞入上下文。
 
 【输出必须包含】
 元数据、诚实边界、路由×源文件清单、主屏组件表、OV-ID 表、§BP 数据接入约定、notes。

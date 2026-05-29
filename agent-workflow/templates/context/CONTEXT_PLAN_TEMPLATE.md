@@ -18,9 +18,11 @@
 
 | 项 | 限制 |
 |----|------|
-| Max files | 8 |
-| Max symbols | 20 |
-| Max search queries | 5 |
+| Max files | 6 |
+| Max symbols | 12 |
+| Max search queries | 3 |
+| Max handoff lines | 120 |
+| Max sync inbox events | 20 |
 
 ## 允许读取文件
 
@@ -61,6 +63,16 @@
 
 | 时间 | 文件 | 原因 | 是否在允许列表 |
 |------|------|------|----------------|
+
+## Token 预算检查
+
+| 项 | 结果 |
+|----|------|
+| 是否读取 HTML 手册 | no |
+| 是否读取 ENGINEERING_INDEX.md | no |
+| 是否全仓扫描 | no |
+| 是否读取完整 sync inbox | no |
+| 是否读取 blocked dirs | no |
 
 ## 扩大上下文记录
 

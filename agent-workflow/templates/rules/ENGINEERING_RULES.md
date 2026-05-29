@@ -82,7 +82,7 @@
 
 - 新增模块前先确认目录归属和负责人。
 - 禁止无目标全仓扫描。开始任何业务代码修改前，必须先生成或读取 `docs/context/tasks/CTX-<AT-T>.md`，并只读取 Context Plan 中列出的文件。
-- 默认单任务上下文预算：最多 8 个业务文件、20 个 symbol、5 次精准搜索。需要扩大范围时，必须先在 Context Plan 的“扩大上下文记录”中写明原因和工程师确认。
+- 默认单任务上下文预算：最多 6 个业务文件、12 个 symbol、3 次精准搜索。需要扩大范围时，必须先在 Context Plan 的“扩大上下文记录”中写明原因和工程师确认。
 - 读代码优先顺序：CodeGraph / `aw context` → `docs/context/CODE_CONTEXT_INDEX.md` → `docs/FILE_INDEX.md` → 精准 `rg` → 工程师确认。不得为了“了解项目”批量读取文件。
 - 禁止读取 `.git`、`node_modules`、`dist`、`build`、`coverage`、`.next`、`.nuxt`、`target`、`vendor`、`tmp`、`logs` 等依赖、构建、缓存、生成或日志目录，除非工程师明确授权。
 - 不引入未评审的新依赖、新中间件、新云服务。

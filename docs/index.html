@@ -561,6 +561,7 @@
       <nav>
         <a href="#overview">1. 这是什么</a>
         <a href="#quick-tutorial">1.1 新手完整教程</a>
+        <a href="#token-budget">1.2 省 token 工作法</a>
         <a href="#roles">2. 工程师与 Agent 分工</a>
         <a href="#install">3. 安装与初始化</a>
         <a href="#scenario-router">4. 按场景选择路线</a>
@@ -628,6 +629,24 @@
         </div>
         <div class="callout">
           <strong>最重要的规则：</strong>DSL 没有工程师确认成 <code>已审</code> 前，不写业务代码；每个 AT-T 开始前，Agent 必须先问清需求并等待工程师确认。
+        </div>
+      </section>
+
+      <section id="token-budget">
+        <h2>1.2 省 token 工作法</h2>
+        <p>AgentWorkflow 默认采用“先摘要、后展开”。Agent 不应该把整本手册、整个同步中心、整仓代码或历史文件一次性读进上下文；每一步都先用 CLI 摘要和任务级白名单定位。</p>
+        <table>
+          <thead><tr><th>场景</th><th>默认只看</th><th>禁止默认读取</th></tr></thead>
+          <tbody>
+            <tr><td>启动</td><td><code>aw start</code>、<code>aw status --json</code>、<code>aw project scan</code> 摘要。</td><td>整本 HTML 手册、整篇历史 Roadmap。</td></tr>
+            <tr><td>恢复会话</td><td><code>aw handoff --check</code>、<code>aw memory inject</code>、<code>aw next</code>。</td><td>完整 Handoff 历史、完整 Memory 目录。</td></tr>
+            <tr><td>研发任务</td><td><code>aw task brief</code> 和 <code>docs/context/tasks/CTX-&lt;AT-T&gt;.md</code> 白名单。</td><td>无目标全仓扫描、一次性打开大量业务文件。</td></tr>
+            <tr><td>前后端同步</td><td><code>aw sync inbox --from &lt;peer&gt;</code> 摘要、<code>TASK_BOARD.md</code>、相关 event / contract。</td><td>整个 <code>docs/sync/inbox</code> 或整个 <code>project-harness</code>。</td></tr>
+            <tr><td>工程师索引</td><td>提示人类查看 <code>ENGINEERING_INDEX.md</code> / <code>docs/FILE_INDEX.md</code>。</td><td>Agent 把 <code>ENGINEERING_INDEX.md</code> 当上下文全文读取。</td></tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <strong>默认预算：</strong>每个 AT-T 最多 6 个业务文件、12 个 symbol、3 次精准搜索。超过预算前，Agent 必须说明“为什么需要更多上下文、准备读哪些文件、要回答什么问题”，并等待工程师确认。
         </div>
       </section>
 
@@ -1560,12 +1579,12 @@ Plan 未确认前不要写业务代码。</code></pre>
 同步中心：/path/workspace/project-harness
 
 当前会话是 frontend-agent。
-开始任务前先读取同步中心 global/dsl、global/plans 和 global/plans/TASK_BOARD.md，确认共享基线和双方任务状态没有冲突。
+开始任务前先看同步摘要，避免读取完整同步中心：只查看 global/plans/TASK_BOARD.md、aw sync inbox 摘要，以及与当前 AT-T 相关的 DSL/Plan/contract 片段。
 每个前端任务开始前，先在前端项目执行：
 1. aw sync pull --from backend
 2. aw sync inbox --from backend
 3. aw sync board
-读取 docs/sync/inbox/backend 后再 task brief。
+只读取 docs/sync/inbox/backend 中与当前 AT-T、接口、阻塞或契约相关的事件后再 task brief；不要读取整个 inbox。
 遇到接口字段、权限、错误码不明确时，使用 aw sync event --type question 或 --type contract，不要只写聊天结论。
 完成任务后 aw task complete 会自动发布 complete 事件；如果还有需求变更、问题、契约或交接，再补 aw sync event --type change/question/contract/handoff，并问我是否提交 Git 或同步中心版本。</code></pre>
         <pre><code>使用 agentworkflow 的双项目同步。
@@ -1575,12 +1594,12 @@ Plan 未确认前不要写业务代码。</code></pre>
 同步中心：/path/workspace/project-harness
 
 当前会话是 backend-agent。
-开始任务前先读取同步中心 global/dsl、global/plans 和 global/plans/TASK_BOARD.md，确认共享基线和双方任务状态没有冲突。
+开始任务前先看同步摘要，避免读取完整同步中心：只查看 global/plans/TASK_BOARD.md、aw sync inbox 摘要，以及与当前 AT-T 相关的 DSL/Plan/contract 片段。
 每个后端任务开始前，先在后端项目执行：
 1. aw sync pull --from frontend
 2. aw sync inbox --from frontend
 3. aw sync board
-读取 docs/sync/inbox/frontend 后再 task brief。
+只读取 docs/sync/inbox/frontend 中与当前 AT-T、接口、阻塞或契约相关的事件后再 task brief；不要读取整个 inbox。
 遇到页面字段、交互、联动边界不明确时，使用 aw sync event --type question 或 --type contract，不要只写聊天结论。
 完成任务后 aw task complete 会自动发布 complete 事件，并更新 SERVICE_CATALOG；如果还有需求变更、问题、契约或交接，再补 aw sync event --type change/question/contract/handoff，并问我是否提交 Git 或同步中心版本。</code></pre>
         <h3>19.11 不同电脑：前后端两个项目 + 远程 Harness</h3>
@@ -1593,7 +1612,7 @@ Plan 未确认前不要写业务代码。</code></pre>
 当前会话是 frontend-agent。
 开始任务前：
 1. 进入 project-harness 执行 git pull
-2. 读取 project-harness/global/dsl、project-harness/global/plans 和 TASK_BOARD.md，确认共享基线和双方任务状态
+2. 只读取 project-harness/global/plans/TASK_BOARD.md、相关 contract，以及当前 AT-T 对应的共享 DSL/Plan 片段，确认共享基线和双方任务状态
 3. 回到前端项目执行 aw sync pull --from backend
 4. 执行 aw sync inbox --from backend
 5. 执行 aw sync board
@@ -1615,7 +1634,7 @@ Plan 未确认前不要写业务代码。</code></pre>
 当前会话是 backend-agent。
 开始任务前：
 1. 进入 project-harness 执行 git pull
-2. 读取 project-harness/global/dsl、project-harness/global/plans 和 TASK_BOARD.md，确认共享基线和双方任务状态
+2. 只读取 project-harness/global/plans/TASK_BOARD.md、相关 contract，以及当前 AT-T 对应的共享 DSL/Plan 片段，确认共享基线和双方任务状态
 3. 回到后端项目执行 aw sync pull --from frontend
 4. 执行 aw sync inbox --from frontend
 5. 执行 aw sync board
@@ -1659,7 +1678,7 @@ Plan 未确认前不要写业务代码。</code></pre>
         <h3>19.14 联调阶段</h3>
         <pre><code>进入前后端联调阶段。
 请使用 agentworkflow 做以下事情：
-1. 双方先读取同步中心 global/dsl、global/plans、global/plans/TASK_BOARD.md、global/contracts
+1. 双方先查看 global/plans/TASK_BOARD.md、global/contracts 相关接口、当前 AT-T 对应的共享 DSL/Plan 片段
 2. 双方分别执行 aw sync pull --from &lt;peer&gt;、aw sync inbox --from &lt;peer&gt;、aw sync board
 3. 接口契约变化用 aw sync event --type contract
 4. 检查 SERVICE_CATALOG、DSL boundaries、Plan、ATOMIC 是否一致

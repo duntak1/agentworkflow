@@ -61,6 +61,12 @@ agent-workflow 把交付拆成一条跨工具流水线：
 
 Skill 首屏还内置编码原则：**Think before coding、Simplicity first、Mature solutions first、Surgical changes、Goal-driven execution**。
 
+## Token 省用原则
+
+默认按“先摘要、后展开”执行：启动只看 `aw start` / `aw status --json` / `aw project scan` 摘要；研发任务只读 `aw task brief` 和 `docs/context/tasks/CTX-<AT-T>.md` 白名单；跨端同步只读 `aw sync inbox` 摘要、`TASK_BOARD.md` 和相关 event / contract。不要把 HTML 手册、`ENGINEERING_INDEX.md`、整个同步中心、整个 inbox 或整仓代码塞进 AI 上下文。
+
+默认 AT-T 预算：6 个业务文件、12 个 symbol、3 次精准搜索。超过预算前，Agent 必须说明原因并等待工程师确认。
+
 ## 快速开始
 
 对话里最短启动：

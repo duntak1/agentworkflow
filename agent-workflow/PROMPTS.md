@@ -282,10 +282,10 @@ Plan 未确认前不要写业务代码。
 同步中心：/path/workspace/project-harness
 
 当前会话是 frontend-agent。
-开始任务前先读取同步中心 global/dsl、global/plans 和 global/plans/TASK_BOARD.md，确认共享 DSL / 协作 Plan 基线和双方任务状态没有冲突。
+开始任务前先看同步摘要，避免读取完整同步中心：只查看 global/plans/TASK_BOARD.md、aw sync inbox 摘要，以及与当前 AT-T 相关的 DSL/Plan/contract 片段。
 每个前端任务开始前，先在前端项目执行 aw sync pull --from backend。
 再执行 aw sync board，查看对方计划、任务、依赖、阻塞和联调点。
-读取 docs/sync/inbox/backend 后再 task brief。
+只读取 docs/sync/inbox/backend 中与当前 AT-T、接口、阻塞或契约相关的事件后再 task brief；不要读取整个 inbox。
 遇到接口字段、权限、错误码不明确时，写 agents handoff 给 backend-agent，并 aw sync push。
 完成任务后 aw task complete、aw agents handoff、aw sync push，然后问我是否提交 Git。
 ```
@@ -298,10 +298,10 @@ Plan 未确认前不要写业务代码。
 同步中心：/path/workspace/project-harness
 
 当前会话是 backend-agent。
-开始任务前先读取同步中心 global/dsl、global/plans 和 global/plans/TASK_BOARD.md，确认共享 DSL / 协作 Plan 基线和双方任务状态没有冲突。
+开始任务前先看同步摘要，避免读取完整同步中心：只查看 global/plans/TASK_BOARD.md、aw sync inbox 摘要，以及与当前 AT-T 相关的 DSL/Plan/contract 片段。
 每个后端任务开始前，先在后端项目执行 aw sync pull --from frontend。
 再执行 aw sync board，查看对方计划、任务、依赖、阻塞和联调点。
-读取 docs/sync/inbox/frontend 后再 task brief。
+只读取 docs/sync/inbox/frontend 中与当前 AT-T、接口、阻塞或契约相关的事件后再 task brief；不要读取整个 inbox。
 遇到页面字段、交互、联动边界不明确时，写 agents handoff 给 frontend-agent，并 aw sync push。
 完成任务后 aw task complete、更新 SERVICE_CATALOG、aw agents handoff、aw sync push，然后问我是否提交 Git。
 ```
@@ -317,10 +317,10 @@ Plan 未确认前不要写业务代码。
 
 开始任务前：
 1. 进入 project-harness 执行 git pull
-2. 读取 project-harness/global/dsl、project-harness/global/plans 和 TASK_BOARD.md，确认共享基线和双方任务状态
+2. 只读取 project-harness/global/plans/TASK_BOARD.md、相关 contract，以及当前 AT-T 对应的共享 DSL/Plan 片段，确认共享基线和双方任务状态
 3. 回到当前项目执行 aw sync pull --from <peer>
 4. 执行 aw sync board
-5. 读取 docs/sync/inbox/<peer>
+5. 只读取 docs/sync/inbox/<peer> 中与当前 AT-T、接口、阻塞或契约相关的事件
 6. aw task brief 当前 AT-T，并向我确认需求
 
 完成任务后：

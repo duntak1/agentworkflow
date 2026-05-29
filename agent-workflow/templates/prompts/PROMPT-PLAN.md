@@ -7,7 +7,7 @@
 
 【输入】
 - DSL 真源：@docs/dsl/<已审文件>.md
-- 若为 DSL suite：同时读取 @docs/dsl/DSL_<slug>/INDEX.md、00-requirements、10-pages、20-interactions、30-events、40-boundaries、90-acceptance
+- 若为 DSL suite：先读取 @docs/dsl/DSL_<slug>/INDEX.md，再按目标领域只读取必要分片；不要默认一次性读取全部分片
 - 关联 REQ：@docs/requirements/ 对应 REQ
 - 计划骨架：@docs/plans/_TEMPLATE_PLAN.md
 - 原子任务骨架：@docs/plans/_TEMPLATE_ATOMIC_TASKS.md
@@ -23,6 +23,7 @@
 - 每项验证必须可执行（命令或 TP 用例路径）。
 - 不编写业务代码；只产出计划文档。
 - 在 DSL 元数据回填「关联 Plan」路径。
+- 省 token：不读取源码全文、不读取 ENGINEERING_INDEX.md、不读取 HTML 手册；需要更多 DSL 分片时先说明原因。
 
 【禁止】DSL 状态非「已审」时停止并提示人类先审 DSL。
 ```
