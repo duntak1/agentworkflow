@@ -242,6 +242,7 @@
     .hero-copy {
       position: relative;
       padding: 22px 30px 6px;
+      z-index: 3;
     }
     .hero-copy::before {
       content: "";
@@ -278,18 +279,19 @@
       margin: 0;
       font-size: clamp(48px, 6.2vw, 76px);
       line-height: 1.06;
-      font-weight: 820;
-      color: #f8fbff;
+      font-weight: 860;
+      color: #ffffff;
       text-shadow:
-        0 2px 18px rgba(0, 0, 0, .62),
-        0 0 26px rgba(132, 170, 255, .18);
+        0 2px 14px rgba(0, 0, 0, .7),
+        0 0 34px rgba(164, 201, 255, .28),
+        0 0 68px rgba(113, 96, 255, .18);
     }
     .grad-text {
       color: transparent;
-      background: linear-gradient(90deg, #ffffff 0%, #f6fbff 48%, #dceaff 76%, #b8d3ff 100%);
+      background: linear-gradient(90deg, #ffffff 0%, #eef7ff 34%, #9fd4ff 68%, #c9b8ff 100%);
       -webkit-background-clip: text;
       background-clip: text;
-      filter: drop-shadow(0 1px 10px rgba(60, 102, 190, .18));
+      filter: drop-shadow(0 1px 16px rgba(120, 176, 255, .34));
     }
     .lead {
       max-width: 660px;
@@ -304,6 +306,40 @@
       justify-content: center;
       gap: 12px;
       margin-top: 30px;
+    }
+    .hero-highlights {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 12px;
+      width: min(960px, 100%);
+      margin: 28px auto 0;
+    }
+    .hero-highlight {
+      border: 1px solid rgba(143, 183, 255, .2);
+      border-radius: 12px;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, rgba(11, 19, 45, .72), rgba(7, 12, 27, .46));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 16px 46px rgba(0,0,0,.18);
+      text-align: left;
+      backdrop-filter: blur(12px);
+    }
+    .hero-highlight strong {
+      display: block;
+      color: #f8fbff;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .hero-highlight span {
+      display: block;
+      color: #aebced;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .hero-highlight.primary {
+      border-color: rgba(169, 214, 255, .44);
+      background:
+        radial-gradient(circle at 18% 0%, rgba(131, 180, 255, .26), transparent 42%),
+        linear-gradient(180deg, rgba(20, 36, 80, .82), rgba(10, 18, 43, .58));
     }
     .hero-card {
       width: min(920px, 88vw);
@@ -459,6 +495,13 @@
       background: rgba(16, 23, 34, .78);
       padding: 18px;
       min-width: 0;
+    }
+    .card.featured {
+      border-color: rgba(143, 183, 255, .36);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(143, 183, 255, .16), transparent 36%),
+        rgba(16, 23, 34, .84);
+      box-shadow: 0 20px 60px rgba(37, 68, 138, .18);
     }
     .card h3 { margin-top: 0; }
     .card p { margin: 8px 0 0; color: var(--muted); }
@@ -691,6 +734,7 @@
       .preview-shell { grid-template-columns: 1fr; }
       .preview-side, .preview-right { display: none; }
       .flow { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .hero-highlights { grid-template-columns: 1fr; }
       .toplinks { display: none; }
     }
     @media (max-width: 760px) {
@@ -758,8 +802,14 @@
             <div class="eyebrow">v1.5 · Engineering Harness Workflow Skill</div>
             <h1>把 AI 研发变成<br><span class="grad-text">可确认的工程系统</span></h1>
             <p class="lead">AgentWorkflow 将复杂的产品、前端、后端协作，压缩成清晰发光的研发结构：Reference → DSL → Plan → AT-T → Verify → Handoff。启动只需要说 <code>启动 aw</code> 或 <code>@aw</code>。</p>
+            <div class="hero-highlights">
+              <div class="hero-highlight primary"><strong>全自动代码地图</strong><span>context plan、task start/complete、watch、pre-commit 自动刷新 CODE_MAP。</span></div>
+              <div class="hero-highlight"><strong>先确认再编码</strong><span>DSL、Plan、任务需求、上下文白名单逐层闸门，不靠 Agent 自觉。</span></div>
+              <div class="hero-highlight"><strong>跨端同步中心</strong><span>产品、前端、后端共享 DSL / Plan / Contract / Handoff，减少对接成本。</span></div>
+            </div>
             <div class="hero-actions">
               <a class="btn primary" href="#quickstart">开始使用</a>
+              <a class="btn" href="#code-map">代码地图</a>
               <a class="btn" href="#prompts">复制提示词</a>
               <a class="btn" href="https://github.com/duntak1/agentworkflow" target="_blank" rel="noopener">查看仓库</a>
             </div>
@@ -808,7 +858,7 @@
           <div class="card"><span class="tag blue">需求清晰</span><h3>先 DSL 后代码</h3><p>需求、页面、交互、事件、联动边界、验收都进入 DSL，审核前不写业务代码。</p></div>
           <div class="card"><span class="tag green">任务可控</span><h3>Plan 拆 AT-T</h3><p>每个研发任务都有范围、依赖、验收、测试计划和完成条件。</p></div>
           <div class="card"><span class="tag violet">跨端同步</span><h3>同步中心协作</h3><p>产品、前端、后台前端、后端通过 shared DSL、Plan、任务看板和契约文件沟通。</p></div>
-          <div class="card"><span class="tag yellow">省 Token</span><h3>分层读取</h3><p>默认 6 文件 / 12 symbol / 3 搜索，先读摘要和 Context Plan，不默认全仓扫描。</p></div>
+          <div class="card featured"><span class="tag yellow">代码地图</span><h3>全自动定位代码</h3><p><code>CODE_MAP.md</code> 自动生成和更新，先定位模块 / Symbol / 路由 / 测试，再进入 Context Plan，避免全仓扫描。</p></div>
         </div>
       </section>
 
