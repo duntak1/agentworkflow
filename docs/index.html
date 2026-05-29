@@ -72,7 +72,7 @@
       white-space: pre;
     }
     .shell {
-      max-width: 1440px;
+      width: 100%;
       margin: 0 auto;
       display: grid;
       grid-template-columns: 286px minmax(0, 1fr);
@@ -185,14 +185,14 @@
     }
     main {
       min-width: 0;
-      padding: 0 42px 72px;
+      padding: 0 0 72px;
     }
     .hero {
       position: relative;
       min-height: calc(100vh - 64px);
       display: grid;
       align-items: start;
-      padding: 52px 0 72px;
+      padding: 52px clamp(24px, 5vw, 96px) 72px;
       border-bottom: 1px solid rgba(148, 163, 184, .16);
       background:
         linear-gradient(180deg, rgba(3, 7, 20, .08) 0%, rgba(3, 7, 20, .22) 54%, rgba(3, 7, 20, .92) 100%),
@@ -419,8 +419,11 @@
     }
     .terminal-line span:first-child { color: #e879f9; }
     section {
-      padding: 54px 0 0;
+      padding: 54px clamp(24px, 4vw, 72px) 0;
       scroll-margin-top: 82px;
+    }
+    section.hero {
+      padding: 52px clamp(24px, 5vw, 96px) 72px;
     }
     .section-head {
       display: flex;
@@ -583,7 +586,7 @@
     }
     .footer {
       margin-top: 60px;
-      padding: 28px 0 44px;
+      padding: 28px clamp(24px, 4vw, 72px) 44px;
       border-top: 1px solid rgba(148, 163, 184, .16);
       color: var(--muted);
       font-size: 14px;
@@ -683,7 +686,7 @@
     @media (max-width: 1180px) {
       .shell { grid-template-columns: 1fr; }
       aside { display: none; }
-      main { padding: 0 24px 64px; }
+      main { padding: 0 0 64px; }
       .hero-grid { grid-template-columns: 1fr; }
       .preview-shell { grid-template-columns: 1fr; }
       .preview-side, .preview-right { display: none; }
@@ -694,8 +697,8 @@
       .topbar { padding: 0 14px; }
       .brand { min-width: 0; }
       .actions { display: none; }
-      main { padding: 0 16px 54px; }
-      .hero { min-height: auto; padding: 42px 0 38px; }
+      main { padding: 0 0 54px; }
+      section.hero { min-height: auto; padding: 42px 16px 38px; }
       .hero::after { top: 78px; width: 88vw; height: 140px; }
       .hero-grid { padding-top: 86px; }
       .hero-card { width: 100%; }
