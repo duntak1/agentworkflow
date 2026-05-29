@@ -50,6 +50,73 @@ audit_task() {
   fi
 }
 
+sync_auto_enabled() {
+  [[ "${AW_SYNC_AUTO:-1}" != "0" ]] || return 1
+  [[ -x "${SCRIPT_DIR}/aw-sync.sh" ]] || return 1
+  aw_sync_configured
+}
+
+sync_role_for_pm() {
+  local role
+  role="$(awk -F'|' '/\*\*角色\*\*/ {gsub(/^[ \t]+|[ \t]+$/, "", $3); print $3; exit}' "${ROOT}/docs/sync/SYNC_CONFIG.md" 2>/dev/null || true)"
+  case "$role" in
+    frontend|fe|前台|前台前端) echo "frontend" ;;
+    admin|admin-frontend|后台|后台管理|后台管理前端) echo "admin" ;;
+    backend|be|后端) echo "backend" ;;
+    *) echo "" ;;
+  esac
+}
+
+sync_before_task_start() {
+  local task_id="$1" role
+  sync_auto_enabled || return 0
+  echo "== auto sync before task start =="
+  "${SCRIPT_DIR}/aw-sync.sh" pull || {
+    echo "error: auto sync pull failed; fix sync center or set AW_SYNC_AUTO=0 for an explicit exception" >&2
+    return 1
+  }
+  "${SCRIPT_DIR}/aw-sync.sh" gate --task "$task_id" || {
+    echo "error: auto sync gate failed before starting ${task_id}" >&2
+    return 1
+  }
+  role="$(sync_role_for_pm)"
+  if [[ -n "$role" && -x "${SCRIPT_DIR}/aw-pm.sh" ]]; then
+    "${SCRIPT_DIR}/aw-pm.sh" assignments --role "$role" >/dev/null 2>&1 || true
+    echo "ok  PM assignments checked for role: ${role}"
+  fi
+}
+
+sync_after_task_complete() {
+  local task_id="$1"
+  sync_auto_enabled || return 0
+  echo "== auto sync after task complete =="
+  AW_SYNC_EVENT_SKIP_LOCAL=1 "${SCRIPT_DIR}/aw-sync.sh" event \
+    --type complete \
+    --task "$task_id" \
+    --to all \
+    --summary "任务 ${task_id} 已完成并通过验证" \
+    --evidence "docs/plans/; docs/handoff/; docs/quality/test-plans/; docs/sync/" || {
+      echo "warn: auto sync complete event failed; run ./scripts/aw sync push --task ${task_id}" >&2
+      return 0
+    }
+}
+
+sync_after_task_blocked() {
+  local task_id="$1"
+  sync_auto_enabled || return 0
+  echo "== auto sync after task blocked =="
+  AW_SYNC_EVENT_SKIP_LOCAL=1 "${SCRIPT_DIR}/aw-sync.sh" event \
+    --type block \
+    --task "$task_id" \
+    --to all \
+    --summary "任务 ${task_id} 已标记阻塞，请相关端检查依赖、接口或验收口径" \
+    --risk "跨端依赖可能停滞" \
+    --evidence "docs/handoff/PROJECT_HANDOFF.md; docs/sync/SYNC_EVENTS.md" || {
+      echo "warn: auto sync block event failed; run ./scripts/aw sync push --task ${task_id}" >&2
+      return 0
+    }
+}
+
 print_commit_prompt() {
   local task_id="$1"
   cat <<EOF
@@ -293,6 +360,7 @@ case "$CMD" in
       echo "  review allowed files, then rerun: ./scripts/aw context gate --task ${TASK_ID}" >&2
       exit 1
     }
+    sync_before_task_start "$TASK_ID" || exit 1
     aw_task_set_status "${ROOT}/${atomic}" "$TASK_ID" "进行中"
     aw_task_set_current "$TASK_ID"
     audit_task "$TASK_ID" "task start" "Marked task as 进行中 after requirement confirmation and context gate." "$atomic"
@@ -310,6 +378,7 @@ case "$CMD" in
     aw_task_set_status "${ROOT}/${atomic}" "$TASK_ID" "阻塞"
     aw_task_set_current "$TASK_ID"
     audit_task "$TASK_ID" "task blocked" "Marked task as 阻塞." "$atomic"
+    sync_after_task_blocked "$TASK_ID"
     echo "ok: ${TASK_ID} → 阻塞"
     echo "next: update docs/handoff/PROJECT_HANDOFF.md with blocker"
     ;;
@@ -340,6 +409,7 @@ case "$CMD" in
       aw_task_set_status "${ROOT}/${atomic}" "$TASK_ID" "已完成"
       aw_task_set_current ""
       audit_task "$TASK_ID" "task complete" "Verification passed; marked task as 已完成." "$atomic"
+      sync_after_task_complete "$TASK_ID"
       echo "ok: ${TASK_ID} verify passed → 已完成"
       echo "next: ./scripts/aw compact \"完成 ${TASK_ID}\" --write --snapshot · ./scripts/aw file-index · ./scripts/aw task checkpoint ${TASK_ID} --git yes|no --reason \"...\" --handoff --compact --file-index"
       print_commit_prompt "$TASK_ID"

@@ -80,6 +80,18 @@ case "$CMD" in
     insert_row "$CHANGELOG" "| ${now} | ${TASK} | ${TYPE}${BREAKING:+ / breaking} | ${ENDPOINT}: ${SUMMARY} | ${impact} | ${impact} | 待 contract test | open |"
     echo "logged: docs/contracts/API_CHANGELOG.md"
     aw_refresh_engineering_index
+    if [[ "${AW_CONTRACT_AUTO_SYNC:-1}" != "0" && -x "${SCRIPT_DIR}/aw-sync.sh" ]] && aw_sync_configured; then
+      echo "== auto sync contract change =="
+      "${SCRIPT_DIR}/aw-sync.sh" event \
+        --type contract \
+        --task "$TASK" \
+        --to all \
+        --summary "${TYPE}${BREAKING:+ breaking} ${ENDPOINT}: ${SUMMARY}" \
+        --risk "$impact" \
+        --evidence "docs/contracts/API_CHANGELOG.md; docs/contracts/API_CONTRACT.openapi.yaml" || {
+          echo "warn: auto contract sync failed; run ./scripts/aw contract sync --task ${TASK}" >&2
+        }
+    fi
     ;;
   test)
     TASK="—"

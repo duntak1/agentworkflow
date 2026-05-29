@@ -572,17 +572,23 @@ event_sync() {
   case "$type" in
     change)
       [[ "$impact" != "—" && "$acceptance" != "—" ]] || { echo "error: change events require --impact and --acceptance" >&2; exit 1; }
-      "${SCRIPT_DIR}/aw-req.sh" change "$task" "$summary" --impact "$impact" --acceptance "$acceptance"
+      if [[ "${AW_SYNC_EVENT_SKIP_LOCAL:-0}" != "1" ]]; then
+        "${SCRIPT_DIR}/aw-req.sh" change "$task" "$summary" --impact "$impact" --acceptance "$acceptance"
+      fi
       [[ -n "$done" ]] || done="记录需求变更：${summary}"
       [[ -n "$todo" ]] || todo="请评估并在本项目重新落 REQ / DSL / Plan / ATOMIC：${summary}"
       ;;
     bug)
-      "${SCRIPT_DIR}/aw-bug.sh" add "$summary" --source chat --scope "$task" --evidence "$evidence"
+      if [[ "${AW_SYNC_EVENT_SKIP_LOCAL:-0}" != "1" ]]; then
+        "${SCRIPT_DIR}/aw-bug.sh" add "$summary" --source chat --scope "$task" --evidence "$evidence"
+      fi
       [[ -n "$done" ]] || done="记录跨端 Bug：${summary}"
       [[ -n "$todo" ]] || todo="请评估并在本项目记录 / 修复 / 复测：${summary}"
       ;;
     block)
-      "${SCRIPT_DIR}/aw-task.sh" blocked "$task" >/dev/null || true
+      if [[ "${AW_SYNC_EVENT_SKIP_LOCAL:-0}" != "1" ]]; then
+        AW_SYNC_AUTO=0 "${SCRIPT_DIR}/aw-task.sh" blocked "$task" >/dev/null || true
+      fi
       [[ -n "$done" ]] || done="任务阻塞：${summary}"
       [[ -n "$todo" ]] || todo="请处理阻塞项并同步结果：${summary}"
       ;;

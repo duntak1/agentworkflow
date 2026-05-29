@@ -142,7 +142,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw next` | 输出下一条 AT-T |
 | `aw task brief <AT-T>` | 输出子任务开始前的需求沟通包 |
 | `aw task confirm <AT-T> "已确认：范围=...；验收=...；非目标=..."` | 工程师确认需求已问清楚；摘要缺少范围 / 验收 / 非目标会被拒绝；未确认不能 `start` / `complete` |
-| `aw task start|blocked|complete|done|show` | AT-T 生命周期 |
+| `aw task start|blocked|complete|done|show` | AT-T 生命周期；配置同步中心后，start 自动 `sync pull + sync gate`，complete 自动发布 complete 事件，blocked 自动发布 block 事件 |
 | `aw task blocked <AT-T>` | 标记任务阻塞 |
 | `aw task split <AT-T> --into "A; B"` | 将过大的任务拆成后续 AT-T，并阻塞原任务 |
 | `aw task complete <AT-T>` | 自动执行验证；通过标记已完成，失败写 `AI_BUG_LOG.md` 并保留进行中 |
@@ -187,7 +187,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw context init|status|plan|query|impact|affected|gate|budget` | 任务级代码上下文控制：禁止无目标全仓扫描，按 CodeGraph / CODE_CONTEXT_INDEX / FILE_INDEX 生成最小读取范围和 affected 分析 |
 | `aw context enrich --task <AT-T>` | 自动用 CodeGraph / 精准 rg / 索引补全 Context Plan 的 Symbol 和影响范围 |
 | `aw verify --affected --task <AT-T>` | 先写入 affected analysis，再执行任务验证 |
-| `aw contract init|change|test|diff|gate|check` | 前后端契约系统：OpenAPI、API 变更、Mock、Contract Test、Schema Diff、破坏性变更阻断 |
+| `aw contract init|change|test|diff|gate|check` | 前后端契约系统：OpenAPI、API 变更、Mock、Contract Test、Schema Diff、破坏性变更阻断；配置同步中心后 `aw contract change` 自动发布 contract 事件 |
 | `aw contract diff --write|breaking-check|sync` | 自动记录 OpenAPI diff、检测破坏性变更候选，并向同步中心发布契约事件 |
 | `aw vcs init|branch|fill|create|review|gate|check` / `aw vcs gate` | 多代码仓库 PR/MR/CR 闭环：GitHub、GitLab、Bitbucket、Gitee、GitCode、Gitea、Forgejo、GitLab CE、Gerrit、Codeup |
 | `aw github-pr ...` | 兼容旧入口，内部转发到 `aw vcs` |
@@ -201,6 +201,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw sync baseline` | 显示并初始化同步中心 `global/dsl/`、`global/plans/`、`global/contracts/` 共享基线路径 |
 | `aw sync board` | 从已 push 的前后端 ATOMIC 快照生成 / 查看 `global/plans/TASK_BOARD.md` 共享任务看板 |
 | `aw sync event --type complete|change|block|question|contract|bug|decision|handoff --task <AT-T> --to <agent> --summary "..."` | 通用跨端同步事件：按类型写本地流水 / handoff / push / board，并输出 Harness Git 提交建议 |
+| `AW_SYNC_AUTO=0` / `AW_CONTRACT_AUTO_SYNC=0` | 临时关闭任务生命周期自动同步或契约自动同步；只能作为人工确认的例外 |
 | `aw sync change <AT-T> "summary" --to <agent> --impact "..." --acceptance "..."` | 跨端需求变更编排：本项目 REQ 回写、Agent handoff、sync push、board 刷新，并输出 Harness Git 提交建议 |
 | `aw sync inbox [--from <project|all>]` | 汇总已 pull 到本项目 inbox 的对方 manifest 和 sync events，方便采纳 |
 | `aw sync status|check` | 查看或校验跨项目同步配置和快照状态 |

@@ -101,7 +101,7 @@ chmod +x scripts/aw scripts/*.sh
 | 双项目 Plan 拆分 | DSL 已审后，先写 `project-harness/global/plans/` 协作 Plan，再派生 `project-frontend/docs/plans/` 和 `project-backend/docs/plans/` 本地 Plan |
 | 定向生成任务 | `aw approve dsl <dsl> --plan --domain frontend` / `--domain backend` |
 | 任务确认 | `任务确认` / `aw confirm` → 生成 `ENGINEERING_INDEX.md` |
-| 研发 | `aw next` → `aw task brief` → 需求沟通确认 → `aw task confirm`（范围 / 验收 / 非目标齐全） → `aw context plan` → `aw context gate` → `aw task start` → `aw paste task` → `aw task complete` |
+| 研发 | `aw next` → `aw task brief` → 需求沟通确认 → `aw task confirm`（范围 / 验收 / 非目标齐全） → `aw context plan` → `aw context gate` → `aw task start` → `aw paste task` → `aw task complete`；配置同步中心后，start 自动 pull/gate，complete 自动发布 complete 事件，blocked 自动发布 block 事件 |
 | 子任务需求确认 | `aw task brief <AT-T>` → 工程师确认后 `aw task confirm <AT-T> "已确认：范围=...；验收=...；非目标=..."` |
 | 口述新增需求 | `aw req new <slug> "标题" --type 口述新增 --impact "..." --acceptance "..."` |
 | 研发中需求变更 | `aw req change <AT-T> "摘要" --impact "..." --acceptance "..."` → 回写 REQ / DSL / Plan / ATOMIC → 重新 brief/confirm |
@@ -123,7 +123,7 @@ chmod +x scripts/aw scripts/*.sh
 | 代码上下文控制 | `aw context init|status|plan|query|impact|affected|gate` 生成任务级 Context Plan，限制读取文件和 symbol，优先接入 CodeGraph，避免无目标全仓扫描 |
 | 上下文自动补全 | `aw context enrich --task <AT-T>` 自动补全 Symbol / 影响范围；`aw verify --affected --task <AT-T>` 先写入 affected analysis 再验证 |
 | 前后端契约 | `aw contract init|change|test|diff|gate` 维护 OpenAPI、API 变更、Mock、Contract Test、Schema Diff 和破坏性变更阻断 |
-| 契约自动化 | `aw contract diff --write|breaking-check|sync` 自动记录 OpenAPI diff、检测破坏性变更候选，并发布契约同步事件 |
+| 契约自动化 | `aw contract diff --write|breaking-check|sync` 自动记录 OpenAPI diff、检测破坏性变更候选，并发布契约同步事件；配置同步中心后 `aw contract change` 自动发布 contract 事件 |
 | VCS PR/MR/CR 闭环 | `aw vcs branch|fill|create|review|gate` / `aw vcs gate` 维护分支策略、PR/MR/CR 清单、Review、Contract/Score/Release/Rollback 检查；支持 GitHub、GitLab、Bitbucket、Gitee、GitCode、Gitea、Forgejo、GitLab CE、Gerrit、Codeup |
 | PR/MR/CR 自动填充 | `aw vcs fill|create` 基于 AT-T、DSL、Plan、Context、Verify、Contract、Score 自动生成草稿；真正创建远端请求需工程师确认 |
 | Watch 自动化 | `aw watch index [--once|--loop]` 刷新 FILE_INDEX / ENGINEERING_INDEX，并输出 affected analysis |
@@ -138,7 +138,7 @@ chmod +x scripts/aw scripts/*.sh
 | 可靠性 / 事故 | `aw ops slo|incident|incident-close|runbook ...` 记录 SLO、事故、恢复闭环、Runbook；`aw ops gate` 检查未关闭高危事故 |
 | 多 Agent 协作 | `aw agents assign|handoff|review ...` 记录角色、文件边界、交接和评审结论；`aw agents gate` 检查阻断评审和路径重叠，`--strict` 可阻断冲突 |
 | 多 Agent 严格门禁 | `aw agents gate --strict` 发现 allowed paths 重叠时阻断，要求先 handoff 或重新分配文件边界 |
-| 跨项目前后端同步 | `aw sync init <harness-dir> --project <name> --agent <name>` 配置共享同步中心；`aw sync baseline` 显示 / 初始化共享 DSL、协作 Plan、接口契约基线路径；`aw sync board` 生成 / 查看共享任务看板；`aw sync gate --task <AT-T>` 在分仓任务开始前强制最近 pull、inbox、board 就绪；`aw sync event --type ...` 编排任务完成、需求变更、阻塞、问题、契约、Bug、决策和交接；`aw sync change <AT-T> "summary" --to <agent> --impact "..." --acceptance "..."` 是需求变更快捷入口；`aw sync inbox` 汇总对方事件；`aw sync pull` 拉取其他项目快照到只读 inbox；`aw sync push --task <AT-T>` 发布本项目 DSL / Plan / REQ / Handoff / Agents / Bug / TP / Security 快照 |
+| 跨项目前后端同步 | `aw sync init <harness-dir> --project <name> --agent <name>` 配置共享同步中心；`aw sync baseline` 显示 / 初始化共享 DSL、协作 Plan、接口契约基线路径；`aw sync board` 生成 / 查看共享任务看板；`aw sync gate --task <AT-T>` 在分仓任务开始前强制最近 pull、inbox、board 就绪；`aw sync event --type ...` 编排任务完成、需求变更、阻塞、问题、契约、Bug、决策和交接；`aw sync change <AT-T> "summary" --to <agent> --impact "..." --acceptance "..."` 是需求变更快捷入口；`aw sync inbox` 汇总对方事件；`aw sync pull` 拉取其他项目快照到只读 inbox；`aw sync push --task <AT-T>` 发布本项目 DSL / Plan / REQ / Handoff / Agents / Bug / TP / Security 快照；配置同步中心后任务生命周期会自动调用这些同步动作 |
 | PM 三端任务派发 | DSL 审核后先 `aw pm plan --write` 生成 `project-harness/global/plans/*`；Plan 审核后 `aw pm dispatch --write` 生成 `TASK_BOARD.md`、`FRONTEND_ASSIGNMENTS.md`、`ADMIN_ASSIGNMENTS.md`、`BACKEND_ASSIGNMENTS.md`；前台/后台/后端 Agent 开始任务前先读取自己的 assignments 和 `global/contracts/INTEGRATION_MATRIX.md` |
 
 PM 常用命令：`aw pm plan --write` 从已审 DSL 生成共享/三端 Plan 草案；`aw pm dispatch --write` 从 `global/plans/ATOMIC_TASKS.md` 生成派发表；`aw pm assignments --role frontend|admin|backend|all` 查看三端任务派发；`aw pm dashboard --write` 刷新项目进度看板。

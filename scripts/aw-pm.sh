@@ -940,6 +940,12 @@ EOF
   echo "written: ${fe}"
   echo "written: ${admin}"
   echo "written: ${be}"
+  pm_dashboard --write >/dev/null || true
+  echo "refreshed: ${harness}/global/dashboard/PROJECT_DASHBOARD.md"
+  echo "next:"
+  echo "  1. frontend/admin/backend agents run aw sync pull before claiming work."
+  echo "  2. implementation agents read aw pm assignments --role frontend|admin|backend."
+  echo "  3. aw task start/complete/blocked will auto sync when docs/sync/SYNC_CONFIG.md is configured."
 }
 
 case "$CMD" in

@@ -1031,7 +1031,7 @@ cd /path/workspace/project-backend
             <tr><td>Auto Gate</td><td><code>aw gate pre-commit|task|pr|release</code></td><td>把 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release 串成自动门禁。</td></tr>
             <tr><td>Context</td><td><code>aw context plan|gate|affected</code></td><td>任务级代码上下文计划：限制读取文件、symbol 和搜索次数，优先接入 CodeGraph，禁止无目标全仓扫描。</td></tr>
             <tr><td>Automation</td><td><code>aw context enrich / aw verify --affected / aw watch index</code></td><td>自动补全 Context Plan、按改动范围写入 affected analysis、刷新索引。</td></tr>
-            <tr><td>Contract</td><td><code>aw contract change|test|gate</code></td><td>OpenAPI、Mock、Contract Test、Schema Diff、破坏性变更阻断。</td></tr>
+            <tr><td>Contract</td><td><code>aw contract change|test|gate</code></td><td>OpenAPI、Mock、Contract Test、Schema Diff、破坏性变更阻断；配置同步中心后 contract change 自动发布契约同步事件。</td></tr>
             <tr><td>VCS PR/MR/CR</td><td><code>aw vcs branch|fill|create|review|gate</code></td><td>支持 GitHub、GitLab、Bitbucket、Gitee、GitCode、Gitea、Forgejo、GitLab CE、Gerrit、Codeup 的分支、草稿、Review、CI/Release/Rollback 检查。</td></tr>
             <tr><td>PM Agent</td><td><code>aw pm start|init|intake-check|design|plan|dispatch|dashboard|gate</code></td><td>面向产品经理的向导式流程：同步中心资料、Pencil 设计稿、DSL 审核后生成共享/三端 Plan、Plan 审核后三端任务派发、进度看板和产品全生命周期 Gate。</td></tr>
             <tr><td>Score</td><td><code>aw score record</code></td><td>对需求、DSL/Plan、任务确认、验证、Bug、文件索引、Contract、Git、Handoff 评分。</td></tr>
@@ -1539,7 +1539,7 @@ Plan 未确认前不要写业务代码。</code></pre>
 3. aw sync board
 读取 docs/sync/inbox/backend 后再 task brief。
 遇到接口字段、权限、错误码不明确时，使用 aw sync event --type question 或 --type contract，不要只写聊天结论。
-完成任务后 aw task complete；如果影响后端，用 aw sync event --type complete/change/contract/handoff 发布事件，再问我是否提交 Git 或同步中心版本。</code></pre>
+完成任务后 aw task complete 会自动发布 complete 事件；如果还有需求变更、问题、契约或交接，再补 aw sync event --type change/question/contract/handoff，并问我是否提交 Git 或同步中心版本。</code></pre>
         <pre><code>使用 agentworkflow 的双项目同步。
 当前电脑上有三个目录：
 前端项目：/path/workspace/project-frontend
@@ -1554,7 +1554,7 @@ Plan 未确认前不要写业务代码。</code></pre>
 3. aw sync board
 读取 docs/sync/inbox/frontend 后再 task brief。
 遇到页面字段、交互、联动边界不明确时，使用 aw sync event --type question 或 --type contract，不要只写聊天结论。
-完成任务后 aw task complete、更新 SERVICE_CATALOG；如果影响前端，用 aw sync event --type complete/change/contract/handoff 发布事件，再问我是否提交 Git 或同步中心版本。</code></pre>
+完成任务后 aw task complete 会自动发布 complete 事件，并更新 SERVICE_CATALOG；如果还有需求变更、问题、契约或交接，再补 aw sync event --type change/question/contract/handoff，并问我是否提交 Git 或同步中心版本。</code></pre>
         <h3>19.11 不同电脑：前后端两个项目 + 远程 Harness</h3>
         <pre><code>使用 agentworkflow 的跨电脑双项目同步。
 同步中心是单独远程 Git 仓库 project-harness。
@@ -1710,7 +1710,7 @@ handoff   普通交接
 1. aw task complete &lt;AT-T&gt;
 2. 如果失败，写 AI_BUG_LOG 并保持任务未完成
 3. 如果通过，更新 handoff / agents handoff / report
-4. 如果是双项目且影响其他 Agent，执行 aw sync event --type complete；如果只是本项目快照，才使用 aw sync push
+4. 如果是双项目，aw task complete 会自动发布 complete 事件；如果还有额外沟通事项，再执行 aw sync event --type question/change/contract/handoff；如果只是本项目快照，才使用 aw sync push
 5. 如果本任务新增 / 删除 / 重命名前端、后端、共享、测试或配置代码文件，执行 aw file-index
 6. 执行 aw index 刷新 ENGINEERING_INDEX.md 的扫描信息
 7. 执行 aw sync board 更新共享任务视图
