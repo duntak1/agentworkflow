@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 920" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="deep" cx="50%" cy="46%" r="72%">
+      <stop offset="0%" stop-color="#14244a"/>
+      <stop offset="42%" stop-color="#06112a"/>
+      <stop offset="100%" stop-color="#01030c"/>
+    </radialGradient>
+    <radialGradient id="horizon" cx="50%" cy="70%" r="44%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity=".95"/>
+      <stop offset="9%" stop-color="#b7d8ff" stop-opacity=".82"/>
+      <stop offset="22%" stop-color="#3d76d8" stop-opacity=".34"/>
+      <stop offset="58%" stop-color="#061433" stop-opacity=".08"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="planetShade" cx="50%" cy="19%" r="42%">
+      <stop offset="0%" stop-color="#101c3b"/>
+      <stop offset="58%" stop-color="#05091a"/>
+      <stop offset="100%" stop-color="#00030b"/>
+    </radialGradient>
+    <filter id="blurA" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+    <linearGradient id="arc" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#16274f" stop-opacity="0"/>
+      <stop offset="20%" stop-color="#79aaff" stop-opacity=".75"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity=".92"/>
+      <stop offset="80%" stop-color="#79aaff" stop-opacity=".75"/>
+      <stop offset="100%" stop-color="#16274f" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="920" fill="url(#deep)"/>
+  <rect width="1600" height="920" fill="#01030c" opacity=".42"/>
+
+  <g opacity=".8">
+    <circle cx="178" cy="95" r="2.1" fill="#d8e6ff" opacity=".62"/>
+    <circle cx="220" cy="185" r="1.5" fill="#9dbdff" opacity=".52"/>
+    <circle cx="1358" cy="118" r="2" fill="#d8e6ff" opacity=".54"/>
+    <circle cx="1405" cy="204" r="1.5" fill="#8fb7ff" opacity=".55"/>
+    <circle cx="1286" cy="270" r="1.3" fill="#d8e6ff" opacity=".42"/>
+    <circle cx="105" cy="314" r="1.2" fill="#8fb7ff" opacity=".48"/>
+    <circle cx="1510" cy="356" r="1.4" fill="#d8e6ff" opacity=".5"/>
+    <circle cx="392" cy="72" r="1.1" fill="#cfe1ff" opacity=".32"/>
+    <circle cx="1184" cy="72" r="1.1" fill="#cfe1ff" opacity=".32"/>
+  </g>
+
+  <ellipse cx="800" cy="-82" rx="560" ry="385" fill="url(#planetShade)" opacity=".9"/>
+  <path d="M226 74 C 445 448, 1157 448, 1374 74" fill="none" stroke="url(#arc)" stroke-width="5" opacity=".84" filter="url(#soft)"/>
+  <path d="M274 72 C 488 378, 1112 378, 1326 72" fill="none" stroke="#25457e" stroke-width="28" opacity=".22" filter="url(#blurA)"/>
+
+  <ellipse cx="800" cy="704" rx="910" ry="198" fill="#020817"/>
+  <path d="M-60 693 C 265 548, 1335 548, 1660 693" fill="none" stroke="url(#arc)" stroke-width="17" opacity=".96" filter="url(#soft)"/>
+  <path d="M-80 702 C 268 585, 1332 585, 1680 702" fill="none" stroke="#4d82ef" stroke-width="55" opacity=".26" filter="url(#blurA)"/>
+  <ellipse cx="800" cy="684" rx="650" ry="70" fill="url(#horizon)" opacity=".9"/>
+
+  <g opacity=".95">
+    <ellipse cx="800" cy="626" rx="38" ry="138" fill="#9cc2ff" opacity=".28" filter="url(#blurA)"/>
+    <ellipse cx="800" cy="573" rx="20" ry="66" fill="#ffffff" opacity=".32" filter="url(#soft)"/>
+    <circle cx="800" cy="432" r="4" fill="#ffffff" opacity=".62"/>
+    <circle cx="800" cy="391" r="2.4" fill="#d6e5ff" opacity=".42"/>
+    <circle cx="800" cy="340" r="2.2" fill="#b4ccff" opacity=".38"/>
+    <path d="M761 262 C 782 287, 818 287, 839 262 C 829 282, 771 282, 761 262Z" fill="#dbe7ff" opacity=".5" filter="url(#soft)"/>
+    <path d="M776 126 C 790 141, 810 141, 824 126 C 817 151, 783 151, 776 126Z" fill="#8db8ff" opacity=".58" filter="url(#soft)"/>
+    <circle cx="800" cy="495" r="44" fill="none" stroke="#bcd4ff" stroke-width="2" opacity=".34" filter="url(#soft)"/>
+  </g>
+
+  <rect width="1600" height="920" fill="url(#deep)" opacity=".16"/>
+</svg>

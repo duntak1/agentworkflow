@@ -194,6 +194,9 @@
       align-items: start;
       padding: 52px 0 72px;
       border-bottom: 1px solid rgba(148, 163, 184, .16);
+      background:
+        linear-gradient(180deg, rgba(3, 7, 20, .08) 0%, rgba(3, 7, 20, .22) 54%, rgba(3, 7, 20, .92) 100%),
+        url("assets/hero-space-bg.svg") center top / cover no-repeat;
       overflow: hidden;
     }
     .hero::before {
@@ -201,30 +204,28 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse at 50% 23%, rgba(126, 168, 255, .34), transparent 11%),
-        radial-gradient(ellipse at 50% 52%, rgba(60, 90, 180, .28), transparent 26%),
-        linear-gradient(rgba(143, 183, 255, .038) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(143, 183, 255, .038) 1px, transparent 1px);
-      background-size: auto, auto, 96px 96px, 96px 96px;
-      mask-image: radial-gradient(circle at 50% 32%, black 0%, transparent 78%);
+        radial-gradient(ellipse at 50% 47%, rgba(255, 255, 255, .1), transparent 15%),
+        linear-gradient(rgba(143, 183, 255, .026) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(143, 183, 255, .026) 1px, transparent 1px);
+      background-size: auto, 96px 96px, 96px 96px;
+      mask-image: radial-gradient(circle at 50% 48%, black 0%, transparent 80%);
       pointer-events: none;
     }
     .hero::after {
       content: "";
       position: absolute;
       left: 50%;
-      top: 96px;
-      width: min(760px, 74vw);
-      height: 240px;
+      top: 62%;
+      width: min(1040px, 86vw);
+      height: 130px;
       transform: translateX(-50%);
-      border-top: 2px solid rgba(167, 197, 255, .94);
+      border-top: 1px solid rgba(228, 238, 255, .72);
       border-radius: 50% 50% 0 0 / 100% 100% 0 0;
       box-shadow:
-        0 -9px 30px rgba(143, 183, 255, .9),
-        0 -34px 82px rgba(56, 91, 220, .52),
-        inset 0 18px 24px rgba(143, 183, 255, .12);
-      filter: blur(.15px);
-      opacity: .95;
+        0 -3px 18px rgba(207, 226, 255, .5),
+        0 -12px 44px rgba(91, 133, 255, .38);
+      filter: blur(.1px);
+      opacity: .55;
       pointer-events: none;
     }
     .hero-grid {
@@ -236,7 +237,7 @@
       align-items: start;
       justify-items: center;
       text-align: center;
-      padding-top: 110px;
+      padding-top: 122px;
     }
     .eyebrow {
       display: inline-flex;
@@ -246,7 +247,7 @@
       padding: 7px 12px;
       border: 1px solid rgba(143, 183, 255, .32);
       border-radius: 999px;
-      background: rgba(77, 101, 194, .18);
+      background: rgba(7, 13, 31, .46);
       color: #dbeafe;
       font-size: 13px;
       font-weight: 720;
@@ -266,6 +267,7 @@
       font-size: clamp(48px, 6.2vw, 76px);
       line-height: 1.06;
       font-weight: 820;
+      text-shadow: 0 0 34px rgba(8, 12, 24, .9);
     }
     .grad-text {
       color: transparent;
@@ -276,8 +278,9 @@
     .lead {
       max-width: 660px;
       margin: 22px auto 0;
-      color: #aab6cc;
+      color: #b7c2d8;
       font-size: 16px;
+      text-shadow: 0 1px 18px rgba(0, 0, 0, .72);
     }
     .hero-actions {
       display: flex;
@@ -288,13 +291,14 @@
     }
     .hero-card {
       width: min(920px, 88vw);
-      margin-top: 22px;
+      margin-top: 56px;
       border: 1px solid rgba(143, 183, 255, .16);
       border-radius: 18px;
-      background: linear-gradient(180deg, rgba(13, 22, 45, .86), rgba(3, 7, 20, .94));
+      background: linear-gradient(180deg, rgba(7, 12, 27, .78), rgba(3, 7, 20, .93));
+      backdrop-filter: blur(16px);
       box-shadow:
         0 0 0 8px rgba(143, 183, 255, .025),
-        0 0 60px rgba(86, 122, 255, .34),
+        0 0 74px rgba(119, 160, 255, .3),
         var(--shadow);
       overflow: hidden;
     }
@@ -302,7 +306,7 @@
       content: "";
       display: block;
       height: 8px;
-      background: linear-gradient(90deg, transparent, rgba(143, 183, 255, .7), transparent);
+      background: linear-gradient(90deg, transparent, rgba(214, 229, 255, .78), transparent);
       opacity: .9;
     }
     .terminal-head {
@@ -486,8 +490,8 @@
       align-items: center;
       justify-content: center;
       border-radius: 8px;
-      background: rgba(168, 85, 247, .18);
-      color: #e9d5ff;
+      background: rgba(91, 133, 255, .18);
+      color: #dbeafe;
       font-style: normal;
       font-weight: 800;
     }
@@ -548,10 +552,10 @@
       position: absolute;
       top: 10px;
       right: 10px;
-      border: 1px solid rgba(216, 180, 254, .34);
+      border: 1px solid rgba(143, 183, 255, .34);
       border-radius: 7px;
-      background: rgba(88, 28, 135, .24);
-      color: #f5d0fe;
+      background: rgba(37, 68, 138, .26);
+      color: #dbeafe;
       padding: 5px 9px;
       font-size: 12px;
       cursor: pointer;
@@ -571,11 +575,11 @@
     .diagram {
       margin-top: 20px;
       padding: 18px;
-      border: 1px solid rgba(216, 180, 254, .18);
+      border: 1px solid rgba(143, 183, 255, .18);
       border-radius: 10px;
       background:
-        linear-gradient(180deg, rgba(30, 20, 52, .78), rgba(13, 10, 24, .76)),
-        radial-gradient(circle at 20% 0%, rgba(168, 85, 247, .12), transparent 28%);
+        linear-gradient(180deg, rgba(13, 22, 45, .78), rgba(5, 9, 20, .78)),
+        radial-gradient(circle at 20% 0%, rgba(91, 133, 255, .14), transparent 28%);
       overflow-x: auto;
     }
     .diagram-title {
@@ -583,7 +587,7 @@
       align-items: center;
       gap: 8px;
       margin: 0 0 14px;
-      color: #f5d0fe;
+      color: #dbeafe;
       font-weight: 760;
     }
     .diagram-title::before {
@@ -591,8 +595,8 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #e879f9;
-      box-shadow: 0 0 18px rgba(232, 121, 249, .75);
+      background: #8fb7ff;
+      box-shadow: 0 0 18px rgba(143, 183, 255, .75);
     }
     .diagram-row {
       display: grid;
@@ -606,9 +610,9 @@
       position: relative;
       min-height: 104px;
       padding: 14px;
-      border: 1px solid rgba(216, 180, 254, .22);
+      border: 1px solid rgba(143, 183, 255, .22);
       border-radius: 10px;
-      background: rgba(15, 11, 27, .82);
+      background: rgba(6, 12, 28, .82);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
     }
     .diagram-node:not(:last-child)::after {
@@ -616,7 +620,7 @@
       position: absolute;
       right: -15px;
       top: 40%;
-      color: #c084fc;
+      color: #8fb7ff;
       font-weight: 900;
     }
     .diagram-node strong {
@@ -646,17 +650,17 @@
       display: grid;
       place-items: center;
       border-radius: 8px;
-      background: rgba(88, 28, 135, .3);
-      color: #f5d0fe;
+      background: rgba(37, 68, 138, .32);
+      color: #dbeafe;
       font-weight: 760;
       font-size: 13px;
     }
     .lane-cell {
       min-height: 58px;
       padding: 10px;
-      border: 1px solid rgba(216, 180, 254, .16);
+      border: 1px solid rgba(143, 183, 255, .16);
       border-radius: 8px;
-      background: rgba(15, 11, 27, .68);
+      background: rgba(6, 12, 28, .68);
       color: #cbd5e1;
       font-size: 12px;
     }
