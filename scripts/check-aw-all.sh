@@ -42,6 +42,7 @@ case "$SUB" in
   github-pr|pr) run "${SCRIPT_DIR}/aw-github-pr.sh" check ;;
   vcs) run "${SCRIPT_DIR}/aw-vcs.sh" check ;;
   context) run "${SCRIPT_DIR}/aw-context.sh" check ;;
+  code-map) run "${SCRIPT_DIR}/aw-code-map.sh" gate ;;
   score) run "${SCRIPT_DIR}/aw-score.sh" check ;;
   recover|recovery) run "${SCRIPT_DIR}/aw-recover.sh" check ;;
   rules) run "${SCRIPT_DIR}/aw-rules.sh" check ;;
@@ -72,11 +73,12 @@ case "$SUB" in
     run "${SCRIPT_DIR}/aw-vcs.sh" check
     run "${SCRIPT_DIR}/aw-github-pr.sh" check
     run "${SCRIPT_DIR}/aw-context.sh" check
+    run "${SCRIPT_DIR}/aw-code-map.sh" gate
     run "${SCRIPT_DIR}/aw-score.sh" check
     run "${SCRIPT_DIR}/aw-recover.sh" check
   ;;
   *)
-    echo "Usage: check-aw-all.sh [all|layout|dsl|plan|config|rules|req|tp|docs|plugin|memory|changelog|audit|policy|security|service-catalog|release|report|trace|metrics|ops|agents|sync|pm|gate|contract|github-pr|vcs|context|score|recover]" >&2
+    echo "Usage: check-aw-all.sh [all|layout|dsl|plan|config|rules|req|tp|docs|plugin|memory|changelog|audit|policy|security|service-catalog|release|report|trace|metrics|ops|agents|sync|pm|gate|contract|github-pr|vcs|context|code-map|score|recover]" >&2
     exit 1
     ;;
 esac

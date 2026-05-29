@@ -7,11 +7,11 @@
 
 | 字段 | 内容 |
 |------|------|
-| **生成时间** | 2026-05-29 17:26:24 |
+| **生成时间** | 2026-05-29 17:42:21 |
 | **后端** | builtin |
 | **项目根目录** | /Users/mayan/Library/Mobile Documents/com~apple~CloudDocs/Project/项目/agentworkflow |
-| **文件数** | 220 |
-| **Symbol 数** | 1531 |
+| **文件数** | 327 |
+| **Symbol 数** | 1760 |
 | **路由 / API 数** | 0 |
 | **测试文件数** | 0 |
 
@@ -25,15 +25,46 @@
 | agent-workflow/adapters/codex-context | doc | 1 | inferred from file paths |
 | agent-workflow/adapters/cursor-hooks | doc | 1 | inferred from file paths |
 | agent-workflow/meta | doc | 2 | inferred from file paths |
+| agent-workflow/templates | doc | 2 | inferred from file paths |
 | agent-workflow/templates/agents | doc | 5 | inferred from file paths |
+| agent-workflow/templates/audit | doc | 1 | inferred from file paths |
+| agent-workflow/templates/context | doc | 4 | inferred from file paths |
 | agent-workflow/templates/contracts | api | 1 | inferred from file paths |
 | agent-workflow/templates/contracts | doc | 3 | inferred from file paths |
-| agent-workflow/templates/dsl | doc | 6 | inferred from file paths |
+| agent-workflow/templates/dsl | doc | 10 | inferred from file paths |
+| agent-workflow/templates/github | doc | 3 | inferred from file paths |
+| agent-workflow/templates/hooks | doc | 1 | inferred from file paths |
+| agent-workflow/templates/memory | doc | 3 | inferred from file paths |
+| agent-workflow/templates/metrics | doc | 1 | inferred from file paths |
+| agent-workflow/templates/ops | doc | 3 | inferred from file paths |
+| agent-workflow/templates/plans | doc | 2 | inferred from file paths |
+| agent-workflow/templates/pm/analytics | doc | 4 | inferred from file paths |
+| agent-workflow/templates/pm/architecture | doc | 5 | inferred from file paths |
+| agent-workflow/templates/pm/contracts | doc | 1 | inferred from file paths |
+| agent-workflow/templates/pm/dashboard | doc | 8 | inferred from file paths |
+| agent-workflow/templates/pm/delivery | doc | 5 | inferred from file paths |
+| agent-workflow/templates/pm/dispatch | doc | 4 | inferred from file paths |
+| agent-workflow/templates/pm/dsl | doc | 7 | inferred from file paths |
+| agent-workflow/templates/pm/integration | doc | 4 | inferred from file paths |
+| agent-workflow/templates/pm/knowledge | doc | 4 | inferred from file paths |
+| agent-workflow/templates/pm/plans | doc | 5 | inferred from file paths |
+| agent-workflow/templates/pm/product | doc | 5 | inferred from file paths |
+| agent-workflow/templates/pm/quality | doc | 5 | inferred from file paths |
+| agent-workflow/templates/pm/references | doc | 1 | inferred from file paths |
+| agent-workflow/templates/pm/references/design | doc | 5 | inferred from file paths |
+| agent-workflow/templates/pm/references/design/pencil | doc | 1 | inferred from file paths |
+| agent-workflow/templates/pm/release | doc | 4 | inferred from file paths |
+| agent-workflow/templates/pm/requirements | doc | 4 | inferred from file paths |
 | agent-workflow/templates/policy | code | 1 | inferred from file paths |
 | agent-workflow/templates/policy | doc | 1 | inferred from file paths |
+| agent-workflow/templates/prompts | doc | 2 | inferred from file paths |
+| agent-workflow/templates/quality/test-plans | test | 3 | inferred from file paths |
 | agent-workflow/templates/recovery | doc | 1 | inferred from file paths |
 | agent-workflow/templates/reference | doc | 1 | inferred from file paths |
+| agent-workflow/templates/release | doc | 3 | inferred from file paths |
 | agent-workflow/templates/rules | doc | 1 | inferred from file paths |
+| agent-workflow/templates/score | doc | 1 | inferred from file paths |
+| agent-workflow/templates/security | doc | 2 | inferred from file paths |
 | assets/social | code | 1 | inferred from file paths |
 | docs | doc | 5 | inferred from file paths |
 | docs/agents | doc | 5 | inferred from file paths |
@@ -71,9 +102,10 @@
 
 | 类型 | 文件 | 说明 |
 |------|------|------|
-| doc | README.md | entry/config candidate |
 | doc | CLAUDE.md | entry/config candidate |
 | doc | AGENTS.md | entry/config candidate |
+| doc | README.md | entry/config candidate |
+| doc | skill/SKILL.md | entry/config candidate |
 | cli | scripts/aw-demo.sh | entry/config candidate |
 | cli | scripts/aw-doctor.sh | entry/config candidate |
 | cli | scripts/aw-upgrade.sh | entry/config candidate |
@@ -128,7 +160,6 @@
 | cli | scripts/aw-dsl-apply.sh | entry/config candidate |
 | cli | scripts/aw-dsl-review.sh | entry/config candidate |
 | cli | scripts/aw-tp.sh | entry/config candidate |
-| doc | skill/SKILL.md | entry/config candidate |
 | doc | agent-workflow/INVOCATION.md | entry/config candidate |
 
 ## 模块地图
@@ -155,16 +186,16 @@
 | agent-workflow/SECURITY.md | agent-workflow/SECURITY.md | doc | 待查询 | 待查询 | 1 files |
 | agent-workflow/VERSION_CHANGELOG_QUALITY_LOOP.md | agent-workflow/VERSION_CHANGELOG_QUALITY_LOOP.md | doc | 待查询 | 待查询 | 1 files |
 | agent-workflow/WINDOWS.md | agent-workflow/WINDOWS.md | doc | 待查询 | 待查询 | 1 files |
-| agent-workflow/adapters | agent-workflow/adapters/claude-code.md | doc | 待查询 | 待查询 | 12 files |
+| agent-workflow/adapters | agent-workflow/adapters/cline.md | doc | 待查询 | 待查询 | 12 files |
 | agent-workflow/meta | agent-workflow/meta/PRE_COMMIT_AND_HOOKS.md | doc | 待查询 | 待查询 | 2 files |
-| agent-workflow/templates | agent-workflow/templates/policy/POLICY.yml | code,doc,api | 待查询 | 待查询 | 20 files |
+| agent-workflow/templates | agent-workflow/templates/policy/POLICY.yml | code,doc,api,test | 待查询 | 待查询 | 127 files |
 | assets/social | assets/social/agentworkflow-skills-poster.html | code | 待查询 | 待查询 | 1 files |
 | docs/ENGINEERING_RULES.md | docs/ENGINEERING_RULES.md | doc | 待查询 | 待查询 | 1 files |
 | docs/FILE_INDEX.md | docs/FILE_INDEX.md | doc | 待查询 | 待查询 | 1 files |
 | docs/PROJECT_CONFIG.md | docs/PROJECT_CONFIG.md | doc | 待查询 | 待查询 | 1 files |
 | docs/README.md | docs/README.md | doc | 待查询 | 待查询 | 1 files |
 | docs/SERVICE_CATALOG.md | docs/SERVICE_CATALOG.md | doc | 待查询 | 待查询 | 1 files |
-| docs/agents | docs/agents/AGENT_ROLES.md | doc | 待查询 | 待查询 | 5 files |
+| docs/agents | docs/agents/AGENT_REVIEWS.md | doc | 待查询 | 待查询 | 5 files |
 | docs/audit | docs/audit/AGENT_TRACE.md | doc | 待查询 | 待查询 | 1 files |
 | docs/context | docs/context/CONTEXT_CONFIG.md | doc | 待查询 | 待查询 | 3 files |
 | docs/contracts | docs/contracts/MOCK_SERVER.md | doc,api | 待查询 | 待查询 | 4 files |
@@ -285,6 +316,32 @@
 | Symbol | 类型 | 文件 | 行号 | 说明 |
 |--------|------|------|------|------|
 | Security | heading | SECURITY.md | 1 | markdown section |
+| Reference（人类参考材料区） | heading | reference/README.md | 1 | markdown section |
+| 放什么 | heading | reference/README.md | 5 | markdown section |
+| 不放什么 | heading | reference/README.md | 13 | markdown section |
+| 操作步骤 | heading | reference/README.md | 18 | markdown section |
+| Git | heading | reference/README.md | 25 | markdown section |
+| CLAUDE.md（入口） | heading | CLAUDE.md | 1 | markdown section |
+| AGENTS.md（入口） | heading | AGENTS.md | 1 | markdown section |
+| AGENT_RULES.md（入口） | heading | AGENT_RULES.md | 1 | markdown section |
+| 发布与安装 agent-workflow Skill | heading | PUBLISH.md | 1 | markdown section |
+| 产物是什么 | heading | PUBLISH.md | 3 | markdown section |
+| 本机安装（开发者） | heading | PUBLISH.md | 11 | markdown section |
+| 可选：AW_SYNC_PROJECT_SKILL=0 跳过写入 .cursor/skills/ | heading | PUBLISH.md | 16 | markdown section |
+| 或 | heading | PUBLISH.md | 23 | markdown section |
+| 用户安装（无需 clone 全仓） | heading | PUBLISH.md | 27 | markdown section |
+| 方式 A：本地路径 | heading | PUBLISH.md | 30 | markdown section |
+| 方式 B：远程仓库（直接传 URL） | heading | PUBLISH.md | 33 | markdown section |
+| 方式 C：远程仓库（环境变量，适合 README/CI） | heading | PUBLISH.md | 36 | markdown section |
+| 可选：指定分支或 tag | heading | PUBLISH.md | 40 | markdown section |
+| 接入业务项目（任意 IDE） | heading | PUBLISH.md | 44 | markdown section |
+| 项目级 Skill（团队共享） | heading | PUBLISH.md | 58 | markdown section |
+| 或 | heading | PUBLISH.md | 66 | markdown section |
+| 发版 checklist | heading | PUBLISH.md | 70 | markdown section |
+| GitHub Actions 模板 | heading | PUBLISH.md | 78 | markdown section |
+| 从 Release  tarball 安装 | heading | PUBLISH.md | 97 | markdown section |
+| 解压得到 ~/.cursor/skills/agent-workflow/ | heading | PUBLISH.md | 102 | markdown section |
+| 别名 | heading | PUBLISH.md | 105 | markdown section |
 | agent-workflow | heading | README.md | 1 | markdown section |
 | 为什么需要 | heading | README.md | 7 | markdown section |
 | 解决方案 | heading | README.md | 18 | markdown section |
@@ -298,16 +355,120 @@
 | Handoff vs Memory | heading | README.md | 173 | markdown section |
 | 文档 | heading | README.md | 180 | markdown section |
 | License | heading | README.md | 190 | markdown section |
-| Reference（人类参考材料区） | heading | reference/README.md | 1 | markdown section |
-| 放什么 | heading | reference/README.md | 5 | markdown section |
-| 不放什么 | heading | reference/README.md | 13 | markdown section |
-| 操作步骤 | heading | reference/README.md | 18 | markdown section |
-| Git | heading | reference/README.md | 25 | markdown section |
-| CLAUDE.md（入口） | heading | CLAUDE.md | 1 | markdown section |
-| AGENTS.md（入口） | heading | AGENTS.md | 1 | markdown section |
-| SERVICE_CATALOG（服务 / 模块目录） | heading | docs/SERVICE_CATALOG.md | 1 | markdown section |
-| 维护规则 | heading | docs/SERVICE_CATALOG.md | 5 | markdown section |
-| 服务 / 模块 | heading | docs/SERVICE_CATALOG.md | 11 | markdown section |
+| 安全策略（仓库根摘要） | heading | agent-workflow/SECURITY.md | 1 | markdown section |
+| 报告漏洞 | heading | agent-workflow/SECURITY.md | 5 | markdown section |
+| 范围与期望 | heading | agent-workflow/SECURITY.md | 11 | markdown section |
+| 密钥与敏感数据 | heading | agent-workflow/SECURITY.md | 16 | markdown section |
+| Invocation Guide (Tool-Agnostic) | heading | agent-workflow/INVOCATION.en.md | 1 | markdown section |
+| Flow | heading | agent-workflow/INVOCATION.en.md | 5 | markdown section |
+| Closed-Loop Management | heading | agent-workflow/INVOCATION.en.md | 22 | markdown section |
+| CLI | heading | agent-workflow/INVOCATION.en.md | 35 | markdown section |
+| or: ./scripts/aw config init --project-kind 2 | heading | agent-workflow/INVOCATION.en.md | 42 | markdown section |
+| Gates | heading | agent-workflow/INVOCATION.en.md | 63 | markdown section |
+| New Session Resume | heading | agent-workflow/INVOCATION.en.md | 75 | markdown section |
+| Context Continuity | heading | agent-workflow/INVOCATION.en.md | 95 | markdown section |
+| or directly: | heading | agent-workflow/INVOCATION.en.md | 123 | markdown section |
+| Useful Commands | heading | agent-workflow/INVOCATION.en.md | 132 | markdown section |
+| AI 辅助编码工作流（Karpathy Guidelines 落地版） | heading | agent-workflow/AICODING_WORKFLOW.md | 1 | markdown section |
+| 与产品 DSL（`docs/dsl/`）的分工 | heading | agent-workflow/AICODING_WORKFLOW.md | 13 | markdown section |
+| 端到端时间线（人类 + AI，推荐顺序） | heading | agent-workflow/AICODING_WORKFLOW.md | 21 | markdown section |
+| 总览：一条主线 | heading | agent-workflow/AICODING_WORKFLOW.md | 42 | markdown section |
+| 阶段 A — 想清楚再写（Think Before Coding） | heading | agent-workflow/AICODING_WORKFLOW.md | 50 | markdown section |
+| 阶段 B — 目标驱动（Goal-Driven Execution） | heading | agent-workflow/AICODING_WORKFLOW.md | 70 | markdown section |
+| 阶段 C — 先简单后复杂（Simplicity First） | heading | agent-workflow/AICODING_WORKFLOW.md | 104 | markdown section |
+| 阶段 D — 手术式改动（Surgical Changes） | heading | agent-workflow/AICODING_WORKFLOW.md | 120 | markdown section |
+| 阶段 E — 验证闭环（Loop Until Verified） | heading | agent-workflow/AICODING_WORKFLOW.md | 134 | markdown section |
+| Token / 上下文预算（真实写代码时） | heading | agent-workflow/AICODING_WORKFLOW.md | 160 | markdown section |
+| 文档怎么引用（分层，避免每条消息堆全文） | heading | agent-workflow/AICODING_WORKFLOW.md | 164 | markdown section |
+| 对话里少烧 token 的习惯 | heading | agent-workflow/AICODING_WORKFLOW.md | 174 | markdown section |
+| 与「全面测试」怎么兼得 | heading | agent-workflow/AICODING_WORKFLOW.md | 183 | markdown section |
+| 会话交接与需求存档（跨上下文） | heading | agent-workflow/AICODING_WORKFLOW.md | 189 | markdown section |
+| 单人迭代模板（日常） | heading | agent-workflow/AICODING_WORKFLOW.md | 210 | markdown section |
+| 相关文档 | heading | agent-workflow/AICODING_WORKFLOW.md | 227 | markdown section |
+| 变更记录 | heading | agent-workflow/AICODING_WORKFLOW.md | 246 | markdown section |
+| CLAUDE.md（详版 · 项目栈与禁令） | heading | agent-workflow/CLAUDE.md | 1 | markdown section |
+| 技术栈（模板 — init 后覆盖） | heading | agent-workflow/CLAUDE.md | 8 | markdown section |
+| 构建与测试命令（必须填真实命令） | heading | agent-workflow/CLAUDE.md | 19 | markdown section |
+| 禁令（默认） | heading | agent-workflow/CLAUDE.md | 31 | markdown section |
+| SOP 摘要 | heading | agent-workflow/CLAUDE.md | 41 | markdown section |
+| 对话触发语 | heading | agent-workflow/CLAUDE.md | 52 | markdown section |
+| 跨项目前后端同步教程 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 1 | markdown section |
+| DSL / Plan 前置流程 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 17 | markdown section |
+| 核心概念 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 43 | markdown section |
+| 共享 DSL / 协作 Plan | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 87 | markdown section |
+| 重要边界 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 133 | markdown section |
+| 第一次配置 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 150 | markdown section |
+| 1. 前端项目配置 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 152 | markdown section |
+| 2. 后端项目配置 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 170 | markdown section |
+| 每天开始任务前 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 181 | markdown section |
+| 完成任务后发布快照 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 223 | markdown section |
+| 接口变更怎么处理 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 259 | markdown section |
+| 阻塞怎么处理 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 305 | markdown section |
+| 两个 Codex 会话怎么说 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 330 | markdown section |
+| 推荐执行节奏 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 352 | markdown section |
+| 通用跨端事件 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 386 | markdown section |
+| 常见问题 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 432 | markdown section |
+| 是否需要一个真正的 Git 仓库做 project-harness？ | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 434 | markdown section |
+| pull 会不会把后端 DSL 覆盖到前端？ | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 440 | markdown section |
+| push 会不会推代码？ | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 446 | markdown section |
+| API contract 放哪里？ | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 450 | markdown section |
+| 单仓库前后端还需要 aw sync 吗？ | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 461 | markdown section |
+| 最小可跑示例 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 471 | markdown section |
+| agent-workflow（运行时精简版） | heading | skill/SKILL.md | 13 | markdown section |
+| Runtime Rule | heading | skill/SKILL.md | 19 | markdown section |
+| Startup | heading | skill/SKILL.md | 29 | markdown section |
+| Token Budget | heading | skill/SKILL.md | 45 | markdown section |
+| Required Gates | heading | skill/SKILL.md | 82 | markdown section |
+| Context Continuity | heading | skill/SKILL.md | 97 | markdown section |
+| DSL / Plan / PM | heading | skill/SKILL.md | 117 | markdown section |
+| Cross-Project Sync | heading | skill/SKILL.md | 125 | markdown section |
+| Engineering Principles | heading | skill/SKILL.md | 136 | markdown section |
+| File / Bug / Git Rules | heading | skill/SKILL.md | 148 | markdown section |
+| Pencil | heading | skill/SKILL.md | 156 | markdown section |
+| agent-workflow — 10 分钟上手（任意 AI 工具） | heading | skill/QUICKSTART.md | 1 | markdown section |
+| 1. 装入工作流包 | heading | skill/QUICKSTART.md | 3 | markdown section |
+| 2. 选择你的工具（已 `--adapters` 可跳过） | heading | skill/QUICKSTART.md | 33 | markdown section |
+| 3. 阶段 0 → 研发 | heading | skill/QUICKSTART.md | 47 | markdown section |
+| n: 1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup；2 不需要 --repo-url | heading | skill/QUICKSTART.md | 56 | markdown section |
+| 若 build-target=3 且前后端分仓 / 双项目：先 aw sync init <project-harness> ...，再拆 Plan | heading | skill/QUICKSTART.md | 58 | markdown section |
+| 4. 换 IDE 时 | heading | skill/QUICKSTART.md | 124 | markdown section |
+| 5. 诊断 / 升级 / 移除 | heading | skill/QUICKSTART.md | 128 | markdown section |
+| agent-workflow — 参考 | heading | skill/reference.md | 1 | markdown section |
+| 工具无关原则 | heading | skill/reference.md | 3 | markdown section |
+| 启动入口 | heading | skill/reference.md | 9 | markdown section |
+| 编码原则 | heading | skill/reference.md | 22 | markdown section |
+| 闭环管理 | heading | skill/reference.md | 39 | markdown section |
+| 适配器安装 | heading | skill/reference.md | 50 | markdown section |
+| Skill 安装 | heading | skill/reference.md | 68 | markdown section |
+| 本地源码 | heading | skill/reference.md | 71 | markdown section |
+| 远程仓库 | heading | skill/reference.md | 74 | markdown section |
+| 指定 tag/branch | heading | skill/reference.md | 77 | markdown section |
+| 常用检查 | heading | skill/reference.md | 87 | markdown section |
+| Handoff vs Memory | heading | skill/reference.md | 103 | markdown section |
+| CLI 速查 | heading | skill/reference.md | 122 | markdown section |
+| 流程与闸门 | heading | skill/reference.md | 249 | markdown section |
+| 提示词大全（agent-workflow 包内） | heading | agent-workflow/PROMPTS.md | 1 | markdown section |
+| 基础模板 | heading | agent-workflow/PROMPTS.md | 5 | markdown section |
+| 启动分流：先判断全新项目还是已有项目 | heading | agent-workflow/PROMPTS.md | 12 | markdown section |
+| 全新项目接入 | heading | agent-workflow/PROMPTS.md | 36 | markdown section |
+| 非全新项目接入：先盘点现状 | heading | agent-workflow/PROMPTS.md | 52 | markdown section |
+| 非全新项目：一期基线回填 | heading | agent-workflow/PROMPTS.md | 77 | markdown section |
+| 生成 DSL | heading | agent-workflow/PROMPTS.md | 103 | markdown section |
+| 非全新项目：增量 DSL | heading | agent-workflow/PROMPTS.md | 114 | markdown section |
+| 生成 Plan | heading | agent-workflow/PROMPTS.md | 135 | markdown section |
+| 前后端双项目：DSL/Plan 前置引导 | heading | agent-workflow/PROMPTS.md | 147 | markdown section |
+| 前后端双项目：同步中心建设 | heading | agent-workflow/PROMPTS.md | 172 | markdown section |
+| 前后端双项目：DSL 已审后拆 Plan | heading | agent-workflow/PROMPTS.md | 196 | markdown section |
+| 非全新项目：增量 Plan | heading | agent-workflow/PROMPTS.md | 226 | markdown section |
+| 仅前端项目 | heading | agent-workflow/PROMPTS.md | 243 | markdown section |
+| 仅后端项目 | heading | agent-workflow/PROMPTS.md | 259 | markdown section |
+| 同电脑前后端两个项目 | heading | agent-workflow/PROMPTS.md | 275 | markdown section |
+| 不同电脑前后端两个项目 | heading | agent-workflow/PROMPTS.md | 309 | markdown section |
+| 变更、Bug、收尾 | heading | agent-workflow/PROMPTS.md | 333 | markdown section |
+| AGENTS.md（Codex / 多 Agent 路由） | heading | agent-workflow/AGENTS.md | 1 | markdown section |
+| 快速路由 | heading | agent-workflow/AGENTS.md | 9 | markdown section |
+| 研发硬闸门 | heading | agent-workflow/AGENTS.md | 21 | markdown section |
+| 工具适配（可选） | heading | agent-workflow/AGENTS.md | 35 | markdown section |
 | Demonstrate agent-workflow end to end in a temporary repository. | heading | scripts/aw-demo.sh | 2 | markdown section |
 | DSL — aw demo | heading | scripts/aw-demo.sh | 50 | markdown section |
 | 元数据 | heading | scripts/aw-demo.sh | 52 | markdown section |
@@ -537,6 +698,9 @@
 | 风险 / 待确认 | heading | scripts/init-project.sh | 257 | markdown section |
 | AI / 会话 Bug 流水 | heading | scripts/init-project.sh | 266 | markdown section |
 | 流水（新在上） | heading | scripts/init-project.sh | 277 | markdown section |
+| RECOVERY_PLAYBOOK | heading | docs/recovery/RECOVERY_PLAYBOOK.md | 1 | markdown section |
+| 恢复场景 | heading | docs/recovery/RECOVERY_PLAYBOOK.md | 3 | markdown section |
+| 原则 | heading | docs/recovery/RECOVERY_PLAYBOOK.md | 14 | markdown section |
 | Block staging business code paths when active DSL is not 已审. | heading | scripts/check-dsl-business-gate.sh | 2 | markdown section |
 | shellcheck source=_aw-lib.sh | heading | scripts/check-dsl-business-gate.sh | 6 | markdown section |
 | Traceability checks across REQ, DSL, Plan, AT-T, TP, Bug, Changelog, and Harness records. | heading | scripts/aw-trace.sh | 2 | markdown section |
@@ -568,8 +732,8 @@
 | shellcheck source=_aw-lib.sh | heading | scripts/aw-plan-apply.sh | 6 | markdown section |
 | usage | shell function | scripts/aw-plan-apply.sh | 15 | shell declaration |
 | Scripts（agent-workflow · 工具无关） | heading | scripts/README.md | 1 | markdown section |
-| 环境变量 | heading | scripts/README.md | 68 | markdown section |
-| 快速开始 | heading | scripts/README.md | 75 | markdown section |
+| 环境变量 | heading | scripts/README.md | 69 | markdown section |
+| 快速开始 | heading | scripts/README.md | 76 | markdown section |
 | shellcheck source=_aw-lib.sh | heading | scripts/draft-handoff.sh | 5 | markdown section |
 | shellcheck source=_aw-task-lib.sh | heading | scripts/draft-handoff.sh | 7 | markdown section |
 | usage | shell function | scripts/draft-handoff.sh | 14 | shell declaration |
@@ -593,8 +757,8 @@
 | shellcheck source=_aw-lib.sh | heading | scripts/aw-gate.sh | 6 | markdown section |
 | shellcheck source=_aw-task-lib.sh | heading | scripts/aw-gate.sh | 8 | markdown section |
 | usage | shell function | scripts/aw-gate.sh | 15 | shell declaration |
-| ensure_gate_docs | shell function | scripts/aw-gate.sh | 30 | shell declaration |
-| run_or_mark | shell function | scripts/aw-gate.sh | 37 | shell declaration |
+| ensure_gate_docs | shell function | scripts/aw-gate.sh | 31 | shell declaration |
+| run_or_mark | shell function | scripts/aw-gate.sh | 38 | shell declaration |
 | Minimal policy-as-code helper. | heading | scripts/aw-policy.sh | 2 | markdown section |
 | shellcheck source=_aw-lib.sh | heading | scripts/aw-policy.sh | 6 | markdown section |
 | usage | shell function | scripts/aw-policy.sh | 17 | shell declaration |
@@ -714,22 +878,24 @@
 | sync_before_task_start | shell function | scripts/aw-task.sh | 70 | shell declaration |
 | sync_after_task_complete | shell function | scripts/aw-task.sh | 89 | shell declaration |
 | sync_after_task_blocked | shell function | scripts/aw-task.sh | 104 | shell declaration |
-| print_commit_prompt | shell function | scripts/aw-task.sh | 120 | shell declaration |
-| checkpoint_file | shell function | scripts/aw-task.sh | 136 | shell declaration |
-| checkpoint_mark | shell function | scripts/aw-task.sh | 140 | shell declaration |
-| checkpoint_require_resolved | shell function | scripts/aw-task.sh | 154 | shell declaration |
-| print_task_paste | shell function | scripts/aw-task.sh | 165 | shell declaration |
-| 当前任务 | heading | scripts/aw-task.sh | 175 | markdown section |
-| 必读（@ 路径，勿读 ENGINEERING_INDEX.md） | heading | scripts/aw-task.sh | 183 | markdown section |
-| 阶段 A（先输出再写码） | heading | scripts/aw-task.sh | 192 | markdown section |
-| 阶段 C–D | heading | scripts/aw-task.sh | 197 | markdown section |
-| 阶段 E | heading | scripts/aw-task.sh | 200 | markdown section |
-| 闸门 | heading | scripts/aw-task.sh | 206 | markdown section |
-| print_task_brief | shell function | scripts/aw-task.sh | 226 | shell declaration |
-| 当前候选任务 | heading | scripts/aw-task.sh | 236 | markdown section |
-| 需求真源 | heading | scripts/aw-task.sh | 244 | markdown section |
-| 开始前必须沟通清楚 | heading | scripts/aw-task.sh | 250 | markdown section |
-| Agent 规则 | heading | scripts/aw-task.sh | 258 | markdown section |
+| code_map_auto_refresh | shell function | scripts/aw-task.sh | 120 | shell declaration |
+| code_map_auto_gate | shell function | scripts/aw-task.sh | 129 | shell declaration |
+| print_commit_prompt | shell function | scripts/aw-task.sh | 138 | shell declaration |
+| checkpoint_file | shell function | scripts/aw-task.sh | 154 | shell declaration |
+| checkpoint_mark | shell function | scripts/aw-task.sh | 158 | shell declaration |
+| checkpoint_require_resolved | shell function | scripts/aw-task.sh | 172 | shell declaration |
+| print_task_paste | shell function | scripts/aw-task.sh | 183 | shell declaration |
+| 当前任务 | heading | scripts/aw-task.sh | 193 | markdown section |
+| 必读（@ 路径，勿读 ENGINEERING_INDEX.md） | heading | scripts/aw-task.sh | 201 | markdown section |
+| 阶段 A（先输出再写码） | heading | scripts/aw-task.sh | 210 | markdown section |
+| 阶段 C–D | heading | scripts/aw-task.sh | 215 | markdown section |
+| 阶段 E | heading | scripts/aw-task.sh | 218 | markdown section |
+| 闸门 | heading | scripts/aw-task.sh | 224 | markdown section |
+| print_task_brief | shell function | scripts/aw-task.sh | 244 | shell declaration |
+| 当前候选任务 | heading | scripts/aw-task.sh | 254 | markdown section |
+| 需求真源 | heading | scripts/aw-task.sh | 262 | markdown section |
+| 开始前必须沟通清楚 | heading | scripts/aw-task.sh | 268 | markdown section |
+| Agent 规则 | heading | scripts/aw-task.sh | 276 | markdown section |
 | Requirement commands: new / change | heading | scripts/aw-req.sh | 2 | markdown section |
 | shellcheck source=_aw-lib.sh | heading | scripts/aw-req.sh | 6 | markdown section |
 | shellcheck source=_aw-task-lib.sh | heading | scripts/aw-req.sh | 8 | markdown section |
@@ -1011,16 +1177,17 @@
 | shellcheck source=_aw-task-lib.sh | heading | scripts/aw-context.sh | 8 | markdown section |
 | usage | shell function | scripts/aw-context.sh | 21 | shell declaration |
 | ensure_context | shell function | scripts/aw-context.sh | 38 | shell declaration |
-| ctx_plan_path | shell function | scripts/aw-context.sh | 45 | shell declaration |
-| ctx_rel | shell function | scripts/aw-context.sh | 50 | shell declaration |
-| ctx_field | shell function | scripts/aw-context.sh | 55 | shell declaration |
-| ctx_codegraph_available | shell function | scripts/aw-context.sh | 69 | shell declaration |
-| ctx_is_blocked_path | shell function | scripts/aw-context.sh | 73 | shell declaration |
-| ctx_candidate_files_for_task | shell function | scripts/aw-context.sh | 86 | shell declaration |
-| ctx_insert_after_section | shell function | scripts/aw-context.sh | 116 | shell declaration |
-| ctx_task_query | shell function | scripts/aw-context.sh | 131 | shell declaration |
-| ctx_allowed_files | shell function | scripts/aw-context.sh | 147 | shell declaration |
-| ctx_update_section_table | shell function | scripts/aw-context.sh | 155 | shell declaration |
+| ctx_auto_code_map_build | shell function | scripts/aw-context.sh | 45 | shell declaration |
+| ctx_plan_path | shell function | scripts/aw-context.sh | 54 | shell declaration |
+| ctx_rel | shell function | scripts/aw-context.sh | 59 | shell declaration |
+| ctx_field | shell function | scripts/aw-context.sh | 64 | shell declaration |
+| ctx_codegraph_available | shell function | scripts/aw-context.sh | 78 | shell declaration |
+| ctx_is_blocked_path | shell function | scripts/aw-context.sh | 82 | shell declaration |
+| ctx_candidate_files_for_task | shell function | scripts/aw-context.sh | 95 | shell declaration |
+| ctx_insert_after_section | shell function | scripts/aw-context.sh | 125 | shell declaration |
+| ctx_task_query | shell function | scripts/aw-context.sh | 140 | shell declaration |
+| ctx_allowed_files | shell function | scripts/aw-context.sh | 156 | shell declaration |
+| ctx_update_section_table | shell function | scripts/aw-context.sh | 164 | shell declaration |
 | One-shot setup for a target repo. | heading | scripts/aw-setup.sh | 2 | markdown section |
 | shellcheck source=_aw-lib.sh | heading | scripts/aw-setup.sh | 6 | markdown section |
 | usage | shell function | scripts/aw-setup.sh | 14 | shell declaration |
@@ -1045,60 +1212,255 @@
 | usage | shell function | scripts/aw-tp.sh | 18 | shell declaration |
 | resolve_tp_file | shell function | scripts/aw-tp.sh | 29 | shell declaration |
 | update_verify_with_tp | shell function | scripts/aw-tp.sh | 42 | shell declaration |
-| agent-workflow（运行时精简版） | heading | skill/SKILL.md | 13 | markdown section |
-| Runtime Rule | heading | skill/SKILL.md | 19 | markdown section |
-| Startup | heading | skill/SKILL.md | 29 | markdown section |
-| Token Budget | heading | skill/SKILL.md | 45 | markdown section |
-| Required Gates | heading | skill/SKILL.md | 82 | markdown section |
-| Context Continuity | heading | skill/SKILL.md | 97 | markdown section |
-| DSL / Plan / PM | heading | skill/SKILL.md | 117 | markdown section |
-| Cross-Project Sync | heading | skill/SKILL.md | 125 | markdown section |
-| Engineering Principles | heading | skill/SKILL.md | 136 | markdown section |
-| File / Bug / Git Rules | heading | skill/SKILL.md | 148 | markdown section |
-| Pencil | heading | skill/SKILL.md | 156 | markdown section |
-| agent-workflow — 10 分钟上手（任意 AI 工具） | heading | skill/QUICKSTART.md | 1 | markdown section |
-| 1. 装入工作流包 | heading | skill/QUICKSTART.md | 3 | markdown section |
-| 2. 选择你的工具（已 `--adapters` 可跳过） | heading | skill/QUICKSTART.md | 33 | markdown section |
-| 3. 阶段 0 → 研发 | heading | skill/QUICKSTART.md | 47 | markdown section |
-| n: 1=GitHub，2=本地 Git，3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup；2 不需要 --repo-url | heading | skill/QUICKSTART.md | 56 | markdown section |
-| 若 build-target=3 且前后端分仓 / 双项目：先 aw sync init <project-harness> ...，再拆 Plan | heading | skill/QUICKSTART.md | 58 | markdown section |
-| 4. 换 IDE 时 | heading | skill/QUICKSTART.md | 124 | markdown section |
-| 5. 诊断 / 升级 / 移除 | heading | skill/QUICKSTART.md | 128 | markdown section |
-| agent-workflow — 参考 | heading | skill/reference.md | 1 | markdown section |
-| 工具无关原则 | heading | skill/reference.md | 3 | markdown section |
-| 启动入口 | heading | skill/reference.md | 9 | markdown section |
-| 编码原则 | heading | skill/reference.md | 22 | markdown section |
-| 闭环管理 | heading | skill/reference.md | 39 | markdown section |
-| 适配器安装 | heading | skill/reference.md | 50 | markdown section |
-| Skill 安装 | heading | skill/reference.md | 68 | markdown section |
-| 本地源码 | heading | skill/reference.md | 71 | markdown section |
-| 远程仓库 | heading | skill/reference.md | 74 | markdown section |
-| 指定 tag/branch | heading | skill/reference.md | 77 | markdown section |
-| 常用检查 | heading | skill/reference.md | 87 | markdown section |
-| Handoff vs Memory | heading | skill/reference.md | 103 | markdown section |
-| CLI 速查 | heading | skill/reference.md | 122 | markdown section |
-| 流程与闸门 | heading | skill/reference.md | 248 | markdown section |
-| 发布与安装 agent-workflow Skill | heading | PUBLISH.md | 1 | markdown section |
-| 产物是什么 | heading | PUBLISH.md | 3 | markdown section |
-| 本机安装（开发者） | heading | PUBLISH.md | 11 | markdown section |
-| 可选：AW_SYNC_PROJECT_SKILL=0 跳过写入 .cursor/skills/ | heading | PUBLISH.md | 16 | markdown section |
-| 或 | heading | PUBLISH.md | 23 | markdown section |
-| 用户安装（无需 clone 全仓） | heading | PUBLISH.md | 27 | markdown section |
-| 方式 A：本地路径 | heading | PUBLISH.md | 30 | markdown section |
-| 方式 B：远程仓库（直接传 URL） | heading | PUBLISH.md | 33 | markdown section |
-| 方式 C：远程仓库（环境变量，适合 README/CI） | heading | PUBLISH.md | 36 | markdown section |
-| 可选：指定分支或 tag | heading | PUBLISH.md | 40 | markdown section |
-| 接入业务项目（任意 IDE） | heading | PUBLISH.md | 44 | markdown section |
-| 项目级 Skill（团队共享） | heading | PUBLISH.md | 58 | markdown section |
-| 或 | heading | PUBLISH.md | 66 | markdown section |
-| 发版 checklist | heading | PUBLISH.md | 70 | markdown section |
-| GitHub Actions 模板 | heading | PUBLISH.md | 78 | markdown section |
-| 从 Release  tarball 安装 | heading | PUBLISH.md | 97 | markdown section |
-| 解压得到 ~/.cursor/skills/agent-workflow/ | heading | PUBLISH.md | 102 | markdown section |
-| 别名 | heading | PUBLISH.md | 105 | markdown section |
-| AGENT_RULES.md（入口） | heading | AGENT_RULES.md | 1 | markdown section |
+| agent-workflow policy-as-code（最小门禁） | heading | agent-workflow/templates/policy/POLICY.yml | 1 | markdown section |
+| Policy Decisions（策略例外与审批记录） | heading | agent-workflow/templates/policy/POLICY_DECISIONS.md | 1 | markdown section |
+| 记录规则 | heading | agent-workflow/templates/policy/POLICY_DECISIONS.md | 5 | markdown section |
+| 流水（新在上） | heading | agent-workflow/templates/policy/POLICY_DECISIONS.md | 11 | markdown section |
+| 项目交接快照 | heading | docs/handoff/PROJECT_HANDOFF.md | 1 | markdown section |
+| 当前目标 | heading | docs/handoff/PROJECT_HANDOFF.md | 5 | markdown section |
+| 硬约束（真源） | heading | docs/handoff/PROJECT_HANDOFF.md | 9 | markdown section |
+| 关联 REQ | heading | docs/handoff/PROJECT_HANDOFF.md | 15 | markdown section |
+| VCS_REVIEW_GATE | heading | docs/vcs/REVIEW_GATE.md | 1 | markdown section |
+| Cursor：上下文将满时自动交接（Hooks） | heading | docs/handoff/CURSOR_CONTEXT_HOOK.md | 1 | markdown section |
+| 默认阈值（安装 hooks 后） | heading | docs/handoff/CURSOR_CONTEXT_HOOK.md | 17 | markdown section |
+| 限制说明 | heading | docs/handoff/CURSOR_CONTEXT_HOOK.md | 26 | markdown section |
+| 变更记录 | heading | docs/handoff/CURSOR_CONTEXT_HOOK.md | 36 | markdown section |
+| BRANCH_POLICY | heading | docs/vcs/BRANCH_POLICY.md | 1 | markdown section |
+| 分支规范 | heading | docs/vcs/BRANCH_POLICY.md | 3 | markdown section |
+| Gate | heading | docs/vcs/BRANCH_POLICY.md | 12 | markdown section |
+| 新会话首条消息 · 粘贴模板（通用） | heading | docs/handoff/NEW_CHAT_PASTE_TEMPLATE.md | 1 | markdown section |
+| 维护核对 | heading | docs/handoff/NEW_CHAT_PASTE_TEMPLATE.md | 9 | markdown section |
+| 新会话首条消息（整段复制） | heading | docs/handoff/NEW_CHAT_PASTE_TEMPLATE.md | 20 | markdown section |
+| VCS_REVIEW_CHECKLIST | heading | docs/vcs/PR_CHECKLIST.md | 1 | markdown section |
+| 工程师 Review Checklist | heading | docs/vcs/PR_CHECKLIST.md | 17 | markdown section |
+| Engineering Harness 增强任务清单 | heading | docs/handoff/ENGINEERING_HARNESS_TASKS.md | 1 | markdown section |
+| P0：先补强 AI 执行可控性 | heading | docs/handoff/ENGINEERING_HARNESS_TASKS.md | 5 | markdown section |
+| P1：补齐交付控制面 | heading | docs/handoff/ENGINEERING_HARNESS_TASKS.md | 13 | markdown section |
+| P2：形成可度量平台基础 | heading | docs/handoff/ENGINEERING_HARNESS_TASKS.md | 21 | markdown section |
+| P3：形成治理闭环 | heading | docs/handoff/ENGINEERING_HARNESS_TASKS.md | 29 | markdown section |
+| 执行顺序 | heading | docs/handoff/ENGINEERING_HARNESS_TASKS.md | 39 | markdown section |
+| 会话交接（Handoff） | heading | docs/handoff/README.md | 1 | markdown section |
+| AI / 会话 Bug 流水 | heading | docs/handoff/AI_BUG_LOG.md | 1 | markdown section |
+| 流水（新在上） | heading | docs/handoff/AI_BUG_LOG.md | 16 | markdown section |
+| agent-workflow / Skill 交接路线图 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 1 | markdown section |
+| 1. 项目目标（一句话） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 9 | markdown section |
+| 2. 仓库结构（真源） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 17 | markdown section |
+| 3. 端到端流程（当前可跑通） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 40 | markdown section |
+| 4. CLI 命令清单（已实现） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 70 | markdown section |
+| 4.1 安装与初始化 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 72 | markdown section |
+| 4.2 阶段 0（产品输入） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 87 | markdown section |
+| 4.3 研发执行环（P0） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 106 | markdown section |
+| 4.4 校验聚合 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 117 | markdown section |
+| 4.5 Skill 发布 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 124 | markdown section |
+| 5. 已删除 / 已瘦身（勿恢复 unless 明确要求） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 137 | markdown section |
+| 6. 已知缺口与 Bug 修复史（避免重复踩坑） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 146 | markdown section |
+| 7. 未做 / 待做（按优先级） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 159 | markdown section |
+| P3 — 高价值（已推进） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 161 | markdown section |
+| P4 — 体验与质量 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 171 | markdown section |
+| P5 — 自动化与生态 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 182 | markdown section |
+| P6 — 产品化与发布收口 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 191 | markdown section |
+| P7 — 生态增强 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 200 | markdown section |
+| 明确不做（除非用户改需求） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 213 | markdown section |
+| 8. 给下一个 AI 的「第一条任务」建议 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 221 | markdown section |
+| 9. 测试清单（每次改 scripts 必跑） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 238 | markdown section |
+| 若在业务仓验证： | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 245 | markdown section |
+| 10. 关键文件索引（改哪里） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 254 | markdown section |
+| 11. Skill 合格标准（自检表） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 270 | markdown section |
+| 12. 版本里程碑建议 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 281 | markdown section |
+| 上下文压缩指南（类比 Claude Code compact） | heading | docs/handoff/HANDOFF_GUIDE.md | 1 | markdown section |
+| 何时更新 `PROJECT_HANDOFF.md` | heading | docs/handoff/HANDOFF_GUIDE.md | 7 | markdown section |
+| 与 `docs/memory/` 的边界 | heading | docs/handoff/HANDOFF_GUIDE.md | 18 | markdown section |
+| 压缩检查清单（按需删减，优先短的） | heading | docs/handoff/HANDOFF_GUIDE.md | 35 | markdown section |
+| 可复制骨架（粘贴进 `PROJECT_HANDOFF.md` 再改） | heading | docs/handoff/HANDOFF_GUIDE.md | 64 | markdown section |
+| 当前目标（1～3 句） | heading | docs/handoff/HANDOFF_GUIDE.md | 67 | markdown section |
+| 硬约束 | heading | docs/handoff/HANDOFF_GUIDE.md | 70 | markdown section |
+| 已拍板决策 | heading | docs/handoff/HANDOFF_GUIDE.md | 74 | markdown section |
+| 仓库地图（本轮 delta） | heading | docs/handoff/HANDOFF_GUIDE.md | 77 | markdown section |
+| 未完成（Next） | heading | docs/handoff/HANDOFF_GUIDE.md | 80 | markdown section |
+| 阻塞 / 待确认 | heading | docs/handoff/HANDOFF_GUIDE.md | 83 | markdown section |
+| 关联需求 | heading | docs/handoff/HANDOFF_GUIDE.md | 86 | markdown section |
+| 刻意不写 | heading | docs/handoff/HANDOFF_GUIDE.md | 89 | markdown section |
+| 给下一轮 AI 省 Token | heading | docs/handoff/HANDOFF_GUIDE.md | 93 | markdown section |
+| 长度建议 | heading | docs/handoff/HANDOFF_GUIDE.md | 103 | markdown section |
+| 与新对话的固定开场（可复制） | heading | docs/handoff/HANDOFF_GUIDE.md | 109 | markdown section |
+| 通用最短版（任意模块） | heading | docs/handoff/HANDOFF_GUIDE.md | 111 | markdown section |
+| 本仓库 Vue 查房前端（推荐详稿） | heading | docs/handoff/HANDOFF_GUIDE.md | 121 | markdown section |
+| 半自动草稿 | heading | docs/handoff/HANDOFF_GUIDE.md | 128 | markdown section |
+| Codex：一键工程化压缩 | heading | docs/handoff/HANDOFF_GUIDE.md | 149 | markdown section |
+| Cursor：将近占满时自动提醒 | heading | docs/handoff/HANDOFF_GUIDE.md | 167 | markdown section |
+| 变更记录 | heading | docs/handoff/HANDOFF_GUIDE.md | 173 | markdown section |
+| Reference（人类参考材料区） | heading | agent-workflow/templates/reference/README.md | 1 | markdown section |
+| 放什么 | heading | agent-workflow/templates/reference/README.md | 5 | markdown section |
+| 不放什么 | heading | agent-workflow/templates/reference/README.md | 13 | markdown section |
+| 操作步骤 | heading | agent-workflow/templates/reference/README.md | 18 | markdown section |
+| Git | heading | agent-workflow/templates/reference/README.md | 25 | markdown section |
+| agent-workflow policy-as-code（最小门禁） | heading | docs/policy/POLICY.yml | 1 | markdown section |
+| Policy Decisions（策略例外与审批记录） | heading | docs/policy/POLICY_DECISIONS.md | 1 | markdown section |
+| 记录规则 | heading | docs/policy/POLICY_DECISIONS.md | 5 | markdown section |
+| 流水（新在上） | heading | docs/policy/POLICY_DECISIONS.md | 11 | markdown section |
+| Agent Trace（AI 执行审计） | heading | docs/audit/AGENT_TRACE.md | 1 | markdown section |
+| 维护规则 | heading | docs/audit/AGENT_TRACE.md | 5 | markdown section |
+| 流水（新在上） | heading | docs/audit/AGENT_TRACE.md | 11 | markdown section |
+| Dependency Review（依赖准入） | heading | docs/security/DEPENDENCY_REVIEW.md | 1 | markdown section |
+| 维护规则 | heading | docs/security/DEPENDENCY_REVIEW.md | 5 | markdown section |
+| 依赖记录（新在上） | heading | docs/security/DEPENDENCY_REVIEW.md | 11 | markdown section |
+| Security Findings（安全发现） | heading | docs/security/SECURITY_FINDINGS.md | 1 | markdown section |
+| 流水（新在上） | heading | docs/security/SECURITY_FINDINGS.md | 5 | markdown section |
+| 90 Acceptance — <name> | heading | agent-workflow/templates/dsl/DSL_SUITE_ACCEPTANCE.md | 1 | markdown section |
+| 验收（可检查） | heading | agent-workflow/templates/dsl/DSL_SUITE_ACCEPTANCE.md | 3 | markdown section |
+| 测试锚点 | heading | agent-workflow/templates/dsl/DSL_SUITE_ACCEPTANCE.md | 8 | markdown section |
+| 待确认 | heading | agent-workflow/templates/dsl/DSL_SUITE_ACCEPTANCE.md | 13 | markdown section |
+| DSL — <产品/域名称> | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 1 | markdown section |
+| 元数据 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 3 | markdown section |
+| 背景与定位 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 16 | markdown section |
+| 用户与场景 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 22 | markdown section |
+| 概念模型 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 28 | markdown section |
+| 不在范围内 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 34 | markdown section |
+| 成功标准 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 40 | markdown section |
+| 路由与信息架构（若有前端） | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 46 | markdown section |
+| 主屏业务组件（摘要） | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 53 | markdown section |
+| OV-ID 叠加层总表 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 60 | markdown section |
+| 验收（可检查） | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 68 | markdown section |
+| notes / 待确认 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 75 | markdown section |
+| DSL Suite — <name> | heading | agent-workflow/templates/dsl/DSL_SUITE_INDEX.md | 1 | markdown section |
+| 元数据 | heading | agent-workflow/templates/dsl/DSL_SUITE_INDEX.md | 3 | markdown section |
+| 文件结构 | heading | agent-workflow/templates/dsl/DSL_SUITE_INDEX.md | 15 | markdown section |
+| 验收（可检查） | heading | agent-workflow/templates/dsl/DSL_SUITE_INDEX.md | 26 | markdown section |
+| notes / 待确认 | heading | agent-workflow/templates/dsl/DSL_SUITE_INDEX.md | 32 | markdown section |
+| DSL — <产品/域名称> | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 1 | markdown section |
+| 元数据 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 3 | markdown section |
+| 背景与定位 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 16 | markdown section |
+| 用户与场景 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 22 | markdown section |
+| 概念模型 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 28 | markdown section |
+| 不在范围内 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 34 | markdown section |
+| 成功标准 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 40 | markdown section |
+| 路由与信息架构（若有前端） | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 46 | markdown section |
+| 主屏业务组件（摘要） | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 53 | markdown section |
+| OV-ID 叠加层总表 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 60 | markdown section |
+| 验收（可检查） | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 68 | markdown section |
+| notes / 待确认 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 75 | markdown section |
+| 页面规格 — <路由 path> | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 1 | markdown section |
+| 元数据 | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 5 | markdown section |
+| 布局与区块 | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 15 | markdown section |
+| 主交互与跳转 | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 21 | markdown section |
+| 权限 / 条件展示 | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 27 | markdown section |
+| 响应式（文字描述，不写 CSS） | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 33 | markdown section |
+| OV-ID（本页触发） | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 40 | markdown section |
+| §BP 数据接入（若适用） | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 47 | markdown section |
+| 验收锚点 | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 56 | markdown section |
+| notes / 待确认 | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 62 | markdown section |
+| 40 Boundaries — <name> | heading | agent-workflow/templates/dsl/DSL_SUITE_BOUNDARIES.md | 1 | markdown section |
+| 模块边界 | heading | agent-workflow/templates/dsl/DSL_SUITE_BOUNDARIES.md | 3 | markdown section |
+| 接口 / 数据契约 | heading | agent-workflow/templates/dsl/DSL_SUITE_BOUNDARIES.md | 8 | markdown section |
+| 联动边界 | heading | agent-workflow/templates/dsl/DSL_SUITE_BOUNDARIES.md | 13 | markdown section |
+| 风险与约束 | heading | agent-workflow/templates/dsl/DSL_SUITE_BOUNDARIES.md | 18 | markdown section |
+| 00 Requirements — <name> | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 1 | markdown section |
+| 需求描述 | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 3 | markdown section |
+| 用户与场景 | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 7 | markdown section |
+| 范围 | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 11 | markdown section |
+| In Scope | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 13 | markdown section |
+| Out of Scope | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 17 | markdown section |
+| 成功标准 | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 21 | markdown section |
+| 追踪 | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 25 | markdown section |
+| 30 Events — <name> | heading | agent-workflow/templates/dsl/DSL_SUITE_EVENTS.md | 1 | markdown section |
+| 事件表 | heading | agent-workflow/templates/dsl/DSL_SUITE_EVENTS.md | 3 | markdown section |
+| 异步与状态同步 | heading | agent-workflow/templates/dsl/DSL_SUITE_EVENTS.md | 8 | markdown section |
+| 埋点 / 审计（如适用） | heading | agent-workflow/templates/dsl/DSL_SUITE_EVENTS.md | 13 | markdown section |
+| 10 Pages — <name> | heading | agent-workflow/templates/dsl/DSL_SUITE_PAGES.md | 1 | markdown section |
+| 路由与信息架构 | heading | agent-workflow/templates/dsl/DSL_SUITE_PAGES.md | 3 | markdown section |
+| 页面结构 | heading | agent-workflow/templates/dsl/DSL_SUITE_PAGES.md | 8 | markdown section |
+| 响应式与权限 | heading | agent-workflow/templates/dsl/DSL_SUITE_PAGES.md | 13 | markdown section |
+| DSL — <项目草稿> | heading | agent-workflow/templates/dsl/DSL_DRAFT.md | 1 | markdown section |
+| 元数据 | heading | agent-workflow/templates/dsl/DSL_DRAFT.md | 5 | markdown section |
+| 背景与定位 | heading | agent-workflow/templates/dsl/DSL_DRAFT.md | 18 | markdown section |
+| 验收（可检查） | heading | agent-workflow/templates/dsl/DSL_DRAFT.md | 24 | markdown section |
+| notes / 待确认 | heading | agent-workflow/templates/dsl/DSL_DRAFT.md | 30 | markdown section |
+| 20 Interactions — <name> | heading | agent-workflow/templates/dsl/DSL_SUITE_INTERACTIONS.md | 1 | markdown section |
+| 交互行为 | heading | agent-workflow/templates/dsl/DSL_SUITE_INTERACTIONS.md | 3 | markdown section |
+| 表单 / 控件规则 | heading | agent-workflow/templates/dsl/DSL_SUITE_INTERACTIONS.md | 8 | markdown section |
+| 权限与条件分支 | heading | agent-workflow/templates/dsl/DSL_SUITE_INTERACTIONS.md | 13 | markdown section |
+| Engineering Index（工程师索引） | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 1 | markdown section |
+| 读者声明（重要） | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 5 | markdown section |
+| 任务快照 | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 13 | markdown section |
+| 快速入口 | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 27 | markdown section |
+| 更新日志 | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 40 | markdown section |
+| Reference / DSL / Plan（阶段 0） | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 49 | markdown section |
+| DSL / 页面说明 | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 58 | markdown section |
+| 研发计划 | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 67 | markdown section |
+| 需求（REQ） | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 76 | markdown section |
+| Bug / 缺陷 | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 86 | markdown section |
+| 测试与质量（用例与 PR） | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 95 | markdown section |
+| CI 与本地校验脚本 | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 107 | markdown section |
+| 进度与交接 · 上下文压缩 | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 117 | markdown section |
+| 应用代码（若已落地） | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 129 | markdown section |
+| 安全 | heading | agent-workflow/templates/ENGINEERING_INDEX.header.md | 137 | markdown section |
+| 页面规格 — <路由 path> | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 1 | markdown section |
+| 元数据 | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 5 | markdown section |
+| 布局与区块 | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 15 | markdown section |
+| 主交互与跳转 | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 21 | markdown section |
+| 权限 / 条件展示 | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 27 | markdown section |
+| 响应式（文字描述，不写 CSS） | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 33 | markdown section |
+| OV-ID（本页触发） | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 40 | markdown section |
+| §BP 数据接入（若适用） | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 47 | markdown section |
+| 验收锚点 | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 56 | markdown section |
+| notes / 待确认 | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 62 | markdown section |
+| DSL / 页面说明 | heading | docs/dsl/README.md | 1 | markdown section |
+| 模板（本目录） | heading | docs/dsl/README.md | 5 | markdown section |
+| 命令 | heading | docs/dsl/README.md | 14 | markdown section |
+| REVIEW_GATE | heading | docs/github/REVIEW_GATE.md | 1 | markdown section |
+| BRANCH_POLICY | heading | docs/github/BRANCH_POLICY.md | 1 | markdown section |
+| 分支规范 | heading | docs/github/BRANCH_POLICY.md | 3 | markdown section |
+| Gate | heading | docs/github/BRANCH_POLICY.md | 12 | markdown section |
+| PR_CHECKLIST | heading | docs/github/PR_CHECKLIST.md | 1 | markdown section |
+| 工程师 Review Checklist | heading | docs/github/PR_CHECKLIST.md | 17 | markdown section |
+| 研发计划 | heading | docs/plans/README.md | 1 | markdown section |
+| 研发计划 — <功能/里程碑> | heading | docs/plans/_TEMPLATE_PLAN.md | 1 | markdown section |
+| 元数据 | heading | docs/plans/_TEMPLATE_PLAN.md | 3 | markdown section |
+| 目标（一句话） | heading | docs/plans/_TEMPLATE_PLAN.md | 14 | markdown section |
+| 不在范围内 | heading | docs/plans/_TEMPLATE_PLAN.md | 20 | markdown section |
+| 阶段与里程碑 | heading | docs/plans/_TEMPLATE_PLAN.md | 26 | markdown section |
+| 验收（与 DSL 对齐） | heading | docs/plans/_TEMPLATE_PLAN.md | 35 | markdown section |
+| 风险与依赖 | heading | docs/plans/_TEMPLATE_PLAN.md | 41 | markdown section |
+| 原子任务词典 — <项目> | heading | docs/plans/_TEMPLATE_ATOMIC_TASKS.md | 1 | markdown section |
+| 元数据 | heading | docs/plans/_TEMPLATE_ATOMIC_TASKS.md | 5 | markdown section |
+| 任务表 | heading | docs/plans/_TEMPLATE_ATOMIC_TASKS.md | 14 | markdown section |
+| AI 执行协议（摘要） | heading | docs/plans/_TEMPLATE_ATOMIC_TASKS.md | 26 | markdown section |
+| Runbooks（运维手册） | heading | agent-workflow/templates/ops/RUNBOOKS.md | 1 | markdown section |
+| SLO（服务等级目标） | heading | agent-workflow/templates/ops/SLO.md | 1 | markdown section |
+| Incidents（事故 / 严重故障） | heading | agent-workflow/templates/ops/INCIDENTS.md | 1 | markdown section |
+| 事故流水（新在上） | heading | agent-workflow/templates/ops/INCIDENTS.md | 5 | markdown section |
+| 项目配置（人类填写） | heading | docs/PROJECT_CONFIG.md | 1 | markdown section |
+| 本地验证命令 | heading | docs/PROJECT_CONFIG.md | 29 | markdown section |
+| DELIVERY_SCORE | heading | docs/score/DELIVERY_SCORE.md | 1 | markdown section |
+| `docs/` 目录说明 | heading | docs/README.md | 1 | markdown section |
 | 质量与交付闭环 | heading | docs/quality/README.md | 1 | markdown section |
 | 交付闭环（摘要） | heading | docs/quality/README.md | 9 | markdown section |
+| DSL 生成提示词（路径 A / B / C） | heading | agent-workflow/templates/prompts/PROMPT-DSL.md | 1 | markdown section |
+| 路径 A：仅需求 / 规格 MD → DSL | heading | agent-workflow/templates/prompts/PROMPT-DSL.md | 5 | markdown section |
+| 路径 B：设计说明 → DSL | heading | agent-workflow/templates/prompts/PROMPT-DSL.md | 35 | markdown section |
+| 路径 C：参考源码（± 规格）→ DSL | heading | agent-workflow/templates/prompts/PROMPT-DSL.md | 50 | markdown section |
+| Plan 生成提示词（DSL 已审 → docs/plans/） | heading | agent-workflow/templates/prompts/PROMPT-PLAN.md | 1 | markdown section |
+| Runbooks（运维手册） | heading | docs/ops/RUNBOOKS.md | 1 | markdown section |
+| SLO（服务等级目标） | heading | docs/ops/SLO.md | 1 | markdown section |
+| Incidents（事故 / 严重故障） | heading | docs/ops/INCIDENTS.md | 1 | markdown section |
+| 事故流水（新在上） | heading | docs/ops/INCIDENTS.md | 5 | markdown section |
+| FILE_INDEX（项目代码文件索引） | heading | docs/FILE_INDEX.md | 1 | markdown section |
+| 维护规则 | heading | docs/FILE_INDEX.md | 5 | markdown section |
+| 前端业务代码 | heading | docs/FILE_INDEX.md | 13 | markdown section |
+| 后端业务代码 | heading | docs/FILE_INDEX.md | 19 | markdown section |
+| 共享 / 通用代码 | heading | docs/FILE_INDEX.md | 25 | markdown section |
+| 测试代码 | heading | docs/FILE_INDEX.md | 31 | markdown section |
+| 运行配置 / 构建配置 | heading | docs/FILE_INDEX.md | 37 | markdown section |
+| CLI / 脚本代码 | heading | docs/FILE_INDEX.md | 43 | markdown section |
+| Skill / 插件包 | heading | docs/FILE_INDEX.md | 136 | markdown section |
+| 工作流包文档 | heading | docs/FILE_INDEX.md | 145 | markdown section |
+| 模板文件 | heading | docs/FILE_INDEX.md | 173 | markdown section |
+| IDE / Agent 适配 | heading | docs/FILE_INDEX.md | 306 | markdown section |
+| 项目工作流文档 | heading | docs/FILE_INDEX.md | 323 | markdown section |
+| CI / Git Hooks | heading | docs/FILE_INDEX.md | 371 | markdown section |
+| 仓库入口 / 配置 | heading | docs/FILE_INDEX.md | 377 | markdown section |
+| 参考材料入口 | heading | docs/FILE_INDEX.md | 393 | markdown section |
+| 其他项目文件 | heading | docs/FILE_INDEX.md | 400 | markdown section |
 | Engineering Harness PRD | heading | docs/product/ENGINEERING_HARNESS_PRD.md | 1 | markdown section |
 | 1. 产品定位 | heading | docs/product/ENGINEERING_HARNESS_PRD.md | 3 | markdown section |
 | 2. 背景与问题 | heading | docs/product/ENGINEERING_HARNESS_PRD.md | 11 | markdown section |
@@ -1171,6 +1533,59 @@
 | 16. 建议 CLI | heading | docs/product/PM_AGENT_LIFECYCLE_PRD.md | 548 | markdown section |
 | 17. 强约束 | heading | docs/product/PM_AGENT_LIFECYCLE_PRD.md | 589 | markdown section |
 | 18. 验收标准 | heading | docs/product/PM_AGENT_LIFECYCLE_PRD.md | 606 | markdown section |
+| 工程规范（人类维护 · Agent 必读） | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 1 | markdown section |
+| 优先级 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 5 | markdown section |
+| 项目概述 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 11 | markdown section |
+| 技术栈 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 15 | markdown section |
+| 团队固定前端栈 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 17 | markdown section |
+| 团队固定后端栈 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 25 | markdown section |
+| 前端 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 53 | markdown section |
+| 后端 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 63 | markdown section |
+| 构建与部署 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 73 | markdown section |
+| 代码规范 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 79 | markdown section |
+| 通用 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 81 | markdown section |
+| 前端 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 100 | markdown section |
+| 后端 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 116 | markdown section |
+| 前端模块规范（企业后台） | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 132 | markdown section |
+| 标准目录 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 134 | markdown section |
+| 团队前端标准目录 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 151 | markdown section |
+| 标准后台页面能力 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 185 | markdown section |
+| 前端命名建议 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 194 | markdown section |
+| 前端拆分边界 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 201 | markdown section |
+| 后端模块规范（Spring / Cloud / Boot） | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 210 | markdown section |
+| 推荐输出顺序 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 212 | markdown section |
+| 团队后端标准结构 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 225 | markdown section |
+| Spring 技术栈参考 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 245 | markdown section |
+| 数据库字段建议 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 254 | markdown section |
+| 安全底线 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 261 | markdown section |
+| 依赖准入 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 274 | markdown section |
+| 数据库约定 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 282 | markdown section |
+| 常见任务 SOP | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 289 | markdown section |
+| 新增前端页面 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 291 | markdown section |
+| 新增后端接口 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 299 | markdown section |
+| 数据库变更 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 308 | markdown section |
+| 后台 CRUD 模块 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 315 | markdown section |
+| 登录认证 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 323 | markdown section |
+| 文件上传下载 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 331 | markdown section |
+| Git 提交 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 339 | markdown section |
+| 提交前流程 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 341 | markdown section |
+| 阶段性提交提醒 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 351 | markdown section |
+| 提交信息格式 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 357 | markdown section |
+| 禁止项 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 367 | markdown section |
+| 关键文件 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 373 | markdown section |
+| 待确认 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 387 | markdown section |
+| 书面用例索引（TP） | heading | docs/quality/test-plans/INDEX.md | 1 | markdown section |
+| 状态说明（建议） | heading | docs/quality/test-plans/INDEX.md | 11 | markdown section |
+| 功能测试用例（书面） | heading | docs/quality/test-plans/README.md | 1 | markdown section |
+| TP-YYYYMMDD-NN-short-slug | heading | docs/quality/test-plans/_TEMPLATE.md | 1 | markdown section |
+| 元数据 | heading | docs/quality/test-plans/_TEMPLATE.md | 3 | markdown section |
+| 前置条件 | heading | docs/quality/test-plans/_TEMPLATE.md | 15 | markdown section |
+| 主路径 | heading | docs/quality/test-plans/_TEMPLATE.md | 21 | markdown section |
+| 分支与边界 | heading | docs/quality/test-plans/_TEMPLATE.md | 27 | markdown section |
+| 权限 / 角色 | heading | docs/quality/test-plans/_TEMPLATE.md | 33 | markdown section |
+| 错误与恢复 | heading | docs/quality/test-plans/_TEMPLATE.md | 39 | markdown section |
+| 回归要点 | heading | docs/quality/test-plans/_TEMPLATE.md | 45 | markdown section |
+| 执行记录 | heading | docs/quality/test-plans/_TEMPLATE.md | 51 | markdown section |
 | 研发计划 — PM Agent 产品全生命周期管理 | heading | docs/product/tasks/PM_AGENT_LIFECYCLE_PLAN.md | 1 | markdown section |
 | 元数据 | heading | docs/product/tasks/PM_AGENT_LIFECYCLE_PLAN.md | 3 | markdown section |
 | 目标 | heading | docs/product/tasks/PM_AGENT_LIFECYCLE_PLAN.md | 13 | markdown section |
@@ -1184,46 +1599,18 @@
 | 任务表 | heading | docs/product/tasks/PM_AGENT_LIFECYCLE_TASKS.md | 12 | markdown section |
 | 执行顺序建议 | heading | docs/product/tasks/PM_AGENT_LIFECYCLE_TASKS.md | 40 | markdown section |
 | AI 执行协议 | heading | docs/product/tasks/PM_AGENT_LIFECYCLE_TASKS.md | 47 | markdown section |
-| `docs/` 目录说明 | heading | docs/README.md | 1 | markdown section |
-| DELIVERY_SCORE | heading | docs/score/DELIVERY_SCORE.md | 1 | markdown section |
-| Agent Trace（AI 执行审计） | heading | docs/audit/AGENT_TRACE.md | 1 | markdown section |
-| 维护规则 | heading | docs/audit/AGENT_TRACE.md | 5 | markdown section |
-| 流水（新在上） | heading | docs/audit/AGENT_TRACE.md | 11 | markdown section |
-| VCS_REVIEW_GATE | heading | docs/vcs/REVIEW_GATE.md | 1 | markdown section |
-| BRANCH_POLICY | heading | docs/vcs/BRANCH_POLICY.md | 1 | markdown section |
-| 分支规范 | heading | docs/vcs/BRANCH_POLICY.md | 3 | markdown section |
-| Gate | heading | docs/vcs/BRANCH_POLICY.md | 12 | markdown section |
-| VCS_REVIEW_CHECKLIST | heading | docs/vcs/PR_CHECKLIST.md | 1 | markdown section |
-| 工程师 Review Checklist | heading | docs/vcs/PR_CHECKLIST.md | 17 | markdown section |
-| CONTEXT_CONFIG | heading | docs/context/CONTEXT_CONFIG.md | 1 | markdown section |
-| Backend 说明 | heading | docs/context/CONTEXT_CONFIG.md | 16 | markdown section |
-| 硬规则 | heading | docs/context/CONTEXT_CONFIG.md | 23 | markdown section |
-| CODE_MAP（代码地图） | heading | docs/context/CODE_MAP.md | 1 | markdown section |
-| 元数据 | heading | docs/context/CODE_MAP.md | 6 | markdown section |
-| 目录概览 | heading | docs/context/CODE_MAP.md | 18 | markdown section |
-| 入口文件 | heading | docs/context/CODE_MAP.md | 61 | markdown section |
-| 模块地图 | heading | docs/context/CODE_MAP.md | 124 | markdown section |
-| Symbol 索引 | heading | docs/context/CODE_MAP.md | 251 | markdown section |
-| 路由 / API 索引 | heading | docs/context/CODE_MAP.md | 256 | markdown section |
-| 测试映射 | heading | docs/context/CODE_MAP.md | 261 | markdown section |
-| 依赖线索 | heading | docs/context/CODE_MAP.md | 267 | markdown section |
-| Token 读取规则 | heading | docs/context/CODE_MAP.md | 272 | markdown section |
-| CODE_CONTEXT_INDEX（AI 代码上下文索引） | heading | docs/context/CODE_CONTEXT_INDEX.md | 1 | markdown section |
-| 模块索引 | heading | docs/context/CODE_CONTEXT_INDEX.md | 6 | markdown section |
-| 前端入口映射 | heading | docs/context/CODE_CONTEXT_INDEX.md | 12 | markdown section |
-| 后端入口映射 | heading | docs/context/CODE_CONTEXT_INDEX.md | 18 | markdown section |
-| 受影响测试映射 | heading | docs/context/CODE_CONTEXT_INDEX.md | 24 | markdown section |
+| HOOKS（自动 Gate / 自动化触发） | heading | agent-workflow/templates/hooks/HOOKS.md | 1 | markdown section |
+| Hook 策略 | heading | agent-workflow/templates/hooks/HOOKS.md | 5 | markdown section |
+| 自动刷新 | heading | agent-workflow/templates/hooks/HOOKS.md | 15 | markdown section |
+| 例外记录 | heading | agent-workflow/templates/hooks/HOOKS.md | 21 | markdown section |
+| 协作与工作流 | heading | docs/workflow/README.md | 1 | markdown section |
+| 关键命令 | heading | docs/workflow/README.md | 7 | markdown section |
 | Memory Index | heading | docs/memory/INDEX.md | 1 | markdown section |
 | Agent Memory | heading | docs/memory/README.md | 1 | markdown section |
 | 目录 | heading | docs/memory/README.md | 5 | markdown section |
 | 规则 | heading | docs/memory/README.md | 13 | markdown section |
 | 与 Handoff 的边界 | heading | docs/memory/README.md | 21 | markdown section |
 | 聊天记忆 | heading | docs/memory/README.md | 28 | markdown section |
-| MEM-YYYYMMDD-NN-short-slug | heading | docs/memory/_TEMPLATE.md | 1 | markdown section |
-| Metadata | heading | docs/memory/_TEMPLATE.md | 3 | markdown section |
-| Memory | heading | docs/memory/_TEMPLATE.md | 15 | markdown section |
-| Evidence | heading | docs/memory/_TEMPLATE.md | 19 | markdown section |
-| Reuse Notes | heading | docs/memory/_TEMPLATE.md | 23 | markdown section |
 | 需求索引（REQ） | heading | docs/requirements/INDEX.md | 1 | markdown section |
 | 状态说明 | heading | docs/requirements/INDEX.md | 11 | markdown section |
 | 需求类型 | heading | docs/requirements/INDEX.md | 20 | markdown section |
@@ -1243,179 +1630,121 @@
 | 实现与痕迹 | heading | docs/requirements/_TEMPLATE.md | 44 | markdown section |
 | 备注 | heading | docs/requirements/_TEMPLATE.md | 54 | markdown section |
 | 变更记录 | heading | docs/requirements/_TEMPLATE.md | 60 | markdown section |
-| 研发计划 | heading | docs/plans/README.md | 1 | markdown section |
-| 研发计划 — <功能/里程碑> | heading | docs/plans/_TEMPLATE_PLAN.md | 1 | markdown section |
-| 元数据 | heading | docs/plans/_TEMPLATE_PLAN.md | 3 | markdown section |
-| 目标（一句话） | heading | docs/plans/_TEMPLATE_PLAN.md | 14 | markdown section |
-| 不在范围内 | heading | docs/plans/_TEMPLATE_PLAN.md | 20 | markdown section |
-| 阶段与里程碑 | heading | docs/plans/_TEMPLATE_PLAN.md | 26 | markdown section |
-| 验收（与 DSL 对齐） | heading | docs/plans/_TEMPLATE_PLAN.md | 35 | markdown section |
-| 风险与依赖 | heading | docs/plans/_TEMPLATE_PLAN.md | 41 | markdown section |
-| 原子任务词典 — <项目> | heading | docs/plans/_TEMPLATE_ATOMIC_TASKS.md | 1 | markdown section |
-| 元数据 | heading | docs/plans/_TEMPLATE_ATOMIC_TASKS.md | 5 | markdown section |
-| 任务表 | heading | docs/plans/_TEMPLATE_ATOMIC_TASKS.md | 14 | markdown section |
-| AI 执行协议（摘要） | heading | docs/plans/_TEMPLATE_ATOMIC_TASKS.md | 26 | markdown section |
-| Dependency Review（依赖准入） | heading | docs/security/DEPENDENCY_REVIEW.md | 1 | markdown section |
-| 维护规则 | heading | docs/security/DEPENDENCY_REVIEW.md | 5 | markdown section |
-| 依赖记录（新在上） | heading | docs/security/DEPENDENCY_REVIEW.md | 11 | markdown section |
-| Security Findings（安全发现） | heading | docs/security/SECURITY_FINDINGS.md | 1 | markdown section |
-| 流水（新在上） | heading | docs/security/SECURITY_FINDINGS.md | 5 | markdown section |
-| MOCK_SERVER | heading | docs/contracts/MOCK_SERVER.md | 1 | markdown section |
-| Mock 策略 | heading | docs/contracts/MOCK_SERVER.md | 3 | markdown section |
-| 规则 | heading | docs/contracts/MOCK_SERVER.md | 13 | markdown section |
-| CONTRACT_TESTS | heading | docs/contracts/CONTRACT_TESTS.md | 1 | markdown section |
-| API_CHANGELOG | heading | docs/contracts/API_CHANGELOG.md | 1 | markdown section |
-| Agent Roles（多 Agent 协作角色） | heading | docs/agents/AGENT_ROLES.md | 1 | markdown section |
-| 角色矩阵 | heading | docs/agents/AGENT_ROLES.md | 5 | markdown section |
-| 协作规则 | heading | docs/agents/AGENT_ROLES.md | 15 | markdown section |
+| Agent Trace（AI 执行审计） | heading | agent-workflow/templates/audit/AGENT_TRACE.md | 1 | markdown section |
+| 维护规则 | heading | agent-workflow/templates/audit/AGENT_TRACE.md | 5 | markdown section |
+| 流水（新在上） | heading | agent-workflow/templates/audit/AGENT_TRACE.md | 11 | markdown section |
+| Feature Flags（渐进发布 / 开关） | heading | docs/release/FEATURE_FLAGS.md | 1 | markdown section |
+| Release Record（发布记录） | heading | docs/release/RELEASE_RECORD.md | 1 | markdown section |
+| 发布流水（新在上） | heading | docs/release/RELEASE_RECORD.md | 5 | markdown section |
+| Environments（环境说明） | heading | docs/release/ENVIRONMENTS.md | 1 | markdown section |
+| REVIEW_GATE | heading | agent-workflow/templates/github/REVIEW_GATE.md | 1 | markdown section |
+| BRANCH_POLICY | heading | agent-workflow/templates/github/BRANCH_POLICY.md | 1 | markdown section |
+| 分支规范 | heading | agent-workflow/templates/github/BRANCH_POLICY.md | 3 | markdown section |
+| Gate | heading | agent-workflow/templates/github/BRANCH_POLICY.md | 12 | markdown section |
+| PR_CHECKLIST | heading | agent-workflow/templates/github/PR_CHECKLIST.md | 1 | markdown section |
+| 工程师 Review Checklist | heading | agent-workflow/templates/github/PR_CHECKLIST.md | 17 | markdown section |
+| MEM-YYYYMMDD-NN-short-slug | heading | docs/memory/_TEMPLATE.md | 1 | markdown section |
+| Metadata | heading | docs/memory/_TEMPLATE.md | 3 | markdown section |
+| Memory | heading | docs/memory/_TEMPLATE.md | 15 | markdown section |
+| Evidence | heading | docs/memory/_TEMPLATE.md | 19 | markdown section |
+| Reuse Notes | heading | docs/memory/_TEMPLATE.md | 23 | markdown section |
+| HOOKS（自动 Gate / 自动化触发） | heading | docs/hooks/HOOKS.md | 1 | markdown section |
+| Hook 策略 | heading | docs/hooks/HOOKS.md | 5 | markdown section |
+| 自动刷新 | heading | docs/hooks/HOOKS.md | 15 | markdown section |
+| 例外记录 | heading | docs/hooks/HOOKS.md | 21 | markdown section |
+| 工程规范（人类维护 · Agent 必读） | heading | docs/ENGINEERING_RULES.md | 1 | markdown section |
+| 优先级 | heading | docs/ENGINEERING_RULES.md | 5 | markdown section |
+| 项目概述 | heading | docs/ENGINEERING_RULES.md | 11 | markdown section |
+| 技术栈 | heading | docs/ENGINEERING_RULES.md | 15 | markdown section |
+| 团队固定前端栈 | heading | docs/ENGINEERING_RULES.md | 17 | markdown section |
+| 团队固定后端栈 | heading | docs/ENGINEERING_RULES.md | 25 | markdown section |
+| 前端 | heading | docs/ENGINEERING_RULES.md | 53 | markdown section |
+| 后端 | heading | docs/ENGINEERING_RULES.md | 63 | markdown section |
+| 构建与部署 | heading | docs/ENGINEERING_RULES.md | 73 | markdown section |
+| 代码规范 | heading | docs/ENGINEERING_RULES.md | 79 | markdown section |
+| 通用 | heading | docs/ENGINEERING_RULES.md | 81 | markdown section |
+| 前端 | heading | docs/ENGINEERING_RULES.md | 96 | markdown section |
+| 后端 | heading | docs/ENGINEERING_RULES.md | 112 | markdown section |
+| 前端模块规范（企业后台） | heading | docs/ENGINEERING_RULES.md | 128 | markdown section |
+| 标准目录 | heading | docs/ENGINEERING_RULES.md | 130 | markdown section |
+| 团队前端标准目录 | heading | docs/ENGINEERING_RULES.md | 147 | markdown section |
+| 标准后台页面能力 | heading | docs/ENGINEERING_RULES.md | 181 | markdown section |
+| 前端命名建议 | heading | docs/ENGINEERING_RULES.md | 190 | markdown section |
+| 前端拆分边界 | heading | docs/ENGINEERING_RULES.md | 197 | markdown section |
+| 后端模块规范（Spring / Cloud / Boot） | heading | docs/ENGINEERING_RULES.md | 206 | markdown section |
+| 推荐输出顺序 | heading | docs/ENGINEERING_RULES.md | 208 | markdown section |
+| 团队后端标准结构 | heading | docs/ENGINEERING_RULES.md | 221 | markdown section |
+| Spring 技术栈参考 | heading | docs/ENGINEERING_RULES.md | 241 | markdown section |
+| 数据库字段建议 | heading | docs/ENGINEERING_RULES.md | 250 | markdown section |
+| 安全底线 | heading | docs/ENGINEERING_RULES.md | 257 | markdown section |
+| 依赖准入 | heading | docs/ENGINEERING_RULES.md | 270 | markdown section |
+| 数据库约定 | heading | docs/ENGINEERING_RULES.md | 278 | markdown section |
+| 常见任务 SOP | heading | docs/ENGINEERING_RULES.md | 285 | markdown section |
+| 新增前端页面 | heading | docs/ENGINEERING_RULES.md | 287 | markdown section |
+| 新增后端接口 | heading | docs/ENGINEERING_RULES.md | 295 | markdown section |
+| 数据库变更 | heading | docs/ENGINEERING_RULES.md | 304 | markdown section |
+| 后台 CRUD 模块 | heading | docs/ENGINEERING_RULES.md | 311 | markdown section |
+| 登录认证 | heading | docs/ENGINEERING_RULES.md | 319 | markdown section |
+| 文件上传下载 | heading | docs/ENGINEERING_RULES.md | 327 | markdown section |
+| Git 提交 | heading | docs/ENGINEERING_RULES.md | 335 | markdown section |
+| 提交前流程 | heading | docs/ENGINEERING_RULES.md | 337 | markdown section |
+| 阶段性提交提醒 | heading | docs/ENGINEERING_RULES.md | 347 | markdown section |
+| 提交信息格式 | heading | docs/ENGINEERING_RULES.md | 353 | markdown section |
+| 禁止项 | heading | docs/ENGINEERING_RULES.md | 363 | markdown section |
+| 关键文件 | heading | docs/ENGINEERING_RULES.md | 369 | markdown section |
+| 待确认 | heading | docs/ENGINEERING_RULES.md | 383 | markdown section |
+| 仓库落地自检清单 | heading | agent-workflow/REPO_LANDING_CHECKLIST.md | 1 | markdown section |
+| 一次性配置 | heading | agent-workflow/REPO_LANDING_CHECKLIST.md | 7 | markdown section |
+| 合并与发布门禁 | heading | agent-workflow/REPO_LANDING_CHECKLIST.md | 21 | markdown section |
+| 产品输入（阶段 0） | heading | agent-workflow/REPO_LANDING_CHECKLIST.md | 29 | markdown section |
+| 质量习惯（抽样） | heading | agent-workflow/REPO_LANDING_CHECKLIST.md | 36 | markdown section |
+| 变更记录 | heading | agent-workflow/REPO_LANDING_CHECKLIST.md | 46 | markdown section |
+| `agent-workflow/` 文件索引 | heading | agent-workflow/INDEX.md | 1 | markdown section |
+| DELIVERY_SCORE | heading | agent-workflow/templates/score/DELIVERY_SCORE.md | 1 | markdown section |
 | Agent Reviews（Agent 评审记录） | heading | docs/agents/AGENT_REVIEWS.md | 1 | markdown section |
 | 评审流水（新在上） | heading | docs/agents/AGENT_REVIEWS.md | 5 | markdown section |
 | AGENT_LOCKS | heading | docs/agents/AGENT_LOCKS.md | 1 | markdown section |
 | AGENT_HEARTBEATS | heading | docs/agents/AGENT_HEARTBEATS.md | 1 | markdown section |
 | Agent Handoffs（Agent 交接记录） | heading | docs/agents/AGENT_HANDOFFS.md | 1 | markdown section |
 | 交接流水（新在上） | heading | docs/agents/AGENT_HANDOFFS.md | 5 | markdown section |
-| Changelog | heading | agent-workflow/CHANGELOG.md | 1 | markdown section |
-| [1.5.0] - 2026-05-29 | heading | agent-workflow/CHANGELOG.md | 3 | markdown section |
-| Added | heading | agent-workflow/CHANGELOG.md | 5 | markdown section |
-| Changed | heading | agent-workflow/CHANGELOG.md | 9 | markdown section |
-| [1.1.0] - 2026-05-19 | heading | agent-workflow/CHANGELOG.md | 13 | markdown section |
-| Added | heading | agent-workflow/CHANGELOG.md | 15 | markdown section |
-| [Unreleased] | heading | agent-workflow/CHANGELOG.md | 20 | markdown section |
-| Added | heading | agent-workflow/CHANGELOG.md | 22 | markdown section |
-| Changed | heading | agent-workflow/CHANGELOG.md | 62 | markdown section |
-| Delivery Metrics（DORA / Flow） | heading | docs/metrics/DELIVERY_METRICS.md | 1 | markdown section |
-| 指标说明 | heading | docs/metrics/DELIVERY_METRICS.md | 5 | markdown section |
-| 流水（新在上） | heading | docs/metrics/DELIVERY_METRICS.md | 14 | markdown section |
-| RECOVERY_PLAYBOOK | heading | docs/recovery/RECOVERY_PLAYBOOK.md | 1 | markdown section |
-| 恢复场景 | heading | docs/recovery/RECOVERY_PLAYBOOK.md | 3 | markdown section |
-| 原则 | heading | docs/recovery/RECOVERY_PLAYBOOK.md | 14 | markdown section |
-| Feature Flags（渐进发布 / 开关） | heading | docs/release/FEATURE_FLAGS.md | 1 | markdown section |
-| Release Record（发布记录） | heading | docs/release/RELEASE_RECORD.md | 1 | markdown section |
-| 发布流水（新在上） | heading | docs/release/RELEASE_RECORD.md | 5 | markdown section |
-| Environments（环境说明） | heading | docs/release/ENVIRONMENTS.md | 1 | markdown section |
-| 书面用例索引（TP） | heading | docs/quality/test-plans/INDEX.md | 1 | markdown section |
-| 状态说明（建议） | heading | docs/quality/test-plans/INDEX.md | 11 | markdown section |
-| 功能测试用例（书面） | heading | docs/quality/test-plans/README.md | 1 | markdown section |
-| TP-YYYYMMDD-NN-short-slug | heading | docs/quality/test-plans/_TEMPLATE.md | 1 | markdown section |
-| 元数据 | heading | docs/quality/test-plans/_TEMPLATE.md | 3 | markdown section |
-| 前置条件 | heading | docs/quality/test-plans/_TEMPLATE.md | 15 | markdown section |
-| 主路径 | heading | docs/quality/test-plans/_TEMPLATE.md | 21 | markdown section |
-| 分支与边界 | heading | docs/quality/test-plans/_TEMPLATE.md | 27 | markdown section |
-| 权限 / 角色 | heading | docs/quality/test-plans/_TEMPLATE.md | 33 | markdown section |
-| 错误与恢复 | heading | docs/quality/test-plans/_TEMPLATE.md | 39 | markdown section |
-| 回归要点 | heading | docs/quality/test-plans/_TEMPLATE.md | 45 | markdown section |
-| 执行记录 | heading | docs/quality/test-plans/_TEMPLATE.md | 51 | markdown section |
-| 安全策略（仓库根摘要） | heading | agent-workflow/SECURITY.md | 1 | markdown section |
-| 报告漏洞 | heading | agent-workflow/SECURITY.md | 5 | markdown section |
-| 范围与期望 | heading | agent-workflow/SECURITY.md | 11 | markdown section |
-| 密钥与敏感数据 | heading | agent-workflow/SECURITY.md | 16 | markdown section |
-| Invocation Guide (Tool-Agnostic) | heading | agent-workflow/INVOCATION.en.md | 1 | markdown section |
-| Flow | heading | agent-workflow/INVOCATION.en.md | 5 | markdown section |
-| Closed-Loop Management | heading | agent-workflow/INVOCATION.en.md | 22 | markdown section |
-| CLI | heading | agent-workflow/INVOCATION.en.md | 35 | markdown section |
-| or: ./scripts/aw config init --project-kind 2 | heading | agent-workflow/INVOCATION.en.md | 42 | markdown section |
-| Gates | heading | agent-workflow/INVOCATION.en.md | 63 | markdown section |
-| New Session Resume | heading | agent-workflow/INVOCATION.en.md | 75 | markdown section |
-| Context Continuity | heading | agent-workflow/INVOCATION.en.md | 95 | markdown section |
-| or directly: | heading | agent-workflow/INVOCATION.en.md | 123 | markdown section |
-| Useful Commands | heading | agent-workflow/INVOCATION.en.md | 132 | markdown section |
-| AI 辅助编码工作流（Karpathy Guidelines 落地版） | heading | agent-workflow/AICODING_WORKFLOW.md | 1 | markdown section |
-| 与产品 DSL（`docs/dsl/`）的分工 | heading | agent-workflow/AICODING_WORKFLOW.md | 13 | markdown section |
-| 端到端时间线（人类 + AI，推荐顺序） | heading | agent-workflow/AICODING_WORKFLOW.md | 21 | markdown section |
-| 总览：一条主线 | heading | agent-workflow/AICODING_WORKFLOW.md | 42 | markdown section |
-| 阶段 A — 想清楚再写（Think Before Coding） | heading | agent-workflow/AICODING_WORKFLOW.md | 50 | markdown section |
-| 阶段 B — 目标驱动（Goal-Driven Execution） | heading | agent-workflow/AICODING_WORKFLOW.md | 70 | markdown section |
-| 阶段 C — 先简单后复杂（Simplicity First） | heading | agent-workflow/AICODING_WORKFLOW.md | 104 | markdown section |
-| 阶段 D — 手术式改动（Surgical Changes） | heading | agent-workflow/AICODING_WORKFLOW.md | 120 | markdown section |
-| 阶段 E — 验证闭环（Loop Until Verified） | heading | agent-workflow/AICODING_WORKFLOW.md | 134 | markdown section |
-| Token / 上下文预算（真实写代码时） | heading | agent-workflow/AICODING_WORKFLOW.md | 160 | markdown section |
-| 文档怎么引用（分层，避免每条消息堆全文） | heading | agent-workflow/AICODING_WORKFLOW.md | 164 | markdown section |
-| 对话里少烧 token 的习惯 | heading | agent-workflow/AICODING_WORKFLOW.md | 174 | markdown section |
-| 与「全面测试」怎么兼得 | heading | agent-workflow/AICODING_WORKFLOW.md | 183 | markdown section |
-| 会话交接与需求存档（跨上下文） | heading | agent-workflow/AICODING_WORKFLOW.md | 189 | markdown section |
-| 单人迭代模板（日常） | heading | agent-workflow/AICODING_WORKFLOW.md | 210 | markdown section |
-| 相关文档 | heading | agent-workflow/AICODING_WORKFLOW.md | 227 | markdown section |
-| 变更记录 | heading | agent-workflow/AICODING_WORKFLOW.md | 246 | markdown section |
-| CLAUDE.md（详版 · 项目栈与禁令） | heading | agent-workflow/CLAUDE.md | 1 | markdown section |
-| 技术栈（模板 — init 后覆盖） | heading | agent-workflow/CLAUDE.md | 8 | markdown section |
-| 构建与测试命令（必须填真实命令） | heading | agent-workflow/CLAUDE.md | 19 | markdown section |
-| 禁令（默认） | heading | agent-workflow/CLAUDE.md | 31 | markdown section |
-| SOP 摘要 | heading | agent-workflow/CLAUDE.md | 41 | markdown section |
-| 对话触发语 | heading | agent-workflow/CLAUDE.md | 52 | markdown section |
-| 跨项目前后端同步教程 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 1 | markdown section |
-| DSL / Plan 前置流程 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 17 | markdown section |
-| 核心概念 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 43 | markdown section |
-| 共享 DSL / 协作 Plan | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 87 | markdown section |
-| 重要边界 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 133 | markdown section |
-| 第一次配置 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 150 | markdown section |
-| 1. 前端项目配置 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 152 | markdown section |
-| 2. 后端项目配置 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 170 | markdown section |
-| 每天开始任务前 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 181 | markdown section |
-| 完成任务后发布快照 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 223 | markdown section |
-| 接口变更怎么处理 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 259 | markdown section |
-| 阻塞怎么处理 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 305 | markdown section |
-| 两个 Codex 会话怎么说 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 330 | markdown section |
-| 推荐执行节奏 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 352 | markdown section |
-| 通用跨端事件 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 386 | markdown section |
-| 常见问题 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 432 | markdown section |
-| 是否需要一个真正的 Git 仓库做 project-harness？ | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 434 | markdown section |
-| pull 会不会把后端 DSL 覆盖到前端？ | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 440 | markdown section |
-| push 会不会推代码？ | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 446 | markdown section |
-| API contract 放哪里？ | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 450 | markdown section |
-| 单仓库前后端还需要 aw sync 吗？ | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 461 | markdown section |
-| 最小可跑示例 | heading | agent-workflow/CROSS_PROJECT_SYNC.md | 471 | markdown section |
-| Runbooks（运维手册） | heading | docs/ops/RUNBOOKS.md | 1 | markdown section |
-| SLO（服务等级目标） | heading | docs/ops/SLO.md | 1 | markdown section |
-| Incidents（事故 / 严重故障） | heading | docs/ops/INCIDENTS.md | 1 | markdown section |
-| 事故流水（新在上） | heading | docs/ops/INCIDENTS.md | 5 | markdown section |
-| FILE_INDEX（项目代码文件索引） | heading | docs/FILE_INDEX.md | 1 | markdown section |
-| 维护规则 | heading | docs/FILE_INDEX.md | 5 | markdown section |
-| 前端业务代码 | heading | docs/FILE_INDEX.md | 13 | markdown section |
-| 后端业务代码 | heading | docs/FILE_INDEX.md | 19 | markdown section |
-| 共享 / 通用代码 | heading | docs/FILE_INDEX.md | 25 | markdown section |
-| 测试代码 | heading | docs/FILE_INDEX.md | 31 | markdown section |
-| 运行配置 / 构建配置 | heading | docs/FILE_INDEX.md | 37 | markdown section |
-| CLI / 脚本代码 | heading | docs/FILE_INDEX.md | 43 | markdown section |
-| Skill / 插件包 | heading | docs/FILE_INDEX.md | 130 | markdown section |
-| 工作流包文档 | heading | docs/FILE_INDEX.md | 139 | markdown section |
-| 模板文件 | heading | docs/FILE_INDEX.md | 167 | markdown section |
-| IDE / Agent 适配 | heading | docs/FILE_INDEX.md | 227 | markdown section |
-| 项目工作流文档 | heading | docs/FILE_INDEX.md | 244 | markdown section |
-| CI / Git Hooks | heading | docs/FILE_INDEX.md | 292 | markdown section |
-| 仓库入口 / 配置 | heading | docs/FILE_INDEX.md | 298 | markdown section |
-| 参考材料入口 | heading | docs/FILE_INDEX.md | 314 | markdown section |
-| 其他项目文件 | heading | docs/FILE_INDEX.md | 321 | markdown section |
-| agent-workflow policy-as-code（最小门禁） | heading | docs/policy/POLICY.yml | 1 | markdown section |
-| Policy Decisions（策略例外与审批记录） | heading | docs/policy/POLICY_DECISIONS.md | 1 | markdown section |
-| 记录规则 | heading | docs/policy/POLICY_DECISIONS.md | 5 | markdown section |
-| 流水（新在上） | heading | docs/policy/POLICY_DECISIONS.md | 11 | markdown section |
-| DSL — <产品/域名称> | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 1 | markdown section |
-| 元数据 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 3 | markdown section |
-| 背景与定位 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 16 | markdown section |
-| 用户与场景 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 22 | markdown section |
-| 概念模型 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 28 | markdown section |
-| 不在范围内 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 34 | markdown section |
-| 成功标准 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 40 | markdown section |
-| 路由与信息架构（若有前端） | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 46 | markdown section |
-| 主屏业务组件（摘要） | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 53 | markdown section |
-| OV-ID 叠加层总表 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 60 | markdown section |
-| 验收（可检查） | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 68 | markdown section |
-| notes / 待确认 | heading | docs/dsl/DSL_SPEC_TEMPLATE.md | 75 | markdown section |
-| 页面规格 — <路由 path> | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 1 | markdown section |
-| 元数据 | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 5 | markdown section |
-| 布局与区块 | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 15 | markdown section |
-| 主交互与跳转 | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 21 | markdown section |
-| 权限 / 条件展示 | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 27 | markdown section |
-| 响应式（文字描述，不写 CSS） | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 33 | markdown section |
-| OV-ID（本页触发） | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 40 | markdown section |
-| §BP 数据接入（若适用） | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 47 | markdown section |
-| 验收锚点 | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 56 | markdown section |
-| notes / 待确认 | heading | docs/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 62 | markdown section |
-| DSL / 页面说明 | heading | docs/dsl/README.md | 1 | markdown section |
-| 模板（本目录） | heading | docs/dsl/README.md | 5 | markdown section |
-| 命令 | heading | docs/dsl/README.md | 14 | markdown section |
-| 项目配置（人类填写） | heading | docs/PROJECT_CONFIG.md | 1 | markdown section |
-| 本地验证命令 | heading | docs/PROJECT_CONFIG.md | 29 | markdown section |
+| Agent Roles（多 Agent 协作角色） | heading | docs/agents/AGENT_ROLES.md | 1 | markdown section |
+| 角色矩阵 | heading | docs/agents/AGENT_ROLES.md | 5 | markdown section |
+| 协作规则 | heading | docs/agents/AGENT_ROLES.md | 15 | markdown section |
+| CONTEXT_CONFIG | heading | docs/context/CONTEXT_CONFIG.md | 1 | markdown section |
+| Backend 说明 | heading | docs/context/CONTEXT_CONFIG.md | 19 | markdown section |
+| Token 预算说明 | heading | docs/context/CONTEXT_CONFIG.md | 27 | markdown section |
+| 硬规则 | heading | docs/context/CONTEXT_CONFIG.md | 34 | markdown section |
+| CODE_MAP（代码地图） | heading | docs/context/CODE_MAP.md | 1 | markdown section |
+| 元数据 | heading | docs/context/CODE_MAP.md | 6 | markdown section |
+| 目录概览 | heading | docs/context/CODE_MAP.md | 18 | markdown section |
+| 入口文件 | heading | docs/context/CODE_MAP.md | 101 | markdown section |
+| 模块地图 | heading | docs/context/CODE_MAP.md | 165 | markdown section |
+| Symbol 索引 | heading | docs/context/CODE_MAP.md | 314 | markdown section |
+| 路由 / API 索引 | heading | docs/context/CODE_MAP.md | 2079 | markdown section |
+| 测试映射 | heading | docs/context/CODE_MAP.md | 2084 | markdown section |
+| 依赖线索 | heading | docs/context/CODE_MAP.md | 2090 | markdown section |
+| Token 读取规则 | heading | docs/context/CODE_MAP.md | 2095 | markdown section |
+| CODE_CONTEXT_INDEX（AI 代码上下文索引） | heading | docs/context/CODE_CONTEXT_INDEX.md | 1 | markdown section |
+| 模块索引 | heading | docs/context/CODE_CONTEXT_INDEX.md | 6 | markdown section |
+| 前端入口映射 | heading | docs/context/CODE_CONTEXT_INDEX.md | 12 | markdown section |
+| 后端入口映射 | heading | docs/context/CODE_CONTEXT_INDEX.md | 18 | markdown section |
+| 受影响测试映射 | heading | docs/context/CODE_CONTEXT_INDEX.md | 24 | markdown section |
+| Feature Flags（渐进发布 / 开关） | heading | agent-workflow/templates/release/FEATURE_FLAGS.md | 1 | markdown section |
+| Release Record（发布记录） | heading | agent-workflow/templates/release/RELEASE_RECORD.md | 1 | markdown section |
+| 发布流水（新在上） | heading | agent-workflow/templates/release/RELEASE_RECORD.md | 5 | markdown section |
+| Environments（环境说明） | heading | agent-workflow/templates/release/ENVIRONMENTS.md | 1 | markdown section |
+| SERVICE_CATALOG（服务 / 模块目录） | heading | docs/SERVICE_CATALOG.md | 1 | markdown section |
+| 维护规则 | heading | docs/SERVICE_CATALOG.md | 5 | markdown section |
+| 服务 / 模块 | heading | docs/SERVICE_CATALOG.md | 11 | markdown section |
+| MOCK_SERVER | heading | docs/contracts/MOCK_SERVER.md | 1 | markdown section |
+| Mock 策略 | heading | docs/contracts/MOCK_SERVER.md | 3 | markdown section |
+| 规则 | heading | docs/contracts/MOCK_SERVER.md | 13 | markdown section |
+| CONTRACT_TESTS | heading | docs/contracts/CONTRACT_TESTS.md | 1 | markdown section |
+| API_CHANGELOG | heading | docs/contracts/API_CHANGELOG.md | 1 | markdown section |
+| Cline（VS Code 扩展） | heading | agent-workflow/adapters/cline.md | 1 | markdown section |
+| 挂载 | heading | agent-workflow/adapters/cline.md | 3 | markdown section |
+| 触发 | heading | agent-workflow/adapters/cline.md | 7 | markdown section |
+| 说明 | heading | agent-workflow/adapters/cline.md | 11 | markdown section |
 | agent-workflow（通用 AI 交付工作流包） | heading | agent-workflow/README.md | 1 | markdown section |
 | 五分钟上手 | heading | agent-workflow/README.md | 9 | markdown section |
 | 在目标仓库根目录 | heading | agent-workflow/README.md | 12 | markdown section |
@@ -1434,82 +1763,43 @@
 | 统一 CLI（推荐） | heading | agent-workflow/INVOCATION.md | 52 | markdown section |
 | 2=本地 Git，无需远程仓库地址；3=GitLab，4=Bitbucket，5=Gitee，6=GitCode，7=Gitea，8=Forgejo，9=GitLab CE，10=Gerrit，11=云效 Codeup | heading | agent-workflow/INVOCATION.md | 69 | markdown section |
 | 对话触发语（各工具通用） | heading | agent-workflow/INVOCATION.md | 86 | markdown section |
-| Handoff 与 Memory 边界 | heading | agent-workflow/INVOCATION.md | 206 | markdown section |
-| Agent 必读（按阶段） | heading | agent-workflow/INVOCATION.md | 248 | markdown section |
-| 硬闸门（所有工具） | heading | agent-workflow/INVOCATION.md | 263 | markdown section |
-| 新会话粘贴块（复制到任意 Chat） | heading | agent-workflow/INVOCATION.md | 275 | markdown section |
-| IDE 适配（一览） | heading | agent-workflow/INVOCATION.md | 289 | markdown section |
-| 与 Cursor Skill 的关系 | heading | agent-workflow/INVOCATION.md | 304 | markdown section |
+| Handoff 与 Memory 边界 | heading | agent-workflow/INVOCATION.md | 207 | markdown section |
+| Agent 必读（按阶段） | heading | agent-workflow/INVOCATION.md | 249 | markdown section |
+| 硬闸门（所有工具） | heading | agent-workflow/INVOCATION.md | 264 | markdown section |
+| 新会话粘贴块（复制到任意 Chat） | heading | agent-workflow/INVOCATION.md | 276 | markdown section |
+| IDE 适配（一览） | heading | agent-workflow/INVOCATION.md | 290 | markdown section |
+| 与 Cursor Skill 的关系 | heading | agent-workflow/INVOCATION.md | 305 | markdown section |
 | Windows Support | heading | agent-workflow/WINDOWS.md | 1 | markdown section |
-| 协作与工作流 | heading | docs/workflow/README.md | 1 | markdown section |
-| 关键命令 | heading | docs/workflow/README.md | 7 | markdown section |
-| 项目交接快照 | heading | docs/handoff/PROJECT_HANDOFF.md | 1 | markdown section |
-| 当前目标 | heading | docs/handoff/PROJECT_HANDOFF.md | 5 | markdown section |
-| 硬约束（真源） | heading | docs/handoff/PROJECT_HANDOFF.md | 9 | markdown section |
-| 关联 REQ | heading | docs/handoff/PROJECT_HANDOFF.md | 15 | markdown section |
-| Cursor：上下文将满时自动交接（Hooks） | heading | docs/handoff/CURSOR_CONTEXT_HOOK.md | 1 | markdown section |
-| 默认阈值（安装 hooks 后） | heading | docs/handoff/CURSOR_CONTEXT_HOOK.md | 17 | markdown section |
-| 限制说明 | heading | docs/handoff/CURSOR_CONTEXT_HOOK.md | 26 | markdown section |
-| 变更记录 | heading | docs/handoff/CURSOR_CONTEXT_HOOK.md | 36 | markdown section |
-| 新会话首条消息 · 粘贴模板（通用） | heading | docs/handoff/NEW_CHAT_PASTE_TEMPLATE.md | 1 | markdown section |
-| 维护核对 | heading | docs/handoff/NEW_CHAT_PASTE_TEMPLATE.md | 9 | markdown section |
-| 新会话首条消息（整段复制） | heading | docs/handoff/NEW_CHAT_PASTE_TEMPLATE.md | 20 | markdown section |
-| Engineering Harness 增强任务清单 | heading | docs/handoff/ENGINEERING_HARNESS_TASKS.md | 1 | markdown section |
-| P0：先补强 AI 执行可控性 | heading | docs/handoff/ENGINEERING_HARNESS_TASKS.md | 5 | markdown section |
-| P1：补齐交付控制面 | heading | docs/handoff/ENGINEERING_HARNESS_TASKS.md | 13 | markdown section |
-| P2：形成可度量平台基础 | heading | docs/handoff/ENGINEERING_HARNESS_TASKS.md | 21 | markdown section |
-| P3：形成治理闭环 | heading | docs/handoff/ENGINEERING_HARNESS_TASKS.md | 29 | markdown section |
-| 执行顺序 | heading | docs/handoff/ENGINEERING_HARNESS_TASKS.md | 39 | markdown section |
-| 会话交接（Handoff） | heading | docs/handoff/README.md | 1 | markdown section |
-| AI / 会话 Bug 流水 | heading | docs/handoff/AI_BUG_LOG.md | 1 | markdown section |
-| 流水（新在上） | heading | docs/handoff/AI_BUG_LOG.md | 16 | markdown section |
-| agent-workflow / Skill 交接路线图 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 1 | markdown section |
-| 1. 项目目标（一句话） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 9 | markdown section |
-| 2. 仓库结构（真源） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 17 | markdown section |
-| 3. 端到端流程（当前可跑通） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 40 | markdown section |
-| 4. CLI 命令清单（已实现） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 70 | markdown section |
-| 4.1 安装与初始化 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 72 | markdown section |
-| 4.2 阶段 0（产品输入） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 87 | markdown section |
-| 4.3 研发执行环（P0） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 106 | markdown section |
-| 4.4 校验聚合 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 117 | markdown section |
-| 4.5 Skill 发布 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 124 | markdown section |
-| 5. 已删除 / 已瘦身（勿恢复 unless 明确要求） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 137 | markdown section |
-| 6. 已知缺口与 Bug 修复史（避免重复踩坑） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 146 | markdown section |
-| 7. 未做 / 待做（按优先级） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 159 | markdown section |
-| P3 — 高价值（已推进） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 161 | markdown section |
-| P4 — 体验与质量 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 171 | markdown section |
-| P5 — 自动化与生态 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 182 | markdown section |
-| P6 — 产品化与发布收口 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 191 | markdown section |
-| P7 — 生态增强 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 200 | markdown section |
-| 明确不做（除非用户改需求） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 213 | markdown section |
-| 8. 给下一个 AI 的「第一条任务」建议 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 221 | markdown section |
-| 9. 测试清单（每次改 scripts 必跑） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 238 | markdown section |
-| 若在业务仓验证： | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 245 | markdown section |
-| 10. 关键文件索引（改哪里） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 254 | markdown section |
-| 11. Skill 合格标准（自检表） | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 270 | markdown section |
-| 12. 版本里程碑建议 | heading | docs/handoff/AGENTWORKFLOW_ROADMAP.md | 281 | markdown section |
-| 上下文压缩指南（类比 Claude Code compact） | heading | docs/handoff/HANDOFF_GUIDE.md | 1 | markdown section |
-| 何时更新 `PROJECT_HANDOFF.md` | heading | docs/handoff/HANDOFF_GUIDE.md | 7 | markdown section |
-| 与 `docs/memory/` 的边界 | heading | docs/handoff/HANDOFF_GUIDE.md | 18 | markdown section |
-| 压缩检查清单（按需删减，优先短的） | heading | docs/handoff/HANDOFF_GUIDE.md | 35 | markdown section |
-| 可复制骨架（粘贴进 `PROJECT_HANDOFF.md` 再改） | heading | docs/handoff/HANDOFF_GUIDE.md | 64 | markdown section |
-| 当前目标（1～3 句） | heading | docs/handoff/HANDOFF_GUIDE.md | 67 | markdown section |
-| 硬约束 | heading | docs/handoff/HANDOFF_GUIDE.md | 70 | markdown section |
-| 已拍板决策 | heading | docs/handoff/HANDOFF_GUIDE.md | 74 | markdown section |
-| 仓库地图（本轮 delta） | heading | docs/handoff/HANDOFF_GUIDE.md | 77 | markdown section |
-| 未完成（Next） | heading | docs/handoff/HANDOFF_GUIDE.md | 80 | markdown section |
-| 阻塞 / 待确认 | heading | docs/handoff/HANDOFF_GUIDE.md | 83 | markdown section |
-| 关联需求 | heading | docs/handoff/HANDOFF_GUIDE.md | 86 | markdown section |
-| 刻意不写 | heading | docs/handoff/HANDOFF_GUIDE.md | 89 | markdown section |
-| 给下一轮 AI 省 Token | heading | docs/handoff/HANDOFF_GUIDE.md | 93 | markdown section |
-| 长度建议 | heading | docs/handoff/HANDOFF_GUIDE.md | 103 | markdown section |
-| 与新对话的固定开场（可复制） | heading | docs/handoff/HANDOFF_GUIDE.md | 109 | markdown section |
-| 通用最短版（任意模块） | heading | docs/handoff/HANDOFF_GUIDE.md | 111 | markdown section |
-| 本仓库 Vue 查房前端（推荐详稿） | heading | docs/handoff/HANDOFF_GUIDE.md | 121 | markdown section |
-| 半自动草稿 | heading | docs/handoff/HANDOFF_GUIDE.md | 128 | markdown section |
-| Codex：一键工程化压缩 | heading | docs/handoff/HANDOFF_GUIDE.md | 149 | markdown section |
-| Cursor：将近占满时自动提醒 | heading | docs/handoff/HANDOFF_GUIDE.md | 167 | markdown section |
-| 变更记录 | heading | docs/handoff/HANDOFF_GUIDE.md | 173 | markdown section |
+| Codex Context Continuity | heading | agent-workflow/adapters/codex-context/README.md | 1 | markdown section |
+| 新 Codex 会话启动 | heading | agent-workflow/adapters/codex-context/README.md | 5 | markdown section |
+| 旧会话结束前 | heading | agent-workflow/adapters/codex-context/README.md | 25 | markdown section |
+| 与 Codex 原生能力的边界 | heading | agent-workflow/adapters/codex-context/README.md | 48 | markdown section |
+| GitHub Copilot | heading | agent-workflow/adapters/copilot.md | 1 | markdown section |
+| 挂载 | heading | agent-workflow/adapters/copilot.md | 3 | markdown section |
+| 项目 Agent 指令 | heading | agent-workflow/adapters/copilot.md | 8 | markdown section |
+| 触发 | heading | agent-workflow/adapters/copilot.md | 20 | markdown section |
+| VS Code（通用 · 含 Copilot 扩展） | heading | agent-workflow/adapters/vscode.md | 1 | markdown section |
+| 通用对话（无专用规则文件） | heading | agent-workflow/adapters/generic-chat.md | 1 | markdown section |
+| 步骤 | heading | agent-workflow/adapters/generic-chat.md | 5 | markdown section |
+| 限制 | heading | agent-workflow/adapters/generic-chat.md | 13 | markdown section |
+| OpenAI Codex | heading | agent-workflow/adapters/codex.md | 1 | markdown section |
+| 挂载 | heading | agent-workflow/adapters/codex.md | 3 | markdown section |
+| 触发 | heading | agent-workflow/adapters/codex.md | 9 | markdown section |
+| 参考 | heading | agent-workflow/adapters/codex.md | 13 | markdown section |
+| 工具适配层（可选） | heading | agent-workflow/adapters/README.md | 1 | markdown section |
+| 一键安装（业务仓库根） | heading | agent-workflow/adapters/README.md | 7 | markdown section |
+| 或按需：--claude --codex --copilot --cursor --windsurf --cline --continue | heading | agent-workflow/adapters/README.md | 11 | markdown section |
+| 支持矩阵 | heading | agent-workflow/adapters/README.md | 16 | markdown section |
+| 原则 | heading | agent-workflow/adapters/README.md | 31 | markdown section |
+| Cursor Skill（可选） | heading | agent-workflow/adapters/README.md | 37 | markdown section |
+| Cursor（可选 · 非唯一入口） | heading | agent-workflow/adapters/cursor.md | 1 | markdown section |
+| 项目规则（推荐） | heading | agent-workflow/adapters/cursor.md | 5 | markdown section |
+| → .cursor/rules/agent-workflow.mdc | heading | agent-workflow/adapters/cursor.md | 9 | markdown section |
+| 个人 Skill（可选） | heading | agent-workflow/adapters/cursor.md | 12 | markdown section |
+| 触发 | heading | agent-workflow/adapters/cursor.md | 20 | markdown section |
+| Delivery Metrics（DORA / Flow） | heading | docs/metrics/DELIVERY_METRICS.md | 1 | markdown section |
+| 指标说明 | heading | docs/metrics/DELIVERY_METRICS.md | 5 | markdown section |
+| 流水（新在上） | heading | docs/metrics/DELIVERY_METRICS.md | 14 | markdown section |
 | 产品输入工作流（阶段 0） | heading | agent-workflow/PRODUCT_INPUT_WORKFLOW.md | 1 | markdown section |
 | 目录约定（init 后） | heading | agent-workflow/PRODUCT_INPUT_WORKFLOW.md | 9 | markdown section |
 | 状态闸门 | heading | agent-workflow/PRODUCT_INPUT_WORKFLOW.md | 23 | markdown section |
@@ -1552,6 +1842,15 @@
 | 14. 复测清单（合并 / 发布前） | heading | agent-workflow/VERSION_CHANGELOG_QUALITY_LOOP.md | 223 | markdown section |
 | 15. 与 AI 协作时的用法 | heading | agent-workflow/VERSION_CHANGELOG_QUALITY_LOOP.md | 236 | markdown section |
 | 变更记录 | heading | agent-workflow/VERSION_CHANGELOG_QUALITY_LOOP.md | 247 | markdown section |
+| Changelog | heading | agent-workflow/CHANGELOG.md | 1 | markdown section |
+| [1.5.0] - 2026-05-29 | heading | agent-workflow/CHANGELOG.md | 3 | markdown section |
+| Added | heading | agent-workflow/CHANGELOG.md | 5 | markdown section |
+| Changed | heading | agent-workflow/CHANGELOG.md | 9 | markdown section |
+| [1.1.0] - 2026-05-19 | heading | agent-workflow/CHANGELOG.md | 13 | markdown section |
+| Added | heading | agent-workflow/CHANGELOG.md | 15 | markdown section |
+| [Unreleased] | heading | agent-workflow/CHANGELOG.md | 20 | markdown section |
+| Added | heading | agent-workflow/CHANGELOG.md | 22 | markdown section |
+| Changed | heading | agent-workflow/CHANGELOG.md | 64 | markdown section |
 | README_AGENT_DOCS.md（仓库根入口） | heading | agent-workflow/README_AGENT_DOCS.md | 1 | markdown section |
 | AGENT_RULES（精简 · 可复制到 .cursor/rules） | heading | agent-workflow/AGENT_RULES.md | 1 | markdown section |
 | 流程闸门 | heading | agent-workflow/AGENT_RULES.md | 5 | markdown section |
@@ -1562,13 +1861,27 @@
 | Engineering Harness 扩展 | heading | agent-workflow/AGENT_RULES.md | 47 | markdown section |
 | Token | heading | agent-workflow/AGENT_RULES.md | 61 | markdown section |
 | 触发语 | heading | agent-workflow/AGENT_RULES.md | 66 | markdown section |
-| 仓库落地自检清单 | heading | agent-workflow/REPO_LANDING_CHECKLIST.md | 1 | markdown section |
-| 一次性配置 | heading | agent-workflow/REPO_LANDING_CHECKLIST.md | 7 | markdown section |
-| 合并与发布门禁 | heading | agent-workflow/REPO_LANDING_CHECKLIST.md | 21 | markdown section |
-| 产品输入（阶段 0） | heading | agent-workflow/REPO_LANDING_CHECKLIST.md | 29 | markdown section |
-| 质量习惯（抽样） | heading | agent-workflow/REPO_LANDING_CHECKLIST.md | 36 | markdown section |
-| 变更记录 | heading | agent-workflow/REPO_LANDING_CHECKLIST.md | 46 | markdown section |
-| `agent-workflow/` 文件索引 | heading | agent-workflow/INDEX.md | 1 | markdown section |
+| Continue（VS Code / JetBrains 等） | heading | agent-workflow/adapters/continue.md | 1 | markdown section |
+| 挂载 | heading | agent-workflow/adapters/continue.md | 3 | markdown section |
+| 触发 | heading | agent-workflow/adapters/continue.md | 8 | markdown section |
+| 限制 | heading | agent-workflow/adapters/continue.md | 12 | markdown section |
+| Claude Code | heading | agent-workflow/adapters/claude-code.md | 1 | markdown section |
+| 挂载 | heading | agent-workflow/adapters/claude-code.md | 3 | markdown section |
+| 触发 | heading | agent-workflow/adapters/claude-code.md | 8 | markdown section |
+| 脚本 | heading | agent-workflow/adapters/claude-code.md | 12 | markdown section |
+| Windsurf（Cascade） | heading | agent-workflow/adapters/windsurf.md | 1 | markdown section |
+| 挂载 | heading | agent-workflow/adapters/windsurf.md | 3 | markdown section |
+| 触发 | heading | agent-workflow/adapters/windsurf.md | 7 | markdown section |
+| 脚本 | heading | agent-workflow/adapters/windsurf.md | 11 | markdown section |
+| Agent Reviews（Agent 评审记录） | heading | agent-workflow/templates/agents/AGENT_REVIEWS.md | 1 | markdown section |
+| 评审流水（新在上） | heading | agent-workflow/templates/agents/AGENT_REVIEWS.md | 5 | markdown section |
+| AGENT_LOCKS | heading | agent-workflow/templates/agents/AGENT_LOCKS.md | 1 | markdown section |
+| AGENT_HEARTBEATS | heading | agent-workflow/templates/agents/AGENT_HEARTBEATS.md | 1 | markdown section |
+| Agent Handoffs（Agent 交接记录） | heading | agent-workflow/templates/agents/AGENT_HANDOFFS.md | 1 | markdown section |
+| 交接流水（新在上） | heading | agent-workflow/templates/agents/AGENT_HANDOFFS.md | 5 | markdown section |
+| Agent Roles（多 Agent 协作角色） | heading | agent-workflow/templates/agents/AGENT_ROLES.md | 1 | markdown section |
+| 角色矩阵 | heading | agent-workflow/templates/agents/AGENT_ROLES.md | 5 | markdown section |
+| 协作规则 | heading | agent-workflow/templates/agents/AGENT_ROLES.md | 15 | markdown section |
 | 提交前自动校验与记录（Git Hooks） | heading | agent-workflow/meta/PRE_COMMIT_AND_HOOKS.md | 1 | markdown section |
 | 一次性安装（每名开发者、每个克隆） | heading | agent-workflow/meta/PRE_COMMIT_AND_HOOKS.md | 7 | markdown section |
 | pre-commit 做什么 | heading | agent-workflow/meta/PRE_COMMIT_AND_HOOKS.md | 19 | markdown section |
@@ -1579,242 +1892,189 @@
 | Agent 约定文档 — 如何使用（工具无关） | heading | agent-workflow/meta/README_AGENT_DOCS.md | 1 | markdown section |
 | 各工具常见挂载方式（按需选用） | heading | agent-workflow/meta/README_AGENT_DOCS.md | 19 | markdown section |
 | 同步原则 | heading | agent-workflow/meta/README_AGENT_DOCS.md | 31 | markdown section |
-| HOOKS（自动 Gate / 自动化触发） | heading | docs/hooks/HOOKS.md | 1 | markdown section |
-| Hook 策略 | heading | docs/hooks/HOOKS.md | 5 | markdown section |
-| 自动刷新 | heading | docs/hooks/HOOKS.md | 15 | markdown section |
-| 例外记录 | heading | docs/hooks/HOOKS.md | 21 | markdown section |
-| REVIEW_GATE | heading | docs/github/REVIEW_GATE.md | 1 | markdown section |
-| BRANCH_POLICY | heading | docs/github/BRANCH_POLICY.md | 1 | markdown section |
-| 分支规范 | heading | docs/github/BRANCH_POLICY.md | 3 | markdown section |
-| Gate | heading | docs/github/BRANCH_POLICY.md | 12 | markdown section |
-| PR_CHECKLIST | heading | docs/github/PR_CHECKLIST.md | 1 | markdown section |
-| 工程师 Review Checklist | heading | docs/github/PR_CHECKLIST.md | 17 | markdown section |
-| 工程规范（人类维护 · Agent 必读） | heading | docs/ENGINEERING_RULES.md | 1 | markdown section |
-| 优先级 | heading | docs/ENGINEERING_RULES.md | 5 | markdown section |
-| 项目概述 | heading | docs/ENGINEERING_RULES.md | 11 | markdown section |
-| 技术栈 | heading | docs/ENGINEERING_RULES.md | 15 | markdown section |
-| 团队固定前端栈 | heading | docs/ENGINEERING_RULES.md | 17 | markdown section |
-| 团队固定后端栈 | heading | docs/ENGINEERING_RULES.md | 25 | markdown section |
-| 前端 | heading | docs/ENGINEERING_RULES.md | 53 | markdown section |
-| 后端 | heading | docs/ENGINEERING_RULES.md | 63 | markdown section |
-| 构建与部署 | heading | docs/ENGINEERING_RULES.md | 73 | markdown section |
-| 代码规范 | heading | docs/ENGINEERING_RULES.md | 79 | markdown section |
-| 通用 | heading | docs/ENGINEERING_RULES.md | 81 | markdown section |
-| 前端 | heading | docs/ENGINEERING_RULES.md | 96 | markdown section |
-| 后端 | heading | docs/ENGINEERING_RULES.md | 112 | markdown section |
-| 前端模块规范（企业后台） | heading | docs/ENGINEERING_RULES.md | 128 | markdown section |
-| 标准目录 | heading | docs/ENGINEERING_RULES.md | 130 | markdown section |
-| 团队前端标准目录 | heading | docs/ENGINEERING_RULES.md | 147 | markdown section |
-| 标准后台页面能力 | heading | docs/ENGINEERING_RULES.md | 181 | markdown section |
-| 前端命名建议 | heading | docs/ENGINEERING_RULES.md | 190 | markdown section |
-| 前端拆分边界 | heading | docs/ENGINEERING_RULES.md | 197 | markdown section |
-| 后端模块规范（Spring / Cloud / Boot） | heading | docs/ENGINEERING_RULES.md | 206 | markdown section |
-| 推荐输出顺序 | heading | docs/ENGINEERING_RULES.md | 208 | markdown section |
-| 团队后端标准结构 | heading | docs/ENGINEERING_RULES.md | 221 | markdown section |
-| Spring 技术栈参考 | heading | docs/ENGINEERING_RULES.md | 241 | markdown section |
-| 数据库字段建议 | heading | docs/ENGINEERING_RULES.md | 250 | markdown section |
-| 安全底线 | heading | docs/ENGINEERING_RULES.md | 257 | markdown section |
-| 依赖准入 | heading | docs/ENGINEERING_RULES.md | 270 | markdown section |
-| 数据库约定 | heading | docs/ENGINEERING_RULES.md | 278 | markdown section |
-| 常见任务 SOP | heading | docs/ENGINEERING_RULES.md | 285 | markdown section |
-| 新增前端页面 | heading | docs/ENGINEERING_RULES.md | 287 | markdown section |
-| 新增后端接口 | heading | docs/ENGINEERING_RULES.md | 295 | markdown section |
-| 数据库变更 | heading | docs/ENGINEERING_RULES.md | 304 | markdown section |
-| 后台 CRUD 模块 | heading | docs/ENGINEERING_RULES.md | 311 | markdown section |
-| 登录认证 | heading | docs/ENGINEERING_RULES.md | 319 | markdown section |
-| 文件上传下载 | heading | docs/ENGINEERING_RULES.md | 327 | markdown section |
-| Git 提交 | heading | docs/ENGINEERING_RULES.md | 335 | markdown section |
-| 提交前流程 | heading | docs/ENGINEERING_RULES.md | 337 | markdown section |
-| 阶段性提交提醒 | heading | docs/ENGINEERING_RULES.md | 347 | markdown section |
-| 提交信息格式 | heading | docs/ENGINEERING_RULES.md | 353 | markdown section |
-| 禁止项 | heading | docs/ENGINEERING_RULES.md | 363 | markdown section |
-| 关键文件 | heading | docs/ENGINEERING_RULES.md | 369 | markdown section |
-| 待确认 | heading | docs/ENGINEERING_RULES.md | 383 | markdown section |
-| AGENTS.md（Codex / 多 Agent 路由） | heading | agent-workflow/AGENTS.md | 1 | markdown section |
-| 快速路由 | heading | agent-workflow/AGENTS.md | 9 | markdown section |
-| 研发硬闸门 | heading | agent-workflow/AGENTS.md | 21 | markdown section |
-| 工具适配（可选） | heading | agent-workflow/AGENTS.md | 35 | markdown section |
+| Cursor Hooks（可选安装） | heading | agent-workflow/adapters/cursor-hooks/README.md | 1 | markdown section |
+| 安装步骤（概要） | heading | agent-workflow/adapters/cursor-hooks/README.md | 5 | markdown section |
+| 与本包的关系 | heading | agent-workflow/adapters/cursor-hooks/README.md | 12 | markdown section |
+| MOCK_SERVER | heading | agent-workflow/templates/contracts/MOCK_SERVER.md | 1 | markdown section |
+| Mock 策略 | heading | agent-workflow/templates/contracts/MOCK_SERVER.md | 3 | markdown section |
+| 规则 | heading | agent-workflow/templates/contracts/MOCK_SERVER.md | 13 | markdown section |
+| CONTRACT_TESTS | heading | agent-workflow/templates/contracts/CONTRACT_TESTS.md | 1 | markdown section |
+| API_CHANGELOG | heading | agent-workflow/templates/contracts/API_CHANGELOG.md | 1 | markdown section |
+| 研发计划 — <功能/里程碑> | heading | agent-workflow/templates/plans/_TEMPLATE_PLAN.md | 1 | markdown section |
+| 元数据 | heading | agent-workflow/templates/plans/_TEMPLATE_PLAN.md | 3 | markdown section |
+| 目标（一句话） | heading | agent-workflow/templates/plans/_TEMPLATE_PLAN.md | 14 | markdown section |
+| 不在范围内 | heading | agent-workflow/templates/plans/_TEMPLATE_PLAN.md | 20 | markdown section |
+| 阶段与里程碑 | heading | agent-workflow/templates/plans/_TEMPLATE_PLAN.md | 26 | markdown section |
+| 验收（与 DSL 对齐） | heading | agent-workflow/templates/plans/_TEMPLATE_PLAN.md | 35 | markdown section |
+| 风险与依赖 | heading | agent-workflow/templates/plans/_TEMPLATE_PLAN.md | 41 | markdown section |
+| 原子任务词典 — <项目> | heading | agent-workflow/templates/plans/_TEMPLATE_ATOMIC_TASKS.md | 1 | markdown section |
+| 元数据 | heading | agent-workflow/templates/plans/_TEMPLATE_ATOMIC_TASKS.md | 5 | markdown section |
+| 任务表 | heading | agent-workflow/templates/plans/_TEMPLATE_ATOMIC_TASKS.md | 14 | markdown section |
+| AI 执行协议（摘要） | heading | agent-workflow/templates/plans/_TEMPLATE_ATOMIC_TASKS.md | 28 | markdown section |
+| Dependency Review（依赖准入） | heading | agent-workflow/templates/security/DEPENDENCY_REVIEW.md | 1 | markdown section |
+| 维护规则 | heading | agent-workflow/templates/security/DEPENDENCY_REVIEW.md | 5 | markdown section |
+| 依赖记录（新在上） | heading | agent-workflow/templates/security/DEPENDENCY_REVIEW.md | 11 | markdown section |
+| Security Findings（安全发现） | heading | agent-workflow/templates/security/SECURITY_FINDINGS.md | 1 | markdown section |
+| 流水（新在上） | heading | agent-workflow/templates/security/SECURITY_FINDINGS.md | 5 | markdown section |
+| RECOVERY_PLAYBOOK | heading | agent-workflow/templates/recovery/RECOVERY_PLAYBOOK.md | 1 | markdown section |
+| 恢复场景 | heading | agent-workflow/templates/recovery/RECOVERY_PLAYBOOK.md | 3 | markdown section |
+| 原则 | heading | agent-workflow/templates/recovery/RECOVERY_PLAYBOOK.md | 14 | markdown section |
+| Delivery Metrics（DORA / Flow） | heading | agent-workflow/templates/metrics/DELIVERY_METRICS.md | 1 | markdown section |
+| 指标说明 | heading | agent-workflow/templates/metrics/DELIVERY_METRICS.md | 5 | markdown section |
+| 流水（新在上） | heading | agent-workflow/templates/metrics/DELIVERY_METRICS.md | 14 | markdown section |
+| CONTEXT_CONFIG | heading | agent-workflow/templates/context/CONTEXT_CONFIG.md | 1 | markdown section |
+| Backend 说明 | heading | agent-workflow/templates/context/CONTEXT_CONFIG.md | 19 | markdown section |
+| Token 预算说明 | heading | agent-workflow/templates/context/CONTEXT_CONFIG.md | 27 | markdown section |
+| 硬规则 | heading | agent-workflow/templates/context/CONTEXT_CONFIG.md | 34 | markdown section |
+| CODE_CONTEXT_INDEX（AI 代码上下文索引） | heading | agent-workflow/templates/context/CODE_CONTEXT_INDEX.md | 1 | markdown section |
+| 模块索引 | heading | agent-workflow/templates/context/CODE_CONTEXT_INDEX.md | 6 | markdown section |
+| 前端入口映射 | heading | agent-workflow/templates/context/CODE_CONTEXT_INDEX.md | 12 | markdown section |
+| 后端入口映射 | heading | agent-workflow/templates/context/CODE_CONTEXT_INDEX.md | 18 | markdown section |
+| 受影响测试映射 | heading | agent-workflow/templates/context/CODE_CONTEXT_INDEX.md | 24 | markdown section |
+| SERVICE_CATALOG（服务 / 模块目录） | heading | agent-workflow/templates/SERVICE_CATALOG.md | 1 | markdown section |
+| 维护规则 | heading | agent-workflow/templates/SERVICE_CATALOG.md | 5 | markdown section |
+| 服务 / 模块 | heading | agent-workflow/templates/SERVICE_CATALOG.md | 11 | markdown section |
+| CODE_MAP（代码地图） | heading | agent-workflow/templates/context/CODE_MAP.md | 1 | markdown section |
+| 元数据 | heading | agent-workflow/templates/context/CODE_MAP.md | 6 | markdown section |
+| 目录概览 | heading | agent-workflow/templates/context/CODE_MAP.md | 18 | markdown section |
+| 入口文件 | heading | agent-workflow/templates/context/CODE_MAP.md | 24 | markdown section |
+| 模块地图 | heading | agent-workflow/templates/context/CODE_MAP.md | 30 | markdown section |
+| Symbol 索引 | heading | agent-workflow/templates/context/CODE_MAP.md | 36 | markdown section |
+| 路由 / API 索引 | heading | agent-workflow/templates/context/CODE_MAP.md | 42 | markdown section |
+| 测试映射 | heading | agent-workflow/templates/context/CODE_MAP.md | 48 | markdown section |
+| 依赖线索 | heading | agent-workflow/templates/context/CODE_MAP.md | 54 | markdown section |
+| Token 读取规则 | heading | agent-workflow/templates/context/CODE_MAP.md | 60 | markdown section |
+| CTX-<AT-T> | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 1 | markdown section |
+| 任务 | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 3 | markdown section |
+| 目标 | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 13 | markdown section |
+| 上下文预算 | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 17 | markdown section |
+| 允许读取文件 | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 27 | markdown section |
+| 禁止读取目录 | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 33 | markdown section |
+| 相关 Symbol | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 47 | markdown section |
+| 调用链 / 影响范围 | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 53 | markdown section |
+| 读取记录 | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 62 | markdown section |
+| Token 预算检查 | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 67 | markdown section |
+| 扩大上下文记录 | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 77 | markdown section |
+| Affected Analysis | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 82 | markdown section |
+| 结论 | heading | agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md | 87 | markdown section |
+| 书面用例索引（TP） | heading | agent-workflow/templates/quality/test-plans/INDEX.md | 1 | markdown section |
+| 状态说明（建议） | heading | agent-workflow/templates/quality/test-plans/INDEX.md | 11 | markdown section |
+| 功能测试用例（书面） | heading | agent-workflow/templates/quality/test-plans/README.md | 1 | markdown section |
+| TP-YYYYMMDD-NN-short-slug | heading | agent-workflow/templates/quality/test-plans/_TEMPLATE.md | 1 | markdown section |
+| 元数据 | heading | agent-workflow/templates/quality/test-plans/_TEMPLATE.md | 3 | markdown section |
+| 前置条件 | heading | agent-workflow/templates/quality/test-plans/_TEMPLATE.md | 15 | markdown section |
+| 主路径 | heading | agent-workflow/templates/quality/test-plans/_TEMPLATE.md | 21 | markdown section |
+| 分支与边界 | heading | agent-workflow/templates/quality/test-plans/_TEMPLATE.md | 27 | markdown section |
+| 权限 / 角色 | heading | agent-workflow/templates/quality/test-plans/_TEMPLATE.md | 33 | markdown section |
+| 错误与恢复 | heading | agent-workflow/templates/quality/test-plans/_TEMPLATE.md | 39 | markdown section |
+| 回归要点 | heading | agent-workflow/templates/quality/test-plans/_TEMPLATE.md | 45 | markdown section |
+| 执行记录 | heading | agent-workflow/templates/quality/test-plans/_TEMPLATE.md | 51 | markdown section |
+| Memory Index | heading | agent-workflow/templates/memory/INDEX.md | 1 | markdown section |
+| Agent Memory | heading | agent-workflow/templates/memory/README.md | 1 | markdown section |
+| 目录 | heading | agent-workflow/templates/memory/README.md | 5 | markdown section |
+| 规则 | heading | agent-workflow/templates/memory/README.md | 13 | markdown section |
+| 与 Handoff 的边界 | heading | agent-workflow/templates/memory/README.md | 21 | markdown section |
+| 聊天记忆 | heading | agent-workflow/templates/memory/README.md | 28 | markdown section |
+| METRICS_PLAN | heading | agent-workflow/templates/pm/analytics/METRICS_PLAN.md | 1 | markdown section |
+| FUNNEL | heading | agent-workflow/templates/pm/analytics/FUNNEL.md | 1 | markdown section |
+| METRICS_REVIEW | heading | agent-workflow/templates/pm/analytics/METRICS_REVIEW.md | 1 | markdown section |
+| EVENT_TRACKING | heading | agent-workflow/templates/pm/analytics/EVENT_TRACKING.md | 1 | markdown section |
+| RELEASE_PLAN | heading | agent-workflow/templates/pm/release/RELEASE_PLAN.md | 1 | markdown section |
+| GO_LIVE_CHECKLIST | heading | agent-workflow/templates/pm/release/GO_LIVE_CHECKLIST.md | 1 | markdown section |
+| ROLLBACK_PLAN | heading | agent-workflow/templates/pm/release/ROLLBACK_PLAN.md | 1 | markdown section |
+| POST_RELEASE_REVIEW | heading | agent-workflow/templates/pm/release/POST_RELEASE_REVIEW.md | 1 | markdown section |
+| 结论 | heading | agent-workflow/templates/pm/release/POST_RELEASE_REVIEW.md | 8 | markdown section |
+| INTEGRATION_DESIGN | heading | agent-workflow/templates/pm/architecture/INTEGRATION_DESIGN.md | 1 | markdown section |
+| AUTH_MODEL | heading | agent-workflow/templates/pm/architecture/AUTH_MODEL.md | 1 | markdown section |
+| ARCHITECTURE_DECISION_RECORDS | heading | agent-workflow/templates/pm/architecture/ARCHITECTURE_DECISION_RECORDS.md | 1 | markdown section |
+| DATA_MODEL | heading | agent-workflow/templates/pm/architecture/DATA_MODEL.md | 1 | markdown section |
+| TECH_DESIGN | heading | agent-workflow/templates/pm/architecture/TECH_DESIGN.md | 1 | markdown section |
+| 架构说明 | heading | agent-workflow/templates/pm/architecture/TECH_DESIGN.md | 9 | markdown section |
+| 风险 | heading | agent-workflow/templates/pm/architecture/TECH_DESIGN.md | 13 | markdown section |
+| INTEGRATION_MATRIX | heading | agent-workflow/templates/pm/contracts/INTEGRATION_MATRIX.md | 1 | markdown section |
+| DSL_ACCEPTANCE | heading | agent-workflow/templates/pm/dsl/DSL_ACCEPTANCE.md | 1 | markdown section |
+| DSL_INTERACTIONS | heading | agent-workflow/templates/pm/dsl/DSL_INTERACTIONS.md | 1 | markdown section |
+| PM DSL INDEX | heading | agent-workflow/templates/pm/dsl/INDEX.md | 1 | markdown section |
+| DSL_BOUNDARIES | heading | agent-workflow/templates/pm/dsl/DSL_BOUNDARIES.md | 1 | markdown section |
+| DSL_REQUIREMENTS | heading | agent-workflow/templates/pm/dsl/DSL_REQUIREMENTS.md | 1 | markdown section |
+| 状态 | heading | agent-workflow/templates/pm/dsl/DSL_REQUIREMENTS.md | 3 | markdown section |
+| 需求描述 | heading | agent-workflow/templates/pm/dsl/DSL_REQUIREMENTS.md | 7 | markdown section |
+| DSL_PAGES | heading | agent-workflow/templates/pm/dsl/DSL_PAGES.md | 1 | markdown section |
+| DSL_EVENTS | heading | agent-workflow/templates/pm/dsl/DSL_EVENTS.md | 1 | markdown section |
+| MEM-YYYYMMDD-NN-short-slug | heading | agent-workflow/templates/memory/_TEMPLATE.md | 1 | markdown section |
+| Metadata | heading | agent-workflow/templates/memory/_TEMPLATE.md | 3 | markdown section |
+| Memory | heading | agent-workflow/templates/memory/_TEMPLATE.md | 15 | markdown section |
+| Evidence | heading | agent-workflow/templates/memory/_TEMPLATE.md | 19 | markdown section |
+| Reuse Notes | heading | agent-workflow/templates/memory/_TEMPLATE.md | 23 | markdown section |
+| PROGRESS_BOARD | heading | agent-workflow/templates/pm/dashboard/PROGRESS_BOARD.md | 1 | markdown section |
+| LIFECYCLE_BOARD | heading | agent-workflow/templates/pm/dashboard/LIFECYCLE_BOARD.md | 1 | markdown section |
+| CHANGE_REQUESTS | heading | agent-workflow/templates/pm/dashboard/CHANGE_REQUESTS.md | 1 | markdown section |
+| EXECUTIVE_SUMMARY | heading | agent-workflow/templates/pm/dashboard/EXECUTIVE_SUMMARY.md | 1 | markdown section |
+| 管理层摘要 | heading | agent-workflow/templates/pm/dashboard/EXECUTIVE_SUMMARY.md | 3 | markdown section |
+| BLOCKERS | heading | agent-workflow/templates/pm/dashboard/BLOCKERS.md | 1 | markdown section |
+| DECISION_BOARD | heading | agent-workflow/templates/pm/dashboard/DECISION_BOARD.md | 1 | markdown section |
+| RISKS | heading | agent-workflow/templates/pm/dashboard/RISKS.md | 1 | markdown section |
+| PROJECT_DASHBOARD | heading | agent-workflow/templates/pm/dashboard/PROJECT_DASHBOARD.md | 1 | markdown section |
+| ADMIN_ASSIGNMENTS | heading | agent-workflow/templates/pm/dispatch/ADMIN_ASSIGNMENTS.md | 1 | markdown section |
+| TASK_BOARD | heading | agent-workflow/templates/pm/dispatch/TASK_BOARD.md | 1 | markdown section |
+| FRONTEND_ASSIGNMENTS | heading | agent-workflow/templates/pm/dispatch/FRONTEND_ASSIGNMENTS.md | 1 | markdown section |
+| BACKEND_ASSIGNMENTS | heading | agent-workflow/templates/pm/dispatch/BACKEND_ASSIGNMENTS.md | 1 | markdown section |
+| BACKEND_PLAN | heading | agent-workflow/templates/pm/plans/BACKEND_PLAN.md | 1 | markdown section |
+| FRONTEND_PLAN | heading | agent-workflow/templates/pm/plans/FRONTEND_PLAN.md | 1 | markdown section |
+| ADMIN_FRONTEND_PLAN | heading | agent-workflow/templates/pm/plans/ADMIN_FRONTEND_PLAN.md | 1 | markdown section |
+| ATOMIC_TASKS | heading | agent-workflow/templates/pm/plans/ATOMIC_TASKS.md | 1 | markdown section |
+| GLOBAL_PLAN | heading | agent-workflow/templates/pm/plans/GLOBAL_PLAN.md | 1 | markdown section |
+| 三端边界 | heading | agent-workflow/templates/pm/plans/GLOBAL_PLAN.md | 8 | markdown section |
+| MVP_SCOPE | heading | agent-workflow/templates/pm/product/MVP_SCOPE.md | 1 | markdown section |
+| MVP 范围 | heading | agent-workflow/templates/pm/product/MVP_SCOPE.md | 3 | markdown section |
+| 非 MVP 范围 | heading | agent-workflow/templates/pm/product/MVP_SCOPE.md | 9 | markdown section |
+| COMPETITOR_NOTES | heading | agent-workflow/templates/pm/product/COMPETITOR_NOTES.md | 1 | markdown section |
+| STAKEHOLDERS | heading | agent-workflow/templates/pm/product/STAKEHOLDERS.md | 1 | markdown section |
+| SUCCESS_METRICS | heading | agent-workflow/templates/pm/product/SUCCESS_METRICS.md | 1 | markdown section |
+| PRODUCT_BRIEF | heading | agent-workflow/templates/pm/product/PRODUCT_BRIEF.md | 1 | markdown section |
+| 一句话定位 | heading | agent-workflow/templates/pm/product/PRODUCT_BRIEF.md | 12 | markdown section |
+| 背景 | heading | agent-workflow/templates/pm/product/PRODUCT_BRIEF.md | 16 | markdown section |
+| 成功标准 | heading | agent-workflow/templates/pm/product/PRODUCT_BRIEF.md | 20 | markdown section |
+| MOCK_STRATEGY | heading | agent-workflow/templates/pm/integration/MOCK_STRATEGY.md | 1 | markdown section |
+| INTEGRATION_ISSUES | heading | agent-workflow/templates/pm/integration/INTEGRATION_ISSUES.md | 1 | markdown section |
+| INTEGRATION_ACCEPTANCE | heading | agent-workflow/templates/pm/integration/INTEGRATION_ACCEPTANCE.md | 1 | markdown section |
+| INTEGRATION_PLAN | heading | agent-workflow/templates/pm/integration/INTEGRATION_PLAN.md | 1 | markdown section |
+| UAT_RECORD | heading | agent-workflow/templates/pm/quality/UAT_RECORD.md | 1 | markdown section |
+| 记录 | heading | agent-workflow/templates/pm/quality/UAT_RECORD.md | 9 | markdown section |
+| QUALITY_REPORT | heading | agent-workflow/templates/pm/quality/QUALITY_REPORT.md | 1 | markdown section |
+| TEST_STRATEGY | heading | agent-workflow/templates/pm/quality/TEST_STRATEGY.md | 1 | markdown section |
+| 范围 | heading | agent-workflow/templates/pm/quality/TEST_STRATEGY.md | 8 | markdown section |
+| TEST_CASES | heading | agent-workflow/templates/pm/quality/TEST_CASES.md | 1 | markdown section |
+| REGRESSION_PLAN | heading | agent-workflow/templates/pm/quality/REGRESSION_PLAN.md | 1 | markdown section |
 | 复用到其他仓库（工具无关） | heading | agent-workflow/BOOTSTRAP.md | 1 | markdown section |
 | 方式 A：拷贝文档包 + 脚本（推荐 · 任意 AI 工具） | heading | agent-workflow/BOOTSTRAP.md | 3 | markdown section |
 | 方式 B：仅对话 + 粘贴（无 IDE 规则） | heading | agent-workflow/BOOTSTRAP.md | 16 | markdown section |
 | 不要依赖单一 IDE | heading | agent-workflow/BOOTSTRAP.md | 22 | markdown section |
 | init 后目录 | heading | agent-workflow/BOOTSTRAP.md | 27 | markdown section |
 | 不要拷贝 | heading | agent-workflow/BOOTSTRAP.md | 38 | markdown section |
-| 提示词大全（agent-workflow 包内） | heading | agent-workflow/PROMPTS.md | 1 | markdown section |
-| 基础模板 | heading | agent-workflow/PROMPTS.md | 5 | markdown section |
-| 启动分流：先判断全新项目还是已有项目 | heading | agent-workflow/PROMPTS.md | 12 | markdown section |
-| 全新项目接入 | heading | agent-workflow/PROMPTS.md | 36 | markdown section |
-| 非全新项目接入：先盘点现状 | heading | agent-workflow/PROMPTS.md | 52 | markdown section |
-| 非全新项目：一期基线回填 | heading | agent-workflow/PROMPTS.md | 77 | markdown section |
-| 生成 DSL | heading | agent-workflow/PROMPTS.md | 103 | markdown section |
-| 非全新项目：增量 DSL | heading | agent-workflow/PROMPTS.md | 114 | markdown section |
-| 生成 Plan | heading | agent-workflow/PROMPTS.md | 135 | markdown section |
-| 前后端双项目：DSL/Plan 前置引导 | heading | agent-workflow/PROMPTS.md | 147 | markdown section |
-| 前后端双项目：同步中心建设 | heading | agent-workflow/PROMPTS.md | 172 | markdown section |
-| 前后端双项目：DSL 已审后拆 Plan | heading | agent-workflow/PROMPTS.md | 196 | markdown section |
-| 非全新项目：增量 Plan | heading | agent-workflow/PROMPTS.md | 226 | markdown section |
-| 仅前端项目 | heading | agent-workflow/PROMPTS.md | 243 | markdown section |
-| 仅后端项目 | heading | agent-workflow/PROMPTS.md | 259 | markdown section |
-| 同电脑前后端两个项目 | heading | agent-workflow/PROMPTS.md | 275 | markdown section |
-| 不同电脑前后端两个项目 | heading | agent-workflow/PROMPTS.md | 309 | markdown section |
-| 变更、Bug、收尾 | heading | agent-workflow/PROMPTS.md | 333 | markdown section |
-| Claude Code | heading | agent-workflow/adapters/claude-code.md | 1 | markdown section |
-| 挂载 | heading | agent-workflow/adapters/claude-code.md | 3 | markdown section |
-| 触发 | heading | agent-workflow/adapters/claude-code.md | 8 | markdown section |
-| 脚本 | heading | agent-workflow/adapters/claude-code.md | 12 | markdown section |
-| Cline（VS Code 扩展） | heading | agent-workflow/adapters/cline.md | 1 | markdown section |
-| 挂载 | heading | agent-workflow/adapters/cline.md | 3 | markdown section |
-| 触发 | heading | agent-workflow/adapters/cline.md | 7 | markdown section |
-| 说明 | heading | agent-workflow/adapters/cline.md | 11 | markdown section |
-| Windsurf（Cascade） | heading | agent-workflow/adapters/windsurf.md | 1 | markdown section |
-| 挂载 | heading | agent-workflow/adapters/windsurf.md | 3 | markdown section |
-| 触发 | heading | agent-workflow/adapters/windsurf.md | 7 | markdown section |
-| 脚本 | heading | agent-workflow/adapters/windsurf.md | 11 | markdown section |
-| Continue（VS Code / JetBrains 等） | heading | agent-workflow/adapters/continue.md | 1 | markdown section |
-| 挂载 | heading | agent-workflow/adapters/continue.md | 3 | markdown section |
-| 触发 | heading | agent-workflow/adapters/continue.md | 8 | markdown section |
-| 限制 | heading | agent-workflow/adapters/continue.md | 12 | markdown section |
-| Cursor Hooks（可选安装） | heading | agent-workflow/adapters/cursor-hooks/README.md | 1 | markdown section |
-| 安装步骤（概要） | heading | agent-workflow/adapters/cursor-hooks/README.md | 5 | markdown section |
-| 与本包的关系 | heading | agent-workflow/adapters/cursor-hooks/README.md | 12 | markdown section |
-| OpenAI Codex | heading | agent-workflow/adapters/codex.md | 1 | markdown section |
-| 挂载 | heading | agent-workflow/adapters/codex.md | 3 | markdown section |
-| 触发 | heading | agent-workflow/adapters/codex.md | 9 | markdown section |
-| 参考 | heading | agent-workflow/adapters/codex.md | 13 | markdown section |
-| 工具适配层（可选） | heading | agent-workflow/adapters/README.md | 1 | markdown section |
-| 一键安装（业务仓库根） | heading | agent-workflow/adapters/README.md | 7 | markdown section |
-| 或按需：--claude --codex --copilot --cursor --windsurf --cline --continue | heading | agent-workflow/adapters/README.md | 11 | markdown section |
-| 支持矩阵 | heading | agent-workflow/adapters/README.md | 16 | markdown section |
-| 原则 | heading | agent-workflow/adapters/README.md | 31 | markdown section |
-| Cursor Skill（可选） | heading | agent-workflow/adapters/README.md | 37 | markdown section |
-| Cursor（可选 · 非唯一入口） | heading | agent-workflow/adapters/cursor.md | 1 | markdown section |
-| 项目规则（推荐） | heading | agent-workflow/adapters/cursor.md | 5 | markdown section |
-| → .cursor/rules/agent-workflow.mdc | heading | agent-workflow/adapters/cursor.md | 9 | markdown section |
-| 个人 Skill（可选） | heading | agent-workflow/adapters/cursor.md | 12 | markdown section |
-| 触发 | heading | agent-workflow/adapters/cursor.md | 20 | markdown section |
-| VS Code（通用 · 含 Copilot 扩展） | heading | agent-workflow/adapters/vscode.md | 1 | markdown section |
-| 通用对话（无专用规则文件） | heading | agent-workflow/adapters/generic-chat.md | 1 | markdown section |
-| 步骤 | heading | agent-workflow/adapters/generic-chat.md | 5 | markdown section |
-| 限制 | heading | agent-workflow/adapters/generic-chat.md | 13 | markdown section |
-| GitHub Copilot | heading | agent-workflow/adapters/copilot.md | 1 | markdown section |
-| 挂载 | heading | agent-workflow/adapters/copilot.md | 3 | markdown section |
-| 项目 Agent 指令 | heading | agent-workflow/adapters/copilot.md | 8 | markdown section |
-| 触发 | heading | agent-workflow/adapters/copilot.md | 20 | markdown section |
-| Codex Context Continuity | heading | agent-workflow/adapters/codex-context/README.md | 1 | markdown section |
-| 新 Codex 会话启动 | heading | agent-workflow/adapters/codex-context/README.md | 5 | markdown section |
-| 旧会话结束前 | heading | agent-workflow/adapters/codex-context/README.md | 25 | markdown section |
-| 与 Codex 原生能力的边界 | heading | agent-workflow/adapters/codex-context/README.md | 48 | markdown section |
-| agent-workflow policy-as-code（最小门禁） | heading | agent-workflow/templates/policy/POLICY.yml | 1 | markdown section |
-| Policy Decisions（策略例外与审批记录） | heading | agent-workflow/templates/policy/POLICY_DECISIONS.md | 1 | markdown section |
-| 记录规则 | heading | agent-workflow/templates/policy/POLICY_DECISIONS.md | 5 | markdown section |
-| 流水（新在上） | heading | agent-workflow/templates/policy/POLICY_DECISIONS.md | 11 | markdown section |
-| Agent Reviews（Agent 评审记录） | heading | agent-workflow/templates/agents/AGENT_REVIEWS.md | 1 | markdown section |
-| 评审流水（新在上） | heading | agent-workflow/templates/agents/AGENT_REVIEWS.md | 5 | markdown section |
-| AGENT_LOCKS | heading | agent-workflow/templates/agents/AGENT_LOCKS.md | 1 | markdown section |
-| AGENT_HEARTBEATS | heading | agent-workflow/templates/agents/AGENT_HEARTBEATS.md | 1 | markdown section |
-| Agent Handoffs（Agent 交接记录） | heading | agent-workflow/templates/agents/AGENT_HANDOFFS.md | 1 | markdown section |
-| 交接流水（新在上） | heading | agent-workflow/templates/agents/AGENT_HANDOFFS.md | 5 | markdown section |
-| Agent Roles（多 Agent 协作角色） | heading | agent-workflow/templates/agents/AGENT_ROLES.md | 1 | markdown section |
-| 角色矩阵 | heading | agent-workflow/templates/agents/AGENT_ROLES.md | 5 | markdown section |
-| 协作规则 | heading | agent-workflow/templates/agents/AGENT_ROLES.md | 15 | markdown section |
-| Reference（人类参考材料区） | heading | agent-workflow/templates/reference/README.md | 1 | markdown section |
-| 放什么 | heading | agent-workflow/templates/reference/README.md | 5 | markdown section |
-| 不放什么 | heading | agent-workflow/templates/reference/README.md | 13 | markdown section |
-| 操作步骤 | heading | agent-workflow/templates/reference/README.md | 18 | markdown section |
-| Git | heading | agent-workflow/templates/reference/README.md | 25 | markdown section |
-| MOCK_SERVER | heading | agent-workflow/templates/contracts/MOCK_SERVER.md | 1 | markdown section |
-| Mock 策略 | heading | agent-workflow/templates/contracts/MOCK_SERVER.md | 3 | markdown section |
-| 规则 | heading | agent-workflow/templates/contracts/MOCK_SERVER.md | 13 | markdown section |
-| CONTRACT_TESTS | heading | agent-workflow/templates/contracts/CONTRACT_TESTS.md | 1 | markdown section |
-| API_CHANGELOG | heading | agent-workflow/templates/contracts/API_CHANGELOG.md | 1 | markdown section |
-| 工程规范（人类维护 · Agent 必读） | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 1 | markdown section |
-| 优先级 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 5 | markdown section |
-| 项目概述 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 11 | markdown section |
-| 技术栈 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 15 | markdown section |
-| 团队固定前端栈 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 17 | markdown section |
-| 团队固定后端栈 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 25 | markdown section |
-| 前端 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 53 | markdown section |
-| 后端 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 63 | markdown section |
-| 构建与部署 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 73 | markdown section |
-| 代码规范 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 79 | markdown section |
-| 通用 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 81 | markdown section |
-| 前端 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 100 | markdown section |
-| 后端 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 116 | markdown section |
-| 前端模块规范（企业后台） | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 132 | markdown section |
-| 标准目录 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 134 | markdown section |
-| 团队前端标准目录 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 151 | markdown section |
-| 标准后台页面能力 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 185 | markdown section |
-| 前端命名建议 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 194 | markdown section |
-| 前端拆分边界 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 201 | markdown section |
-| 后端模块规范（Spring / Cloud / Boot） | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 210 | markdown section |
-| 推荐输出顺序 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 212 | markdown section |
-| 团队后端标准结构 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 225 | markdown section |
-| Spring 技术栈参考 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 245 | markdown section |
-| 数据库字段建议 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 254 | markdown section |
-| 安全底线 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 261 | markdown section |
-| 依赖准入 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 274 | markdown section |
-| 数据库约定 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 282 | markdown section |
-| 常见任务 SOP | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 289 | markdown section |
-| 新增前端页面 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 291 | markdown section |
-| 新增后端接口 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 299 | markdown section |
-| 数据库变更 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 308 | markdown section |
-| 后台 CRUD 模块 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 315 | markdown section |
-| 登录认证 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 323 | markdown section |
-| 文件上传下载 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 331 | markdown section |
-| Git 提交 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 339 | markdown section |
-| 提交前流程 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 341 | markdown section |
-| 阶段性提交提醒 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 351 | markdown section |
-| 提交信息格式 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 357 | markdown section |
-| 禁止项 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 367 | markdown section |
-| 关键文件 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 373 | markdown section |
-| 待确认 | heading | agent-workflow/templates/rules/ENGINEERING_RULES.md | 387 | markdown section |
-| RECOVERY_PLAYBOOK | heading | agent-workflow/templates/recovery/RECOVERY_PLAYBOOK.md | 1 | markdown section |
-| 恢复场景 | heading | agent-workflow/templates/recovery/RECOVERY_PLAYBOOK.md | 3 | markdown section |
-| 原则 | heading | agent-workflow/templates/recovery/RECOVERY_PLAYBOOK.md | 14 | markdown section |
-| 90 Acceptance — <name> | heading | agent-workflow/templates/dsl/DSL_SUITE_ACCEPTANCE.md | 1 | markdown section |
-| 验收（可检查） | heading | agent-workflow/templates/dsl/DSL_SUITE_ACCEPTANCE.md | 3 | markdown section |
-| 测试锚点 | heading | agent-workflow/templates/dsl/DSL_SUITE_ACCEPTANCE.md | 8 | markdown section |
-| 待确认 | heading | agent-workflow/templates/dsl/DSL_SUITE_ACCEPTANCE.md | 13 | markdown section |
-| DSL Suite — <name> | heading | agent-workflow/templates/dsl/DSL_SUITE_INDEX.md | 1 | markdown section |
-| 元数据 | heading | agent-workflow/templates/dsl/DSL_SUITE_INDEX.md | 3 | markdown section |
-| 文件结构 | heading | agent-workflow/templates/dsl/DSL_SUITE_INDEX.md | 15 | markdown section |
-| 验收（可检查） | heading | agent-workflow/templates/dsl/DSL_SUITE_INDEX.md | 26 | markdown section |
-| notes / 待确认 | heading | agent-workflow/templates/dsl/DSL_SUITE_INDEX.md | 32 | markdown section |
-| DSL — <产品/域名称> | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 1 | markdown section |
-| 元数据 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 3 | markdown section |
-| 背景与定位 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 16 | markdown section |
-| 用户与场景 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 22 | markdown section |
-| 概念模型 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 28 | markdown section |
-| 不在范围内 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 34 | markdown section |
-| 成功标准 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 40 | markdown section |
-| 路由与信息架构（若有前端） | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 46 | markdown section |
-| 主屏业务组件（摘要） | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 53 | markdown section |
-| OV-ID 叠加层总表 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 60 | markdown section |
-| 验收（可检查） | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 68 | markdown section |
-| notes / 待确认 | heading | agent-workflow/templates/dsl/DSL_SPEC_TEMPLATE.md | 75 | markdown section |
-| 页面规格 — <路由 path> | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 1 | markdown section |
-| 元数据 | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 5 | markdown section |
-| 布局与区块 | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 15 | markdown section |
-| 主交互与跳转 | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 21 | markdown section |
-| 权限 / 条件展示 | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 27 | markdown section |
-| 响应式（文字描述，不写 CSS） | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 33 | markdown section |
-| OV-ID（本页触发） | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 40 | markdown section |
-| §BP 数据接入（若适用） | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 47 | markdown section |
-| 验收锚点 | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 56 | markdown section |
-| notes / 待确认 | heading | agent-workflow/templates/dsl/FRONTEND_PAGE_SPEC_TEMPLATE.md | 62 | markdown section |
-| 40 Boundaries — <name> | heading | agent-workflow/templates/dsl/DSL_SUITE_BOUNDARIES.md | 1 | markdown section |
-| 模块边界 | heading | agent-workflow/templates/dsl/DSL_SUITE_BOUNDARIES.md | 3 | markdown section |
-| 接口 / 数据契约 | heading | agent-workflow/templates/dsl/DSL_SUITE_BOUNDARIES.md | 8 | markdown section |
-| 联动边界 | heading | agent-workflow/templates/dsl/DSL_SUITE_BOUNDARIES.md | 13 | markdown section |
-| 风险与约束 | heading | agent-workflow/templates/dsl/DSL_SUITE_BOUNDARIES.md | 18 | markdown section |
-| 00 Requirements — <name> | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 1 | markdown section |
-| 需求描述 | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 3 | markdown section |
-| 用户与场景 | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 7 | markdown section |
-| 范围 | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 11 | markdown section |
-| In Scope | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 13 | markdown section |
-| Out of Scope | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 17 | markdown section |
-| 成功标准 | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 21 | markdown section |
-| 追踪 | heading | agent-workflow/templates/dsl/DSL_SUITE_REQUIREMENTS.md | 25 | markdown section |
+| ITERATION_PLAN | heading | agent-workflow/templates/pm/delivery/ITERATION_PLAN.md | 1 | markdown section |
+| DEPENDENCY_GRAPH | heading | agent-workflow/templates/pm/delivery/DEPENDENCY_GRAPH.md | 1 | markdown section |
+| DELIVERY_RISKS | heading | agent-workflow/templates/pm/delivery/DELIVERY_RISKS.md | 1 | markdown section |
+| DAILY_SYNC | heading | agent-workflow/templates/pm/delivery/DAILY_SYNC.md | 1 | markdown section |
+| REWORK_LOG | heading | agent-workflow/templates/pm/delivery/REWORK_LOG.md | 1 | markdown section |
+| 参考资料上传区 | heading | agent-workflow/templates/pm/references/README.md | 1 | markdown section |
+| BACKLOG | heading | agent-workflow/templates/pm/requirements/BACKLOG.md | 1 | markdown section |
+| TECH_KNOWLEDGE | heading | agent-workflow/templates/pm/knowledge/TECH_KNOWLEDGE.md | 1 | markdown section |
+| 技术知识库 | heading | agent-workflow/templates/pm/knowledge/TECH_KNOWLEDGE.md | 3 | markdown section |
+| ACCEPTANCE_RECORD | heading | agent-workflow/templates/pm/requirements/ACCEPTANCE_RECORD.md | 1 | markdown section |
+| REVIEW_LOG | heading | agent-workflow/templates/pm/requirements/REVIEW_LOG.md | 1 | markdown section |
+| PRODUCT_KNOWLEDGE | heading | agent-workflow/templates/pm/knowledge/PRODUCT_KNOWLEDGE.md | 1 | markdown section |
+| 产品知识库 | heading | agent-workflow/templates/pm/knowledge/PRODUCT_KNOWLEDGE.md | 3 | markdown section |
+| DECISION_LOG | heading | agent-workflow/templates/pm/knowledge/DECISION_LOG.md | 1 | markdown section |
+| FAQ | heading | agent-workflow/templates/pm/knowledge/FAQ.md | 1 | markdown section |
+| PRIORITIZATION | heading | agent-workflow/templates/pm/requirements/PRIORITIZATION.md | 1 | markdown section |
+| Pencil 设计稿 | heading | agent-workflow/templates/pm/references/design/pencil/README.md | 1 | markdown section |
+| DESIGN_REVIEW | heading | agent-workflow/templates/pm/references/design/DESIGN_REVIEW.md | 1 | markdown section |
+| DESIGN_QA | heading | agent-workflow/templates/pm/references/design/DESIGN_QA.md | 1 | markdown section |
+| DESIGN_CHANGELOG | heading | agent-workflow/templates/pm/references/design/DESIGN_CHANGELOG.md | 1 | markdown section |
+| DESIGN_INDEX | heading | agent-workflow/templates/pm/references/design/DESIGN_INDEX.md | 1 | markdown section |
+| DESIGN_FREEZE | heading | agent-workflow/templates/pm/references/design/DESIGN_FREEZE.md | 1 | markdown section |
+| 说明 | heading | agent-workflow/templates/pm/references/design/DESIGN_FREEZE.md | 10 | markdown section |
 
 ## 路由 / API 索引
 

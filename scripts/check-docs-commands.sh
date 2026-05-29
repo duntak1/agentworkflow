@@ -49,6 +49,7 @@ COMMANDS=(
   "aw check tp"
   "aw check plugin"
   "aw check memory"
+  "aw check code-map"
   "aw ci install"
   "aw doctor"
   "aw demo"

@@ -69,7 +69,7 @@ Use this lean order:
 
 Read only files listed in `docs/context/tasks/CTX-<AT-T>.md`. Prefer CodeGraph / `aw code-map` / `aw context` symbol, caller/callee, impact, and affected-test queries. If CodeGraph is unavailable, use `CODE_MAP`, `CODE_CONTEXT_INDEX`, `FILE_INDEX`, and precise `rg`.
 
-Before coding in existing or large projects, build/query the code map instead of scanning the repo:
+Code map is automatic by default. `aw context plan`, `aw task start`, `aw task complete`, `aw watch index`, and `aw gate pre-commit` refresh/check `docs/context/CODE_MAP.md` unless `AW_CODE_MAP_AUTO=0` is set for an explicit exception. Before coding in existing or large projects, query the map instead of scanning the repo:
 
 ```bash
 ./scripts/aw code-map build

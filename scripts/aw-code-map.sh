@@ -18,7 +18,7 @@ usage() {
   cat <<'EOF'
 Usage:
   aw code-map init
-  aw code-map build [--max-files 450]
+  aw code-map build [--max-files 450] [--quiet]
   aw code-map status
   aw code-map query "symbol or keyword"
   aw code-map impact "symbol or keyword"
@@ -160,9 +160,11 @@ case "$CMD" in
     ;;
   build)
     MAX_FILES=450
+    QUIET=false
     while [[ $# -gt 0 ]]; do
       case "$1" in
         --max-files) MAX_FILES="${2:-}"; shift 2 ;;
+        --quiet) QUIET=true; shift ;;
         *) echo "Unknown: $1" >&2; usage 1 ;;
       esac
     done
@@ -310,8 +312,10 @@ case "$CMD" in
       echo "- 禁止为了“了解项目”读取全仓；禁止读取 \`.git\`、\`node_modules\`、\`dist\`、\`build\`、\`coverage\`、\`.next\`、\`.nuxt\`、\`target\`、\`vendor\`、\`tmp\`、\`logs\`。"
     } > "$CODE_MAP"
     rm -f "$tmp_files" "$tmp_dirs" "$tmp_entries" "$tmp_modules" "$tmp_symbols" "$tmp_routes" "$tmp_tests" "$tmp_imports"
-    echo "written: $(rel "$CODE_MAP")"
-    echo "summary: files=${file_count}, symbols=${symbol_count}, routes=${route_count}, tests=${test_count}, backend=${backend}"
+    if ! $QUIET; then
+      echo "written: $(rel "$CODE_MAP")"
+      echo "summary: files=${file_count}, symbols=${symbol_count}, routes=${route_count}, tests=${test_count}, backend=${backend}"
+    fi
     ;;
   query)
     QUERY="${1:-}"

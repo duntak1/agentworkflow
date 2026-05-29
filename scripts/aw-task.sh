@@ -117,6 +117,24 @@ sync_after_task_blocked() {
     }
 }
 
+code_map_auto_refresh() {
+  [[ "${AW_CODE_MAP_AUTO:-1}" != "0" ]] || return 0
+  [[ -x "${SCRIPT_DIR}/aw-code-map.sh" ]] || return 0
+  "${SCRIPT_DIR}/aw-code-map.sh" build --quiet >/dev/null 2>&1 || {
+    echo "warn: auto code-map refresh failed; run ./scripts/aw code-map build" >&2
+    return 0
+  }
+}
+
+code_map_auto_gate() {
+  [[ "${AW_CODE_MAP_AUTO:-1}" != "0" ]] || return 0
+  [[ -x "${SCRIPT_DIR}/aw-code-map.sh" ]] || return 0
+  "${SCRIPT_DIR}/aw-code-map.sh" gate --task "$1" || {
+    echo "error: code-map gate failed for ${1}; run ./scripts/aw code-map build" >&2
+    return 1
+  }
+}
+
 print_commit_prompt() {
   local task_id="$1"
   cat <<EOF
@@ -354,12 +372,14 @@ case "$CMD" in
     }
     aw_task_require_requirement_confirmed "$TASK_ID" || exit 1
     aw_require_github_url_before_coding || exit 1
+    code_map_auto_refresh
     "${SCRIPT_DIR}/aw-context.sh" gate --task "$TASK_ID" || {
       echo "error: context plan required before coding for ${TASK_ID}" >&2
       echo "  run: ./scripts/aw context plan --task ${TASK_ID}" >&2
       echo "  review allowed files, then rerun: ./scripts/aw context gate --task ${TASK_ID}" >&2
       exit 1
     }
+    code_map_auto_gate "$TASK_ID" || exit 1
     sync_before_task_start "$TASK_ID" || exit 1
     aw_task_set_status "${ROOT}/${atomic}" "$TASK_ID" "进行中"
     aw_task_set_current "$TASK_ID"
@@ -400,6 +420,7 @@ case "$CMD" in
     }
     aw_task_require_requirement_confirmed "$TASK_ID" || exit 1
     aw_task_require_started "$TASK_ID" "$atomic" || exit 1
+    code_map_auto_refresh
     "${SCRIPT_DIR}/aw-context.sh" affected --task "$TASK_ID" || true
     verify_args=(--task "$TASK_ID")
     $RUN_E2E && verify_args+=(--run-e2e)
@@ -408,6 +429,7 @@ case "$CMD" in
     if "${SCRIPT_DIR}/aw-verify.sh" "${verify_args[@]}"; then
       aw_task_set_status "${ROOT}/${atomic}" "$TASK_ID" "已完成"
       aw_task_set_current ""
+      code_map_auto_refresh
       audit_task "$TASK_ID" "task complete" "Verification passed; marked task as 已完成." "$atomic"
       sync_after_task_complete "$TASK_ID"
       echo "ok: ${TASK_ID} verify passed → 已完成"

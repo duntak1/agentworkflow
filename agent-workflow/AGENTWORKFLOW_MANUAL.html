@@ -1087,7 +1087,7 @@
           </div>
         </div>
         <div class="grid cols-3">
-          <div class="card"><span class="tag blue">生成地图</span><h3><code>aw code-map build</code></h3><p>生成 <code>docs/context/CODE_MAP.md</code>，默认跳过依赖、构建、缓存、日志目录，输出模块和 Symbol 索引。</p></div>
+          <div class="card"><span class="tag blue">自动生成</span><h3><code>CODE_MAP.md</code></h3><p><code>aw context plan</code>、<code>aw task start</code>、<code>aw task complete</code>、<code>aw watch index</code> 和 pre-commit 会自动刷新代码地图。</p></div>
           <div class="card"><span class="tag green">精准查询</span><h3><code>query / impact</code></h3><p>通过 <code>aw code-map query "keyword"</code> 和 <code>aw code-map impact "symbol"</code> 找相关文件、调用线索、路由和测试。</p></div>
           <div class="card"><span class="tag violet">进入闸门</span><h3>Context Plan</h3><p>代码地图只是定位索引，不授权全文读取。真正编码前仍要生成 <code>CTX-AT-T</code> 并让工程师确认白名单。</p></div>
         </div>
@@ -1110,7 +1110,7 @@
             <div class="diagram-node"><strong>按需读代码</strong><span>只打开白名单文件，改完跑 affected / verify。</span></div>
           </div>
         </div>
-        <div class="callout good">推荐节奏：已有项目接入后先跑 <code>aw code-map build</code>；每个 AT-T 开始前先 <code>aw code-map query</code>，再 <code>aw context plan</code>。如果安装了外部 CodeGraph，会自动作为增强后端；没安装也能用内置地图工作。</div>
+        <div class="callout good">默认全自动：研发任务进入 <code>context plan</code> / <code>task start</code> / <code>task complete</code> 时会刷新并校验 <code>CODE_MAP.md</code>；<code>aw watch index</code> 会同步刷新代码地图、文件索引和工程索引；Git pre-commit 会自动刷新并暂存更新后的地图。只有设置 <code>AW_CODE_MAP_AUTO=0</code> 才会关闭自动刷新，这应作为明确例外记录。</div>
       </section>
 
       <section id="index">
@@ -1203,7 +1203,8 @@ DSL 和共享 Plan 放同步中心，本地 Plan 只作为执行派生。</code>
 再生成 context plan、执行 context gate，并只读取白名单文件。</code></pre></div>
 
           <div class="prompt"><h3>11. 构建代码地图</h3><pre><code>启动 aw 的代码地图能力。
-请先运行 aw code-map build，生成 docs/context/CODE_MAP.md。
+请确认代码地图自动刷新已开启，不要关闭 AW_CODE_MAP_AUTO。
+执行 aw context plan / aw task start / aw task complete 时会自动生成或更新 docs/context/CODE_MAP.md。
 然后针对当前需求执行 aw code-map query "&lt;需求关键词/路由/symbol&gt;"。
 只根据代码地图输出候选模块、入口文件、相关 symbol、路由/API 和测试映射。
 不要因为查询不足就全仓扫描；需要扩大上下文时先说明原因并等待我确认。</code></pre></div>

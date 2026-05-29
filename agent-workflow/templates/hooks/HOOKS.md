@@ -6,7 +6,7 @@
 
 | 触发点 | 推荐动作 | 阻断条件 |
 |--------|----------|----------|
-| `pre-commit` | `aw gate pre-commit` | DSL 未审却修改业务代码；trace 断链；高风险策略未确认 |
+| `pre-commit` | `aw gate pre-commit` | 自动刷新 / 暂存 `docs/context/CODE_MAP.md`，并阻断 DSL 未审却修改业务代码、trace 断链、高风险策略未确认 |
 | `post-commit` | 记录 commit checkpoint | 不中断 |
 | AT-T 完成前 | `aw gate task --task AT-Txxx` | 未确认需求、未跑验证、Bug 未记录 |
 | PR 前 | `aw gate pr` | PR 清单、review、release、contract、score 不达标 |
@@ -14,7 +14,7 @@
 
 ## 自动刷新
 
-- `aw gate index-refresh`：刷新 `docs/FILE_INDEX.md` 与 `ENGINEERING_INDEX.md`。
+- `aw gate index-refresh`：刷新 `docs/context/CODE_MAP.md`、`docs/FILE_INDEX.md` 与 `ENGINEERING_INDEX.md`。
 - `aw hooks install`：安装 Git hooks。
 - `aw hooks check`：检查 hooks 是否启用。
 

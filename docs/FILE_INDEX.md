@@ -8,7 +8,7 @@
 - 新增 / 删除 / 重命名前端、后端、共享、测试或配置代码文件后，运行 `./scripts/aw file-index`。
 - 优先查看「前端业务代码 / 后端业务代码 / 共享代码 / 测试代码 / 运行配置」；脚本、模板、工作流文档只是辅助索引。
 - 本文件供人类工程师定位代码和手改点，不替代代码真源、DSL、Plan、REQ、测试计划或 Bug 流水。
-- 生成时间：2026-05-22T01:45:31Z
+- 生成时间：2026-05-29T09:42:22Z
 
 ## 前端业务代码
 
@@ -57,7 +57,9 @@
 | `scripts/aw-capabilities.sh` | 输出 CLI 能力摘要和 proof paths，支持 JSON。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-changelog.sh` | 版本记录助手：向 CHANGELOG [Unreleased] 写入可追溯变更条目并检查结构。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-ci.sh` | 安装 GitHub Actions workflow 模板。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-code-map.sh` | 项目文件：aw-code-map.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-commit.sh` | 提交助手：默认先 verify，再建议或执行 commit message。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-compact.sh` | 一键工程化上下文压缩：写 handoff、自动快照、新会话粘贴块和可选聊天 Memory。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-config.sh` | 初始化和更新 docs/PROJECT_CONFIG.md 的技术栈与验证命令。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-confirm.sh` | 任务确认入口：校验 DSL 已审、Plan 可执行并生成确认态和工程师索引。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-context.sh` | 项目文件：aw-context.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
@@ -79,7 +81,9 @@
 | `scripts/aw-plan-apply.sh` | 将 Plan 与 ATOMIC_TASKS 落盘到 docs/plans 并触发索引刷新。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-plan-change.sh` | 研发中计划变更助手：记录 plan change、追加 AT-T、拆分过大任务并自动审计。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-plan-select.sh` | 多 Plan 文件的 list/use 选择器。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-pm.sh` | 项目文件：aw-pm.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-policy.sh` | Policy-as-Code 助手：初始化策略文件、记录策略例外和审批决策、检查策略结构。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-project.sh` | 项目文件：aw-project.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-recover.sh` | 项目文件：aw-recover.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-release.sh` | 发布闭环助手：维护环境、发布记录、回滚计划、Feature Flag 台账和发布门禁。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-remove.sh` | 干运行或执行移除 adapters、CI、package 等安装产物。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
@@ -96,6 +100,7 @@
 | `scripts/aw-tp.sh` | 测试计划管理：list、show、new、link 到 AT-T Verify 列。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-trace.sh` | 项目文件：aw-trace.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-upgrade.sh` | 升级目标仓中的 agent-workflow 包、脚本和可选 CI。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-vcs.sh` | 项目文件：aw-vcs.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-verify.sh` | 执行任务 Verify、PROJECT_CONFIG lint/format/typecheck/test/build/e2e。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-watch.sh` | 项目文件：aw-watch.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/build-skill-archive.sh` | 构建 dist/agent-workflow-skill-*.tar.gz 并运行包检查。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
@@ -104,6 +109,7 @@
 | `scripts/check-docs-commands.sh` | 检查核心 CLI 命令是否在 skill/reference 与 INVOCATION 中有文档。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/check-dsl-business-gate.sh` | 提交前业务代码闸门：DSL 未已审时阻止业务路径变更。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/check-dsl.sh` | 校验 DSL 元数据、关联 REQ、manifest 路径和 suite 完整性。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/check-file-index-sync.sh` | 项目文件：check-file-index-sync.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/check-memory.sh` | 检查 docs/memory 布局和记忆索引。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/check-plan.sh` | 校验 Plan 状态、关联 DSL/REQ、ATOMIC 任务和 TP 引用。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/check-plugin-metadata.sh` | 检查 Codex plugin 和 marketplace metadata。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
@@ -177,6 +183,7 @@
 | `agent-workflow/templates/agents/AGENT_ROLES.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/audit/AGENT_TRACE.md` | Agent 执行审计模板或流水，记录关键动作、命令、结果和确认点。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/context/CODE_CONTEXT_INDEX.md` | 项目 Markdown 文档：CODE_CONTEXT_INDEX.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/context/CODE_MAP.md` | 项目 Markdown 文档：CODE_MAP.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/context/CONTEXT_CONFIG.md` | 项目 Markdown 文档：CONTEXT_CONFIG.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/context/CONTEXT_PLAN_TEMPLATE.md` | 项目 Markdown 文档：CONTEXT_PLAN_TEMPLATE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/contracts/API_CHANGELOG.md` | 项目 Markdown 文档：API_CHANGELOG.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
@@ -206,6 +213,78 @@
 | `agent-workflow/templates/ops/SLO.md` | SLO、Incident、Runbook 可靠性模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/plans/_TEMPLATE_ATOMIC_TASKS.md` | Plan / ATOMIC_TASKS 模板或说明：_TEMPLATE_ATOMIC_TASKS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/plans/_TEMPLATE_PLAN.md` | Plan / ATOMIC_TASKS 模板或说明：_TEMPLATE_PLAN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/analytics/EVENT_TRACKING.md` | 项目 Markdown 文档：EVENT_TRACKING.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/analytics/FUNNEL.md` | 项目 Markdown 文档：FUNNEL.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/analytics/METRICS_PLAN.md` | 项目 Markdown 文档：METRICS_PLAN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/analytics/METRICS_REVIEW.md` | 项目 Markdown 文档：METRICS_REVIEW.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/architecture/ARCHITECTURE_DECISION_RECORDS.md` | 项目 Markdown 文档：ARCHITECTURE_DECISION_RECORDS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/architecture/AUTH_MODEL.md` | 项目 Markdown 文档：AUTH_MODEL.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/architecture/DATA_MODEL.md` | 项目 Markdown 文档：DATA_MODEL.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/architecture/INTEGRATION_DESIGN.md` | 项目 Markdown 文档：INTEGRATION_DESIGN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/architecture/TECH_DESIGN.md` | 项目 Markdown 文档：TECH_DESIGN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/contracts/INTEGRATION_MATRIX.md` | 项目 Markdown 文档：INTEGRATION_MATRIX.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dashboard/BLOCKERS.md` | 项目 Markdown 文档：BLOCKERS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dashboard/CHANGE_REQUESTS.md` | 项目 Markdown 文档：CHANGE_REQUESTS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dashboard/DECISION_BOARD.md` | 项目 Markdown 文档：DECISION_BOARD.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dashboard/EXECUTIVE_SUMMARY.md` | 项目 Markdown 文档：EXECUTIVE_SUMMARY.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dashboard/LIFECYCLE_BOARD.md` | 项目 Markdown 文档：LIFECYCLE_BOARD.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dashboard/PROGRESS_BOARD.md` | 项目 Markdown 文档：PROGRESS_BOARD.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dashboard/PROJECT_DASHBOARD.md` | 项目 Markdown 文档：PROJECT_DASHBOARD.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dashboard/RISKS.md` | 项目 Markdown 文档：RISKS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/delivery/DAILY_SYNC.md` | 项目 Markdown 文档：DAILY_SYNC.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/delivery/DELIVERY_RISKS.md` | 项目 Markdown 文档：DELIVERY_RISKS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/delivery/DEPENDENCY_GRAPH.md` | 项目 Markdown 文档：DEPENDENCY_GRAPH.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/delivery/ITERATION_PLAN.md` | 项目 Markdown 文档：ITERATION_PLAN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/delivery/REWORK_LOG.md` | 项目 Markdown 文档：REWORK_LOG.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dispatch/ADMIN_ASSIGNMENTS.md` | 项目 Markdown 文档：ADMIN_ASSIGNMENTS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dispatch/BACKEND_ASSIGNMENTS.md` | 项目 Markdown 文档：BACKEND_ASSIGNMENTS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dispatch/FRONTEND_ASSIGNMENTS.md` | 项目 Markdown 文档：FRONTEND_ASSIGNMENTS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dispatch/TASK_BOARD.md` | 项目 Markdown 文档：TASK_BOARD.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dsl/DSL_ACCEPTANCE.md` | 项目 Markdown 文档：DSL_ACCEPTANCE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dsl/DSL_BOUNDARIES.md` | 项目 Markdown 文档：DSL_BOUNDARIES.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dsl/DSL_EVENTS.md` | 项目 Markdown 文档：DSL_EVENTS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dsl/DSL_INTERACTIONS.md` | 项目 Markdown 文档：DSL_INTERACTIONS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dsl/DSL_PAGES.md` | 项目 Markdown 文档：DSL_PAGES.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dsl/DSL_REQUIREMENTS.md` | 项目 Markdown 文档：DSL_REQUIREMENTS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/dsl/INDEX.md` | 项目 Markdown 文档：INDEX.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/integration/INTEGRATION_ACCEPTANCE.md` | 项目 Markdown 文档：INTEGRATION_ACCEPTANCE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/integration/INTEGRATION_ISSUES.md` | 项目 Markdown 文档：INTEGRATION_ISSUES.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/integration/INTEGRATION_PLAN.md` | 项目 Markdown 文档：INTEGRATION_PLAN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/integration/MOCK_STRATEGY.md` | 项目 Markdown 文档：MOCK_STRATEGY.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/knowledge/DECISION_LOG.md` | 项目 Markdown 文档：DECISION_LOG.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/knowledge/FAQ.md` | 项目 Markdown 文档：FAQ.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/knowledge/PRODUCT_KNOWLEDGE.md` | 项目 Markdown 文档：PRODUCT_KNOWLEDGE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/knowledge/TECH_KNOWLEDGE.md` | 项目 Markdown 文档：TECH_KNOWLEDGE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/plans/ADMIN_FRONTEND_PLAN.md` | 项目 Markdown 文档：ADMIN_FRONTEND_PLAN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/plans/ATOMIC_TASKS.md` | 项目 Markdown 文档：ATOMIC_TASKS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/plans/BACKEND_PLAN.md` | 项目 Markdown 文档：BACKEND_PLAN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/plans/FRONTEND_PLAN.md` | 项目 Markdown 文档：FRONTEND_PLAN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/plans/GLOBAL_PLAN.md` | 项目 Markdown 文档：GLOBAL_PLAN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/product/COMPETITOR_NOTES.md` | 项目 Markdown 文档：COMPETITOR_NOTES.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/product/MVP_SCOPE.md` | 项目 Markdown 文档：MVP_SCOPE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/product/PRODUCT_BRIEF.md` | 项目 Markdown 文档：PRODUCT_BRIEF.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/product/STAKEHOLDERS.md` | 项目 Markdown 文档：STAKEHOLDERS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/product/SUCCESS_METRICS.md` | 项目 Markdown 文档：SUCCESS_METRICS.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/quality/QUALITY_REPORT.md` | 项目 Markdown 文档：QUALITY_REPORT.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/quality/REGRESSION_PLAN.md` | 项目 Markdown 文档：REGRESSION_PLAN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/quality/TEST_CASES.md` | 项目 Markdown 文档：TEST_CASES.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/quality/TEST_STRATEGY.md` | 项目 Markdown 文档：TEST_STRATEGY.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/quality/UAT_RECORD.md` | 项目 Markdown 文档：UAT_RECORD.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/references/README.md` | 项目 Markdown 文档：README.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/references/design/DESIGN_CHANGELOG.md` | 项目 Markdown 文档：DESIGN_CHANGELOG.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/references/design/DESIGN_FREEZE.md` | 项目 Markdown 文档：DESIGN_FREEZE.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/references/design/DESIGN_INDEX.md` | 项目 Markdown 文档：DESIGN_INDEX.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/references/design/DESIGN_QA.md` | 项目 Markdown 文档：DESIGN_QA.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/references/design/DESIGN_REVIEW.md` | 项目 Markdown 文档：DESIGN_REVIEW.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/references/design/pencil/README.md` | 项目 Markdown 文档：README.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/release/GO_LIVE_CHECKLIST.md` | 项目 Markdown 文档：GO_LIVE_CHECKLIST.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/release/POST_RELEASE_REVIEW.md` | 项目 Markdown 文档：POST_RELEASE_REVIEW.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/release/RELEASE_PLAN.md` | 项目 Markdown 文档：RELEASE_PLAN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/release/ROLLBACK_PLAN.md` | 项目 Markdown 文档：ROLLBACK_PLAN.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/requirements/ACCEPTANCE_RECORD.md` | 项目 Markdown 文档：ACCEPTANCE_RECORD.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/requirements/BACKLOG.md` | 项目 Markdown 文档：BACKLOG.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/requirements/PRIORITIZATION.md` | 项目 Markdown 文档：PRIORITIZATION.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/pm/requirements/REVIEW_LOG.md` | 项目 Markdown 文档：REVIEW_LOG.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/policy/POLICY.yml` | Policy-as-Code 策略和例外审批记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/policy/POLICY_DECISIONS.md` | Policy-as-Code 策略和例外审批记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/prompts/PROMPT-DSL.md` | 生成提示模板：PROMPT-DSL.md。 | 改模板后同步 init/e2e 和生成产物预期。 |
@@ -323,6 +402,7 @@
 | 路径 | 说明 | 维护提示 |
 |------|------|----------|
 | `docs/context/CODE_CONTEXT_INDEX.md` | 项目 Markdown 文档：CODE_CONTEXT_INDEX.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/context/CODE_MAP.md` | 项目 Markdown 文档：CODE_MAP.md。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/context/CONTEXT_CONFIG.md` | 项目 Markdown 文档：CONTEXT_CONFIG.md。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/contracts/API_CHANGELOG.md` | 项目 Markdown 文档：API_CHANGELOG.md。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/contracts/API_CONTRACT.openapi.yaml` | 项目 YAML 配置：API_CONTRACT.openapi.yaml。 | 变更后按影响范围同步索引、文档和验证。 |
@@ -334,8 +414,14 @@
 | `docs/hooks/HOOKS.md` | 项目 Markdown 文档：HOOKS.md。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/index.html` | 项目文件：index.html。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/product/ENGINEERING_HARNESS_PRD.md` | 项目 Markdown 文档：ENGINEERING_HARNESS_PRD.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/product/PM_AGENT_LIFECYCLE_PRD.md` | 项目 Markdown 文档：PM_AGENT_LIFECYCLE_PRD.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/product/tasks/PM_AGENT_LIFECYCLE_PLAN.md` | 项目 Markdown 文档：PM_AGENT_LIFECYCLE_PLAN.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/product/tasks/PM_AGENT_LIFECYCLE_TASKS.md` | 项目 Markdown 文档：PM_AGENT_LIFECYCLE_TASKS.md。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/recovery/RECOVERY_PLAYBOOK.md` | 项目 Markdown 文档：RECOVERY_PLAYBOOK.md。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/score/DELIVERY_SCORE.md` | 项目 Markdown 文档：DELIVERY_SCORE.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/vcs/BRANCH_POLICY.md` | 项目 Markdown 文档：BRANCH_POLICY.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/vcs/PR_CHECKLIST.md` | 项目 Markdown 文档：PR_CHECKLIST.md。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/vcs/REVIEW_GATE.md` | 项目 Markdown 文档：REVIEW_GATE.md。 | 变更后按影响范围同步索引、文档和验证。 |
 | `scripts/README.md` | 项目 Markdown 文档：README.md。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/e2e-smoke.sh` | 端到端冒烟测试：打包、安装、init、DSL/Plan、任务、REQ、Bug、TP、索引刷新。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 

@@ -23,10 +23,11 @@ EOF
 
 run_index_once() {
   echo "== watch index =="
+  "${SCRIPT_DIR}/aw-code-map.sh" build --quiet >/dev/null 2>&1 || true
   "${SCRIPT_DIR}/generate-file-index.sh" >/dev/null 2>&1 || true
   AW_INDEX_MODE=scan "${SCRIPT_DIR}/generate-engineering-index.sh" --scan-only >/dev/null 2>&1 || true
   "${SCRIPT_DIR}/aw-context.sh" affected || true
-  echo "watch index: refreshed FILE_INDEX / ENGINEERING_INDEX and printed affected analysis"
+  echo "watch index: refreshed CODE_MAP / FILE_INDEX / ENGINEERING_INDEX and printed affected analysis"
 }
 
 case "$CMD" in

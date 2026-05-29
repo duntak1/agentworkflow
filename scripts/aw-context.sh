@@ -42,6 +42,15 @@ ensure_context() {
   [[ -f "$INDEX" ]] || cp "${TEMPLATES}/context/CODE_CONTEXT_INDEX.md" "$INDEX"
 }
 
+ctx_auto_code_map_build() {
+  [[ "${AW_CODE_MAP_AUTO:-1}" != "0" ]] || return 0
+  [[ -x "${SCRIPT_DIR}/aw-code-map.sh" ]] || return 0
+  "${SCRIPT_DIR}/aw-code-map.sh" build --quiet >/dev/null 2>&1 || {
+    echo "warn  auto code-map build failed; run ./scripts/aw code-map build" >&2
+    return 0
+  }
+}
+
 ctx_plan_path() {
   local task="$1"
   echo "${TASK_DIR}/CTX-${task}.md"
@@ -203,6 +212,7 @@ case "$CMD" in
     done
     [[ -n "$TASK" ]] || { echo "error: --task is required" >&2; exit 1; }
     ensure_context
+    ctx_auto_code_map_build
     OUT="$(ctx_plan_path "$TASK")"
     cp "${TEMPLATES}/context/CONTEXT_PLAN_TEMPLATE.md" "$OUT"
     dsl="$(aw_resolve_dsl_file 2>/dev/null || echo "待确认")"

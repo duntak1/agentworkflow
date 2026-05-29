@@ -104,7 +104,7 @@ AW_SKILL_REF=v1.5.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 
 `docs/FILE_INDEX.md` is the human-facing project code file index for manual code review and optimization. Generate it with `aw file-index`; it prioritizes frontend business code, backend business code, shared code, tests, and runtime/build configuration, with scripts/templates/workflow docs kept as auxiliary sections. Refresh it whenever project code files are added, deleted, or renamed so engineers can quickly locate AI-written files that need review or manual edits.
 
-`docs/context/CODE_MAP.md` is the AI-facing code map. Generate it with `aw code-map build`; query it with `aw code-map query "symbol"` and `aw code-map impact "symbol"`. It records module paths, entry files, symbols, routes/API candidates, import clues, and inferred tests so Agent can locate code without scanning the whole project. It is a locator index, not authorization to read full files; task coding still requires `aw context plan --task <AT-T>` and `aw context gate --task <AT-T>`.
+`docs/context/CODE_MAP.md` is the AI-facing code map. It is auto-generated/updated by `aw context plan`, `aw task start`, `aw task complete`, `aw watch index`, and `aw gate pre-commit` unless `AW_CODE_MAP_AUTO=0` is set for an explicit exception. You can also run `aw code-map build`; query it with `aw code-map query "symbol"` and `aw code-map impact "symbol"`. It records module paths, entry files, symbols, routes/API candidates, import clues, and inferred tests so Agent can locate code without scanning the whole project. It is a locator index, not authorization to read full files; task coding still requires `aw context plan --task <AT-T>` and `aw context gate --task <AT-T>`.
 
 | 功能 | 存放 | 适合记录 | 不适合记录 |
 |------|------|----------|------------|
@@ -200,8 +200,8 @@ AW_SKILL_REF=v1.5.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw agents gate --strict` | 严格协作门禁：发现 allowed paths 重叠时阻断，要求先 handoff 或重新分配边界 |
 | `aw gate init|check|pre-commit|task|pr|release` | 自动 Gate 聚合 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release 等关键检查 |
 | `aw gate file-index` | 新增 / 删除 / 重命名业务文件时，若未刷新 `docs/FILE_INDEX.md` 则阻断 |
-| `aw context init|status|plan|query|impact|affected|gate|budget` | 任务级代码上下文控制：禁止无目标全仓扫描，按 CodeGraph / CODE_MAP / CODE_CONTEXT_INDEX / FILE_INDEX 生成最小读取范围和 affected 分析 |
-| `aw code-map init|build|query|impact|affected|gate` | 代码地图：生成模块 / 入口 / Symbol / 路由 API / import / 测试映射索引，先定位再生成 Context Plan |
+| `aw context init|status|plan|query|impact|affected|gate|budget` | 任务级代码上下文控制：禁止无目标全仓扫描，按 CodeGraph / CODE_MAP / CODE_CONTEXT_INDEX / FILE_INDEX 生成最小读取范围和 affected 分析；`plan` 会自动刷新 CODE_MAP |
+| `aw code-map init|build|query|impact|affected|gate` | 代码地图：自动生成 / 更新模块、入口、Symbol、路由 API、import、测试映射索引，先定位再生成 Context Plan |
 | `aw context enrich --task <AT-T>` | 自动用 CodeGraph / 精准 rg / 索引补全 Context Plan 的 Symbol 和影响范围 |
 | `aw verify --affected --task <AT-T>` | 先写入 affected analysis，再执行任务验证 |
 | `aw contract init|change|test|diff|gate|check` | 前后端契约系统：OpenAPI、API 变更、Mock、Contract Test、Schema Diff、破坏性变更阻断；配置同步中心后 `aw contract change` 自动发布 contract 事件 |
@@ -210,7 +210,7 @@ AW_SKILL_REF=v1.5.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw github-pr ...` | 兼容旧入口，内部转发到 `aw vcs` |
 | `aw score init|record|check|latest` | 交付评分：需求、DSL/Plan、任务确认、验证、Bug、文件索引、Contract、Git/Release、Handoff |
 | `aw recover init|context|plan|sync|failed-task|conflict|rollback|check` | 恢复机制：上下文断裂、计划过期、同步漂移、任务失败、冲突和回滚 |
-| `aw watch index [--once|--loop]` | 自动刷新 FILE_INDEX / ENGINEERING_INDEX，并输出 affected analysis 提示 |
+| `aw watch index [--once|--loop]` | 自动刷新 CODE_MAP / FILE_INDEX / ENGINEERING_INDEX，并输出 affected analysis 提示 |
 | `aw sync init <harness-dir> --project <name> --agent <name>` | 为前后端分仓项目配置共享同步中心 |
 | `aw sync pull [--from <project|all>]` | 将其他项目快照拉到 `docs/sync/inbox/` 供只读参考，不覆盖本项目 DSL / Plan / 代码 |
 | `aw sync gate --task <AT-T>` | 双项目 / 分仓任务开始前硬检查：最近已 pull、inbox 存在、共享任务看板存在 |
@@ -239,6 +239,7 @@ AW_SKILL_REF=v1.5.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw check all|dsl|plan|config|req|tp|plugin` | 分项或聚合检查 |
 | `aw check plugin` | 校验 Codex plugin / marketplace metadata |
 | `aw check memory` | 校验 docs/memory 布局、字段与敏感信息 |
+| `aw check code-map` | 校验 `docs/context/CODE_MAP.md` 已生成且不是模板占位 |
 | `aw config init --project-stage 1|2 --sync-center 1|2|3 --project-kind <n> --repo-url <url> --build-target 1|2|3` | 填写 PROJECT_CONFIG；项目阶段必须先依据 `aw project scan` 和工程师确认；启动接入时必须询问是否建立同步中心，1=建立/使用、2=不建立、3=稍后决定且 Plan 阻断；代码托管平台支持 1=GitHub、2=本地 Git、3=GitLab、4=Bitbucket、5=Gitee、6=GitCode、7=Gitea、8=Forgejo、9=GitLab CE、10=Gerrit、11=云效 Codeup；全栈角色默认构建目标 3=前后端单仓，分仓/双项目/不同电脑才必须先 `aw sync init` 建同步中心 |
 | `aw rules init|review|check` | 生成、审阅、校验工程规范 `docs/ENGINEERING_RULES.md`；默认固化团队前端/后端/统一 AI 执行规范清单，真实项目只补差异、关键文件和注释原则 |
 | `aw rules discover [--write]` | 扫描真实项目候选关键文件，并可回写 `docs/ENGINEERING_RULES.md` 的“关键文件”表 |

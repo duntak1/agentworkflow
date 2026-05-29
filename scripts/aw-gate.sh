@@ -19,6 +19,7 @@ Usage:
   aw gate check
   aw gate index-refresh
   aw gate file-index
+  aw gate code-map
   aw gate pre-commit
   aw gate task [--task AT-T...]
   aw gate pr [--strict]
@@ -53,6 +54,7 @@ case "$CMD" in
     echo "created/ok: docs/hooks/HOOKS.md"
     ;;
   index-refresh)
+    "${SCRIPT_DIR}/aw-code-map.sh" build --quiet >/dev/null 2>&1 || true
     aw_refresh_engineering_index
     ;;
   check)
@@ -72,13 +74,22 @@ case "$CMD" in
   file-index)
     exec "${SCRIPT_DIR}/check-file-index-sync.sh"
     ;;
+  code-map)
+    exec "${SCRIPT_DIR}/aw-code-map.sh" gate "$@"
+    ;;
   pre-commit)
     ERR=0
     ensure_gate_docs
+    run_or_mark "code-map refresh" "${SCRIPT_DIR}/aw-code-map.sh" build --quiet
+    git -C "$ROOT" diff --quiet -- docs/context/CODE_MAP.md || {
+      echo "info: CODE_MAP changed during pre-commit; staging updated map"
+      git -C "$ROOT" add docs/context/CODE_MAP.md 2>/dev/null || true
+    }
     run_or_mark "dsl business gate" "${SCRIPT_DIR}/check-dsl-business-gate.sh"
     run_or_mark "requirements" "${SCRIPT_DIR}/check-req-index.sh"
     run_or_mark "test plans" "${SCRIPT_DIR}/check-test-plan-index.sh"
     run_or_mark "contract" "${SCRIPT_DIR}/aw-contract.sh" gate
+    run_or_mark "code-map" "${SCRIPT_DIR}/aw-code-map.sh" gate
     run_or_mark "context" "${SCRIPT_DIR}/aw-context.sh" check
     run_or_mark "file-index" "${SCRIPT_DIR}/check-file-index-sync.sh"
     run_or_mark "agents" "${SCRIPT_DIR}/aw-agents.sh" gate --strict
@@ -106,6 +117,7 @@ case "$CMD" in
         exit "$ERR"
       else
         run_or_mark "requirement confirmation" aw_task_require_requirement_confirmed "$TASK_ID"
+        run_or_mark "code-map" "${SCRIPT_DIR}/aw-code-map.sh" gate --task "$TASK_ID"
         run_or_mark "context" "${SCRIPT_DIR}/aw-context.sh" gate --task "$TASK_ID"
         run_or_mark "task lock" "${SCRIPT_DIR}/aw-agents.sh" lock-check --task "$TASK_ID"
         if [[ -f "${ROOT}/docs/sync/SYNC_CONFIG.md" ]]; then
@@ -132,6 +144,7 @@ case "$CMD" in
     ERR=0
     run_or_mark "github-pr" "${SCRIPT_DIR}/aw-github-pr.sh" gate
     run_or_mark "contract" "${SCRIPT_DIR}/aw-contract.sh" gate
+    run_or_mark "code-map" "${SCRIPT_DIR}/aw-code-map.sh" gate
     run_or_mark "context" "${SCRIPT_DIR}/aw-context.sh" check
     run_or_mark "trace" "${SCRIPT_DIR}/aw-trace.sh" check
     run_or_mark "agents" "${SCRIPT_DIR}/aw-agents.sh" gate --strict

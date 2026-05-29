@@ -403,7 +403,7 @@ agent-workflow CLI v${AW_CLI_VERSION} (any AI tool)
   aw file-index             Generate docs/FILE_INDEX.md with project code file descriptions
   aw code-map init|build|query|impact|affected|gate  Build/query code map before reading code
   aw dev                    Print A→E dev paste block (same as paste dev)
-  aw check [all|layout|dsl|plan|config|rules|req|tp|docs|plugin|memory|changelog|audit|policy|security|service-catalog|release|sync|vcs]
+  aw check [all|layout|dsl|plan|config|rules|req|tp|docs|plugin|memory|code-map|changelog|audit|policy|security|service-catalog|release|sync|vcs]
   aw config init       Fill docs/PROJECT_CONFIG.md stage/kind/target/commands
                        stage: --project-stage 1(new) | 2(existing)
   aw rules init|review|check  Engineering rules template/review/check
