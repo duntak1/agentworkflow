@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.5.0] - 2026-05-29
+
+### Added
+
+- Redesign the HTML manual as a product-style v1.5 guide covering startup, role routing, project topology, sync center, DSL/Plan dispatch, dev gates, token budgets, engineer indexes, command reference, FAQ, and scenario prompts with one-click copy.
+
+### Changed
+
+- Promote the published package and Codex plugin metadata to version 1.5.0.
+
 ## [1.1.0] - 2026-05-19
 
 ### Added

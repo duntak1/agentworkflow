@@ -75,7 +75,7 @@ PM 或产品主导项目时，先使用 `aw pm start` 进入向导，再用 `aw 
 ./scripts/install-cursor-skill.sh https://github.com/<you>/agentworkflow.git
 
 # 指定 tag/branch
-AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/agentworkflow.git
+AW_SKILL_REF=v1.5.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/agentworkflow.git
 ```
 
 安装后在业务仓执行：
