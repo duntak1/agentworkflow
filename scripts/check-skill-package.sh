@@ -50,6 +50,7 @@ need "scripts/aw-metrics.sh"
 need "scripts/aw-ops.sh"
 need "scripts/aw-agents.sh"
 need "scripts/aw-sync.sh"
+need "scripts/aw-pm.sh"
 need "scripts/aw-vcs.sh"
 need "scripts/check-file-index-sync.sh"
 need "scripts/generate-file-index.sh"
@@ -71,6 +72,12 @@ need "scripts/aw-ci.sh"
 need "scripts/aw-dsl-select.sh"
 need "scripts/aw-plan-select.sh"
 need "templates/prompts/PROMPT-DSL.md"
+need "templates/pm/product/PRODUCT_BRIEF.md"
+need "templates/pm/references/README.md"
+need "templates/pm/references/design/pencil/README.md"
+need "templates/pm/dispatch/TASK_BOARD.md"
+need "templates/pm/dashboard/PROJECT_DASHBOARD.md"
+need "templates/pm/contracts/INTEGRATION_MATRIX.md"
 need "templates/dsl/DSL_SUITE_INDEX.md"
 need "templates/dsl/DSL_SUITE_ACCEPTANCE.md"
 need "templates/rules/ENGINEERING_RULES.md"
@@ -127,7 +134,7 @@ else
   ERR=1
 fi
 
-for cmd in "doctor" "demo" "dashboard" "status --json" "capabilities" "capabilities --json" "project scan" "project gate" "compact" "memory" "memory chat" "bug" "changelog" "audit" "policy" "policy gate" "security" "security scan" "service-catalog" "service-catalog discover" "release" "release gate" "release gate --strict-report" "release flag-check" "report handoff" "report release" "report check" "metrics" "metrics summary" "ops" "ops gate" "agents" "agents gate" "agents gate --strict" "sync" "sync init" "sync push" "sync pull" "sync gate" "sync baseline" "sync board" "sync event" "sync change" "sync inbox" "vcs" "vcs gate" "trace check" "plan change" "plan task-add" "task split" "task checkpoint" "rules discover" "file-index" "setup" "upgrade" "remove"; do
+for cmd in "doctor" "demo" "dashboard" "status --json" "capabilities" "capabilities --json" "project scan" "project gate" "compact" "memory" "memory chat" "bug" "changelog" "audit" "policy" "policy gate" "security" "security scan" "service-catalog" "service-catalog discover" "release" "release gate" "release gate --strict-report" "release flag-check" "report handoff" "report release" "report check" "metrics" "metrics summary" "ops" "ops gate" "agents" "agents gate" "agents gate --strict" "sync" "sync init" "sync push" "sync pull" "sync gate" "sync baseline" "sync board" "sync event" "sync change" "sync inbox" "pm" "pm init" "pm intake-check" "pm dashboard" "pm assignments" "pm gate" "pm design" "pm dispatch" "vcs" "vcs gate" "trace check" "plan change" "plan task-add" "task split" "task checkpoint" "rules discover" "file-index" "setup" "upgrade" "remove"; do
   if grep -q "aw ${cmd}" "${SKILL_DIR}/SKILL.md" "${SKILL_DIR}/reference.md" 2>/dev/null; then
     echo "ok  docs mention aw ${cmd}"
   else
@@ -182,6 +189,13 @@ if grep -q 'vcs)' "${SKILL_DIR}/scripts/aw" 2>/dev/null; then
   echo "ok  aw routes vcs"
 else
   echo "missing  aw vcs route"
+  ERR=1
+fi
+
+if grep -q 'pm)' "${SKILL_DIR}/scripts/aw" 2>/dev/null; then
+  echo "ok  aw routes pm"
+else
+  echo "missing  aw pm route"
   ERR=1
 fi
 

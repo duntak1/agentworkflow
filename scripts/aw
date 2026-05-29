@@ -130,6 +130,9 @@ case "$CMD" in
   sync)
     exec "${SCRIPT_DIR}/aw-sync.sh" "$@"
     ;;
+  pm)
+    exec "${SCRIPT_DIR}/aw-pm.sh" "$@"
+    ;;
   context)
     exec "${SCRIPT_DIR}/aw-context.sh" "$@"
     ;;

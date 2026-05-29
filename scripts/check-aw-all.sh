@@ -36,6 +36,7 @@ case "$SUB" in
   ops) run "${SCRIPT_DIR}/aw-ops.sh" check ;;
   agents) run "${SCRIPT_DIR}/aw-agents.sh" check ;;
   sync) run "${SCRIPT_DIR}/aw-sync.sh" check ;;
+  pm) run "${SCRIPT_DIR}/aw-pm.sh" check ;;
   gate) run "${SCRIPT_DIR}/aw-gate.sh" check ;;
   contract) run "${SCRIPT_DIR}/aw-contract.sh" check ;;
   github-pr|pr) run "${SCRIPT_DIR}/aw-github-pr.sh" check ;;
@@ -66,6 +67,7 @@ case "$SUB" in
     run "${SCRIPT_DIR}/aw-metrics.sh" check
     run "${SCRIPT_DIR}/aw-ops.sh" check
     run "${SCRIPT_DIR}/aw-agents.sh" check
+    run "${SCRIPT_DIR}/aw-pm.sh" check
     run "${SCRIPT_DIR}/aw-contract.sh" check
     run "${SCRIPT_DIR}/aw-vcs.sh" check
     run "${SCRIPT_DIR}/aw-github-pr.sh" check
@@ -74,7 +76,7 @@ case "$SUB" in
     run "${SCRIPT_DIR}/aw-recover.sh" check
   ;;
   *)
-    echo "Usage: check-aw-all.sh [all|layout|dsl|plan|config|rules|req|tp|docs|plugin|memory|changelog|audit|policy|security|service-catalog|release|report|trace|metrics|ops|agents|sync|gate|contract|github-pr|vcs|context|score|recover]" >&2
+    echo "Usage: check-aw-all.sh [all|layout|dsl|plan|config|rules|req|tp|docs|plugin|memory|changelog|audit|policy|security|service-catalog|release|report|trace|metrics|ops|agents|sync|pm|gate|contract|github-pr|vcs|context|score|recover]" >&2
     exit 1
     ;;
 esac

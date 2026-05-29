@@ -13,7 +13,7 @@
 ## 一句话流程
 
 ```text
-install/init → aw project scan 扫描项目内容 → 工程师确认项目阶段（全新 / 已有）→ 立即询问是否建立同步中心（建立 / 不建 / 稍后决定）→ 选择代码托管平台（GitHub/GitLab/Bitbucket/Gitee/GitCode/Gitea/Forgejo/GitLab CE/Gerrit/云效 Codeup/本地 Git）+ 构建目标（前端/后端/前后端）→ 若双项目则先确认真实前端仓库 / 后端仓库 / 同步中心并执行 aw sync init → 全新项目走 reference → DSL → Plan；已有项目走现状盘点 → 一期基线 → 增量 DSL → 增量 Plan；双项目先共享 DSL / 协作 Plan，再派生本地 Plan → DSL 已审 / Plan 可执行 → aw confirm → ENGINEERING_INDEX.md → aw next → AICODING 写代码 → verify → CHANGELOG/Git → handoff
+install/init → aw project scan 扫描项目内容 → 工程师确认项目阶段（全新 / 已有）→ 立即询问是否建立同步中心（建立 / 不建 / 稍后决定）→ 若 PM / 产品主导或三端协作，先 `aw pm start` + `aw pm init <project-harness>` 建立 PM 同步中心 → 选择代码托管平台（GitHub/GitLab/Bitbucket/Gitee/GitCode/Gitea/Forgejo/GitLab CE/Gerrit/云效 Codeup/本地 Git）+ 构建目标（前端/后端/前后端）→ 若双项目则先确认真实前端仓库 / 后端仓库 / 同步中心并执行 aw sync init → 全新项目走 reference/PM references → DSL → Plan；已有项目走现状盘点 → 一期基线 → 增量 DSL → 增量 Plan；双项目/三端项目先共享 DSL / 协作 Plan / PM dispatch，再派生本地 Plan → DSL 已审 / Plan 可执行 → aw confirm → ENGINEERING_INDEX.md → aw next → AICODING 写代码 → verify → CHANGELOG/Git → handoff
 ```
 
 ## 闭环管理目标
@@ -97,6 +97,7 @@ chmod +x scripts/aw scripts/*.sh
 | 选择构建目标 | DSL 已审后、Plan 生成前执行 `aw config init --build-target 1|2|3`；1=前端项目，2=后端项目，3=前后端项目 |
 | 双项目拓扑确认 | 构建目标为前后端且前后端分仓时，先确认前端真实仓库、后端真实仓库、同电脑 / 不同电脑、同步中心路径 / 远程仓库地址；未确认前不得拆本地 Plan |
 | 同步中心建设 | 同电脑用本地 `project-harness`；不同电脑先创建并 clone 独立远程 `project-harness` 仓库；前后端分别执行 `aw sync init <harness> --project ... --agent ... --role ...` |
+| PM 产品生命周期 | `aw pm start` 进入 PM 向导；`aw pm init <harness>` 创建 PM 同步中心；`aw pm intake-check --write` 体检资料；`aw pm design import/link/change` 管理 Pencil；`aw pm dispatch/dashboard/gate` 派发三端任务、刷新看板、检查生命周期 |
 | 双项目 Plan 拆分 | DSL 已审后，先写 `project-harness/global/plans/` 协作 Plan，再派生 `project-frontend/docs/plans/` 和 `project-backend/docs/plans/` 本地 Plan |
 | 定向生成任务 | `aw approve dsl <dsl> --plan --domain frontend` / `--domain backend` |
 | 任务确认 | `任务确认` / `aw confirm` → 生成 `ENGINEERING_INDEX.md` |
@@ -138,6 +139,9 @@ chmod +x scripts/aw scripts/*.sh
 | 多 Agent 协作 | `aw agents assign|handoff|review ...` 记录角色、文件边界、交接和评审结论；`aw agents gate` 检查阻断评审和路径重叠，`--strict` 可阻断冲突 |
 | 多 Agent 严格门禁 | `aw agents gate --strict` 发现 allowed paths 重叠时阻断，要求先 handoff 或重新分配文件边界 |
 | 跨项目前后端同步 | `aw sync init <harness-dir> --project <name> --agent <name>` 配置共享同步中心；`aw sync baseline` 显示 / 初始化共享 DSL、协作 Plan、接口契约基线路径；`aw sync board` 生成 / 查看共享任务看板；`aw sync gate --task <AT-T>` 在分仓任务开始前强制最近 pull、inbox、board 就绪；`aw sync event --type ...` 编排任务完成、需求变更、阻塞、问题、契约、Bug、决策和交接；`aw sync change <AT-T> "summary" --to <agent> --impact "..." --acceptance "..."` 是需求变更快捷入口；`aw sync inbox` 汇总对方事件；`aw sync pull` 拉取其他项目快照到只读 inbox；`aw sync push --task <AT-T>` 发布本项目 DSL / Plan / REQ / Handoff / Agents / Bug / TP / Security 快照 |
+| PM 三端任务派发 | PM Agent 维护 `project-harness/global/dispatch/TASK_BOARD.md`、`FRONTEND_ASSIGNMENTS.md`、`ADMIN_ASSIGNMENTS.md`、`BACKEND_ASSIGNMENTS.md`；前台/后台/后端 Agent 开始任务前先读取自己的 assignments 和 `global/contracts/INTEGRATION_MATRIX.md` |
+
+PM 常用命令：`aw pm dashboard --write` 刷新项目进度看板；`aw pm assignments --role frontend|admin|backend|all` 查看三端任务派发；`aw pm dispatch --write` 从 `global/plans/ATOMIC_TASKS.md` 生成派发表。
 | 追溯链检查 | `aw trace check` 检查 REQ、DSL、Plan、AT-T、TP、Bug、Changelog 和 Harness 记录是否断链 |
 | 验证 | `aw verify` / `aw verify --task AT-T…` / `aw verify --run-e2e` |
 | Plan 校验 | `aw check plan` |
@@ -170,6 +174,10 @@ Agent 应：**先读本文 + `PRODUCT_INPUT_WORKFLOW.md`**，再执行对应 `sc
 非全新 / 存量项目接入时，Agent 应先建立当前真实状态，不得按空白新项目重建：确认项目阶段、仓库类型、构建目标和一期完成范围；目标化读取入口文件，禁止无目标全仓扫描；刷新 `docs/FILE_INDEX.md` 与 `docs/SERVICE_CATALOG.md`；把已实现能力、已知 Bug、技术债、未确认事项、不应被误改的稳定边界写入 Handoff / REQ / Memory；只有一期基线经工程师确认后，才为下一期、维护、Bug 修复或联调需求生成增量 DSL 和增量 Plan。
 
 前后端分成两个项目时，先读 [`CROSS_PROJECT_SYNC.md`](./CROSS_PROJECT_SYNC.md)：共享 DSL / 协作 Plan 放在同步中心 `global/dsl/` 和 `global/plans/`，共享任务看板放在 `global/plans/TASK_BOARD.md`，本项目 DSL / Plan 是执行派生；`aw sync pull` 只导入对方快照到 `docs/sync/inbox/`，不得直接覆盖本项目 DSL / Plan / 代码；接口、字段、权限、错误码或阻塞变化必须在本项目重新通过 REQ / Bug / Handoff 落账后再 `aw sync push`。
+
+PM Agent 场景：PM 不需要记底层命令，先运行 `aw pm start` 查看向导。若项目使用同步中心作为产品事实源，运行 `aw pm init <project-harness> --project <name> --agent pm-agent --role pm`，再把 PRD/UI/技术/API/业务/Pencil 资料放入 `global/references/`。Pencil `.pen` 存在 `global/references/design/pencil/source/`，导出物放 `exports/`，截图放 `screenshots/`；`.pen` 不允许普通文本解析。新增需求、设计稿变更和三端派发变更先走 `aw pm change` 或 `aw pm design change`，再更新 DSL、Plan、dispatch 和 dashboard，不能直接让实现 Agent 改代码。
+
+产品全生命周期 Gate：立项未确认不生成 DSL；需求未评审不生成正式 Plan；设计未冻结不派发正式前端任务；技术方案未确认不派发正式后端任务；API 契约未确认不进入联调；测试计划未生成不允许任务完成；UAT 未通过不允许发布；上线 checklist 未完成不允许 release；复盘未记录项目不能关闭。用 `aw pm gate` 检查，`--strict` 会阻断所有待确认生命周期状态。
 
 双项目从 DSL 进入 Plan 前，Agent 必须先引导工程师完成真实代码仓库与同步中心建设：前端仓库、后端仓库、同步中心都要有明确本地路径；不同电脑协作时，同步中心必须是单独远程 Git 仓库，双方都先 `git pull` 最新 harness 后再拆 Plan。若仓库未准备好，Agent 只能继续引导建仓 / 初始化 / `aw sync init`，不能生成本地 Plan。
 

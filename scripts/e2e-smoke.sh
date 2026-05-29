@@ -147,6 +147,40 @@ SYNC_HARNESS="${TMP}/project-harness"
 ./scripts/aw sync init "$SYNC_HARNESS" --project frontend --agent frontend-agent --role frontend
 ./scripts/aw sync push --task AT-T0-000 --note "frontend e2e snapshot"
 grep -q 'frontend e2e snapshot' "$SYNC_HARNESS/projects/frontend/MANIFEST.md" || { echo "fail: sync push"; exit 1; }
+./scripts/aw pm init "$SYNC_HARNESS" --project e2e-product --agent pm-agent --role pm
+[[ -f "$SYNC_HARNESS/global/PM_CENTER.md" ]] || { echo "fail: pm center"; exit 1; }
+[[ -f "$SYNC_HARNESS/global/dashboard/PROJECT_DASHBOARD.md" ]] || { echo "fail: pm dashboard template"; exit 1; }
+mkdir -p "$SYNC_HARNESS/global/references/prd" "$SYNC_HARNESS/global/references/ui" "$SYNC_HARNESS/global/references/design/pencil/source"
+printf '# E2E PRD\n' > "$SYNC_HARNESS/global/references/prd/e2e-prd.md"
+printf '# E2E UI\n' > "$SYNC_HARNESS/global/references/ui/e2e-ui.md"
+printf 'pencil placeholder\n' > /tmp/e2e-flow.pen
+./scripts/aw pm design import --file /tmp/e2e-flow.pen --req REQ-E2E --title "E2E Pencil flow" --summary "e2e design"
+grep -q 'REQ-E2E' "$SYNC_HARNESS/global/references/design/DESIGN_INDEX.md" || { echo "fail: pm design import"; exit 1; }
+./scripts/aw pm design change --file "e2e-flow.pen" --summary "move CTA" --req REQ-E2E --tasks "FE-T-E2E,BE-T-E2E"
+grep -q 'move CTA' "$SYNC_HARNESS/global/references/design/DESIGN_CHANGELOG.md" || { echo "fail: pm design change"; exit 1; }
+./scripts/aw pm intake-check --write
+grep -q 'PM Intake Check' "$SYNC_HARNESS/global/references/INTAKE_CHECK.md" || { echo "fail: pm intake check"; exit 1; }
+./scripts/aw pm change --title "E2E product change" --type 口述新增 --impact "前台前端、后端" --acceptance "dashboard reflects change"
+grep -q 'E2E product change' "$SYNC_HARNESS/global/requirements/BACKLOG.md" || { echo "fail: pm change backlog"; exit 1; }
+cat >> "$SYNC_HARNESS/global/plans/ATOMIC_TASKS.md" <<'EOF'
+| FE-T-E2E | frontend | E2E frontend task | 待认领 | BE-T-E2E | GET /e2e | REQ-E2E | e2e-flow.pen | pnpm test |
+| ADMIN-T-E2E | admin | E2E admin task | 待认领 | BE-T-E2E | GET /e2e/admin | REQ-E2E | e2e-flow.pen | pnpm test |
+| BE-T-E2E | backend | E2E backend task | 待认领 | — | GET /e2e | REQ-E2E | — | mvn test |
+EOF
+./scripts/aw pm dispatch --write
+grep -q 'FE-T-E2E' "$SYNC_HARNESS/global/dispatch/FRONTEND_ASSIGNMENTS.md" || { echo "fail: pm frontend assignment"; exit 1; }
+grep -q 'ADMIN-T-E2E' "$SYNC_HARNESS/global/dispatch/ADMIN_ASSIGNMENTS.md" || { echo "fail: pm admin assignment"; exit 1; }
+grep -q 'BE-T-E2E' "$SYNC_HARNESS/global/dispatch/BACKEND_ASSIGNMENTS.md" || { echo "fail: pm backend assignment"; exit 1; }
+PM_ASSIGN_OUT="$(./scripts/aw pm assignments --role all)"
+case "$PM_ASSIGN_OUT" in *FE-T-E2E*ADMIN-T-E2E*BE-T-E2E*) ;; *) echo "fail: pm assignments"; echo "$PM_ASSIGN_OUT"; exit 1 ;; esac
+./scripts/aw pm dashboard --write
+grep -q '前台前端进度' "$SYNC_HARNESS/global/dashboard/PROJECT_DASHBOARD.md" || { echo "fail: pm dashboard"; exit 1; }
+./scripts/aw pm lifecycle --write >/dev/null
+if ./scripts/aw pm gate --strict; then
+  echo "fail: pm strict gate should block pending lifecycle placeholders"
+  exit 1
+fi
+./scripts/aw pm gate
 BACKEND_DIR="${TMP}/backend-app"
 mkdir -p "$BACKEND_DIR"
 (

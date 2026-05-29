@@ -21,6 +21,8 @@
 
 前后端分成两个项目时，先读业务仓 `agent-workflow/CROSS_PROJECT_SYNC.md`。`aw sync pull` 只把对方快照导入 `docs/sync/inbox/` 供只读参考；接口或需求变化要在本项目重新落 REQ / Bug / Handoff 后再 `aw sync push`。
 
+PM 或产品主导项目时，先使用 `aw pm start` 进入向导，再用 `aw pm init <project-harness>` 建立 PM 同步中心。PM Agent 管理 `global/references/`、Pencil 设计稿、共享 DSL、全局/三端 Plan、任务派发、看板和生命周期 Gate；前台前端、后台管理前端、后端 Agent 只认领、执行、回写，不私自改全局 DSL/Plan。
+
 ## 闭环管理
 
 每个大需求 / AT-T 进入下一项前，必须确认：
@@ -202,6 +204,16 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw sync change <AT-T> "summary" --to <agent> --impact "..." --acceptance "..."` | 跨端需求变更编排：本项目 REQ 回写、Agent handoff、sync push、board 刷新，并输出 Harness Git 提交建议 |
 | `aw sync inbox [--from <project|all>]` | 汇总已 pull 到本项目 inbox 的对方 manifest 和 sync events，方便采纳 |
 | `aw sync status|check` | 查看或校验跨项目同步配置和快照状态 |
+| `aw pm start` | 面向 PM 的向导入口：新项目/已有项目、资料上传、Pencil、DSL、Plan、派发、新增需求、看板、生命周期 |
+| `aw pm init <harness-dir> --project <name> --agent pm-agent --role pm` | 初始化 PM 同步中心 `global/`：product、references、design、requirements、dsl、plans、dispatch、contracts、dashboard、quality、release 等目录 |
+| `aw pm intake-check --write` | 扫描 PRD、UI、tech、api、business、Pencil 源文件/导出物/截图，输出资料完整度和缺失项 |
+| `aw pm design init|import|link|change` | 管理 Pencil 设计稿：登记 `.pen` 源文件、关联 REQ、记录设计变更；`.pen` 不做普通文本解析 |
+| `aw pm change --title "..." --type 口述新增|研发中变更|设计稿变更 --impact "..."` | 将新增需求/需求变更/设计变更写入 PM 需求池和变更看板，等待 DSL/Plan/任务派发更新 |
+| `aw pm dispatch --write` | 从 `global/plans/ATOMIC_TASKS.md` 生成 `TASK_BOARD.md` 和前台/后台/后端 assignments |
+| `aw pm assignments --role frontend|admin|backend|all` | 查看三端任务派发表，供实现 Agent 认领前读取 |
+| `aw pm dashboard --write` | 刷新 PM 项目看板和三端进度看板 |
+| `aw pm lifecycle --write` | 查看/初始化产品全生命周期看板 |
+| `aw pm gate [--strict]` | 检查产品立项、需求、设计冻结、技术方案、接口矩阵、测试、UAT、发布、复盘等生命周期 Gate |
 | `aw trace check` | 检查 REQ、DSL、Plan、AT-T、TP、Bug、Changelog、Audit、Policy、Security、Release、Metrics、Ops、Agents 的追溯链 |
 | `aw index` | 仅扫描刷新 `ENGINEERING_INDEX.md`；写入 REQ / Bug / TP / DSL / Plan 时自动触发 |
 | `aw file-index` | 生成 `docs/FILE_INDEX.md`，代码优先覆盖前端、后端、共享、测试和运行配置文件，脚本/模板/文档作为辅助索引 |
