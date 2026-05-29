@@ -17,6 +17,7 @@ Usage:
   aw sync init <harness-dir> --project <name> --agent <name> [--role frontend|backend|fullstack|tester|reviewer]
   aw sync push [--task AT-T...] [--note "..."]
   aw sync pull [--from <project|all>]
+  aw sync gate [--task AT-T...] [--max-age-minutes 120]
   aw sync baseline
   aw sync board
   aw sync event --type complete|change|block|question|contract|bug|decision|handoff --task AT-T... --to <agent/project> --summary "..." [--impact "..."] [--acceptance "..."] [--risk "..."] [--evidence "..."]
@@ -420,8 +421,46 @@ pull_sync() {
     echo "pulled: ${name} → docs/sync/inbox/${name}"
     count=1
   fi
+  date -u +"%Y-%m-%dT%H:%M:%SZ" > "${ROOT}/docs/sync/.last_pull_at"
+  echo "${from}" > "${ROOT}/docs/sync/.last_pull_from"
   [[ "$count" -gt 0 ]] || echo "info: no peer snapshots found"
   aw_refresh_engineering_index
+}
+
+gate_sync() {
+  local task="" max_age=120
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --task) task="${2:-}"; shift 2 ;;
+      --max-age-minutes) max_age="${2:-}"; shift 2 ;;
+      -h|--help) usage 0 ;;
+      *) echo "Unknown: $1" >&2; usage 1 ;;
+    esac
+  done
+  echo "== sync gate =="
+  ensure_configured
+  local last_file="${ROOT}/docs/sync/.last_pull_at" board harness now last last_epoch now_epoch age
+  harness="$(sync_harness)"
+  board="${harness}/global/plans/TASK_BOARD.md"
+  [[ -f "$last_file" ]] || {
+    echo "block: missing sync pull marker; run ./scripts/aw sync pull --from <peer|all> before dependent work" >&2
+    return 1
+  }
+  last="$(cat "$last_file")"
+  now_epoch="$(date -u +%s)"
+  last_epoch="$(date -u -j -f "%Y-%m-%dT%H:%M:%SZ" "$last" +%s 2>/dev/null || date -d "$last" +%s 2>/dev/null || echo 0)"
+  age=$(( (now_epoch - last_epoch) / 60 ))
+  if [[ "$last_epoch" -le 0 || "$age" -gt "$max_age" ]]; then
+    echo "block: last sync pull is stale (${age}m > ${max_age}m); run ./scripts/aw sync pull --from <peer|all>" >&2
+    return 1
+  fi
+  [[ -d "${ROOT}/docs/sync/inbox" ]] || { echo "block: missing docs/sync/inbox; run aw sync pull" >&2; return 1; }
+  [[ -f "$board" ]] || { echo "block: missing shared task board; run aw sync board or aw sync push" >&2; return 1; }
+  echo "ok  last pull: ${last} (${age}m ago)"
+  echo "ok  inbox: docs/sync/inbox"
+  echo "ok  task board: ${board}"
+  [[ -n "$task" ]] && echo "ok  task: ${task}"
+  echo "sync gate: ok"
 }
 
 status_sync() {
@@ -736,6 +775,7 @@ case "$CMD" in
   init) init_sync "$@" ;;
   push) push_sync "$@" ;;
   pull) pull_sync "$@" ;;
+  gate) gate_sync "$@" ;;
   baseline) baseline_sync "$@" ;;
   board) board_sync "$@" ;;
   event) event_sync "$@" ;;

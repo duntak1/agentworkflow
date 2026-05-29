@@ -308,6 +308,36 @@ aw_task_current_id() {
   grep -E '"current_task_id"' "$wf" 2>/dev/null | sed -E 's/.*"current_task_id"[[:space:]]*:[[:space:]]*"([^"]*)".*/\1/' | head -1
 }
 
+aw_task_status() {
+  local task_id="$1" atomic="${2:-}" root row
+  root="$(aw_repo_root)"
+  if [[ -z "$atomic" ]]; then
+    atomic="$(aw_resolve_atomic_tasks_file 2>/dev/null || true)"
+  fi
+  [[ -n "$atomic" && -f "${root}/${atomic}" ]] || return 1
+  row="$(aw_task_get_row "${root}/${atomic}" "$task_id" 2>/dev/null || true)"
+  [[ -n "$row" ]] || return 1
+  echo "$row" | awk -F'\t' '{print $4}'
+}
+
+aw_task_require_started() {
+  local task_id="$1" atomic="${2:-}" st current
+  st="$(aw_task_status "$task_id" "$atomic" 2>/dev/null || true)"
+  current="$(aw_task_current_id 2>/dev/null || true)"
+  if [[ "$st" != "进行中" || "$current" != "$task_id" ]]; then
+    echo "error: ${task_id} must be started before completion (status=${st:-unknown}, current=${current:-none})" >&2
+    echo "  required flow:" >&2
+    echo "    ./scripts/aw task brief ${task_id}" >&2
+    echo "    ./scripts/aw task confirm ${task_id} \"已确认：范围=...；验收=...；非目标=...\"" >&2
+    echo "    ./scripts/aw context plan --task ${task_id}" >&2
+    echo "    ./scripts/aw context gate --task ${task_id}" >&2
+    echo "    ./scripts/aw task start ${task_id}" >&2
+    echo "    ./scripts/aw task complete ${task_id}" >&2
+    return 1
+  fi
+  return 0
+}
+
 aw_task_requirement_confirmed() {
   local task_id="$1"
   local f

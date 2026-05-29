@@ -91,6 +91,17 @@ audit_plan_change() {
   fi
 }
 
+reset_requirement_confirmation_if_task() {
+  local related="$1" f tmp
+  [[ "$related" == AT-T* ]] || return 0
+  f="$(aw_task_requirement_confirm_path)"
+  [[ -f "$f" ]] || return 0
+  tmp="$(mktemp)"
+  grep -vE "^${related}[[:space:]]" "$f" > "$tmp" || true
+  mv "$tmp" "$f"
+  echo "reset: ${related} requirement confirmation"
+}
+
 case "$CMD" in
   change)
     SUMMARY=""
@@ -124,6 +135,7 @@ case "$CMD" in
       echo "next: aw plan <dsl> --domain ... → aw plan apply --slug <new> → aw approve plan → aw confirm" >&2
     fi
     audit_plan_change "plan change" "${KIND}: ${SUMMARY}" "${atomic#"${ROOT}/"}"
+    reset_requirement_confirmation_if_task "$RELATED"
     aw_refresh_engineering_index
     ;;
   task-add)

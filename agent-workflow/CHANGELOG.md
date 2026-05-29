@@ -11,6 +11,8 @@
 
 ### Added
 
+- Add hard delivery gates for task completion checkpoints, sync pull freshness, FILE_INDEX refresh, and provider-neutral VCS PR/MR/CR workflows across GitHub/GitLab/Bitbucket/Gitee/GitCode/Gitea/Forgejo/GitLab CE/Gerrit/Codeup.
+
 - Add `aw compact` for Codex/new-chat context continuity, including handoff write/check, `LAST_AUTO_SNAPSHOT`, `PASTE_IN_NEW_CHAT`, and optional chat memory persistence.
 
 - Add `aw project scan|gate` so project intake scans real files before asking engineers to confirm new/existing stage, and blocks Plan generation until stage, project kind, build target, and required sync-center setup are complete.

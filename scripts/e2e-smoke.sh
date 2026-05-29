@@ -155,8 +155,13 @@ mkdir -p "$BACKEND_DIR"
   chmod +x scripts/aw scripts/*.sh
   ./scripts/aw init >/dev/null
   ./scripts/aw sync init "$SYNC_HARNESS" --project backend --agent backend-agent --role backend >/dev/null
+  if ./scripts/aw sync gate --task AT-T0-000; then
+    echo "fail: sync gate should require pull marker"
+    exit 1
+  fi
   ./scripts/aw sync pull --from frontend
   grep -q 'frontend e2e snapshot' docs/sync/inbox/frontend/MANIFEST.md || { echo "fail: sync pull"; exit 1; }
+  ./scripts/aw sync gate --task AT-T0-000
   ./scripts/aw sync check
 )
 REPORT_HANDOFF_OUT="$(./scripts/aw report handoff --focus "e2e early report")"
@@ -303,6 +308,10 @@ if ./scripts/aw task start AT-T1-001; then
   echo "fail: task start should require requirement confirmation"
   exit 1
 fi
+if ./scripts/aw task complete AT-T1-001; then
+  echo "fail: task complete should require task start"
+  exit 1
+fi
 BRIEF_OUT="$(./scripts/aw task brief AT-T1-001)"
 case "$BRIEF_OUT" in *"子任务需求沟通包"*AT-T1-001*) ;; *) echo "fail: task brief"; echo "$BRIEF_OUT"; exit 1 ;; esac
 if ./scripts/aw task confirm AT-T1-001 "已确认：e2e"; then
@@ -342,6 +351,13 @@ fi
 ./scripts/aw task start AT-T1-001
 ./scripts/aw plan change --summary "E2E same-scope plan note" --related AT-T1-001 --dsl-update "docs/dsl/DSL_DRAFT.md" --plan-update "docs/plans/PLAN_E2E.md"
 grep -q 'E2E same-scope plan note' docs/plans/ATOMIC_TASKS_E2E.md || { echo "fail: plan change note"; exit 1; }
+if ./scripts/aw task start AT-T1-001; then
+  echo "fail: task start should require re-confirmation after plan change"
+  exit 1
+fi
+./scripts/aw task confirm AT-T1-001 "已确认：范围=计划变更后的 e2e 生命周期；验收=layout 检查和 TP 仍通过；非目标=不改真实业务"
+./scripts/aw context gate --task AT-T1-001
+./scripts/aw task start AT-T1-001
 ./scripts/aw plan task-add --title "E2E additional task" --domain QA --deps AT-T1-001 --verify "./scripts/aw check layout" --related AT-T1-001
 grep -q 'E2E additional task' docs/plans/ATOMIC_TASKS_E2E.md || { echo "fail: plan task-add"; exit 1; }
 ./scripts/aw task split AT-T1-001 --into "E2E split A; E2E split B" --domain QA --verify "./scripts/aw check layout" --related AT-T1-001
@@ -400,8 +416,24 @@ grep -q '阻塞' docs/plans/ATOMIC_TASKS_E2E.md || { echo "fail: task not marked
 TASK_COMPLETE_OUT="$(./scripts/aw task complete AT-T1-001 --run-e2e)"
 case "$TASK_COMPLETE_OUT" in *"Commit checkpoint"*aw\ commit\ --task\ AT-T1-001*--changelog*) ;; *) echo "fail: task complete missing changelog commit checkpoint"; echo "$TASK_COMPLETE_OUT"; exit 1 ;; esac
 grep -q '已完成' docs/plans/ATOMIC_TASKS_E2E.md || { echo "fail: task not marked done"; exit 1; }
+if ./scripts/aw gate task --task AT-T1-001; then
+  echo "fail: gate task should require completion checkpoint for completed task"
+  exit 1
+fi
+./scripts/aw compact "完成 AT-T1-001" --write --snapshot >/dev/null
+./scripts/aw file-index >/dev/null
+./scripts/aw task checkpoint AT-T1-001 --git no --reason "e2e smoke does not create real commits" --handoff --compact --file-index
+./scripts/aw gate task --task AT-T1-001
 ./scripts/aw commit --task AT-T1-001 --changelog "Fixed: E2E commit helper changelog entry" >/tmp/aw-e2e-commit.out
 grep -q 'E2E commit helper changelog entry' "$CHANGELOG_PATH" || { echo "fail: aw commit --changelog"; exit 1; }
+
+./scripts/aw vcs init
+./scripts/aw vcs fill --task AT-T1-001 --title "E2E VCS review" --write
+ls docs/vcs/drafts/*AT-T1-001.md >/dev/null 2>&1 || { echo "fail: vcs draft"; exit 1; }
+./scripts/aw vcs review --reviewer "e2e-vcs" --task AT-T1-001 --result pass --evidence "e2e"
+./scripts/aw vcs gate
+GITHUB_PR_COMPAT_OUT="$(./scripts/aw github-pr fill --task AT-T1-001 --title "Compat PR" --write 2>&1)"
+case "$GITHUB_PR_COMPAT_OUT" in *"deprecated"*|*"written:"*) ;; *) echo "fail: github-pr compatibility"; echo "$GITHUB_PR_COMPAT_OUT"; exit 1 ;; esac
 
 cat >> docs/plans/ATOMIC_TASKS_E2E.md <<'EOF'
 | AT-T1-099 | QA | 故意失败任务 | 待办 |  | false |

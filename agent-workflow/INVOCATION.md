@@ -123,8 +123,8 @@ chmod +x scripts/aw scripts/*.sh
 | 上下文自动补全 | `aw context enrich --task <AT-T>` 自动补全 Symbol / 影响范围；`aw verify --affected --task <AT-T>` 先写入 affected analysis 再验证 |
 | 前后端契约 | `aw contract init|change|test|diff|gate` 维护 OpenAPI、API 变更、Mock、Contract Test、Schema Diff 和破坏性变更阻断 |
 | 契约自动化 | `aw contract diff --write|breaking-check|sync` 自动记录 OpenAPI diff、检测破坏性变更候选，并发布契约同步事件 |
-| GitHub PR 闭环 | `aw github-pr branch|draft|review|gate` 维护分支策略、PR 清单、Review、Contract/Score/Release/Rollback 检查 |
-| PR 自动填充 | `aw github-pr fill|create` 基于 AT-T、DSL、Plan、Context、Verify、Contract、Score 自动生成 PR 草稿；真正创建 PR 需工程师确认 |
+| VCS PR/MR/CR 闭环 | `aw vcs branch|fill|create|review|gate` / `aw vcs gate` 维护分支策略、PR/MR/CR 清单、Review、Contract/Score/Release/Rollback 检查；支持 GitHub、GitLab、Bitbucket、Gitee、GitCode、Gitea、Forgejo、GitLab CE、Gerrit、Codeup |
+| PR/MR/CR 自动填充 | `aw vcs fill|create` 基于 AT-T、DSL、Plan、Context、Verify、Contract、Score 自动生成草稿；真正创建远端请求需工程师确认 |
 | Watch 自动化 | `aw watch index [--once|--loop]` 刷新 FILE_INDEX / ENGINEERING_INDEX，并输出 affected analysis |
 | 多 Agent 锁 | `aw agents claim|heartbeat|release|lock-check` 维护任务锁、心跳、过期锁、路径冲突；严格模式阻断并行冲突 |
 | 交付评分 / 恢复 | `aw score record --scope ...` 写 0-100 交付评分；`aw recover context|plan|sync|failed-task|conflict|rollback` 固化恢复路径 |
@@ -137,7 +137,7 @@ chmod +x scripts/aw scripts/*.sh
 | 可靠性 / 事故 | `aw ops slo|incident|incident-close|runbook ...` 记录 SLO、事故、恢复闭环、Runbook；`aw ops gate` 检查未关闭高危事故 |
 | 多 Agent 协作 | `aw agents assign|handoff|review ...` 记录角色、文件边界、交接和评审结论；`aw agents gate` 检查阻断评审和路径重叠，`--strict` 可阻断冲突 |
 | 多 Agent 严格门禁 | `aw agents gate --strict` 发现 allowed paths 重叠时阻断，要求先 handoff 或重新分配文件边界 |
-| 跨项目前后端同步 | `aw sync init <harness-dir> --project <name> --agent <name>` 配置共享同步中心；`aw sync baseline` 显示 / 初始化共享 DSL、协作 Plan、接口契约基线路径；`aw sync board` 生成 / 查看共享任务看板；`aw sync event --type ...` 编排任务完成、需求变更、阻塞、问题、契约、Bug、决策和交接；`aw sync change <AT-T> "summary" --to <agent> --impact "..." --acceptance "..."` 是需求变更快捷入口；`aw sync inbox` 汇总对方事件；`aw sync pull` 拉取其他项目快照到只读 inbox；`aw sync push --task <AT-T>` 发布本项目 DSL / Plan / REQ / Handoff / Agents / Bug / TP / Security 快照 |
+| 跨项目前后端同步 | `aw sync init <harness-dir> --project <name> --agent <name>` 配置共享同步中心；`aw sync baseline` 显示 / 初始化共享 DSL、协作 Plan、接口契约基线路径；`aw sync board` 生成 / 查看共享任务看板；`aw sync gate --task <AT-T>` 在分仓任务开始前强制最近 pull、inbox、board 就绪；`aw sync event --type ...` 编排任务完成、需求变更、阻塞、问题、契约、Bug、决策和交接；`aw sync change <AT-T> "summary" --to <agent> --impact "..." --acceptance "..."` 是需求变更快捷入口；`aw sync inbox` 汇总对方事件；`aw sync pull` 拉取其他项目快照到只读 inbox；`aw sync push --task <AT-T>` 发布本项目 DSL / Plan / REQ / Handoff / Agents / Bug / TP / Security 快照 |
 | 追溯链检查 | `aw trace check` 检查 REQ、DSL、Plan、AT-T、TP、Bug、Changelog 和 Harness 记录是否断链 |
 | 验证 | `aw verify` / `aw verify --task AT-T…` / `aw verify --run-e2e` |
 | Plan 校验 | `aw check plan` |
@@ -147,10 +147,12 @@ chmod +x scripts/aw scripts/*.sh
 | 项目配置填写 | `aw config init --project-kind <n> --repo-url <url> --build-target 1|2|3 --lint ...` |
 | CI 模板 | `aw ci install` |
 | 项目代码文件索引 | `aw file-index` → `docs/FILE_INDEX.md`（新增 / 删除 / 重命名前端、后端、共享、测试、运行配置代码文件时刷新；脚本/模板/文档只是辅助索引） |
+| 文件索引门禁 | `aw gate file-index` 检查新增 / 删除 / 重命名业务文件是否同步刷新 `docs/FILE_INDEX.md` |
 | Plan 落盘 | `aw paste plan-write` / `aw plan write` / `aw plan apply` |
 | 多 ATOMIC | `aw atomic list` / `aw atomic use <slug>` |
 | 多 DSL / Plan | `aw dsl list/use` · `aw plan list/use` |
 | 提交助手 | `aw commit -m "feat(AT-T…): …" --changelog "Changed: ..."`（默认不执行 git commit） |
+| 完成检查点 | `aw task checkpoint <AT-T> --git yes|no --reason "..." --handoff --compact --file-index` 记录任务完成后的 Git 决策、交接压缩和索引刷新；完成态任务缺失时 `aw gate task` 阻断 |
 | DSL 落盘 | `aw dsl write` / `aw paste dsl-write` / `aw dsl apply` |
 | 测试计划 | `aw tp new` · `aw tp link <AT-T> <TP>` · `aw check tp` · Verify 列 `TP:path` |
 | Git 提交 | `aw commit --task <AT-T> --changelog "..." -m "type(<AT-T>): 摘要"` → 版本记录 + 验证 + 建议提交；工程师确认或 `--execute` 后才真正提交 |

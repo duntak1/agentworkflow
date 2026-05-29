@@ -148,6 +148,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw verify --task <AT-T>` | 执行 Verify 列与 PROJECT_CONFIG |
 | `aw verify --run-e2e` | 对 TP 项执行 e2e/playwright 命令 |
 | `aw verify --task <AT-T> --run-e2e` | TP 关联项触发 PROJECT_CONFIG 的 e2e/playwright 命令 |
+| `aw task checkpoint <AT-T> --git yes|no --reason "..." --handoff --compact --file-index` | 完成任务后的硬检查点：记录 Git 决策、交接/压缩、FILE_INDEX 刷新状态 |
 | `aw compact "focus" --write --snapshot` | 一键上下文压缩：写 handoff、自动快照、新会话粘贴块，可选 Memory |
 | `aw handoff "focus"` | 生成当前上下文压缩草稿 |
 | `aw handoff "focus" --write` | 备份并覆盖写入 `docs/handoff/PROJECT_HANDOFF.md` |
@@ -180,18 +181,20 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw agents gate` | 检查 block 评审、未确认文件边界、多个 Agent allowed paths 重叠；默认 warn |
 | `aw agents gate --strict` | 严格协作门禁：发现 allowed paths 重叠时阻断，要求先 handoff 或重新分配边界 |
 | `aw gate init|check|pre-commit|task|pr|release` | 自动 Gate 聚合 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release 等关键检查 |
+| `aw gate file-index` | 新增 / 删除 / 重命名业务文件时，若未刷新 `docs/FILE_INDEX.md` 则阻断 |
 | `aw context init|status|plan|query|impact|affected|gate|budget` | 任务级代码上下文控制：禁止无目标全仓扫描，按 CodeGraph / CODE_CONTEXT_INDEX / FILE_INDEX 生成最小读取范围和 affected 分析 |
 | `aw context enrich --task <AT-T>` | 自动用 CodeGraph / 精准 rg / 索引补全 Context Plan 的 Symbol 和影响范围 |
 | `aw verify --affected --task <AT-T>` | 先写入 affected analysis，再执行任务验证 |
 | `aw contract init|change|test|diff|gate|check` | 前后端契约系统：OpenAPI、API 变更、Mock、Contract Test、Schema Diff、破坏性变更阻断 |
 | `aw contract diff --write|breaking-check|sync` | 自动记录 OpenAPI diff、检测破坏性变更候选，并向同步中心发布契约事件 |
-| `aw github-pr init|branch|draft|review|gate|check` | GitHub PR 闭环：分支、PR 草稿、Review、Contract/Score/Release/Rollback 检查 |
-| `aw github-pr fill|create` | 自动填充 PR 草稿，工程师确认后可调用 GitHub CLI 创建 PR |
+| `aw vcs init|branch|fill|create|review|gate|check` / `aw vcs gate` | 多代码仓库 PR/MR/CR 闭环：GitHub、GitLab、Bitbucket、Gitee、GitCode、Gitea、Forgejo、GitLab CE、Gerrit、Codeup |
+| `aw github-pr ...` | 兼容旧入口，内部转发到 `aw vcs` |
 | `aw score init|record|check|latest` | 交付评分：需求、DSL/Plan、任务确认、验证、Bug、文件索引、Contract、Git/Release、Handoff |
 | `aw recover init|context|plan|sync|failed-task|conflict|rollback|check` | 恢复机制：上下文断裂、计划过期、同步漂移、任务失败、冲突和回滚 |
 | `aw watch index [--once|--loop]` | 自动刷新 FILE_INDEX / ENGINEERING_INDEX，并输出 affected analysis 提示 |
 | `aw sync init <harness-dir> --project <name> --agent <name>` | 为前后端分仓项目配置共享同步中心 |
 | `aw sync pull [--from <project|all>]` | 将其他项目快照拉到 `docs/sync/inbox/` 供只读参考，不覆盖本项目 DSL / Plan / 代码 |
+| `aw sync gate --task <AT-T>` | 双项目 / 分仓任务开始前硬检查：最近已 pull、inbox 存在、共享任务看板存在 |
 | `aw sync push [--task AT-T...]` | 将本项目 DSL / Plan / REQ / Handoff / Agents / Bug / TP / Security 等快照发布到同步中心 |
 | `aw sync baseline` | 显示并初始化同步中心 `global/dsl/`、`global/plans/`、`global/contracts/` 共享基线路径 |
 | `aw sync board` | 从已 push 的前后端 ATOMIC 快照生成 / 查看 `global/plans/TASK_BOARD.md` 共享任务看板 |

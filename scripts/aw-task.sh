@@ -28,7 +28,9 @@ Usage:
   aw task confirm <id> "已确认：范围=...；验收=...；非目标=..."  Mark requirement discussion confirmed
   aw task start <id>   Mark 进行中 (requires requirement confirmation)
   aw task blocked <id> Mark 阻塞
-  aw task done <id>    Mark 已完成; optional --verify runs checks first
+  aw task checkpoint <id> [--git yes|no --reason "..."] [--handoff --compact --file-index]  Resolve post-completion handoff/rollback/index gates
+  aw task checkpoint-check <id>  Check completion checkpoint only when task is 已完成
+  aw task done <id>    Deprecated alias; verifies by default before marking 已完成
   aw task complete <id> Run verify; if pass mark 已完成, if fail log bug
 
 Paste block for Agent: aw paste task
@@ -57,9 +59,40 @@ print_commit_prompt() {
 - 只生成提交建议：./scripts/aw commit --task ${task_id}
 - 带版本记录生成提交建议：./scripts/aw commit --task ${task_id} --changelog "Changed: 完成 ${task_id} <summary>"
 - 工程师确认后提交：./scripts/aw commit --task ${task_id} --changelog "Changed: 完成 ${task_id} <summary>" -m "feat(${task_id}): <summary>" --execute
-- 更新上下文压缩快照：先看草稿 \`./scripts/aw handoff "完成 ${task_id}"\`；确认后执行 \`./scripts/aw handoff "完成 ${task_id}" --write && ./scripts/aw handoff --check\`
-- 若暂不提交，请在 docs/handoff/PROJECT_HANDOFF.md 记录原因、风险和下一步。
+- 更新上下文压缩快照：./scripts/aw compact "完成 ${task_id}" --write --snapshot
+- 刷新项目代码文件索引：./scripts/aw file-index
+- 记录完成检查点：./scripts/aw task checkpoint ${task_id} --git yes|no --reason "..." --handoff --compact --file-index
+- 若暂不提交，请用 --git no --reason 记录原因、风险和下一步。
 EOF
+}
+
+checkpoint_file() {
+  echo "${ROOT}/docs/.aw-task-checkpoints.tsv"
+}
+
+checkpoint_mark() {
+  local task_id="$1" git_choice="$2" reason="$3" handoff="$4" compact="$5" file_index="$6"
+  local f tmp now
+  f="$(checkpoint_file)"
+  mkdir -p "$(dirname "$f")"
+  now="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+  tmp="$(mktemp)"
+  if [[ -f "$f" ]]; then
+    grep -vE "^${task_id}[[:space:]]" "$f" > "$tmp" || true
+  fi
+  printf '%s\t%s\tgit=%s\treason=%s\thandoff=%s\tcompact=%s\tfile-index=%s\n' "$task_id" "$now" "$git_choice" "$reason" "$handoff" "$compact" "$file_index" >> "$tmp"
+  mv "$tmp" "$f"
+}
+
+checkpoint_require_resolved() {
+  local task_id="$1" f
+  f="$(checkpoint_file)"
+  if [[ ! -f "$f" ]] || ! grep -qE "^${task_id}[[:space:]]" "$f"; then
+    echo "block: missing completion checkpoint for ${task_id}" >&2
+    echo "  run: ./scripts/aw task checkpoint ${task_id} --git yes|no --reason \"...\" --handoff --compact --file-index" >&2
+    return 1
+  fi
+  return 0
 }
 
 print_task_paste() {
@@ -297,6 +330,7 @@ case "$CMD" in
       exit 1
     }
     aw_task_require_requirement_confirmed "$TASK_ID" || exit 1
+    aw_task_require_started "$TASK_ID" "$atomic" || exit 1
     "${SCRIPT_DIR}/aw-context.sh" affected --task "$TASK_ID" || true
     verify_args=(--task "$TASK_ID")
     $RUN_E2E && verify_args+=(--run-e2e)
@@ -307,7 +341,7 @@ case "$CMD" in
       aw_task_set_current ""
       audit_task "$TASK_ID" "task complete" "Verification passed; marked task as 已完成." "$atomic"
       echo "ok: ${TASK_ID} verify passed → 已完成"
-      echo "next: update docs/handoff/PROJECT_HANDOFF.md · ./scripts/aw next"
+      echo "next: ./scripts/aw compact \"完成 ${TASK_ID}\" --write --snapshot · ./scripts/aw file-index · ./scripts/aw task checkpoint ${TASK_ID} --git yes|no --reason \"...\" --handoff --compact --file-index"
       print_commit_prompt "$TASK_ID"
     else
       aw_task_set_status "${ROOT}/${atomic}" "$TASK_ID" "进行中"
@@ -322,10 +356,11 @@ case "$CMD" in
     ;;
   done)
     [[ -n "$TASK_ID" ]] || { echo "error: aw task done <AT-T...>" >&2; exit 1; }
-    RUN_VERIFY=false
+    RUN_VERIFY=true
     while [[ $# -gt 0 ]]; do
       case "$1" in
         --verify) RUN_VERIFY=true ;;
+        --no-verify) echo "error: aw task done no longer allows --no-verify; use aw task complete for verified completion" >&2; exit 1 ;;
         *) echo "Unknown: $1" >&2; exit 1 ;;
       esac
       shift
@@ -336,6 +371,7 @@ case "$CMD" in
       exit 1
     }
     aw_task_require_requirement_confirmed "$TASK_ID" || exit 1
+    aw_task_require_started "$TASK_ID" "$atomic" || exit 1
     if $RUN_VERIFY; then
       "${SCRIPT_DIR}/aw-verify.sh" --task "$TASK_ID" || exit 1
     fi
@@ -343,8 +379,52 @@ case "$CMD" in
     aw_task_set_current ""
     audit_task "$TASK_ID" "task done" "Marked task as 已完成${RUN_VERIFY:+ after verify}." "$atomic"
     echo "ok: ${TASK_ID} → 已完成"
-    echo "next: update docs/handoff/PROJECT_HANDOFF.md · ./scripts/aw next"
+    echo "next: ./scripts/aw compact \"完成 ${TASK_ID}\" --write --snapshot · ./scripts/aw file-index · ./scripts/aw task checkpoint ${TASK_ID} --git yes|no --reason \"...\" --handoff --compact --file-index"
     print_commit_prompt "$TASK_ID"
+    ;;
+  checkpoint)
+    [[ -n "$TASK_ID" ]] || { echo "error: aw task checkpoint <AT-T...>" >&2; exit 1; }
+    GIT_CHOICE=""
+    REASON=""
+    HANDOFF=false
+    COMPACT=false
+    FILE_INDEX=false
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --git) GIT_CHOICE="${2:-}"; shift 2 ;;
+        --reason) REASON="${2:-}"; shift 2 ;;
+        --handoff) HANDOFF=true; shift ;;
+        --compact) COMPACT=true; shift ;;
+        --file-index) FILE_INDEX=true; shift ;;
+        *) echo "Unknown: $1" >&2; exit 1 ;;
+      esac
+    done
+    case "$GIT_CHOICE" in yes|no) ;; *) echo "error: --git yes|no is required" >&2; exit 1 ;; esac
+    [[ -n "$REASON" ]] || { echo "error: --reason is required for rollback traceability" >&2; exit 1; }
+    atomic="$(aw_resolve_atomic_tasks_file)" || exit 1
+    st="$(aw_task_status "$TASK_ID" "$atomic" 2>/dev/null || true)"
+    [[ "$st" == "已完成" ]] || { echo "error: ${TASK_ID} must be 已完成 before checkpoint (status=${st:-unknown})" >&2; exit 1; }
+    $HANDOFF || { echo "error: --handoff required after completion" >&2; exit 1; }
+    $COMPACT || { echo "error: --compact required after completion" >&2; exit 1; }
+    $FILE_INDEX || { echo "error: --file-index required after completion" >&2; exit 1; }
+    [[ -f "${ROOT}/docs/handoff/PROJECT_HANDOFF.md" ]] || { echo "error: missing docs/handoff/PROJECT_HANDOFF.md" >&2; exit 1; }
+    [[ -f "${ROOT}/docs/handoff/LAST_AUTO_SNAPSHOT.md" ]] || { echo "error: missing docs/handoff/LAST_AUTO_SNAPSHOT.md; run aw compact --write --snapshot" >&2; exit 1; }
+    [[ -f "${ROOT}/docs/handoff/PASTE_IN_NEW_CHAT.txt" ]] || { echo "error: missing docs/handoff/PASTE_IN_NEW_CHAT.txt; run aw compact --write --snapshot" >&2; exit 1; }
+    [[ -f "${ROOT}/docs/FILE_INDEX.md" ]] || { echo "error: missing docs/FILE_INDEX.md; run aw file-index" >&2; exit 1; }
+    checkpoint_mark "$TASK_ID" "$GIT_CHOICE" "$REASON" "$HANDOFF" "$COMPACT" "$FILE_INDEX"
+    audit_task "$TASK_ID" "task completion checkpoint" "git=${GIT_CHOICE}; reason=${REASON}; handoff=${HANDOFF}; compact=${COMPACT}; file-index=${FILE_INDEX}" "$(checkpoint_file)"
+    echo "ok: ${TASK_ID} completion checkpoint recorded"
+    ;;
+  checkpoint-check)
+    [[ -n "$TASK_ID" ]] || { echo "error: aw task checkpoint-check <AT-T...>" >&2; exit 1; }
+    atomic="$(aw_resolve_atomic_tasks_file)" || exit 1
+    st="$(aw_task_status "$TASK_ID" "$atomic" 2>/dev/null || true)"
+    if [[ "$st" != "已完成" ]]; then
+      echo "ok: ${TASK_ID} checkpoint not required while status=${st:-unknown}"
+      exit 0
+    fi
+    checkpoint_require_resolved "$TASK_ID"
+    echo "ok: ${TASK_ID} completion checkpoint resolved"
     ;;
   paste)
     aw_gate_coding_ready || exit 1

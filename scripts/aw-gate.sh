@@ -18,6 +18,7 @@ Usage:
   aw gate init
   aw gate check
   aw gate index-refresh
+  aw gate file-index
   aw gate pre-commit
   aw gate task [--task AT-T...]
   aw gate pr [--strict]
@@ -68,6 +69,9 @@ case "$CMD" in
     run_or_mark "score" "${SCRIPT_DIR}/aw-score.sh" check
     exit "$ERR"
     ;;
+  file-index)
+    exec "${SCRIPT_DIR}/check-file-index-sync.sh"
+    ;;
   pre-commit)
     ERR=0
     ensure_gate_docs
@@ -76,6 +80,7 @@ case "$CMD" in
     run_or_mark "test plans" "${SCRIPT_DIR}/check-test-plan-index.sh"
     run_or_mark "contract" "${SCRIPT_DIR}/aw-contract.sh" gate
     run_or_mark "context" "${SCRIPT_DIR}/aw-context.sh" check
+    run_or_mark "file-index" "${SCRIPT_DIR}/check-file-index-sync.sh"
     run_or_mark "agents" "${SCRIPT_DIR}/aw-agents.sh" gate --strict
     run_or_mark "score" "${SCRIPT_DIR}/aw-score.sh" check
     aw_refresh_engineering_index
@@ -92,13 +97,28 @@ case "$CMD" in
     ERR=0
     run_or_mark "coding gates" bash -c 'source "'"${SCRIPT_DIR}"'/_aw-lib.sh"; source "'"${SCRIPT_DIR}"'/_aw-task-lib.sh"; aw_gate_coding_ready'
     if [[ -n "$TASK_ID" ]]; then
-      run_or_mark "requirement confirmation" aw_task_require_requirement_confirmed "$TASK_ID"
-      run_or_mark "context" "${SCRIPT_DIR}/aw-context.sh" gate --task "$TASK_ID"
-      run_or_mark "task lock" "${SCRIPT_DIR}/aw-agents.sh" lock-check --task "$TASK_ID"
+      atomic="$(aw_resolve_atomic_tasks_file 2>/dev/null || true)"
+      status="$(aw_task_status "$TASK_ID" "$atomic" 2>/dev/null || true)"
+      if [[ "$status" == "已完成" ]]; then
+        run_or_mark "completion checkpoint" "${SCRIPT_DIR}/aw-task.sh" checkpoint-check "$TASK_ID"
+        run_or_mark "trace" "${SCRIPT_DIR}/aw-trace.sh" check
+        run_or_mark "score" "${SCRIPT_DIR}/aw-score.sh" record --scope "$TASK_ID"
+        exit "$ERR"
+      else
+        run_or_mark "requirement confirmation" aw_task_require_requirement_confirmed "$TASK_ID"
+        run_or_mark "context" "${SCRIPT_DIR}/aw-context.sh" gate --task "$TASK_ID"
+        run_or_mark "task lock" "${SCRIPT_DIR}/aw-agents.sh" lock-check --task "$TASK_ID"
+        if [[ -f "${ROOT}/docs/sync/SYNC_CONFIG.md" ]]; then
+          run_or_mark "sync" "${SCRIPT_DIR}/aw-sync.sh" gate --task "$TASK_ID"
+        fi
+      fi
     fi
     run_or_mark "verify" "${SCRIPT_DIR}/aw-verify.sh" ${TASK_ID:+--task "$TASK_ID"}
     run_or_mark "trace" "${SCRIPT_DIR}/aw-trace.sh" check
     run_or_mark "score" "${SCRIPT_DIR}/aw-score.sh" record --scope "${TASK_ID:-task}"
+    if [[ -n "$TASK_ID" ]]; then
+      run_or_mark "completion checkpoint" "${SCRIPT_DIR}/aw-task.sh" checkpoint-check "$TASK_ID"
+    fi
     exit "$ERR"
     ;;
   pr)
