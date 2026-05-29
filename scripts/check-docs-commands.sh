@@ -99,6 +99,7 @@ COMMANDS=(
   "aw pm"
   "aw pm init"
   "aw pm intake-check"
+  "aw pm plan"
   "aw pm dashboard"
   "aw pm assignments"
   "aw pm gate"

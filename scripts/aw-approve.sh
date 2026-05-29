@@ -104,6 +104,33 @@ aw_set_metadata_field() {
 
 rel="${FULL#${ROOT}/}"
 
+pm_guidance_enabled() {
+  if aw_sync_configured; then
+    return 0
+  fi
+  local harness
+  harness="$(aw_project_config_field "同步中心路径" 2>/dev/null || true)"
+  [[ -n "$harness" && "$harness" != *"____"* && -d "$harness" ]]
+}
+
+print_pm_after_dsl_guidance() {
+  if pm_guidance_enabled; then
+    echo "pm-next: DSL 已审。PM / 三端同步项目请生成共享计划："
+    echo "  ./scripts/aw pm plan --write"
+    echo "  然后审核 project-harness/global/plans/*，确认后运行："
+    echo "  ./scripts/aw pm dispatch --write"
+  fi
+}
+
+print_pm_after_plan_guidance() {
+  if pm_guidance_enabled; then
+    echo "pm-next: Plan 已可执行。PM / 三端同步项目请派发任务："
+    echo "  ./scripts/aw pm dispatch --write"
+    echo "  ./scripts/aw pm assignments --role frontend|admin|backend"
+    echo "  ./scripts/aw pm dashboard --write"
+  fi
+}
+
 case "$KIND" in
   dsl)
     aw_set_metadata_field "$FULL" "状态" "已审"
@@ -138,8 +165,10 @@ case "$KIND" in
       else
         "${SCRIPT_DIR}/draft-plan.sh" "${rel}"
       fi
+      print_pm_after_dsl_guidance
     else
       echo "next: ./scripts/aw plan ${rel}"
+      print_pm_after_dsl_guidance
     fi
     ;;
   plan)
@@ -152,6 +181,7 @@ case "$KIND" in
     else
       echo "next: ./scripts/aw confirm docs/dsl/<已审>.md ${rel}"
     fi
+    print_pm_after_plan_guidance
     ;;
   *)
     usage

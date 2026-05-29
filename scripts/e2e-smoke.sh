@@ -162,11 +162,18 @@ grep -q 'move CTA' "$SYNC_HARNESS/global/references/design/DESIGN_CHANGELOG.md" 
 grep -q 'PM Intake Check' "$SYNC_HARNESS/global/references/INTAKE_CHECK.md" || { echo "fail: pm intake check"; exit 1; }
 ./scripts/aw pm change --title "E2E product change" --type 口述新增 --impact "前台前端、后端" --acceptance "dashboard reflects change"
 grep -q 'E2E product change' "$SYNC_HARNESS/global/requirements/BACKLOG.md" || { echo "fail: pm change backlog"; exit 1; }
+printf '# E2E Shared DSL\n\n| 字段 | 内容 |\n|------|------|\n| **状态** | 已审 |\n' > "$SYNC_HARNESS/global/dsl/DSL_E2E_SHARED.md"
+PM_PLAN_OUT="$(./scripts/aw pm plan --write)"
+case "$PM_PLAN_OUT" in *GLOBAL_PLAN.md*ATOMIC_TASKS.md*"aw pm dispatch --write"*) ;; *) echo "fail: pm plan write"; echo "$PM_PLAN_OUT"; exit 1 ;; esac
+grep -q 'DECISION-T001' "$SYNC_HARNESS/global/plans/ATOMIC_TASKS.md" || { echo "fail: pm plan atomic scaffold"; exit 1; }
+grep -q 'DSL_E2E_SHARED.md' "$SYNC_HARNESS/global/plans/GLOBAL_PLAN.md" || { echo "fail: pm plan DSL link"; exit 1; }
 cat >> "$SYNC_HARNESS/global/plans/ATOMIC_TASKS.md" <<'EOF'
 | FE-T-E2E | frontend | E2E frontend task | 待认领 | BE-T-E2E | GET /e2e | REQ-E2E | e2e-flow.pen | pnpm test |
 | ADMIN-T-E2E | admin | E2E admin task | 待认领 | BE-T-E2E | GET /e2e/admin | REQ-E2E | e2e-flow.pen | pnpm test |
 | BE-T-E2E | backend | E2E backend task | 待认领 | — | GET /e2e | REQ-E2E | — | mvn test |
 EOF
+DSL_APPROVE_PM_OUT="$(./scripts/aw approve dsl docs/dsl/DSL_DRAFT.md)"
+case "$DSL_APPROVE_PM_OUT" in *"aw pm plan --write"*"aw pm dispatch --write"*) ;; *) echo "fail: approve dsl should guide pm plan"; echo "$DSL_APPROVE_PM_OUT"; exit 1 ;; esac
 ./scripts/aw pm dispatch --write
 grep -q 'FE-T-E2E' "$SYNC_HARNESS/global/dispatch/FRONTEND_ASSIGNMENTS.md" || { echo "fail: pm frontend assignment"; exit 1; }
 grep -q 'ADMIN-T-E2E' "$SYNC_HARNESS/global/dispatch/ADMIN_ASSIGNMENTS.md" || { echo "fail: pm admin assignment"; exit 1; }
@@ -327,7 +334,8 @@ EOF
 PLAN_LIST_OUT="$(./scripts/aw plan list)"
 case "$PLAN_LIST_OUT" in *PLAN_E2E.md*) ;; *) echo "fail: plan list"; echo "$PLAN_LIST_OUT"; exit 1 ;; esac
 ./scripts/aw plan use E2E
-./scripts/aw approve plan docs/plans/PLAN_E2E.md
+PLAN_APPROVE_PM_OUT="$(./scripts/aw approve plan docs/plans/PLAN_E2E.md)"
+case "$PLAN_APPROVE_PM_OUT" in *"aw pm dispatch --write"*"aw pm assignments --role frontend"*) ;; *) echo "fail: approve plan should guide pm dispatch"; echo "$PLAN_APPROVE_PM_OUT"; exit 1 ;; esac
 ./scripts/aw check plan
 ./scripts/aw check config
 ./scripts/aw confirm docs/dsl/DSL_DRAFT.md docs/plans/PLAN_E2E.md

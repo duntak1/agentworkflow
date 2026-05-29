@@ -139,9 +139,9 @@ chmod +x scripts/aw scripts/*.sh
 | 多 Agent 协作 | `aw agents assign|handoff|review ...` 记录角色、文件边界、交接和评审结论；`aw agents gate` 检查阻断评审和路径重叠，`--strict` 可阻断冲突 |
 | 多 Agent 严格门禁 | `aw agents gate --strict` 发现 allowed paths 重叠时阻断，要求先 handoff 或重新分配文件边界 |
 | 跨项目前后端同步 | `aw sync init <harness-dir> --project <name> --agent <name>` 配置共享同步中心；`aw sync baseline` 显示 / 初始化共享 DSL、协作 Plan、接口契约基线路径；`aw sync board` 生成 / 查看共享任务看板；`aw sync gate --task <AT-T>` 在分仓任务开始前强制最近 pull、inbox、board 就绪；`aw sync event --type ...` 编排任务完成、需求变更、阻塞、问题、契约、Bug、决策和交接；`aw sync change <AT-T> "summary" --to <agent> --impact "..." --acceptance "..."` 是需求变更快捷入口；`aw sync inbox` 汇总对方事件；`aw sync pull` 拉取其他项目快照到只读 inbox；`aw sync push --task <AT-T>` 发布本项目 DSL / Plan / REQ / Handoff / Agents / Bug / TP / Security 快照 |
-| PM 三端任务派发 | PM Agent 维护 `project-harness/global/dispatch/TASK_BOARD.md`、`FRONTEND_ASSIGNMENTS.md`、`ADMIN_ASSIGNMENTS.md`、`BACKEND_ASSIGNMENTS.md`；前台/后台/后端 Agent 开始任务前先读取自己的 assignments 和 `global/contracts/INTEGRATION_MATRIX.md` |
+| PM 三端任务派发 | DSL 审核后先 `aw pm plan --write` 生成 `project-harness/global/plans/*`；Plan 审核后 `aw pm dispatch --write` 生成 `TASK_BOARD.md`、`FRONTEND_ASSIGNMENTS.md`、`ADMIN_ASSIGNMENTS.md`、`BACKEND_ASSIGNMENTS.md`；前台/后台/后端 Agent 开始任务前先读取自己的 assignments 和 `global/contracts/INTEGRATION_MATRIX.md` |
 
-PM 常用命令：`aw pm dashboard --write` 刷新项目进度看板；`aw pm assignments --role frontend|admin|backend|all` 查看三端任务派发；`aw pm dispatch --write` 从 `global/plans/ATOMIC_TASKS.md` 生成派发表。
+PM 常用命令：`aw pm plan --write` 从已审 DSL 生成共享/三端 Plan 草案；`aw pm dispatch --write` 从 `global/plans/ATOMIC_TASKS.md` 生成派发表；`aw pm assignments --role frontend|admin|backend|all` 查看三端任务派发；`aw pm dashboard --write` 刷新项目进度看板。
 | 追溯链检查 | `aw trace check` 检查 REQ、DSL、Plan、AT-T、TP、Bug、Changelog 和 Harness 记录是否断链 |
 | 验证 | `aw verify` / `aw verify --task AT-T…` / `aw verify --run-e2e` |
 | Plan 校验 | `aw check plan` |

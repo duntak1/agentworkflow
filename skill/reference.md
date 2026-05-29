@@ -209,6 +209,7 @@ AW_SKILL_REF=v1.1.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw pm intake-check --write` | 扫描 PRD、UI、tech、api、business、Pencil 源文件/导出物/截图，输出资料完整度和缺失项 |
 | `aw pm design init|import|link|change` | 管理 Pencil 设计稿：登记 `.pen` 源文件、关联 REQ、记录设计变更；`.pen` 不做普通文本解析 |
 | `aw pm change --title "..." --type 口述新增|研发中变更|设计稿变更 --impact "..."` | 将新增需求/需求变更/设计变更写入 PM 需求池和变更看板，等待 DSL/Plan/任务派发更新 |
+| `aw pm plan --write` | DSL 已审核后，从 `global/dsl/` 生成 `GLOBAL_PLAN.md`、前台/后台/后端 Plan 和 `ATOMIC_TASKS.md` 草案；审核后才能 dispatch |
 | `aw pm dispatch --write` | 从 `global/plans/ATOMIC_TASKS.md` 生成 `TASK_BOARD.md` 和前台/后台/后端 assignments |
 | `aw pm assignments --role frontend|admin|backend|all` | 查看三端任务派发表，供实现 Agent 认领前读取 |
 | `aw pm dashboard --write` | 刷新 PM 项目看板和三端进度看板 |

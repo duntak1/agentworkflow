@@ -26,6 +26,7 @@ Usage:
   aw pm start
   aw pm init [<harness-dir>] [--project <name>] [--agent <name>] [--role pm]
   aw pm intake-check [--write]
+  aw pm plan [--write] [--from <global-dsl-dir>]
   aw pm dashboard [--write]
   aw pm assignments --role frontend|admin|backend|all
   aw pm gate [--strict]
@@ -54,7 +55,7 @@ pm_start() {
 3. 上传/整理参考资料           → 放入 global/references/ 后运行 aw pm intake-check --write
 4. 同步 Pencil 设计稿           → aw pm design import --file <xxx.pen> --req <REQ-ID>
 5. 生成或更新 DSL              → 先确认资料体检，再生成 global/dsl/*
-6. 生成三端研发计划            → 维护 global/plans/* 后 aw pm dispatch --write
+6. DSL 已审核，生成三端研发计划 → aw pm plan --write
 7. 派发任务给前台/后台/后端    → aw pm assignments --role frontend|admin|backend
 8. 新增需求/需求变更           → aw pm change --title "..."
 9. 查看项目进度看板            → aw pm dashboard --write
@@ -700,6 +701,172 @@ EOF
   echo "next: aw pm dashboard --write && aw pm dispatch --write after confirmation"
 }
 
+pm_plan() {
+  local write=false from="" harness dsl_dir plans dsl_files dsl_list dsl_links source_note ts
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --write) write=true; shift ;;
+      --from) from="${2:-}"; shift 2 ;;
+      -h|--help) usage 0 ;;
+      *) echo "Unknown: $1" >&2; usage 1 ;;
+    esac
+  done
+  harness="$(pm_harness "")"
+  ensure_pm_tree "$harness"
+  dsl_dir="${from:-${harness}/global/dsl}"
+  dsl_dir="$(abs_path "$dsl_dir")"
+  [[ -d "$dsl_dir" ]] || { echo "error: DSL directory not found: ${dsl_dir}" >&2; exit 1; }
+  plans="${harness}/global/plans"
+  ts="$(now_utc)"
+  dsl_files="$(find "$dsl_dir" -maxdepth 2 -type f -name '*.md' ! -name 'README.md' | sort 2>/dev/null || true)"
+  if [[ -z "$dsl_files" ]]; then
+    echo "error: no DSL markdown files found under ${dsl_dir}" >&2
+    echo "hint: put reviewed DSL files under ${harness}/global/dsl/ before generating PM plans." >&2
+    exit 1
+  fi
+  dsl_list="$(printf '%s\n' "$dsl_files" | sed "s#${harness}/##" | awk '{print "- `" $0 "`"}')"
+  dsl_links="$(printf '%s\n' "$dsl_files" | sed "s#${harness}/##" | paste -sd ', ' -)"
+  source_note="Generated from reviewed DSL files at ${ts}. This is a PM scaffold: PM/engineer must review task IDs, dependencies, API contracts, design links, and verification before dispatch."
+
+  if ! $write; then
+    cat <<EOF
+preview: would generate PM global plans from ${dsl_dir}
+
+DSL files:
+${dsl_list}
+
+Outputs:
+  ${plans}/GLOBAL_PLAN.md
+  ${plans}/FRONTEND_PLAN.md
+  ${plans}/ADMIN_FRONTEND_PLAN.md
+  ${plans}/BACKEND_PLAN.md
+  ${plans}/ATOMIC_TASKS.md
+
+run with --write after DSL review is confirmed.
+EOF
+    return 0
+  fi
+
+  cat > "${plans}/GLOBAL_PLAN.md" <<EOF
+# GLOBAL_PLAN
+
+| 字段 | 内容 |
+|------|------|
+| **状态** | 待审核 |
+| **关联 DSL** | ${dsl_links} |
+| **生成时间** | ${ts} |
+
+## 来源 DSL
+
+${dsl_list}
+
+## 三端边界
+
+| 功能 / 模块 | 前台前端 | 后台管理前端 | 后端 | 依赖 / 风险 |
+|-------------|----------|--------------|------|-------------|
+| 待从 DSL 细化 | 页面、交互、状态、埋点 | 管理页面、审核/配置/运营动作 | API、数据模型、权限、任务/事件 | API 契约、设计稿、验收口径待确认 |
+
+## PM 审核清单
+
+- [ ] 每个 DSL 需求都有 Plan 覆盖。
+- [ ] 前台前端、后台管理前端、后端边界没有空白或重复。
+- [ ] 跨端接口进入 \`global/contracts/INTEGRATION_MATRIX.md\` 或 OpenAPI。
+- [ ] 设计稿 / Pencil / 截图已关联到相关任务。
+- [ ] 任务依赖、验收、验证命令明确。
+
+> ${source_note}
+EOF
+
+  cat > "${plans}/FRONTEND_PLAN.md" <<EOF
+# FRONTEND_PLAN
+
+| 字段 | 内容 |
+|------|------|
+| **状态** | 待审核 |
+| **关联 DSL** | ${dsl_links} |
+
+## 前台前端范围
+
+| 模块 | 页面 / 组件 | 交互行为 | 依赖后端 / API | 验收 |
+|------|-------------|----------|----------------|------|
+| 待从 DSL 细化 | 待确认 | 待确认 | 待确认 | 待确认 |
+
+## 任务拆分建议
+
+- 页面结构、路由、状态管理、表单校验、错误态、空态、加载态。
+- 与后端联动的 API 调用、mock、contract test、schema diff。
+- 埋点事件、权限可见性、响应式适配、可访问性。
+EOF
+
+  cat > "${plans}/ADMIN_FRONTEND_PLAN.md" <<EOF
+# ADMIN_FRONTEND_PLAN
+
+| 字段 | 内容 |
+|------|------|
+| **状态** | 待审核 |
+| **关联 DSL** | ${dsl_links} |
+
+## 后台管理前端范围
+
+| 模块 | 管理页面 / 操作 | 权限 / 审批 | 依赖后端 / API | 验收 |
+|------|-----------------|-------------|----------------|------|
+| 待从 DSL 细化 | 待确认 | 待确认 | 待确认 | 待确认 |
+
+## 任务拆分建议
+
+- 列表、筛选、详情、编辑、审核、批量操作、导入导出。
+- 权限边界、操作日志、异常提示、数据刷新和并发冲突。
+- 与后端管理 API 的契约、mock、contract test。
+EOF
+
+  cat > "${plans}/BACKEND_PLAN.md" <<EOF
+# BACKEND_PLAN
+
+| 字段 | 内容 |
+|------|------|
+| **状态** | 待审核 |
+| **关联 DSL** | ${dsl_links} |
+
+## 后端范围
+
+| 模块 | API / 服务 | 数据模型 | 权限 / 状态机 | 验收 |
+|------|------------|----------|---------------|------|
+| 待从 DSL 细化 | 待确认 | 待确认 | 待确认 | 待确认 |
+
+## 任务拆分建议
+
+- OpenAPI / schema、领域模型、数据迁移、鉴权鉴权、业务校验。
+- 前台与后台管理的接口差异、幂等、分页、错误码、审计日志。
+- mock、contract test、集成测试、回归验证。
+EOF
+
+  cat > "${plans}/ATOMIC_TASKS.md" <<EOF
+# ATOMIC_TASKS
+
+| ID | 所属端 | 标题 | 状态 | 依赖任务 | 依赖接口 | 关联 REQ | 关联设计稿 | 验证 |
+|----|--------|------|------|----------|----------|----------|------------|------|
+| DECISION-T001 | pm | 确认 DSL 到三端计划的业务边界 | 待确认 | — | — | 待确认 | 待确认 | PM/工程师确认 GLOBAL_PLAN |
+| CONTRACT-T001 | backend | 建立前后台共用接口契约草案 | 待确认 | DECISION-T001 | OpenAPI 待确认 | 待确认 | — | aw contract diff --write && aw contract gate |
+| FE-T001 | frontend | 根据 DSL 细化前台前端页面和交互任务 | 待确认 | DECISION-T001, CONTRACT-T001 | 待确认 | 待确认 | 待确认 | pnpm test / 项目真实验证命令 |
+| ADMIN-T001 | admin | 根据 DSL 细化后台管理前端任务 | 待确认 | DECISION-T001, CONTRACT-T001 | 待确认 | 待确认 | 待确认 | pnpm test / 项目真实验证命令 |
+| BE-T001 | backend | 根据 DSL 细化后端 API、数据和权限任务 | 待确认 | DECISION-T001 | 待确认 | 待确认 | — | 项目真实测试命令 |
+| INTEGRATION-T001 | pm | 确认前台/后台/后端联调边界和阻塞项 | 待确认 | FE-T001, ADMIN-T001, BE-T001 | 待确认 | 待确认 | 待确认 | aw pm dispatch --write && aw pm dashboard --write |
+| QA-T001 | qa | 建立跨端验收和回归验证清单 | 待确认 | INTEGRATION-T001 | 待确认 | 待确认 | 待确认 | aw check tp / 项目真实验证命令 |
+
+> ${source_note}
+EOF
+
+  echo "written: ${plans}/GLOBAL_PLAN.md"
+  echo "written: ${plans}/FRONTEND_PLAN.md"
+  echo "written: ${plans}/ADMIN_FRONTEND_PLAN.md"
+  echo "written: ${plans}/BACKEND_PLAN.md"
+  echo "written: ${plans}/ATOMIC_TASKS.md"
+  echo "next:"
+  echo "  1. PM/工程师审核 global/plans/*，补齐真实任务、依赖、接口、设计稿、验证命令。"
+  echo "  2. 审核通过后运行：./scripts/aw pm dispatch --write"
+  echo "  3. 三端 Agent 读取：./scripts/aw pm assignments --role frontend|admin|backend"
+}
+
 pm_dispatch() {
   local write=false harness atomic board fe admin be line id domain title st deps api req design verify
   while [[ $# -gt 0 ]]; do
@@ -781,6 +948,7 @@ case "$CMD" in
   intake|intake-check|check-intake) pm_intake_check "$@" ;;
   dashboard) pm_dashboard "$@" ;;
   assignments) pm_assignments "$@" ;;
+  plan) pm_plan "$@" ;;
   lifecycle) pm_lifecycle "$@" ;;
   gate) pm_gate "$@" ;;
   check) pm_check "$@" ;;
