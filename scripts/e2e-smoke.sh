@@ -149,17 +149,22 @@ fi
 ./scripts/aw agents register --id e2e-tester --name "E2E Tester" --type tester --scope "E2E testing" --allowed "scripts" --blocked "business code"
 ./scripts/aw agents register --preset backend
 grep -q '## Agent - backend-agent' docs/agents/AGENT_REGISTRY.md || { echo "fail: backend preset register"; exit 1; }
+./scripts/aw agents register --preset tester
+grep -q '## Agent - tester-agent' docs/agents/AGENT_REGISTRY.md || { echo "fail: tester preset register"; exit 1; }
 DUP_REGISTER_OUT="$(./scripts/aw agents register --preset backend 2>&1 >/dev/null || true)"
 case "$DUP_REGISTER_OUT" in *"already registered"*"--update"*) ;; *) echo "fail: duplicate register should require --update"; echo "$DUP_REGISTER_OUT"; exit 1 ;; esac
 ./scripts/aw agents register --defaults --update >/dev/null
 grep -q '## Agent - communicator-agent' docs/agents/AGENT_REGISTRY.md || { echo "fail: defaults register communicator"; exit 1; }
 grep -q '## Agent - frontend-agent' docs/agents/AGENT_REGISTRY.md || { echo "fail: defaults register frontend"; exit 1; }
+grep -q '## Agent - tester-agent' docs/agents/AGENT_REGISTRY.md || { echo "fail: defaults register tester"; exit 1; }
 AGENTS_LIST_OUT="$(./scripts/aw agents list)"
-case "$AGENTS_LIST_OUT" in *backend-agent*communicator-agent*) ;; *) echo "fail: agents list registered agents"; echo "$AGENTS_LIST_OUT"; exit 1 ;; esac
+case "$AGENTS_LIST_OUT" in *backend-agent*communicator-agent*tester-agent*) ;; *) echo "fail: agents list registered agents"; echo "$AGENTS_LIST_OUT"; exit 1 ;; esac
 AGENTS_SHOW_OUT="$(./scripts/aw agents show backend-agent)"
 case "$AGENTS_SHOW_OUT" in *"Name: Backend Agent"*"Type: developer"*) ;; *) echo "fail: agents show backend"; echo "$AGENTS_SHOW_OUT"; exit 1 ;; esac
+AGENTS_SHOW_TESTER_OUT="$(./scripts/aw agents show tester-agent)"
+case "$AGENTS_SHOW_TESTER_OUT" in *"Name: Tester Agent"*"Type: tester"*"测试小结"*) ;; *) echo "fail: agents show tester"; echo "$AGENTS_SHOW_TESTER_OUT"; exit 1 ;; esac
 UNKNOWN_PRESET_OUT="$(./scripts/aw agents register --preset unknown 2>&1 >/dev/null || true)"
-case "$UNKNOWN_PRESET_OUT" in *"unknown preset"*communicator*backend*) ;; *) echo "fail: unknown preset should list options"; echo "$UNKNOWN_PRESET_OUT"; exit 1 ;; esac
+case "$UNKNOWN_PRESET_OUT" in *"unknown preset"*communicator*backend*tester*) ;; *) echo "fail: unknown preset should list options"; echo "$UNKNOWN_PRESET_OUT"; exit 1 ;; esac
 ./scripts/aw agents unregister backend-agent
 grep -A4 '## Agent - backend-agent' docs/agents/AGENT_REGISTRY.md | grep -q 'Status: retired' || { echo "fail: agents unregister retires"; exit 1; }
 ./scripts/aw agents register --preset backend --update >/dev/null

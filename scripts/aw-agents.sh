@@ -24,7 +24,7 @@ usage() {
 Usage:
   aw agents init [--with-defaults]
   aw agents register --id "..." --name "..." --type developer|reviewer|tester|security|release|coordinator|observer --scope "..." [--allowed "..."] [--blocked "..."] [--notes "..."] [--update]
-  aw agents register --preset communicator|businessman|pm|product-plan-review|fullstack|frontend|admin|backend [--update]
+  aw agents register --preset communicator|businessman|pm|product-plan-review|fullstack|frontend|admin|backend|tester [--update]
   aw agents register --defaults [--update]
   aw agents unregister <agent-id>
   aw agents list
