@@ -56,6 +56,7 @@ agent-workflow 把交付拆成一条跨工具流水线：
 | `aw contract diff --write` / `aw vcs fill` / `aw watch index` | 自动记录契约 diff、生成 PR/MR/CR 草稿、刷新索引和 affected analysis |
 | `aw vcs branch|fill|create|review|gate` | 多代码仓库 PR/MR/CR 闭环：GitHub、GitLab、Bitbucket、Gitee、GitCode、Gitea、Forgejo、GitLab CE、Gerrit、Codeup |
 | `aw pm start|init|intake-check|design|plan|dispatch|dashboard|gate` | PM Agent 产品全生命周期：同步中心资料、Pencil、DSL 审核后生成共享/三端 Plan、Plan 审核后三端任务派发、看板、生命周期 Gate |
+| `aw agents register|list|show|unregister` | 长期 Agent 身份登记：默认预设、自定义 worker identity、注册表查询和 retired 追溯 |
 | `aw agents claim|heartbeat|release` | 多 Agent 任务锁和心跳：认领任务、续约状态、释放任务、冲突检测 |
 | `aw score record` / `aw recover ...` | 交付评分和恢复机制：审计、修复、交接、回滚有固定路径 |
 

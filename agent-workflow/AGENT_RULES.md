@@ -56,7 +56,8 @@
 - 发布、环境、灰度、回滚、Feature Flag：用 `aw release record` / `aw release flag` 记录到 `docs/release/`；发布前用 `aw release gate` 聚合检查。
 - 交付度量：发布、失败、恢复等事件用 `aw metrics record` 记录到 `docs/metrics/DELIVERY_METRICS.md`。
 - 可靠性和事故：SLO、Incident、Runbook 用 `aw ops slo|incident|runbook` 记录到 `docs/ops/`。
-- 多 Agent 协作：并行开发、评审、测试、安全或发布角色必须用 `aw agents assign|handoff|review` 记录 owner、scope、允许/禁止路径、交接和评审结论。
+- 多 Agent 身份：长期存在的 worker identity 用 `aw agents register` 登记；常用角色可用 `aw agents register --defaults` 初始化。
+- 多 Agent 协作：并行开发、评审、测试、安全或发布任务必须用 `aw agents assign|handoff|review` 记录 owner、scope、允许/禁止路径、交接和评审结论。
 
 ## Token
 

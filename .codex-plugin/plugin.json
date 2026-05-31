@@ -1,6 +1,6 @@
 {
   "name": "agent-workflow",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Tool-agnostic AI delivery workflow with DSL gates, executable plans, atomic tasks, and verification.",
   "author": {
     "name": "agent-workflow maintainers",

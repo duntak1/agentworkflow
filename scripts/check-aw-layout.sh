@@ -48,6 +48,8 @@ check "docs/ops/RUNBOOKS.md"
 check "docs/agents/AGENT_ROLES.md"
 check "docs/agents/AGENT_HANDOFFS.md"
 check "docs/agents/AGENT_REVIEWS.md"
+check "docs/agents/AGENT_REGISTRY.md"
+check "docs/agents/AGENT_PRESETS.tsv"
 check "docs/reports"
 
 exit "$ERR"

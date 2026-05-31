@@ -8,7 +8,7 @@
 - 新增 / 删除 / 重命名前端、后端、共享、测试或配置代码文件后，运行 `./scripts/aw file-index`。
 - 优先查看「前端业务代码 / 后端业务代码 / 共享代码 / 测试代码 / 运行配置」；脚本、模板、工作流文档只是辅助索引。
 - 本文件供人类工程师定位代码和手改点，不替代代码真源、DSL、Plan、REQ、测试计划或 Bug 流水。
-- 生成时间：2026-05-29T09:42:22Z
+- 生成时间：2026-05-31T15:55:30Z
 
 ## 前端业务代码
 
@@ -49,7 +49,7 @@
 | `scripts/_aw-task-lib.sh` | 任务和工作流共享函数：解析 DSL/Plan/ATOMIC、任务状态、需求确认记录。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/_aw-verify-lib.sh` | 验证共享函数：解析 Verify 单元、TP 引用、PROJECT_CONFIG 命令。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw` | 统一 CLI 路由入口，分发 init、dsl、plan、task、req、bug、tp、index 等子命令。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
-| `scripts/aw-agents.sh` | 多 Agent 协作助手：记录角色分配、交接和评审结论。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-agents.sh` | 多 Agent 协作助手：登记长期 Agent 身份，记录角色分配、交接和评审结论。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-approve.sh` | DSL/Plan 审批落章：设置已审/可执行，并可触发 Plan 提示。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-atomic.sh` | 多 ATOMIC_TASKS 文件的 list/use 选择器。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-audit.sh` | Agent 执行审计助手：记录任务、动作、决策、命令、结果、证据和人工确认点。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
@@ -179,6 +179,8 @@
 | `agent-workflow/templates/agents/AGENT_HANDOFFS.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/agents/AGENT_HEARTBEATS.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/agents/AGENT_LOCKS.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/agents/AGENT_PRESETS.tsv` | 默认 Agent 注册预设配置，供 aw agents register --preset/--defaults 使用。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/agents/AGENT_REGISTRY.md` | 长期 Agent 身份登记表，记录 worker identity、职责、边界和状态。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/agents/AGENT_REVIEWS.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/agents/AGENT_ROLES.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/audit/AGENT_TRACE.md` | Agent 执行审计模板或流水，记录关键动作、命令、结果和确认点。 | 改模板后同步 init/e2e 和生成产物预期。 |
@@ -328,6 +330,8 @@
 | `docs/agents/AGENT_HANDOFFS.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/agents/AGENT_HEARTBEATS.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/agents/AGENT_LOCKS.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/agents/AGENT_PRESETS.tsv` | 默认 Agent 注册预设配置，供 aw agents register --preset/--defaults 使用。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/agents/AGENT_REGISTRY.md` | 长期 Agent 身份登记表，记录 worker identity、职责、边界和状态。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/agents/AGENT_REVIEWS.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/agents/AGENT_ROLES.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/audit/AGENT_TRACE.md` | Agent 执行审计模板或流水，记录关键动作、命令、结果和确认点。 | 变更后按影响范围同步索引、文档和验证。 |

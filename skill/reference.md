@@ -75,7 +75,7 @@ PM 或产品主导项目时，先使用 `aw pm start` 进入向导，再用 `aw 
 ./scripts/install-cursor-skill.sh https://github.com/<you>/agentworkflow.git
 
 # 指定 tag/branch
-AW_SKILL_REF=v1.5.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/agentworkflow.git
+AW_SKILL_REF=v1.6.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/agentworkflow.git
 ```
 
 安装后在业务仓执行：
@@ -194,10 +194,13 @@ AW_SKILL_REF=v1.5.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw metrics summary` | 汇总 records、deployments、production deployments、failures、recoveries，用于发布 / 交接判断 |
 | `aw ops init|slo|incident|incident-close|runbook|gate|check` | 记录 SLO、事故、恢复闭环和 Runbook；发布/交接前可运行 ops gate |
 | `aw ops gate` | 检查是否存在未关闭的 sev1 / sev2 事故；存在时阻断发布 / 交接 |
-| `aw agents init|assign|handoff|review|gate|check` | 记录多 Agent 角色、文件边界、交接和评审结论；gate 检查阻断评审 |
+| `aw agents init|register|list|show|unregister|check` | 初始化 Agent ledger；登记长期 Agent identity；查询或退休已登记 Agent |
+| `aw agents list` / `aw agents show <agent-id>` / `aw agents unregister <agent-id>` | 查看注册表、展示单个 Agent 完整记录、将 Agent 默认标记为 retired |
+| `aw agents register --preset <name>` / `--defaults` | 注册内置默认 Agent 预设；重复 ID 默认阻断，传 `--update` 才更新 |
+| `aw agents assign|handoff|review|gate` | 记录具体任务分配、文件边界、交接和评审结论；gate 检查阻断评审 |
 | `aw agents claim|heartbeat|release|lock-check` | 多 Agent 任务锁和状态心跳，防止并行修改冲突和任务无人负责 |
-| `aw agents gate` | 检查 block 评审、未确认文件边界、多个 Agent allowed paths 重叠；默认 warn |
-| `aw agents gate --strict` | 严格协作门禁：发现 allowed paths 重叠时阻断，要求先 handoff 或重新分配边界 |
+| `aw agents gate` | 检查 block 评审、未确认文件边界、未注册 Agent 引用、多个 Agent allowed paths 重叠；默认 warn |
+| `aw agents gate --strict` | 严格协作门禁：发现未注册 Agent 或 allowed paths 重叠时阻断，要求先 register / handoff 或重新分配边界 |
 | `aw gate init|check|pre-commit|task|pr|release` | 自动 Gate 聚合 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release 等关键检查 |
 | `aw gate file-index` | 新增 / 删除 / 重命名业务文件时，若未刷新 `docs/FILE_INDEX.md` 则阻断 |
 | `aw context init|status|plan|query|impact|affected|gate|budget` | 任务级代码上下文控制：禁止无目标全仓扫描，按 CodeGraph / CODE_MAP / CODE_CONTEXT_INDEX / FILE_INDEX 生成最小读取范围和 affected 分析；`plan` 会自动刷新 CODE_MAP |

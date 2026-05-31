@@ -47,6 +47,8 @@ case "$REMOVE_OUT" in *dry-run*) ;; *) echo "fail: remove dry-run"; echo "$REMOV
 [[ -f docs/metrics/DELIVERY_METRICS.md ]] || { echo "fail: delivery metrics missing"; exit 1; }
 [[ -f docs/ops/SLO.md ]] || { echo "fail: ops slo missing"; exit 1; }
 [[ -f docs/agents/AGENT_ROLES.md ]] || { echo "fail: agent roles missing"; exit 1; }
+[[ -f docs/agents/AGENT_REGISTRY.md ]] || { echo "fail: agent registry missing"; exit 1; }
+[[ -f docs/agents/AGENT_PRESETS.tsv ]] || { echo "fail: agent presets missing"; exit 1; }
 [[ -d docs/reports ]] || { echo "fail: reports dir missing"; exit 1; }
 grep -q 'CLI / 脚本代码' docs/FILE_INDEX.md || { echo "fail: FILE_INDEX missing CLI section"; exit 1; }
 grep -q 'scripts/aw' docs/FILE_INDEX.md || { echo "fail: FILE_INDEX missing scripts/aw"; exit 1; }
@@ -136,6 +138,32 @@ grep -q 'e2e rollback' docs/ops/RUNBOOKS.md || { echo "fail: ops runbook"; exit 
 ./scripts/aw agents assign --role developer --owner "e2e-dev" --scope "AT-T0-000" --allowed "scripts/aw" --blocked "unrelated files" --related AT-T0-000
 grep -q 'e2e-dev' docs/agents/AGENT_ROLES.md || { echo "fail: agents assign"; exit 1; }
 ./scripts/aw agents assign --role tester --owner "e2e-tester" --scope "AT-T0-000" --allowed "scripts" --blocked "business code" --related AT-T0-000
+UNREGISTERED_GATE_OUT="$(./scripts/aw agents gate 2>&1)"
+case "$UNREGISTERED_GATE_OUT" in *"unregistered active agents"*e2e-dev*e2e-tester*) ;; *) echo "fail: agents gate should warn unregistered agents"; echo "$UNREGISTERED_GATE_OUT"; exit 1 ;; esac
+if ./scripts/aw agents gate --strict >/tmp/aw-agents-strict.log 2>&1; then
+  echo "fail: agents strict gate should block unregistered agents"
+  cat /tmp/aw-agents-strict.log
+  exit 1
+fi
+./scripts/aw agents register --id e2e-dev --name "E2E Dev" --type developer --scope "E2E development" --allowed "scripts/aw" --blocked "unrelated files"
+./scripts/aw agents register --id e2e-tester --name "E2E Tester" --type tester --scope "E2E testing" --allowed "scripts" --blocked "business code"
+./scripts/aw agents register --preset backend
+grep -q '## Agent - backend-agent' docs/agents/AGENT_REGISTRY.md || { echo "fail: backend preset register"; exit 1; }
+DUP_REGISTER_OUT="$(./scripts/aw agents register --preset backend 2>&1 >/dev/null || true)"
+case "$DUP_REGISTER_OUT" in *"already registered"*"--update"*) ;; *) echo "fail: duplicate register should require --update"; echo "$DUP_REGISTER_OUT"; exit 1 ;; esac
+./scripts/aw agents register --defaults --update >/dev/null
+grep -q '## Agent - communicator-agent' docs/agents/AGENT_REGISTRY.md || { echo "fail: defaults register communicator"; exit 1; }
+grep -q '## Agent - frontend-agent' docs/agents/AGENT_REGISTRY.md || { echo "fail: defaults register frontend"; exit 1; }
+AGENTS_LIST_OUT="$(./scripts/aw agents list)"
+case "$AGENTS_LIST_OUT" in *backend-agent*communicator-agent*) ;; *) echo "fail: agents list registered agents"; echo "$AGENTS_LIST_OUT"; exit 1 ;; esac
+AGENTS_SHOW_OUT="$(./scripts/aw agents show backend-agent)"
+case "$AGENTS_SHOW_OUT" in *"Name: Backend Agent"*"Type: developer"*) ;; *) echo "fail: agents show backend"; echo "$AGENTS_SHOW_OUT"; exit 1 ;; esac
+UNKNOWN_PRESET_OUT="$(./scripts/aw agents register --preset unknown 2>&1 >/dev/null || true)"
+case "$UNKNOWN_PRESET_OUT" in *"unknown preset"*communicator*backend*) ;; *) echo "fail: unknown preset should list options"; echo "$UNKNOWN_PRESET_OUT"; exit 1 ;; esac
+./scripts/aw agents unregister backend-agent
+grep -A4 '## Agent - backend-agent' docs/agents/AGENT_REGISTRY.md | grep -q 'Status: retired' || { echo "fail: agents unregister retires"; exit 1; }
+./scripts/aw agents register --preset backend --update >/dev/null
+./scripts/aw agents check
 ./scripts/aw agents handoff --from "e2e-dev" --to "e2e-review" --related AT-T0-000 --scope "e2e" --done "implemented" --todo "review" --risk "none" --evidence "docs/agents/AGENT_HANDOFFS.md"
 grep -q 'e2e-review' docs/agents/AGENT_HANDOFFS.md || { echo "fail: agents handoff"; exit 1; }
 ./scripts/aw agents review --reviewer "e2e-review" --type code --related AT-T0-000 --result pass --evidence "e2e"

@@ -218,6 +218,8 @@ aw_copy_if_missing "${TEMPLATES}/agents/AGENT_HANDOFFS.md" "${ROOT}/docs/agents/
 aw_copy_if_missing "${TEMPLATES}/agents/AGENT_REVIEWS.md" "${ROOT}/docs/agents/AGENT_REVIEWS.md"
 aw_copy_if_missing "${TEMPLATES}/agents/AGENT_LOCKS.md" "${ROOT}/docs/agents/AGENT_LOCKS.md"
 aw_copy_if_missing "${TEMPLATES}/agents/AGENT_HEARTBEATS.md" "${ROOT}/docs/agents/AGENT_HEARTBEATS.md"
+aw_copy_if_missing "${TEMPLATES}/agents/AGENT_REGISTRY.md" "${ROOT}/docs/agents/AGENT_REGISTRY.md"
+aw_copy_if_missing "${TEMPLATES}/agents/AGENT_PRESETS.tsv" "${ROOT}/docs/agents/AGENT_PRESETS.tsv"
 aw_copy_if_missing "${TEMPLATES}/hooks/HOOKS.md" "${ROOT}/docs/hooks/HOOKS.md"
 aw_copy_if_missing "${TEMPLATES}/contracts/API_CONTRACT.openapi.yaml" "${ROOT}/docs/contracts/API_CONTRACT.openapi.yaml"
 aw_copy_if_missing "${TEMPLATES}/contracts/API_CHANGELOG.md" "${ROOT}/docs/contracts/API_CHANGELOG.md"

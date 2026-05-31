@@ -26,6 +26,8 @@ need "VERSION"
 [[ -f "${ROOT}/agent-workflow/templates/metrics/DELIVERY_METRICS.md" ]] && echo "ok  templates/metrics/DELIVERY_METRICS.md" || { echo "missing  templates/metrics/DELIVERY_METRICS.md"; ERR=1; }
 [[ -f "${ROOT}/agent-workflow/templates/ops/SLO.md" ]] && echo "ok  templates/ops/SLO.md" || { echo "missing  templates/ops/SLO.md"; ERR=1; }
 [[ -f "${ROOT}/agent-workflow/templates/agents/AGENT_ROLES.md" ]] && echo "ok  templates/agents/AGENT_ROLES.md" || { echo "missing  templates/agents/AGENT_ROLES.md"; ERR=1; }
+[[ -f "${ROOT}/agent-workflow/templates/agents/AGENT_REGISTRY.md" ]] && echo "ok  templates/agents/AGENT_REGISTRY.md" || { echo "missing  templates/agents/AGENT_REGISTRY.md"; ERR=1; }
+[[ -f "${ROOT}/agent-workflow/templates/agents/AGENT_PRESETS.tsv" ]] && echo "ok  templates/agents/AGENT_PRESETS.tsv" || { echo "missing  templates/agents/AGENT_PRESETS.tsv"; ERR=1; }
 [[ -f "${ROOT}/scripts/aw-report.sh" ]] && echo "ok  scripts/aw-report.sh" || { echo "missing  scripts/aw-report.sh"; ERR=1; }
 [[ -f "${ROOT}/scripts/aw-trace.sh" ]] && echo "ok  scripts/aw-trace.sh" || { echo "missing  scripts/aw-trace.sh"; ERR=1; }
 [[ -f "${ROOT}/scripts/aw-project.sh" ]] && echo "ok  scripts/aw-project.sh" || { echo "missing  scripts/aw-project.sh"; ERR=1; }

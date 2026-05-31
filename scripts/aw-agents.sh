@@ -14,13 +14,21 @@ HANDOFFS="${AGENTS_DIR}/AGENT_HANDOFFS.md"
 REVIEWS="${AGENTS_DIR}/AGENT_REVIEWS.md"
 LOCKS="${AGENTS_DIR}/AGENT_LOCKS.md"
 HEARTBEATS="${AGENTS_DIR}/AGENT_HEARTBEATS.md"
+REGISTRY="${AGENTS_DIR}/AGENT_REGISTRY.md"
+PRESETS="${AGENTS_DIR}/AGENT_PRESETS.tsv"
 CMD="${1:-check}"
 shift || true
 
 usage() {
   cat <<'EOF'
 Usage:
-  aw agents init
+  aw agents init [--with-defaults]
+  aw agents register --id "..." --name "..." --type developer|reviewer|tester|security|release|coordinator|observer --scope "..." [--allowed "..."] [--blocked "..."] [--notes "..."] [--update]
+  aw agents register --preset communicator|businessman|pm|product-plan-review|fullstack|frontend|admin|backend [--update]
+  aw agents register --defaults [--update]
+  aw agents unregister <agent-id>
+  aw agents list
+  aw agents show <agent-id>
   aw agents assign --role developer|reviewer|tester|security|release --owner "..." --scope "..." [--allowed "..."] [--blocked "..."] [--related "REQ/AT-T"]
   aw agents handoff --from "..." --to "..." --related "REQ/AT-T" --scope "..." --done "..." --todo "..." [--risk "..."] [--evidence "..."]
   aw agents review --reviewer "..." --type code|test|security|release --related "REQ/AT-T" --result pass|changes|block [--blockers "..."] [--suggestions "..."] [--evidence "..."]
@@ -30,7 +38,6 @@ Usage:
   aw agents lock-check [--task AT-T...]
   aw agents gate [--strict]
   aw agents check
-  aw agents list
 EOF
   exit "${1:-0}"
 }
@@ -42,6 +49,8 @@ ensure_agents() {
   [[ -f "$REVIEWS" ]] || cp "${TEMPLATES}/agents/AGENT_REVIEWS.md" "$REVIEWS"
   [[ -f "$LOCKS" ]] || cp "${TEMPLATES}/agents/AGENT_LOCKS.md" "$LOCKS"
   [[ -f "$HEARTBEATS" ]] || cp "${TEMPLATES}/agents/AGENT_HEARTBEATS.md" "$HEARTBEATS"
+  [[ -f "$REGISTRY" ]] || cp "${TEMPLATES}/agents/AGENT_REGISTRY.md" "$REGISTRY"
+  [[ -f "$PRESETS" ]] || cp "${TEMPLATES}/agents/AGENT_PRESETS.tsv" "$PRESETS"
 }
 
 insert_after_header() {
@@ -56,10 +65,314 @@ insert_after_header() {
   mv "$tmp" "$file"
 }
 
+valid_agent_type() {
+  case "$1" in developer|reviewer|tester|security|release|coordinator|observer) return 0 ;; *) return 1 ;; esac
+}
+
+agent_section_exists() {
+  local agent_id="$1"
+  [[ -f "$REGISTRY" ]] || return 1
+  awk -v id="$agent_id" '$0 == "## Agent - " id {found=1} END{exit !found}' "$REGISTRY"
+}
+
+agent_is_active() {
+  local agent_id="$1"
+  [[ -f "$REGISTRY" ]] || return 1
+  awk -v id="$agent_id" '
+    $0 == "## Agent - " id {in_agent=1; found=1; status=""; next}
+    in_agent && /^## Agent - / {in_agent=0}
+    in_agent && /^- Status:/ {
+      status=substr($0, index($0, ":")+1)
+      gsub(/^[ \t]+|[ \t]+$/, "", status)
+    }
+    END{exit !(found && status == "active")}
+  ' "$REGISTRY"
+}
+
+available_presets() {
+  ensure_agents
+  awk -F'\t' 'NR > 1 && $1 != "" {out = out (out ? ", " : "") $1} END{print out}' "$PRESETS"
+}
+
+read_preset() {
+  local preset="$1"
+  ensure_agents
+  awk -F'\t' -v preset="$preset" '
+    NR > 1 && $1 == preset {
+      print $2 "\t" $3 "\t" $4 "\t" $5 "\t" $6 "\t" $7
+      found=1
+      exit
+    }
+    END{exit !found}
+  ' "$PRESETS"
+}
+
+write_agent_record() {
+  local agent_id="$1" name="$2" type="$3" status="$4" scope="$5" allowed="$6" blocked="$7" source="$8" notes="$9" update="${10}"
+  local now created tmp record
+  now="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+  created="$now"
+  if agent_section_exists "$agent_id"; then
+    if [[ "$update" != "true" ]]; then
+      echo "error: agent already registered: ${agent_id} (use --update to modify)" >&2
+      exit 1
+    fi
+    created="$(awk -v id="$agent_id" '
+      $0 == "## Agent - " id {in_agent=1; next}
+      in_agent && /^## Agent - / {in_agent=0}
+      in_agent && /^- Created at:/ {
+        v=substr($0, index($0, ":")+1)
+        gsub(/^[ \t]+|[ \t]+$/, "", v)
+        print v
+        exit
+      }
+    ' "$REGISTRY")"
+    [[ -n "$created" ]] || created="$now"
+  fi
+  record="$(mktemp)"
+  {
+    echo ""
+    echo "## Agent - ${agent_id}"
+    echo ""
+    echo "- Name: ${name}"
+    echo "- Type: ${type}"
+    echo "- Status: ${status}"
+    echo "- Scope: ${scope}"
+    echo "- Allowed paths: ${allowed}"
+    echo "- Blocked paths: ${blocked}"
+    echo "- Created at: ${created}"
+    echo "- Updated at: ${now}"
+    echo "- Source: ${source}"
+    echo "- Notes: ${notes}"
+  } > "$record"
+  if agent_section_exists "$agent_id"; then
+    tmp="$(mktemp)"
+    awk -v id="$agent_id" -v repl="$record" '
+      function print_repl() {
+        while ((getline line < repl) > 0) print line
+        close(repl)
+      }
+      $0 == "## Agent - " id {
+        print_repl()
+        skip=1
+        next
+      }
+      skip && /^## Agent - / {
+        skip=0
+      }
+      !skip {print}
+    ' "$REGISTRY" > "$tmp"
+    mv "$tmp" "$REGISTRY"
+  else
+    cat "$record" >> "$REGISTRY"
+  fi
+  rm -f "$record"
+}
+
+register_one() {
+  local agent_id="$1" name="$2" type="$3" scope="$4" allowed="$5" blocked="$6" source="$7" notes="$8" update="$9"
+  [[ -n "$agent_id" && -n "$name" && -n "$scope" ]] || { echo "error: --id --name --scope are required" >&2; exit 1; }
+  valid_agent_type "$type" || { echo "error: --type developer|reviewer|tester|security|release|coordinator|observer is required" >&2; exit 1; }
+  ensure_agents
+  write_agent_record "$agent_id" "$name" "$type" "active" "$scope" "${allowed:-—}" "${blocked:-—}" "$source" "${notes:-—}" "$update"
+  echo "registered: ${agent_id}"
+}
+
+list_registered_agents() {
+  ensure_agents
+  awk '
+    /^## Agent - / {
+      if (id != "") print id "\t" name "\t" type "\t" status "\t" source
+      id=$0; sub(/^## Agent - /, "", id)
+      name=""; type=""; status=""; source=""
+      next
+    }
+    /^- Name:/ {name=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", name)}
+    /^- Type:/ {type=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", type)}
+    /^- Status:/ {status=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", status)}
+    /^- Source:/ {source=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", source)}
+    END {
+      if (id != "") print id "\t" name "\t" type "\t" status "\t" source
+    }
+  ' "$REGISTRY"
+}
+
+show_registered_agent() {
+  local agent_id="$1"
+  ensure_agents
+  awk -v id="$agent_id" '
+    $0 == "## Agent - " id {show=1; found=1}
+    show && /^## Agent - / && $0 != "## Agent - " id {show=0}
+    show {print}
+    END{exit !found}
+  ' "$REGISTRY"
+}
+
+registry_format_check() {
+  ensure_agents
+  awk '
+    function finish() {
+      if (id == "") return
+      if (name == "" || type == "" || status == "" || scope == "" || created == "" || updated == "" || source == "") {
+        print "invalid agent record: " id > "/dev/stderr"
+        err=1
+      }
+      if (type !~ /^(developer|reviewer|tester|security|release|coordinator|observer)$/) {
+        print "invalid agent type: " id " -> " type > "/dev/stderr"
+        err=1
+      }
+      if (status !~ /^(active|paused|retired)$/) {
+        print "invalid agent status: " id " -> " status > "/dev/stderr"
+        err=1
+      }
+    }
+    /^## Agent - / {
+      finish()
+      id=$0; sub(/^## Agent - /, "", id)
+      name=type=status=scope=created=updated=source=""
+      next
+    }
+    /^- Name:/ {name=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", name)}
+    /^- Type:/ {type=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", type)}
+    /^- Status:/ {status=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", status)}
+    /^- Scope:/ {scope=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", scope)}
+    /^- Created at:/ {created=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", created)}
+    /^- Updated at:/ {updated=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", updated)}
+    /^- Source:/ {source=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", source)}
+    END{finish(); exit err}
+  ' "$REGISTRY"
+}
+
+unregistered_agent_refs() {
+  ensure_agents
+  {
+    awk '
+      /^- Owner:/ {
+        owner=substr($0, index($0, ":")+1)
+        gsub(/^[ \t]+|[ \t]+$/, "", owner)
+        if (owner != "") print owner
+      }
+    ' "$ROLES"
+    awk -F'|' '
+      /^\|/ && $2 !~ /Task/ && $0 !~ /\|------/ {
+        agent=$3
+        gsub(/^[ \t]+|[ \t]+$/, "", agent)
+        if (agent != "") print agent
+      }
+    ' "$LOCKS"
+  } | sort -u | while IFS= read -r agent_id; do
+    if ! agent_is_active "$agent_id"; then
+      echo "$agent_id"
+    fi
+  done
+}
+
 case "$CMD" in
   init)
     ensure_agents
+    WITH_DEFAULTS=false
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --with-defaults) WITH_DEFAULTS=true; shift ;;
+        *) echo "Unknown: $1" >&2; usage 1 ;;
+      esac
+    done
+    if $WITH_DEFAULTS; then
+      "${SCRIPT_DIR}/aw-agents.sh" register --defaults --update >/dev/null
+      echo "registered defaults: docs/agents/AGENT_REGISTRY.md"
+    fi
     echo "created/ok: docs/agents/"
+    ;;
+  register)
+    ID=""
+    NAME=""
+    TYPE=""
+    SCOPE=""
+    ALLOWED="—"
+    BLOCKED="—"
+    NOTES="—"
+    PRESET=""
+    DEFAULTS=false
+    UPDATE=false
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --id) ID="${2:-}"; shift 2 ;;
+        --name) NAME="${2:-}"; shift 2 ;;
+        --type) TYPE="${2:-}"; shift 2 ;;
+        --scope) SCOPE="${2:-}"; shift 2 ;;
+        --allowed) ALLOWED="${2:-}"; shift 2 ;;
+        --blocked) BLOCKED="${2:-}"; shift 2 ;;
+        --notes) NOTES="${2:-}"; shift 2 ;;
+        --preset) PRESET="${2:-}"; shift 2 ;;
+        --defaults) DEFAULTS=true; shift ;;
+        --update) UPDATE=true; shift ;;
+        *) echo "Unknown: $1" >&2; usage 1 ;;
+      esac
+    done
+    ensure_agents
+    if $DEFAULTS; then
+      if ! $UPDATE; then
+        existing_defaults="$(
+          while IFS= read -r preset_name; do
+            [[ -n "$preset_name" ]] || continue
+            IFS=$'\t' read -r p_id _rest < <(read_preset "$preset_name")
+            if agent_section_exists "$p_id"; then
+              echo "$p_id"
+            fi
+          done < <(awk -F'\t' 'NR > 1 && $1 != "" {print $1}' "$PRESETS")
+        )"
+        if [[ -n "$existing_defaults" ]]; then
+          echo "error: default agents already registered (use --update to modify):" >&2
+          echo "$existing_defaults" >&2
+          exit 1
+        fi
+      fi
+      while IFS= read -r preset_name; do
+        [[ -n "$preset_name" ]] || continue
+        IFS=$'\t' read -r p_id p_name p_type p_scope p_allowed p_blocked < <(read_preset "$preset_name")
+        register_one "$p_id" "$p_name" "$p_type" "$p_scope" "$p_allowed" "$p_blocked" "preset" "preset=${preset_name}" "$UPDATE"
+      done < <(awk -F'\t' 'NR > 1 && $1 != "" {print $1}' "$PRESETS")
+      aw_refresh_engineering_index
+      exit 0
+    fi
+    if [[ -n "$PRESET" ]]; then
+      if ! preset_row="$(read_preset "$PRESET" 2>/dev/null)"; then
+        echo "error: unknown preset: ${PRESET}" >&2
+        echo "available presets: $(available_presets)" >&2
+        exit 1
+      fi
+      IFS=$'\t' read -r ID NAME TYPE SCOPE ALLOWED BLOCKED <<< "$preset_row"
+      if [[ "$NOTES" == "—" ]]; then
+        NOTES="preset=${PRESET}"
+      fi
+      register_one "$ID" "$NAME" "$TYPE" "$SCOPE" "$ALLOWED" "$BLOCKED" "preset" "$NOTES" "$UPDATE"
+      aw_refresh_engineering_index
+      exit 0
+    fi
+    register_one "$ID" "$NAME" "$TYPE" "$SCOPE" "$ALLOWED" "$BLOCKED" "custom" "$NOTES" "$UPDATE"
+    aw_refresh_engineering_index
+    ;;
+  unregister)
+    AGENT_ID="${1:-}"
+    [[ -n "$AGENT_ID" ]] || { echo "error: agent id is required" >&2; usage 1; }
+    ensure_agents
+    if ! agent_section_exists "$AGENT_ID"; then
+      echo "error: agent not registered: ${AGENT_ID}" >&2
+      exit 1
+    fi
+    NOW="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+    tmp="$(mktemp)"
+    awk -v id="$AGENT_ID" -v now="$NOW" '
+      $0 == "## Agent - " id {in_agent=1}
+      in_agent && /^## Agent - / && $0 != "## Agent - " id {in_agent=0}
+      in_agent && /^- Status:/ {$0="- Status: retired"}
+      in_agent && /^- Updated at:/ {$0="- Updated at: " now}
+      in_agent && /^- Notes:/ {$0=$0 "；unregistered at " now}
+      {print}
+    ' "$REGISTRY" > "$tmp"
+    mv "$tmp" "$REGISTRY"
+    echo "unregistered: ${AGENT_ID} (status=retired)"
+    aw_refresh_engineering_index
     ;;
   assign)
     ROLE=""
@@ -286,7 +599,7 @@ case "$CMD" in
   check)
     echo "== agents check =="
     err=0
-    for f in "$ROLES" "$HANDOFFS" "$REVIEWS" "$LOCKS" "$HEARTBEATS"; do
+    for f in "$ROLES" "$HANDOFFS" "$REVIEWS" "$LOCKS" "$HEARTBEATS" "$REGISTRY" "$PRESETS"; do
       if [[ -f "$f" ]]; then
         echo "ok  ${f#"${ROOT}/"}"
       else
@@ -294,6 +607,9 @@ case "$CMD" in
         err=1
       fi
     done
+    if [[ -f "$REGISTRY" ]] && ! registry_format_check; then
+      err=1
+    fi
     exit "$err"
     ;;
   gate)
@@ -306,9 +622,9 @@ case "$CMD" in
       esac
     done
     echo "== agents gate =="
-    "${SCRIPT_DIR}/aw-agents.sh" check
-    "${SCRIPT_DIR}/aw-agents.sh" lock-check || err=1
     err=0
+    "${SCRIPT_DIR}/aw-agents.sh" check || err=1
+    "${SCRIPT_DIR}/aw-agents.sh" lock-check || err=1
     if grep -Eq '^\| [^|]+ \| [^|]+ \| [^|]+ \| [^|]+ \| block \|' "$REVIEWS"; then
       echo "block: agent review has blocking result" >&2
       grep -E '^\| [^|]+ \| [^|]+ \| [^|]+ \| [^|]+ \| block \|' "$REVIEWS" >&2 || true
@@ -319,6 +635,16 @@ case "$CMD" in
     fi
     if grep -q 'Allowed paths: 待确认' "$ROLES"; then
       echo "warn  agent assignment has unconfirmed allowed paths" >&2
+    fi
+    missing_agents="$(unregistered_agent_refs)"
+    if [[ -n "$missing_agents" ]]; then
+      if $STRICT; then
+        echo "block: assignment/claim references unregistered active agents" >&2
+        echo "$missing_agents" >&2
+        exit 1
+      fi
+      echo "warn  assignment/claim references unregistered active agents" >&2
+      echo "$missing_agents" >&2
     fi
     conflicts="$(
       awk '
@@ -370,11 +696,19 @@ case "$CMD" in
     ;;
   list)
     ensure_agents
-    sed -n '1,120p' "$ROLES"
-    echo ""
-    sed -n '1,120p' "$HANDOFFS"
-    echo ""
-    sed -n '1,120p' "$REVIEWS"
+    echo "== registered agents =="
+    printf "%-28s %-28s %-12s %-10s %s\n" "Agent ID" "Name" "Type" "Status" "Source"
+    list_registered_agents | while IFS=$'\t' read -r id name type status source; do
+      printf "%-28s %-28s %-12s %-10s %s\n" "$id" "$name" "$type" "$status" "$source"
+    done
+    ;;
+  show)
+    AGENT_ID="${1:-}"
+    [[ -n "$AGENT_ID" ]] || { echo "error: agent id is required" >&2; usage 1; }
+    if ! show_registered_agent "$AGENT_ID"; then
+      echo "error: agent not registered: ${AGENT_ID}" >&2
+      exit 1
+    fi
     ;;
   -h|--help|help)
     usage 0

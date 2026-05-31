@@ -131,6 +131,7 @@ For split frontend/backend repositories:
 - Read only `aw sync inbox --from <peer>` summaries and relevant event/contract files.
 - `aw sync pull` imports read-only inbox files; never treat inbox as local truth until adopted through REQ / Bug / Plan / Handoff.
 - API changes use `aw contract change`, `aw contract test`, and `aw contract gate`.
+- Long-lived worker identities use `aw agents register`; common roles can be bootstrapped with `aw agents register --defaults`.
 - Multi-agent implementation uses `aw agents claim`, `aw agents heartbeat`, and `aw agents gate --strict`.
 
 ## Engineering Principles

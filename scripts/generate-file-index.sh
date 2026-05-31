@@ -106,7 +106,7 @@ desc_of() {
     scripts/aw-release.sh) echo "发布闭环助手：维护环境、发布记录、回滚计划、Feature Flag 台账和发布门禁。" ;;
     scripts/aw-metrics.sh) echo "交付度量助手：记录 DORA / Flow 指标，包括部署、变更、失败和恢复。" ;;
     scripts/aw-ops.sh) echo "可靠性助手：维护 SLO、Incident 和 Runbook 记录。" ;;
-    scripts/aw-agents.sh) echo "多 Agent 协作助手：记录角色分配、交接和评审结论。" ;;
+    scripts/aw-agents.sh) echo "多 Agent 协作助手：登记长期 Agent 身份，记录角色分配、交接和评审结论。" ;;
     scripts/aw-sync.sh) echo "跨项目同步助手：通过共享 Harness 目录同步前后端 Agent 的 DSL、Plan、REQ、Handoff、Bug 和协作快照。" ;;
     scripts/aw-ci.sh) echo "安装 GitHub Actions workflow 模板。" ;;
     scripts/aw-atomic.sh) echo "多 ATOMIC_TASKS 文件的 list/use 选择器。" ;;
@@ -154,6 +154,8 @@ desc_of() {
     agent-workflow/templates/release/*|docs/release/*) echo "环境、发布、回滚和 Feature Flag 记录。" ;;
     agent-workflow/templates/metrics/*|docs/metrics/*) echo "DORA / Flow 交付度量模板或记录。" ;;
     agent-workflow/templates/ops/*|docs/ops/*) echo "SLO、Incident、Runbook 可靠性模板或记录。" ;;
+    agent-workflow/templates/agents/AGENT_REGISTRY.md|docs/agents/AGENT_REGISTRY.md) echo "长期 Agent 身份登记表，记录 worker identity、职责、边界和状态。" ;;
+    agent-workflow/templates/agents/AGENT_PRESETS.tsv|docs/agents/AGENT_PRESETS.tsv) echo "默认 Agent 注册预设配置，供 aw agents register --preset/--defaults 使用。" ;;
     agent-workflow/templates/agents/*|docs/agents/*) echo "多 Agent 角色、交接和评审模板或记录。" ;;
     docs/sync/SYNC_CONFIG.md) echo "跨项目前后端同步配置，记录共享 Harness、项目名、Agent 和角色。" ;;
     docs/sync/README.md) echo "跨项目同步目录说明，解释 inbox/outbox 的只读边界。" ;;

@@ -148,6 +148,8 @@ chmod +x scripts/aw scripts/*.sh
 | PR/MR/CR 自动填充 | `aw vcs fill|create` 基于 AT-T、DSL、Plan、Context、Verify、Contract、Score 自动生成草稿；真正创建远端请求需工程师确认 |
 | Watch 自动化 | `aw watch index [--once|--loop]` 刷新 CODE_MAP / FILE_INDEX / ENGINEERING_INDEX，并输出 affected analysis |
 | 代码地图检查 | `aw check code-map` 校验 `docs/context/CODE_MAP.md` 已生成且不是模板占位 |
+| Agent 注册 | `aw agents register|list|show|unregister` 维护长期 Agent identity registry；`--preset <name>` 注册单个预设，`--defaults` 初始化默认 Agent |
+| Agent 查询 | `aw agents list` / `aw agents show <agent-id>` / `aw agents unregister <agent-id>` 查询注册表、展示单个身份或默认退休 Agent |
 | 多 Agent 锁 | `aw agents claim|heartbeat|release|lock-check` 维护任务锁、心跳、过期锁、路径冲突；严格模式阻断并行冲突 |
 | 交付评分 / 恢复 | `aw score record --scope ...` 写 0-100 交付评分；`aw recover context|plan|sync|failed-task|conflict|rollback` 固化恢复路径 |
 | 严格报告发布门禁 | `aw release gate --strict-report` 要求最近 release 报告存在且关键快照完整 |
@@ -157,8 +159,8 @@ chmod +x scripts/aw scripts/*.sh
 | Feature Flag 生命周期 | `aw release flag-check` 检查 flag 是否有清理计划 |
 | 交付度量 | `aw metrics record --type deploy|change|failure|recovery ...` 记录 DORA / Flow 指标；`aw metrics summary` 输出交付健康摘要 |
 | 可靠性 / 事故 | `aw ops slo|incident|incident-close|runbook ...` 记录 SLO、事故、恢复闭环、Runbook；`aw ops gate` 检查未关闭高危事故 |
-| 多 Agent 协作 | `aw agents assign|handoff|review ...` 记录角色、文件边界、交接和评审结论；`aw agents gate` 检查阻断评审和路径重叠，`--strict` 可阻断冲突 |
-| 多 Agent 严格门禁 | `aw agents gate --strict` 发现 allowed paths 重叠时阻断，要求先 handoff 或重新分配文件边界 |
+| 多 Agent 协作 | `aw agents assign|handoff|review ...` 记录任务分配、文件边界、交接和评审结论；`aw agents gate` 检查阻断评审、未注册 Agent 引用和路径重叠，`--strict` 可阻断冲突 |
+| 多 Agent 严格门禁 | `aw agents gate --strict` 发现未注册 Agent 或 allowed paths 重叠时阻断，要求先 register、handoff 或重新分配文件边界 |
 | 跨项目前后端同步 | `aw sync init <harness-dir> --project <name> --agent <name>` 配置共享同步中心；`aw sync baseline` 显示 / 初始化共享 DSL、协作 Plan、接口契约基线路径；`aw sync board` 生成 / 查看共享任务看板；`aw sync gate --task <AT-T>` 在分仓任务开始前强制最近 pull、inbox、board 就绪；`aw sync event --type ...` 编排任务完成、需求变更、阻塞、问题、契约、Bug、决策和交接；`aw sync change <AT-T> "summary" --to <agent> --impact "..." --acceptance "..."` 是需求变更快捷入口；`aw sync inbox` 汇总对方事件；`aw sync pull` 拉取其他项目快照到只读 inbox；`aw sync push --task <AT-T>` 发布本项目 DSL / Plan / REQ / Handoff / Agents / Bug / TP / Security 快照；配置同步中心后任务生命周期会自动调用这些同步动作 |
 | PM 三端任务派发 | DSL 审核后先 `aw pm plan --write` 生成 `project-harness/global/plans/*`；Plan 审核后 `aw pm dispatch --write` 生成 `TASK_BOARD.md`、`FRONTEND_ASSIGNMENTS.md`、`ADMIN_ASSIGNMENTS.md`、`BACKEND_ASSIGNMENTS.md`；前台/后台/后端 Agent 开始任务前先读取自己的 assignments 和 `global/contracts/INTEGRATION_MATRIX.md` |
 

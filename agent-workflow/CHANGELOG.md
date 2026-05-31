@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.6.0] - 2026-05-31
+
+### Added
+
+- Add formal Agent identity registry commands: `aw agents register`, `list`, `show`, and `unregister`.
+- Add default Agent presets for communicator, businessman, PM, product plan review, fullstack, frontend, admin, and backend workers.
+- Add `docs/agents/AGENT_REGISTRY.md` and configurable `AGENT_PRESETS.tsv` templates for long-lived worker identity governance.
+- Extend `aw agents gate --strict` to block assignments and claims that reference unregistered active agents.
+- Add App Store-style version history to the HTML manual covering v1.0 through v1.6.
+
+### Changed
+
+- Promote the published package, skill, and Codex plugin metadata to version 1.6.0.
+- Document the semantic split between `register` as long-lived identity and `assign` as task-specific responsibility.
+
 ## [1.5.0] - 2026-05-29
 
 ### Added
