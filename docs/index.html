@@ -211,23 +211,6 @@
       mask-image: radial-gradient(circle at 50% 48%, black 0%, transparent 80%);
       pointer-events: none;
     }
-    .hero::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 62%;
-      width: min(1040px, 86vw);
-      height: 130px;
-      transform: translateX(-50%);
-      border-top: 1px solid rgba(228, 238, 255, .72);
-      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-      box-shadow:
-        0 -3px 18px rgba(207, 226, 255, .5),
-        0 -12px 44px rgba(91, 133, 255, .38);
-      filter: blur(.1px);
-      opacity: .55;
-      pointer-events: none;
-    }
     .hero-grid {
       position: relative;
       z-index: 1;
@@ -782,7 +765,6 @@
       .actions { display: none; }
       main { padding: 0 0 54px; }
       section.hero { min-height: auto; padding: 42px 16px 38px; }
-      .hero::after { top: 78px; width: 88vw; height: 140px; }
       .hero-grid { padding-top: 86px; }
       .hero-card { width: 100%; }
       .preview-main { padding: 14px; }
@@ -803,6 +785,8 @@
         <a href="#workflow">工作流</a>
         <a href="#roles">角色</a>
         <a href="#sync">同步中心</a>
+        <a href="#agent-roles">多 Agent</a>
+        <a href="#cross-ide">跨 IDE</a>
         <a href="#gates">硬闸门</a>
         <a href="#prompts">提示词</a>
         <a href="#releases">版本</a>
@@ -823,16 +807,18 @@
         <a href="#roles">04. 四种角色路线</a>
         <a href="#topology">05. 项目拓扑</a>
         <a href="#sync">06. 三端同步中心</a>
-        <a href="#dsl-plan">07. DSL 与 Plan</a>
-        <a href="#dev">08. 研发执行</a>
-        <a href="#gates">09. 硬闸门</a>
-        <a href="#token">10. Token 预算</a>
-        <a href="#code-map">11. 代码地图</a>
-        <a href="#index">12. 工程师索引</a>
-        <a href="#prompts">13. 提示词大全</a>
-        <a href="#commands">14. 常用命令</a>
-        <a href="#releases">15. 版本更新</a>
-        <a href="#faq">16. FAQ</a>
+        <a href="#agent-roles">07. 多 Agent 角色</a>
+        <a href="#cross-ide">08. 跨 IDE 协同</a>
+        <a href="#dsl-plan">09. DSL 与 Plan</a>
+        <a href="#dev">10. 研发执行</a>
+        <a href="#gates">11. 硬闸门</a>
+        <a href="#token">12. Token 预算</a>
+        <a href="#code-map">13. 代码地图</a>
+        <a href="#index">14. 工程师索引</a>
+        <a href="#prompts">15. 提示词大全</a>
+        <a href="#commands">16. 常用命令</a>
+        <a href="#releases">17. 版本更新</a>
+        <a href="#faq">18. FAQ</a>
       </nav>
     </aside>
 
@@ -841,7 +827,7 @@
         <div class="hero-grid">
           <div class="hero-copy">
             <div class="eyebrow">v1.6 · Engineering Harness Workflow Skill</div>
-            <h1>把 AI 研发变成<br><span class="grad-text">可确认的工程系统</span></h1>
+            <h1>AgentWorkflow，<br><span class="grad-text">把 AI 研发固化为可管控的工程系统</span></h1>
             <p class="lead">AgentWorkflow 将复杂的产品、前端、后端协作，压缩成清晰发光的研发结构：Reference → DSL → Plan → AT-T → Verify → Handoff。启动只需要说 <code>启动 aw</code> 或 <code>@aw</code>。</p>
             <div class="hero-highlights">
               <div class="hero-highlight primary"><strong>全自动代码地图</strong><span>context plan、task start/complete、watch、pre-commit 自动刷新 CODE_MAP。</span></div>
@@ -1038,6 +1024,77 @@
           </div>
         </div>
         <div class="callout good">同步原则：<code>aw sync pull</code> 只把对方快照导入本项目 <code>docs/sync/inbox/</code>，它是只读收件箱；本项目是否采纳，必须通过 REQ / Bug / Plan / Handoff 落账。</div>
+      </section>
+
+      <section id="agent-roles">
+        <div class="section-head">
+          <div>
+            <h2>多 Agent 角色协同</h2>
+            <p>v1.6 把 Agent 从一次性 owner 升级成长期 worker identity。每个 Agent 先注册身份、职责、边界和运行工具，再进入 assignment、claim、heartbeat、handoff、review 的协作链路。</p>
+          </div>
+        </div>
+        <div class="grid cols-3">
+          <div class="card"><span class="tag green">治理角色</span><h3>PM / Communicator</h3><p>PM 维护 DSL、Plan、ATOMIC、dispatch 和 Business Gate；Communicator 作为低污染旁路整理用户意图、进度和交接，不直接改业务代码。</p></div>
+          <div class="card"><span class="tag blue">执行角色</span><h3>Fullstack / Frontend / Admin / Backend</h3><p>执行 Agent 按已确认任务认领文件边界，使用 <code>claim</code> 和 <code>heartbeat</code> 留下任务锁、状态和下一步，避免多人改同一片区域。</p></div>
+          <div class="card"><span class="tag violet">评审角色</span><h3>Businessman / Plan Review / Tester</h3><p>评审 Agent 不抢实现职责：商业评审守 ICP 与购买理由，产品计划评审守 runtime 立意，测试 Agent 设计正常、边界、异常、多轮用例并反馈缺陷。</p></div>
+        </div>
+        <table>
+          <thead><tr><th>Agent</th><th>长期职责</th><th>协作边界</th></tr></thead>
+          <tbody>
+            <tr><td><code>communicator-agent</code></td><td>低污染沟通旁路、状态整理、指令压缩、handoff 整理。</td><td>不直接执行研发任务，不把闲聊写入执行上下文。</td></tr>
+            <tr><td><code>codex-pm-agent</code></td><td>产品 DSL、Plan、ATOMIC、Business Gate、Demo Scenario。</td><td>不越过 Plan / ATOMIC 直接推进实现。</td></tr>
+            <tr><td><code>frontend-agent</code> / <code>admin-agent</code> / <code>backend-agent</code></td><td>分别负责前台、后台管理端、后端 runtime/kernel/API/service。</td><td>跨端接口变化必须通过 contract、integration matrix 和 sync event。</td></tr>
+            <tr><td><code>businessman</code> / <code>product-plan-review-agent</code></td><td>商业化与产品计划评审，防止偏离 Stateful AI Engineering Runtime 主线。</td><td>只评审和输出建议，不私自改实现代码。</td></tr>
+            <tr><td><code>tester-agent</code></td><td>全维度功能测试、用例执行、缺陷反馈和《测试小结》。</td><td>严格按测试逻辑推进，不闲聊、不偏离测试目标。</td></tr>
+          </tbody>
+        </table>
+        <div class="diagram">
+          <div class="diagram-title">Agent 身份到任务协作流程图</div>
+          <div class="diagram-row">
+            <div class="diagram-node"><strong>Register</strong><span><code>aw agents register --defaults</code> 写入长期身份、职责、边界、预设来源。</span></div>
+            <div class="diagram-node"><strong>Bind</strong><span><code>aw agents bind</code> 记录运行工具、provider、workspace、interface 和 sync mode。</span></div>
+            <div class="diagram-node"><strong>Assign</strong><span>PM 或工程师把某个 REQ / AT-T / 阶段职责分配给已注册 Agent。</span></div>
+            <div class="diagram-node"><strong>Claim</strong><span>执行 Agent 对具体 AT-T 和 allowed paths 加任务锁，防止并行冲突。</span></div>
+            <div class="diagram-node"><strong>Heartbeat</strong><span>研发中持续记录 working / blocked / done、当前动作、阻塞和下一步。</span></div>
+            <div class="diagram-node"><strong>Handoff / Review</strong><span>交接证据、评审结果、blocker 和建议进入 ledger，gate 统一检查。</span></div>
+          </div>
+        </div>
+        <div class="callout">关键命令：<code>aw agents list --bindings</code> 看当前 Agent 运行在哪个工具里；<code>aw agents gate --strict</code> 会阻断未注册 Agent、缺少 runtime binding、路径重叠和 blocking review。</div>
+      </section>
+
+      <section id="cross-ide">
+        <div class="section-head">
+          <div>
+            <h2>跨 IDE 协同机制</h2>
+            <p>AgentWorkflow 不把流程锁死在某个编辑器里。Claude Code、Codex、Cursor、Copilot、Windsurf、Cline、Continue、QoderWork、TraeIDE、Lingma、OpenClaw、qclaw 都只是薄入口，真源始终在仓库里的 <code>agent-workflow/</code>、<code>scripts/aw</code> 和 <code>docs/</code>。</p>
+          </div>
+        </div>
+        <div class="grid cols-4">
+          <div class="card"><span class="tag blue">入口统一</span><h3>适配文件只是指针</h3><p><code>CLAUDE.md</code>、<code>AGENTS.md</code>、<code>.cursor/rules</code>、<code>.qoderwork/rules</code> 等只负责把 Agent 指向同一份 Invocation。</p></div>
+          <div class="card"><span class="tag green">状态统一</span><h3>Ledger 在仓库内</h3><p>REQ、DSL、Plan、ATOMIC、Agent Registry、Handoff、Memory、Bug、Report 都进 Git，不依赖某个 IDE 的私有上下文。</p></div>
+          <div class="card"><span class="tag violet">身份统一</span><h3>Runtime Binding</h3><p>同一个 <code>backend-agent</code> 可以今天跑在 Codex，明天绑定到 Lingma 或 qclaw，但身份、边界和任务历史不变。</p></div>
+          <div class="card"><span class="tag yellow">升级统一</span><h3>更新 aw</h3><p>已安装用户在项目里运行 <code>aw update --from-github --adapters</code>，重新拉取 GitHub、替换 package/scripts，并重装本机 skill。</p></div>
+        </div>
+        <table>
+          <thead><tr><th>工具 / IDE</th><th>入口文件</th><th>绑定示例</th></tr></thead>
+          <tbody>
+            <tr><td>Codex</td><td><code>AGENTS.md</code></td><td><code>aw agents bind codex-fullstack --runtime codex --provider openai</code></td></tr>
+            <tr><td>Claude Code</td><td><code>CLAUDE.md</code></td><td><code>aw agents bind communicator-agent --runtime claude-code --provider anthropic</code></td></tr>
+            <tr><td>QoderWork / TraeIDE / Lingma</td><td><code>.qoderwork/</code>、<code>.trae/</code>、<code>.lingma/</code></td><td><code>aw agents bind tester-agent --runtime qoderwork --interface ide</code></td></tr>
+            <tr><td>OpenClaw / qclaw</td><td><code>.openclaw/</code>、<code>.qclaw/</code></td><td><code>aw agents bind tester-agent --runtime qclaw --provider longjia --sync-mode handoff-only</code></td></tr>
+          </tbody>
+        </table>
+        <div class="diagram">
+          <div class="diagram-title">跨 IDE 协同流程图</div>
+          <div class="diagram-row five">
+            <div class="diagram-node"><strong>安装适配器</strong><span><code>aw adapters --all</code> 或 <code>aw adapters --china</code> 创建各工具入口文件。</span></div>
+            <div class="diagram-node"><strong>读取同一真源</strong><span>所有 IDE 都指向 <code>agent-workflow/INVOCATION.md</code> 和 <code>AGENT_RULES.md</code>。</span></div>
+            <div class="diagram-node"><strong>绑定 Runtime</strong><span>用 <code>aw agents bind</code> 标记 Agent 正在哪个工具、workspace 和同步模式里运行。</span></div>
+            <div class="diagram-node"><strong>共享 Ledger</strong><span>任务、心跳、交接、评审、Bug 和报告都写回 <code>docs/</code>，跨工具可接续。</span></div>
+            <div class="diagram-node"><strong>统一 Gate</strong><span><code>aw agents gate</code>、<code>aw sync gate</code>、<code>aw release gate</code> 在提交和发布前统一检查。</span></div>
+          </div>
+        </div>
+        <div class="callout good">迁移原则：换 IDE 不换流程，换 runtime 不换 Agent 身份。只要仓库 ledger 完整，新工具接手时先 <code>aw status</code>、<code>aw agents bindings</code>、<code>aw handoff --check</code>，再继续任务。</div>
       </section>
 
       <section id="dsl-plan">
@@ -1394,6 +1451,7 @@ DSL 和共享 Plan 放同步中心，本地 Plan 只作为执行派生。</code>
               <ul>
                 <li>新增 <code>aw agents register/list/show/unregister</code>，把长期 worker identity 从任务 assignment 中拆出来。</li>
                 <li>新增 <code>aw agents bind/unbind/bindings</code>，记录 Agent 运行工具、provider、workspace、接口和同步模式。</li>
+                <li>Agent registry 新增 runtime/tool binding 字段，支持 <code>qoderwork</code>、<code>qoder</code>、<code>trae</code>、<code>traeide</code>、<code>lingma</code>、<code>openclaw</code>、<code>qclaw</code> 等运行时枚举。</li>
                 <li>新增 communicator、businessman、PM、产品计划评审、fullstack、frontend、admin、backend、tester 默认预设。</li>
                 <li>新增 QoderWork、TraeIDE、Lingma、OpenClaw、qclaw 适配器，并提供 <code>aw adapters --china</code> 一键安装国产 / 龙嘉组合。</li>
                 <li><code>aw agents gate --strict</code> 可阻断未注册 Agent、缺少 runtime binding 的 Agent 以及 assignment / claim 冲突，保留非 strict warning 模式。</li>
