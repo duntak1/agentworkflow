@@ -101,7 +101,7 @@ chmod +x scripts/aw scripts/*.sh
 | 能力摘要 | `aw capabilities` |
 | 机器能力摘要 | `aw capabilities --json` |
 | 机器状态 | `aw status --json` |
-| 升级 | `aw upgrade` |
+| 升级 | `aw upgrade`；已安装用户说“更新 aw”时运行 `aw upgrade --from-github --adapters` 或 `aw update --from-github --adapters`，会重新拉 GitHub、删除旧本机 skill、安装最新版 skill，并替换当前项目 package/scripts |
 | 移除集成 | `aw remove` |
 | 工程化上下文压缩 | `aw compact "本轮目标" --write --snapshot` |
 | 记忆 | `aw memory add/search/inject`；记住聊天用 `aw memory chat` |

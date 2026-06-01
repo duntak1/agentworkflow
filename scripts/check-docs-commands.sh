@@ -119,6 +119,7 @@ COMMANDS=(
   "aw req change"
   "aw setup"
   "aw upgrade"
+  "aw update"
   "aw remove"
 )
 

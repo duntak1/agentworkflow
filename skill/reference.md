@@ -134,7 +134,8 @@ AW_SKILL_REF=v1.6.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw capabilities --json` | 机器可读能力摘要，供 dashboard/plugin/自动化消费 |
 | `aw memory init|add|list|search|show|archive|inject` | 文件化跨会话记忆 |
 | `aw memory chat <slug> "title" --summary "..."` | 记录聊天摘要记忆：背景、决定、待办、待确认和关联对象 |
-| `aw upgrade` | 刷新 package/scripts，保留业务 docs/reference |
+| `aw upgrade` | 从当前安装来源刷新 package/scripts，保留业务 docs/reference |
+| `aw upgrade --from-github` / `aw update --from-github` | 从 GitHub 重新获取 agentworkflow，删除旧本机 skill，安装新 skill，并替换当前项目 package/scripts |
 | `aw remove` | 预览移除 adapters/CI/package，`--execute` 后删除 |
 | `aw init` | 初始化 reference、DSL、Plan、TP 模板 |
 | `aw project scan` | 扫描当前项目内容，写入 `docs/PROJECT_SCAN.md`，给出全新 / 已有项目建议；Agent 必须复述给工程师确认 |

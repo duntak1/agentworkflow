@@ -25,7 +25,7 @@
 | [`aw-dashboard.sh`](./aw-dashboard.sh) | `aw dashboard` 只读终端视图 |
 | [`aw-memory.sh`](./aw-memory.sh) | `aw memory` 文件化跨会话记忆 |
 | [`aw-setup.sh`](./aw-setup.sh) | `aw setup` 一键初始化常用路径 |
-| [`aw-upgrade.sh`](./aw-upgrade.sh) | `aw upgrade` 刷新 package/scripts |
+| [`aw-upgrade.sh`](./aw-upgrade.sh) | `aw upgrade` / `aw update` 刷新 package/scripts；`--from-github` 会重装本机 skill 并替换当前项目 |
 | [`aw-remove.sh`](./aw-remove.sh) | `aw remove` 预览/删除集成文件 |
 | [`check-docs-commands.sh`](./check-docs-commands.sh) | 检查 Skill/Invocation 命令文档同步 |
 | [`check-plugin-metadata.sh`](./check-plugin-metadata.sh) | 检查 Codex plugin / marketplace metadata |
@@ -38,7 +38,7 @@
 | [`generate-file-index.sh`](./generate-file-index.sh) | 生成 `docs/FILE_INDEX.md`，代码优先覆盖前端、后端、共享、测试和运行配置文件说明 |
 | [`aw-code-map.sh`](./aw-code-map.sh) | 生成 / 查询 `docs/context/CODE_MAP.md`，用于模块、入口、Symbol、路由/API、import 和测试映射定位，避免 AI 全仓扫描 |
 | [`install-aw-adapters.sh`](./install-aw-adapters.sh) | IDE 适配：`aw adapters --all`（Claude/Codex/Copilot/Cursor/Windsurf/Cline/Continue） |
-| [`sync-skill.sh`](./sync-skill.sh) | 同步到 `~/.cursor/skills/agent-workflow/` |
+| [`sync-skill.sh`](./sync-skill.sh) | 同步到 `~/.cursor/skills/agent-workflow/`；`AW_SYNC_LEGACY_SKILL=1` 时额外生成旧别名 `aw-delivery` |
 | [`check-skill-source.sh`](./check-skill-source.sh) | 校验仓库 `skill/` 真源 |
 | [`check-skill-package.sh`](./check-skill-package.sh) | 校验已 sync 的 Skill 目录 |
 | [`install-cursor-skill.sh`](./install-cursor-skill.sh) | 安装 Skill（本地路径或 `AW_SKILL_REPO_URL`） |
@@ -72,6 +72,9 @@
 |------|------|
 | `AW_TEMPLATES_DIR` | 覆盖模板目录（默认 `agent-workflow/templates`） |
 | `AW_SKILL_ROOT` | 使用 Cursor skill 内 `templates/` 时设置 |
+| `AW_SKILL_REPO_URL` / `AW_SKILL_REF` | 安装或 `aw upgrade --from-github` 时覆盖 GitHub 来源和分支 / tag |
+| `AW_KEEP_OLD_SKILLS` | `install-cursor-skill.sh` 保留旧 skill 目录而不是清理替换 |
+| `AW_SYNC_LEGACY_SKILL` | 设为 `1` 时同步旧版 `aw-delivery` skill 别名 |
 
 ## 快速开始
 

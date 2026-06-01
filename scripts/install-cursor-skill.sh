@@ -4,7 +4,9 @@ set -euo pipefail
 
 REPO_URL="${AW_SKILL_REPO_URL:-}"
 REF="${AW_SKILL_REF:-main}"
-DEST="${CURSOR_SKILLS_DIR:-$HOME/.cursor/skills}/agent-workflow"
+SKILL_ROOT="${CURSOR_SKILLS_DIR:-$HOME/.cursor/skills}"
+DEST="${SKILL_ROOT}/agent-workflow"
+LEGACY_DEST="${SKILL_ROOT}/aw-delivery"
 SOURCE="${1:-}"
 
 usage() {
@@ -17,6 +19,8 @@ Usage:
 Installs to: ${DEST}
 Optional:
   AW_SKILL_REF=<branch-or-tag>   default: main
+  AW_KEEP_OLD_SKILLS=1           keep existing skill dirs instead of replacing
+  AW_SYNC_LEGACY_SKILL=1         also recreate legacy aw-delivery alias
 EOF
   exit "${1:-0}"
 }
@@ -24,7 +28,11 @@ EOF
 [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]] && usage 0
 
 WORKDIR=""
-cleanup() { [[ -n "$WORKDIR" && -d "$WORKDIR" ]] && rm -rf "$WORKDIR"; }
+cleanup() {
+  if [[ -n "$WORKDIR" && -d "$WORKDIR" ]]; then
+    rm -rf "$WORKDIR"
+  fi
+}
 trap cleanup EXIT
 
 case "$SOURCE" in
@@ -50,9 +58,15 @@ fi
   exit 1
 }
 
+if [[ "${AW_KEEP_OLD_SKILLS:-0}" != "1" ]]; then
+  rm -rf "$DEST" "$LEGACY_DEST"
+  echo "removed old skills: ${DEST} ${LEGACY_DEST}"
+fi
+
 export AW_SYNC_PROJECT_SKILL=0
 CURSOR_SKILLS_DIR="$(dirname "$DEST")" \
   AW_SKILL_REPO_URL="" \
+  AW_SYNC_LEGACY_SKILL="${AW_SYNC_LEGACY_SKILL:-0}" \
   bash "${ROOT}/scripts/sync-skill.sh"
 
 echo ""

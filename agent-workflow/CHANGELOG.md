@@ -4,6 +4,7 @@
 
 ### Added
 
+- Add `aw update` as an alias for `aw upgrade`, including a remote `--from-github` flow that reinstalls the local skill and refreshes the current project's package/scripts.
 - Add formal Agent identity registry commands: `aw agents register`, `list`, `show`, and `unregister`.
 - Add default Agent presets for communicator, businessman, PM, product plan review, fullstack, frontend, admin, and backend workers.
 - Add `docs/agents/AGENT_REGISTRY.md` and configurable `AGENT_PRESETS.tsv` templates for long-lived worker identity governance.
@@ -14,6 +15,7 @@
 
 - Promote the published package, skill, and Codex plugin metadata to version 1.6.0.
 - Document the semantic split between `register` as long-lived identity and `assign` as task-specific responsibility.
+- Make local skill reinstall clean by default: old `agent-workflow` and legacy `aw-delivery` skill directories are removed before installing the fresh package.
 
 ## [1.5.0] - 2026-05-29
 

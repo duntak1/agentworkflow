@@ -7,7 +7,7 @@ description: >-
   and keeps token usage low through staged context reading. Use for agent-workflow,
   启动 aw, @aw, aw start, aw init, 按 AI 工作流, 生成 DSL/Plan, 任务确认,
   省 token, verify, tp, config, Windsurf, Cline, Copilot, or DSL gates.
-argument-hint: "start | setup | doctor | demo | capabilities | dashboard | memory | audit | policy | security | service-catalog | release | report | install | init | adapters | status | dsl | plan | confirm | config | context | task | verify | tp | commit | upgrade | remove"
+argument-hint: "start | setup | doctor | demo | capabilities | dashboard | memory | audit | policy | security | service-catalog | release | report | install | init | adapters | status | dsl | plan | confirm | config | context | task | verify | tp | commit | upgrade | update | remove"
 ---
 
 # agent-workflow（运行时精简版）
@@ -25,6 +25,16 @@ This skill is a **workflow gate**, not a documentation bundle. Keep context smal
 - Read `reference.md` only for command lookup.
 - Never read the HTML manual as AI context by default.
 - Prefer CLI summaries (`aw status`, `aw next`, `aw task brief`, `aw context plan`, `aw sync inbox`) over opening full ledgers.
+
+## Updating aw
+
+When the user says `更新 aw`, `update aw`, `升级 aw`, or asks to refresh an already installed skill, run the project-local updater:
+
+```bash
+./scripts/aw upgrade --from-github --adapters
+```
+
+`./scripts/aw update --from-github --adapters` is the same path. This fetches `https://github.com/duntak1/agentworkflow.git`, removes the old local skill install, installs the fresh skill, and replaces the current project's `agent-workflow/` package and `scripts/` while preserving business `docs/`, `reference/`, and workflow state. Use `--repo <url>` or `--ref <branch-or-tag>` only when the engineer explicitly asks for a fork, branch, or release tag.
 
 ## Startup
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sync repo → ~/.cursor/skills/agent-workflow (and legacy aw-delivery)
+# Sync repo → ~/.cursor/skills/agent-workflow.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -73,7 +73,9 @@ write_alias_skill() {
 
 mkdir -p "$SKILL_ROOT"
 sync_one "$PRIMARY"
-write_alias_skill "$LEGACY" "aw-delivery"
+if [[ "${AW_SYNC_LEGACY_SKILL:-0}" == "1" ]]; then
+  write_alias_skill "$LEGACY" "aw-delivery"
+fi
 
 # Optional: project skill in source repo (for contributors)
 PROJ_SKILL="${ROOT}/.cursor/skills/agent-workflow"
@@ -86,5 +88,7 @@ fi
 
 echo ""
 echo "Done: ${PRIMARY}"
-echo "      alias: ${LEGACY}"
+if [[ "${AW_SYNC_LEGACY_SKILL:-0}" == "1" ]]; then
+  echo "      alias: ${LEGACY}"
+fi
 echo "Test:  ${PRIMARY}/scripts/check-skill-package.sh"

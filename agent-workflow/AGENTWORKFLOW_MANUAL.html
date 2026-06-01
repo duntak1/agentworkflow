@@ -1371,6 +1371,8 @@ DSL 和共享 Plan 放同步中心，本地 Plan 只作为执行派生。</code>
 ./scripts/aw agents list
 ./scripts/aw agents show backend-agent
 ./scripts/aw agents gate --strict</code></pre></div>
+          <div class="card"><h3>更新 aw</h3><pre><code>./scripts/aw upgrade --from-github --adapters
+./scripts/aw update --from-github --adapters</code></pre></div>
         </div>
       </section>
 
@@ -1391,6 +1393,7 @@ DSL 和共享 Plan 放同步中心，本地 Plan 只作为执行派生。</code>
                 <li>新增 <code>aw agents register/list/show/unregister</code>，把长期 worker identity 从任务 assignment 中拆出来。</li>
                 <li>新增 communicator、businessman、PM、产品计划评审、fullstack、frontend、admin、backend 默认预设。</li>
                 <li><code>aw agents gate --strict</code> 可阻断未注册 Agent 的 assignment / claim，保留非 strict warning 模式。</li>
+                <li>新增 <code>aw update --from-github</code> 更新入口，可重新拉取 GitHub、删除旧本机 skill、安装最新版 skill，并替换当前项目 package/scripts。</li>
               </ul>
             </div>
           </div>

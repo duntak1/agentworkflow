@@ -130,6 +130,8 @@ aw demo
 ```bash
 aw doctor
 aw upgrade --adapters --ci
+aw upgrade --from-github --adapters # 已安装用户：重新拉 GitHub，替换本机 skill 和当前项目 package/scripts
+aw update --from-github --adapters  # 同上，给“更新 aw”触发语使用
 aw remove --adapters --ci        # dry-run
 aw remove --adapters --ci --execute
 ```

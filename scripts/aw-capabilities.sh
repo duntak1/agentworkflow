@@ -158,6 +158,7 @@ if $JSON; then
     "adapters",
     "sync-skill",
     "upgrade",
+    "update",
     "remove"
   ],
   "proof": [
@@ -202,7 +203,7 @@ Core commands:
   vcs, vcs branch, vcs fill, vcs create, vcs review, vcs gate, score, score record,
   github-pr compatibility wrapper,
   recover, recover context, recover plan, recover sync,
-  hooks, adapters, sync-skill, upgrade, remove
+  hooks, adapters, sync-skill, upgrade, update, remove
 
 Proof:
   aw demo

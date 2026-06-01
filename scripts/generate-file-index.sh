@@ -84,9 +84,9 @@ desc_of() {
     scripts/check-skill-source.sh) echo "检查源码仓 skill 文件、模板、plugin metadata 和版本一致性。" ;;
     scripts/e2e-smoke.sh) echo "端到端冒烟测试：打包、安装、init、DSL/Plan、任务、REQ、Bug、TP、索引刷新。" ;;
     scripts/build-skill-archive.sh) echo "构建 dist/agent-workflow-skill-*.tar.gz 并运行包检查。" ;;
-    scripts/sync-skill.sh) echo "同步源码到 Cursor skill 目录和 dist/stage 包目录。" ;;
+    scripts/sync-skill.sh) echo "同步源码到 Cursor skill 目录和 dist/stage 包目录，可选生成旧版 aw-delivery 别名。" ;;
     scripts/aw-install.sh) echo "将 agent-workflow 包和 scripts 安装到目标业务仓。" ;;
-    scripts/aw-upgrade.sh) echo "升级目标仓中的 agent-workflow 包、脚本和可选 CI。" ;;
+    scripts/aw-upgrade.sh) echo "升级目标仓中的 agent-workflow 包和脚本；--from-github 会重装本机 skill 并替换当前项目。" ;;
     scripts/aw-remove.sh) echo "干运行或执行移除 adapters、CI、package 等安装产物。" ;;
     scripts/aw-status.sh) echo "展示当前 DSL、Plan、confirm、当前任务和建议下一步，支持 JSON。" ;;
     scripts/aw-dashboard.sh) echo "只读终端 dashboard，汇总状态、能力和机器可读入口。" ;;

@@ -8,7 +8,7 @@
 - 新增 / 删除 / 重命名前端、后端、共享、测试或配置代码文件后，运行 `./scripts/aw file-index`。
 - 优先查看「前端业务代码 / 后端业务代码 / 共享代码 / 测试代码 / 运行配置」；脚本、模板、工作流文档只是辅助索引。
 - 本文件供人类工程师定位代码和手改点，不替代代码真源、DSL、Plan、REQ、测试计划或 Bug 流水。
-- 生成时间：2026-05-31T23:20:48Z
+- 生成时间：2026-05-31T23:31:15Z
 
 ## 前端业务代码
 
@@ -99,7 +99,7 @@
 | `scripts/aw-task.sh` | AT-T 子任务生命周期：brief、confirm、start、blocked、complete、done、paste。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-tp.sh` | 测试计划管理：list、show、new、link 到 AT-T Verify 列。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-trace.sh` | 项目文件：aw-trace.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
-| `scripts/aw-upgrade.sh` | 升级目标仓中的 agent-workflow 包、脚本和可选 CI。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/aw-upgrade.sh` | 升级目标仓中的 agent-workflow 包和脚本；--from-github 会重装本机 skill 并替换当前项目。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-vcs.sh` | 项目文件：aw-vcs.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-verify.sh` | 执行任务 Verify、PROJECT_CONFIG lint/format/typecheck/test/build/e2e。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/aw-watch.sh` | 项目文件：aw-watch.sh。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
@@ -131,7 +131,7 @@
 | `scripts/new-req.sh` | 兼容旧入口：新建 REQ 文件并更新需求索引。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/new-test-plan.sh` | 新建 TP 测试计划文件并更新 TP 索引。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/pre-commit-verify.sh` | pre-commit 聚合验证脚本。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
-| `scripts/sync-skill.sh` | 同步源码到 Cursor skill 目录和 dist/stage 包目录。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/sync-skill.sh` | 同步源码到 Cursor skill 目录和 dist/stage 包目录，可选生成旧版 aw-delivery 别名。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 
 ## Skill / 插件包
 

@@ -62,6 +62,9 @@ EOF
   upgrade)
     exec "${SCRIPT_DIR}/aw-upgrade.sh" "$@"
     ;;
+  update)
+    exec "${SCRIPT_DIR}/aw-upgrade.sh" "$@"
+    ;;
   remove)
     exec "${SCRIPT_DIR}/aw-remove.sh" "$@"
     ;;
@@ -380,7 +383,7 @@ agent-workflow CLI v${AW_CLI_VERSION} (any AI tool)
   aw setup             One-shot setup (install/init/adapters/ci/status/doctor)
   aw doctor            Diagnose install, gates, adapters, CI, config
   aw demo              Run an end-to-end workflow demonstration in /tmp
-  aw upgrade           Refresh package/scripts in current repo
+  aw upgrade/update    Refresh package/scripts; --from-github also reinstalls local skill
   aw remove            Dry-run removal for adapters/CI/package (--execute to delete)
   aw init              Initialize reference/, docs/dsl, docs/plans, ...
   aw dsl [A|B|C]       Print DSL prompt (L1); aw dsl write / apply for L2/L3

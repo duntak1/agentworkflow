@@ -165,6 +165,16 @@ cd agentworkflow
 ./scripts/install-cursor-skill.sh https://github.com/duntak1/agentworkflow.git
 ```
 
+已安装用户更新本机 skill 和当前项目：
+
+```bash
+./scripts/aw upgrade --from-github --adapters
+# 或：
+./scripts/aw update --from-github --adapters
+```
+
+这会重新获取 `https://github.com/duntak1/agentworkflow.git`，删除本机旧的 `agent-workflow` / `aw-delivery` skill 安装，安装最新版 skill，并替换当前项目中的 `agent-workflow/` 与 `scripts/`；业务 `docs/`、`reference/` 和运行状态会保留。
+
 详见 [PUBLISH.md](PUBLISH.md) · [skill/QUICKSTART.md](skill/QUICKSTART.md)。
 
 ## Codex Plugin Metadata

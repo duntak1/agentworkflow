@@ -150,6 +150,8 @@ When the user asks to remember the conversation:
 | `aw compact "focus" --write --snapshot` | One-shot context compaction for Codex/new chat: handoff, snapshot, paste block, optional memory |
 | `aw handoff --check` | Validate cross-session handoff snapshot |
 | `aw memory chat` | Store summarized chat context |
+| `aw upgrade` | Refresh package/scripts from the current installed source |
+| `aw upgrade --from-github` / `aw update --from-github` | Fetch GitHub, remove old local skills, install the fresh skill, and replace the current project's package/scripts |
 | `aw code-map build|query|impact|affected|gate` | Auto-build/query `docs/context/CODE_MAP.md` before reading code; context plan, task start/complete, watch index, and pre-commit refresh it by default |
 | `aw audit init|add|check` | Record AI actions, decisions, commands, results, evidence, and confirmations |
 | `aw policy init|decision|check|diff|gate` | Initialize/check policy-as-code, inspect risky diffs, and record high-risk exceptions; `gate --strict` blocks risky diffs |

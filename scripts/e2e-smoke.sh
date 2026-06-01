@@ -158,7 +158,9 @@ grep -q '## Agent - communicator-agent' docs/agents/AGENT_REGISTRY.md || { echo 
 grep -q '## Agent - frontend-agent' docs/agents/AGENT_REGISTRY.md || { echo "fail: defaults register frontend"; exit 1; }
 grep -q '## Agent - tester-agent' docs/agents/AGENT_REGISTRY.md || { echo "fail: defaults register tester"; exit 1; }
 AGENTS_LIST_OUT="$(./scripts/aw agents list)"
-case "$AGENTS_LIST_OUT" in *backend-agent*communicator-agent*tester-agent*) ;; *) echo "fail: agents list registered agents"; echo "$AGENTS_LIST_OUT"; exit 1 ;; esac
+for agent_id in backend-agent communicator-agent tester-agent; do
+  case "$AGENTS_LIST_OUT" in *"$agent_id"*) ;; *) echo "fail: agents list registered agents"; echo "$AGENTS_LIST_OUT"; exit 1 ;; esac
+done
 AGENTS_SHOW_OUT="$(./scripts/aw agents show backend-agent)"
 case "$AGENTS_SHOW_OUT" in *"Name: Backend Agent"*"Type: developer"*) ;; *) echo "fail: agents show backend"; echo "$AGENTS_SHOW_OUT"; exit 1 ;; esac
 AGENTS_SHOW_TESTER_OUT="$(./scripts/aw agents show tester-agent)"
@@ -532,6 +534,9 @@ grep -q 'AI_BUG_LOG.md' ENGINEERING_INDEX.md || { echo "fail: engineering index 
 ./scripts/aw trace check >/dev/null
 
 ./scripts/aw doctor
+./scripts/aw update --from-github --repo "$ROOT" --ref main
+./scripts/aw check layout
+grep -q 'from-github' scripts/aw-upgrade.sh || { echo "fail: remote upgrade did not refresh scripts"; exit 1; }
 ./scripts/aw upgrade --ci
 
 export SKIP_DSL_GATE=1
