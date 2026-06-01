@@ -50,6 +50,11 @@ if $JSON; then
     "Windsurf",
     "Cline",
     "Continue",
+    "QoderWork / Qoder",
+    "TraeIDE",
+    "Lingma",
+    "OpenClaw",
+    "qclaw",
     "Any chat"
   ],
   "commands": [
@@ -187,7 +192,7 @@ Pipeline:
   Project content scanned -> Project stage selected -> Project kind/build target selected -> Sync center ready when needed -> Reference or baseline -> DSL reviewed -> Plan executable -> confirm -> AT-T task -> verify -> changelog/git -> compact/handoff
 
 Adapters:
-  Claude Code, Codex, Copilot / VS Code, Cursor, Windsurf, Cline, Continue, Any chat
+  Claude Code, Codex, Copilot / VS Code, Cursor, Windsurf, Cline, Continue, QoderWork / Qoder, TraeIDE, Lingma, OpenClaw, qclaw, Any chat
 
 Core commands:
   install, setup, doctor, demo, init, project, project scan, project gate, status, capabilities, dashboard, dsl, dsl review, plan, approve,

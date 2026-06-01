@@ -9,7 +9,8 @@
    - **Claude Code** → `CLAUDE.md` 链到 `agent-workflow/CLAUDE.md` + `INVOCATION.md`
    - **Codex** → `AGENTS.md` 链到 `agent-workflow/AGENTS.md`
    - **Copilot** → `./scripts/install-aw-adapters.sh --copilot`
-   - **一键多 IDE** → `./scripts/aw adapters --all`（Claude/Codex/Copilot/Cursor/Windsurf/Cline/Continue）
+   - **一键多 IDE** → `./scripts/aw adapters --all`（Claude/Codex/Copilot/Cursor/Windsurf/Cline/Continue/QoderWork/TraeIDE/Lingma/OpenClaw/qclaw）
+   - **国产 / 龙嘉组合** → `./scripts/aw adapters --china`
    - **无规则文件** → `./scripts/aw paste session` 贴入对话
 5. 填写 `docs/PROJECT_CONFIG.md`。
 

@@ -42,6 +42,12 @@ chmod +x scripts/aw scripts/*.sh
 | Windsurf | `aw adapters --windsurf` |
 | Cline | `aw adapters --cline` |
 | Continue | `aw adapters --continue` |
+| QoderWork / Qoder | `aw adapters --qoderwork` |
+| TraeIDE | `aw adapters --trae` |
+| Lingma / 通义灵码 | `aw adapters --lingma` |
+| OpenClaw | `aw adapters --openclaw` |
+| qclaw | `aw adapters --qclaw` |
+| 国产 / 龙嘉组合 | `aw adapters --china` |
 | 网页 / IM | `aw paste session` |
 
 ## 3. 阶段 0 → 研发

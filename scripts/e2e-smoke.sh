@@ -27,7 +27,7 @@ cd "${APP_DIR}"
 "${SKILL_DIR}/scripts/aw" install . --adapters
 chmod +x scripts/aw scripts/*.sh
 
-for f in .windsurfrules .clinerules .github/copilot-instructions.md .cursor/rules/agent-workflow.mdc; do
+for f in .windsurfrules .clinerules .github/copilot-instructions.md .cursor/rules/agent-workflow.mdc .continue/rules/agent-workflow.md .qoderwork/rules/agent-workflow.md .trae/rules/agent-workflow.md .lingma/rules/agent-workflow.md .openclaw/agent-workflow.md .qclaw/agent-workflow.md; do
   [[ -e "$f" ]] || { echo "fail: missing adapter $f"; exit 1; }
 done
 
@@ -145,12 +145,13 @@ if ./scripts/aw agents gate --strict >/tmp/aw-agents-strict.log 2>&1; then
   cat /tmp/aw-agents-strict.log
   exit 1
 fi
-./scripts/aw agents register --id e2e-dev --name "E2E Dev" --type developer --scope "E2E development" --allowed "scripts/aw" --blocked "unrelated files"
-./scripts/aw agents register --id e2e-tester --name "E2E Tester" --type tester --scope "E2E testing" --allowed "scripts" --blocked "business code"
+./scripts/aw agents register --id e2e-dev --name "E2E Dev" --type developer --scope "E2E development" --allowed "scripts/aw" --blocked "unrelated files" --runtime codex --provider openai --interface cli --sync-mode local-files --binding-status active
+./scripts/aw agents register --id e2e-tester --name "E2E Tester" --type tester --scope "E2E testing" --allowed "scripts" --blocked "business code" --runtime qoderwork --provider other --interface ide --sync-mode local-files --binding-status active
 ./scripts/aw agents register --preset backend
 grep -q '## Agent - backend-agent' docs/agents/AGENT_REGISTRY.md || { echo "fail: backend preset register"; exit 1; }
 ./scripts/aw agents register --preset tester
 grep -q '## Agent - tester-agent' docs/agents/AGENT_REGISTRY.md || { echo "fail: tester preset register"; exit 1; }
+grep -A18 '## Agent - tester-agent' docs/agents/AGENT_REGISTRY.md | grep -q 'Runtime: qoderwork' || { echo "fail: tester preset runtime binding"; exit 1; }
 DUP_REGISTER_OUT="$(./scripts/aw agents register --preset backend 2>&1 >/dev/null || true)"
 case "$DUP_REGISTER_OUT" in *"already registered"*"--update"*) ;; *) echo "fail: duplicate register should require --update"; echo "$DUP_REGISTER_OUT"; exit 1 ;; esac
 ./scripts/aw agents register --defaults --update >/dev/null
@@ -161,6 +162,19 @@ AGENTS_LIST_OUT="$(./scripts/aw agents list)"
 for agent_id in backend-agent communicator-agent tester-agent; do
   case "$AGENTS_LIST_OUT" in *"$agent_id"*) ;; *) echo "fail: agents list registered agents"; echo "$AGENTS_LIST_OUT"; exit 1 ;; esac
 done
+AGENTS_BINDINGS_OUT="$(./scripts/aw agents bindings)"
+case "$AGENTS_BINDINGS_OUT" in *tester-agent*qoderwork*) ;; *) echo "fail: agents bindings tester"; echo "$AGENTS_BINDINGS_OUT"; exit 1 ;; esac
+AGENTS_LIST_BINDINGS_OUT="$(./scripts/aw agents list --bindings)"
+case "$AGENTS_LIST_BINDINGS_OUT" in *backend-agent*codex*tester-agent*qoderwork*) ;; *) echo "fail: agents list --bindings"; echo "$AGENTS_LIST_BINDINGS_OUT"; exit 1 ;; esac
+./scripts/aw agents bind tester-agent --runtime qclaw --provider longjia --workspace manual --interface api --sync-mode handoff-only --handoff-target docs/agents/AGENT_REVIEWS.md --status active
+grep -A18 '## Agent - tester-agent' docs/agents/AGENT_REGISTRY.md | grep -q 'Runtime: qclaw' || { echo "fail: agents bind qclaw"; exit 1; }
+./scripts/aw agents unbind tester-agent
+if ./scripts/aw agents gate --strict >/tmp/aw-agents-binding-strict.log 2>&1; then
+  echo "fail: agents strict gate should block unbound active agent"
+  cat /tmp/aw-agents-binding-strict.log
+  exit 1
+fi
+./scripts/aw agents bind tester-agent --runtime qoderwork --provider other --workspace manual --interface ide --sync-mode local-files --handoff-target docs/agents/AGENT_REVIEWS.md --status active
 AGENTS_SHOW_OUT="$(./scripts/aw agents show backend-agent)"
 case "$AGENTS_SHOW_OUT" in *"Name: Backend Agent"*"Type: developer"*) ;; *) echo "fail: agents show backend"; echo "$AGENTS_SHOW_OUT"; exit 1 ;; esac
 AGENTS_SHOW_TESTER_OUT="$(./scripts/aw agents show tester-agent)"

@@ -10,7 +10,7 @@
 
 打造**工具无关**的通用交付 Skill + CLI：  
 `Reference → DSL（已审）→ Plan（可执行）→ confirm → AT-T 单任务研发（A→E）→ verify → done → commit`  
-支持 Cursor / Claude / Codex / Copilot / Windsurf / Cline / Continue 等。
+支持 Claude / Codex / Copilot / Cursor / Windsurf / Cline / Continue / QoderWork / TraeIDE / Lingma / OpenClaw / qclaw 等。
 
 ---
 
@@ -75,7 +75,7 @@ flowchart LR
 |------|------|------|
 | `aw install [path] [--adapters]` | ✅ | 拷贝 `agent-workflow/` + `scripts/` + IDE 适配 |
 | `aw init` | ✅ | `reference/`、`docs/dsl|plans|quality`、PROJECT_CONFIG 等 |
-| `aw adapters --all\|…` | ✅ | Claude/Codex/Copilot/Cursor/Windsurf/Cline/Continue |
+| `aw adapters --all\|…` | ✅ | Claude/Codex/Copilot/Cursor/Windsurf/Cline/Continue/QoderWork/TraeIDE/Lingma/OpenClaw/qclaw |
 | `aw status` | ✅ | 状态 + 建议下一条命令 |
 | `aw setup` | ✅ | 一键 install/init/adapters/CI/status/doctor |
 | `aw doctor` | ✅ | 安装、闸门、适配器、CI、配置诊断 |

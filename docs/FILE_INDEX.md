@@ -8,7 +8,7 @@
 - 新增 / 删除 / 重命名前端、后端、共享、测试或配置代码文件后，运行 `./scripts/aw file-index`。
 - 优先查看「前端业务代码 / 后端业务代码 / 共享代码 / 测试代码 / 运行配置」；脚本、模板、工作流文档只是辅助索引。
 - 本文件供人类工程师定位代码和手改点，不替代代码真源、DSL、Plan、REQ、测试计划或 Bug 流水。
-- 生成时间：2026-05-31T23:31:15Z
+- 生成时间：2026-06-01T01:23:17Z
 
 ## 前端业务代码
 
@@ -125,7 +125,7 @@
 | `scripts/generate-engineering-index.sh` | 生成 ENGINEERING_INDEX.md，人类工程师交付路径聚合索引。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/generate-file-index.sh` | 生成 docs/FILE_INDEX.md，面向工程师手动优化代码的项目代码文件索引。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/init-project.sh` | 初始化业务仓 reference、docs、模板、配置、FILE_INDEX、Bug 流水等基础文件。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
-| `scripts/install-aw-adapters.sh` | 安装 Claude/Codex/Copilot/Cursor/Windsurf/Cline/Continue 适配规则。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
+| `scripts/install-aw-adapters.sh` | 安装 Claude/Codex/Copilot/Cursor/Windsurf/Cline/Continue/QoderWork/TraeIDE/Lingma/OpenClaw/qclaw 适配规则，支持国产 / 龙嘉组合入口。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/install-cursor-skill.sh` | 安装构建产物到 Cursor skill 目录。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/install-git-hooks.sh` | 安装仓库 .githooks。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
 | `scripts/new-req.sh` | 兼容旧入口：新建 REQ 文件并更新需求索引。 | 改 CLI 行为时同步更新 help、reference、e2e。 |
@@ -179,8 +179,8 @@
 | `agent-workflow/templates/agents/AGENT_HANDOFFS.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/agents/AGENT_HEARTBEATS.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/agents/AGENT_LOCKS.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
-| `agent-workflow/templates/agents/AGENT_PRESETS.tsv` | 默认 Agent 注册预设配置，供 aw agents register --preset/--defaults 使用。 | 改模板后同步 init/e2e 和生成产物预期。 |
-| `agent-workflow/templates/agents/AGENT_REGISTRY.md` | 长期 Agent 身份登记表，记录 worker identity、职责、边界和状态。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/agents/AGENT_PRESETS.tsv` | 默认 Agent 注册预设配置，供 aw agents register --preset/--defaults 使用，包含运行工具绑定默认值。 | 改模板后同步 init/e2e 和生成产物预期。 |
+| `agent-workflow/templates/agents/AGENT_REGISTRY.md` | 长期 Agent 身份登记表，记录 worker identity、职责、边界、状态和 runtime/tool binding。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/agents/AGENT_REVIEWS.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/agents/AGENT_ROLES.md` | 多 Agent 角色、交接和评审模板或记录。 | 改模板后同步 init/e2e 和生成产物预期。 |
 | `agent-workflow/templates/audit/AGENT_TRACE.md` | Agent 执行审计模板或流水，记录关键动作、命令、结果和确认点。 | 改模板后同步 init/e2e 和生成产物预期。 |
@@ -319,6 +319,11 @@
 | `agent-workflow/adapters/cursor-hooks/README.md` | IDE / Agent 适配说明：README。 | 改流程规则后同步 AGENT_RULES、INVOCATION、skill 引用。 |
 | `agent-workflow/adapters/cursor.md` | IDE / Agent 适配说明：cursor。 | 改流程规则后同步 AGENT_RULES、INVOCATION、skill 引用。 |
 | `agent-workflow/adapters/generic-chat.md` | IDE / Agent 适配说明：generic-chat。 | 改流程规则后同步 AGENT_RULES、INVOCATION、skill 引用。 |
+| `agent-workflow/adapters/lingma.md` | IDE / Agent 适配说明：lingma。 | 改流程规则后同步 AGENT_RULES、INVOCATION、skill 引用。 |
+| `agent-workflow/adapters/openclaw.md` | IDE / Agent 适配说明：openclaw。 | 改流程规则后同步 AGENT_RULES、INVOCATION、skill 引用。 |
+| `agent-workflow/adapters/qclaw.md` | IDE / Agent 适配说明：qclaw。 | 改流程规则后同步 AGENT_RULES、INVOCATION、skill 引用。 |
+| `agent-workflow/adapters/qoderwork.md` | IDE / Agent 适配说明：qoderwork。 | 改流程规则后同步 AGENT_RULES、INVOCATION、skill 引用。 |
+| `agent-workflow/adapters/traeide.md` | IDE / Agent 适配说明：traeide。 | 改流程规则后同步 AGENT_RULES、INVOCATION、skill 引用。 |
 | `agent-workflow/adapters/vscode.md` | IDE / Agent 适配说明：vscode。 | 改流程规则后同步 AGENT_RULES、INVOCATION、skill 引用。 |
 | `agent-workflow/adapters/windsurf.md` | IDE / Agent 适配说明：windsurf。 | 改流程规则后同步 AGENT_RULES、INVOCATION、skill 引用。 |
 
@@ -330,8 +335,8 @@
 | `docs/agents/AGENT_HANDOFFS.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/agents/AGENT_HEARTBEATS.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/agents/AGENT_LOCKS.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
-| `docs/agents/AGENT_PRESETS.tsv` | 默认 Agent 注册预设配置，供 aw agents register --preset/--defaults 使用。 | 变更后按影响范围同步索引、文档和验证。 |
-| `docs/agents/AGENT_REGISTRY.md` | 长期 Agent 身份登记表，记录 worker identity、职责、边界和状态。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/agents/AGENT_PRESETS.tsv` | 默认 Agent 注册预设配置，供 aw agents register --preset/--defaults 使用，包含运行工具绑定默认值。 | 变更后按影响范围同步索引、文档和验证。 |
+| `docs/agents/AGENT_REGISTRY.md` | 长期 Agent 身份登记表，记录 worker identity、职责、边界、状态和 runtime/tool binding。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/agents/AGENT_REVIEWS.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/agents/AGENT_ROLES.md` | 多 Agent 角色、交接和评审模板或记录。 | 变更后按影响范围同步索引、文档和验证。 |
 | `docs/audit/AGENT_TRACE.md` | Agent 执行审计模板或流水，记录关键动作、命令、结果和确认点。 | 变更后按影响范围同步索引、文档和验证。 |

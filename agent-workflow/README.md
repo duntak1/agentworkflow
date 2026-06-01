@@ -1,6 +1,6 @@
 # agent-workflow（通用 AI 交付工作流包）
 
-可整夹拷贝到**任意仓库、任意 AI 工具**（Cursor / Claude Code / Codex / Copilot / 纯对话）。
+可整夹拷贝到**任意仓库、任意 AI 工具**（Claude Code / Codex / Copilot / Cursor / Windsurf / Cline / Continue / QoderWork / TraeIDE / Lingma / OpenClaw / qclaw / 纯对话）。
 
 **调用真源：** [`INVOCATION.md`](./INVOCATION.md) · 工具适配见 [`adapters/`](./adapters/)
 
@@ -37,7 +37,7 @@ chmod +x scripts/aw scripts/*.sh
 | [`CLAUDE.md`](./CLAUDE.md) | 栈与禁令详版 |
 | [`AGENTS.md`](./AGENTS.md) | Codex 路由 |
 | [`INVOCATION.md`](./INVOCATION.md) | **工具无关调用真源** |
-| [`adapters/`](./adapters/) | Cursor / Claude / Codex / Copilot / 通用对话 |
+| [`adapters/`](./adapters/) | Claude / Codex / Copilot / Cursor / Windsurf / Cline / Continue / QoderWork / TraeIDE / Lingma / OpenClaw / qclaw / 通用对话 |
 | [`BOOTSTRAP.md`](./BOOTSTRAP.md) | 复用到其他仓库 |
 | [`templates/`](./templates/) | init 拷贝用模板，含 audit / policy / security / service catalog / release |
 | [`INDEX.md`](./INDEX.md) | 文件索引 |

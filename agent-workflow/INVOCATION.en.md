@@ -1,6 +1,6 @@
 # Invocation Guide (Tool-Agnostic)
 
-This repository uses `agent-workflow` as the source of truth for Claude Code, OpenAI Codex, GitHub Copilot, Cursor, Windsurf, Cline, Continue, or any chat tool.
+This repository uses `agent-workflow` as the source of truth for Claude Code, OpenAI Codex, GitHub Copilot, Cursor, Windsurf, Cline, Continue, QoderWork / Qoder, TraeIDE, Lingma, OpenClaw, qclaw, or any chat tool.
 
 ## Flow
 

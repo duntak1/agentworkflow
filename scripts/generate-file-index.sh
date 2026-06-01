@@ -125,7 +125,7 @@ desc_of() {
     scripts/pre-commit-verify.sh) echo "pre-commit 聚合验证脚本。" ;;
     scripts/commit-gate.sh) echo "提交门禁：运行 pre-commit-verify 并处理 open Bug 流水策略。" ;;
     scripts/install-git-hooks.sh) echo "安装仓库 .githooks。" ;;
-    scripts/install-aw-adapters.sh) echo "安装 Claude/Codex/Copilot/Cursor/Windsurf/Cline/Continue 适配规则。" ;;
+    scripts/install-aw-adapters.sh) echo "安装 Claude/Codex/Copilot/Cursor/Windsurf/Cline/Continue/QoderWork/TraeIDE/Lingma/OpenClaw/qclaw 适配规则，支持国产 / 龙嘉组合入口。" ;;
     scripts/install-cursor-skill.sh) echo "安装构建产物到 Cursor skill 目录。" ;;
     scripts/new-req.sh) echo "兼容旧入口：新建 REQ 文件并更新需求索引。" ;;
     scripts/new-test-plan.sh) echo "新建 TP 测试计划文件并更新 TP 索引。" ;;
@@ -154,8 +154,8 @@ desc_of() {
     agent-workflow/templates/release/*|docs/release/*) echo "环境、发布、回滚和 Feature Flag 记录。" ;;
     agent-workflow/templates/metrics/*|docs/metrics/*) echo "DORA / Flow 交付度量模板或记录。" ;;
     agent-workflow/templates/ops/*|docs/ops/*) echo "SLO、Incident、Runbook 可靠性模板或记录。" ;;
-    agent-workflow/templates/agents/AGENT_REGISTRY.md|docs/agents/AGENT_REGISTRY.md) echo "长期 Agent 身份登记表，记录 worker identity、职责、边界和状态。" ;;
-    agent-workflow/templates/agents/AGENT_PRESETS.tsv|docs/agents/AGENT_PRESETS.tsv) echo "默认 Agent 注册预设配置，供 aw agents register --preset/--defaults 使用。" ;;
+    agent-workflow/templates/agents/AGENT_REGISTRY.md|docs/agents/AGENT_REGISTRY.md) echo "长期 Agent 身份登记表，记录 worker identity、职责、边界、状态和 runtime/tool binding。" ;;
+    agent-workflow/templates/agents/AGENT_PRESETS.tsv|docs/agents/AGENT_PRESETS.tsv) echo "默认 Agent 注册预设配置，供 aw agents register --preset/--defaults 使用，包含运行工具绑定默认值。" ;;
     agent-workflow/templates/agents/*|docs/agents/*) echo "多 Agent 角色、交接和评审模板或记录。" ;;
     docs/sync/SYNC_CONFIG.md) echo "跨项目前后端同步配置，记录共享 Harness、项目名、Agent 和角色。" ;;
     docs/sync/README.md) echo "跨项目同步目录说明，解释 inbox/outbox 的只读边界。" ;;

@@ -2,11 +2,13 @@
 name: agent-workflow
 description: >-
   Lean, tool-agnostic delivery pipeline (Reference → DSL → Plan → confirm → dev)
-  for Claude Code, Codex, Copilot, Cursor, Windsurf, Cline, Continue, or any chat.
+  for Claude Code, Codex, Copilot, Cursor, Windsurf, Cline, Continue, QoderWork,
+  TraeIDE, Lingma, OpenClaw, qclaw, or any chat.
   Uses aw CLI, gates business code until DSL/Plan/task/context are confirmed,
   and keeps token usage low through staged context reading. Use for agent-workflow,
   启动 aw, @aw, aw start, aw init, 按 AI 工作流, 生成 DSL/Plan, 任务确认,
-  省 token, verify, tp, config, Windsurf, Cline, Copilot, or DSL gates.
+  省 token, verify, tp, config, Windsurf, Cline, Copilot, QoderWork, TraeIDE,
+  Lingma, OpenClaw, qclaw, or DSL gates.
 argument-hint: "start | setup | doctor | demo | capabilities | dashboard | memory | audit | policy | security | service-catalog | release | report | install | init | adapters | status | dsl | plan | confirm | config | context | task | verify | tp | commit | upgrade | update | remove"
 ---
 

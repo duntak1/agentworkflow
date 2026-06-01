@@ -128,6 +128,11 @@ exists "AGENTS.md" && ok "Codex adapter" || warn "missing AGENTS.md (run: ./scri
 exists "CLAUDE.md" && ok "Claude adapter" || warn "missing CLAUDE.md (run: ./scripts/aw adapters --claude)"
 exists ".github/copilot-instructions.md" && ok "Copilot adapter" || warn "missing Copilot adapter"
 exists ".cursor/rules/agent-workflow.mdc" && ok "Cursor adapter" || warn "missing Cursor adapter"
+exists ".qoderwork/rules/agent-workflow.md" && ok "QoderWork adapter" || warn "missing QoderWork adapter"
+exists ".trae/rules/agent-workflow.md" && ok "TraeIDE adapter" || warn "missing TraeIDE adapter"
+exists ".lingma/rules/agent-workflow.md" && ok "Lingma adapter" || warn "missing Lingma adapter"
+exists ".openclaw/agent-workflow.md" && ok "OpenClaw adapter" || warn "missing OpenClaw adapter"
+exists ".qclaw/agent-workflow.md" && ok "qclaw adapter" || warn "missing qclaw adapter"
 exists ".github/workflows/agent-workflow.yml" && ok "project CI workflow" || warn "missing project CI workflow (run: ./scripts/aw ci install)"
 
 echo ""

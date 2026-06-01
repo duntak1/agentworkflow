@@ -47,7 +47,7 @@ targets=()
 $REMOVE_PACKAGE && targets+=("agent-workflow")
 $REMOVE_HOOKS && targets+=(".githooks")
 if $REMOVE_ADAPTERS; then
-  targets+=("AGENTS.md" "CLAUDE.md" "AGENT_RULES.md" ".github/copilot-instructions.md" ".cursor/rules/agent-workflow.mdc" ".windsurfrules" ".clinerules" ".continue/rules/agent-workflow.md")
+  targets+=("AGENTS.md" "CLAUDE.md" "AGENT_RULES.md" ".github/copilot-instructions.md" ".cursor/rules/agent-workflow.mdc" ".windsurfrules" ".clinerules" ".continue/rules/agent-workflow.md" ".qoderwork/rules/agent-workflow.md" ".trae/rules/agent-workflow.md" ".lingma/rules/agent-workflow.md" ".openclaw/agent-workflow.md" ".qclaw/agent-workflow.md")
 fi
 $REMOVE_CI && targets+=(".github/workflows/agent-workflow.yml")
 

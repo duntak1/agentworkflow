@@ -1,6 +1,6 @@
 # agent-workflow
 
-通用 **AI 交付工作流 Skill + CLI**：把需求材料变成可审阅 DSL、可执行 Plan、原子任务和可验证交付。它不绑定某个 IDE，支持 **Claude Code、Codex、Copilot、Cursor、Windsurf、Cline、Continue** 及任意对话；Cursor Skill 只是可选入口。
+通用 **AI 交付工作流 Skill + CLI**：把需求材料变成可审阅 DSL、可执行 Plan、原子任务和可验证交付。它不绑定某个 IDE，支持 **Claude Code、Codex、Copilot、Cursor、Windsurf、Cline、Continue、QoderWork / Qoder、TraeIDE、Lingma、OpenClaw、qclaw** 及任意对话；Cursor Skill 只是可选入口。
 
 在线手册：<https://duntak1.github.io/agentworkflow/>
 
@@ -143,6 +143,11 @@ chmod +x scripts/aw scripts/*.sh
 | Windsurf | `.windsurfrules` | `aw adapters --windsurf` | 支持 |
 | Cline | `.clinerules` | `aw adapters --cline` | 支持 |
 | Continue | `.continue/rules/agent-workflow.md` | `aw adapters --continue` | 支持 |
+| QoderWork / Qoder | `.qoderwork/rules/agent-workflow.md` | `aw adapters --qoderwork` | 支持 |
+| TraeIDE | `.trae/rules/agent-workflow.md` | `aw adapters --trae` | 支持 |
+| Lingma / 通义灵码 | `.lingma/rules/agent-workflow.md` | `aw adapters --lingma` | 支持 |
+| OpenClaw | `.openclaw/agent-workflow.md` | `aw adapters --openclaw` | 支持 |
+| qclaw | `.qclaw/agent-workflow.md` | `aw adapters --qclaw` | 支持 |
 | 任意 Chat | 粘贴块 | `aw paste session` | 支持 |
 
 ## 可验证范围

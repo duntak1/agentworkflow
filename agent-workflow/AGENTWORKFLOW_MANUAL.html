@@ -907,7 +907,7 @@
         <div class="section-head">
           <div>
             <h2>快速启动</h2>
-            <p>在 Codex、Cursor、Claude Code、Copilot、Windsurf、Cline、Continue 或任意聊天工具中，都可以通过同一套规则启动。</p>
+            <p>在 Codex、Cursor、Claude Code、Copilot、Windsurf、Cline、Continue、QoderWork、TraeIDE、Lingma、OpenClaw、qclaw 或任意聊天工具中，都可以通过同一套规则启动。</p>
           </div>
         </div>
         <div class="grid cols-2">
@@ -1366,8 +1366,10 @@ DSL 和共享 Plan 放同步中心，本地 Plan 只作为执行派生。</code>
 ./scripts/aw security scan
 ./scripts/aw release gate
 ./scripts/aw report handoff</code></pre></div>
-          <div class="card"><h3>Agent 注册</h3><pre><code>./scripts/aw agents register --defaults
+<div class="card"><h3>Agent 注册</h3><pre><code>./scripts/aw agents register --defaults
 ./scripts/aw agents register --preset backend
+./scripts/aw agents bind tester-agent --runtime qoderwork
+./scripts/aw agents list --bindings
 ./scripts/aw agents list
 ./scripts/aw agents show backend-agent
 ./scripts/aw agents gate --strict</code></pre></div>
@@ -1391,8 +1393,10 @@ DSL 和共享 Plan 放同步中心，本地 Plan 只作为执行派生。</code>
               <h3>正式 Agent 注册能力</h3>
               <ul>
                 <li>新增 <code>aw agents register/list/show/unregister</code>，把长期 worker identity 从任务 assignment 中拆出来。</li>
-                <li>新增 communicator、businessman、PM、产品计划评审、fullstack、frontend、admin、backend 默认预设。</li>
-                <li><code>aw agents gate --strict</code> 可阻断未注册 Agent 的 assignment / claim，保留非 strict warning 模式。</li>
+                <li>新增 <code>aw agents bind/unbind/bindings</code>，记录 Agent 运行工具、provider、workspace、接口和同步模式。</li>
+                <li>新增 communicator、businessman、PM、产品计划评审、fullstack、frontend、admin、backend、tester 默认预设。</li>
+                <li>新增 QoderWork、TraeIDE、Lingma、OpenClaw、qclaw 适配器，并提供 <code>aw adapters --china</code> 一键安装国产 / 龙嘉组合。</li>
+                <li><code>aw agents gate --strict</code> 可阻断未注册 Agent、缺少 runtime binding 的 Agent 以及 assignment / claim 冲突，保留非 strict warning 模式。</li>
                 <li>新增 <code>aw update --from-github</code> 更新入口，可重新拉取 GitHub、删除旧本机 skill、安装最新版 skill，并替换当前项目 package/scripts。</li>
               </ul>
             </div>

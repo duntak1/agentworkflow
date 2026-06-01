@@ -6,15 +6,18 @@
 
 - Add `aw update` as an alias for `aw upgrade`, including a remote `--from-github` flow that reinstalls the local skill and refreshes the current project's package/scripts.
 - Add formal Agent identity registry commands: `aw agents register`, `list`, `show`, and `unregister`.
-- Add default Agent presets for communicator, businessman, PM, product plan review, fullstack, frontend, admin, and backend workers.
+- Add Agent runtime/tool binding commands: `aw agents bind`, `aw agents unbind`, `aw agents bindings`, and `aw agents list --bindings`.
+- Add default Agent presets for communicator, businessman, PM, product plan review, fullstack, frontend, admin, backend, and tester workers.
 - Add `docs/agents/AGENT_REGISTRY.md` and configurable `AGENT_PRESETS.tsv` templates for long-lived worker identity governance.
-- Extend `aw agents gate --strict` to block assignments and claims that reference unregistered active agents.
+- Add QoderWork/Qoder, TraeIDE, Lingma, OpenClaw, and qclaw adapter pointers, including `aw adapters --china`.
+- Extend `aw agents gate --strict` to block assignments and claims that reference unregistered active agents or active agents missing runtime/tool binding.
 - Add App Store-style version history to the HTML manual covering v1.0 through v1.6.
 
 ### Changed
 
 - Promote the published package, skill, and Codex plugin metadata to version 1.6.0.
 - Document the semantic split between `register` as long-lived identity and `assign` as task-specific responsibility.
+- Document runtime/tool binding as the bridge between long-lived Agent identity and the concrete editor/runtime where the worker is running.
 - Make local skill reinstall clean by default: old `agent-workflow` and legacy `aw-delivery` skill directories are removed before installing the fresh package.
 
 ## [1.5.0] - 2026-05-29

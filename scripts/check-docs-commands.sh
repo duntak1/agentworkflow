@@ -88,6 +88,8 @@ COMMANDS=(
   "aw ops gate"
   "aw agents"
   "aw agents register"
+  "aw agents bind"
+  "aw agents bindings"
   "aw agents list"
   "aw agents show"
   "aw agents unregister"

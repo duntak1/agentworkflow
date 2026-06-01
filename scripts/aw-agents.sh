@@ -23,11 +23,14 @@ usage() {
   cat <<'EOF'
 Usage:
   aw agents init [--with-defaults]
-  aw agents register --id "..." --name "..." --type developer|reviewer|tester|security|release|coordinator|observer --scope "..." [--allowed "..."] [--blocked "..."] [--notes "..."] [--update]
+  aw agents register --id "..." --name "..." --type developer|reviewer|tester|security|release|coordinator|observer --scope "..." [--allowed "..."] [--blocked "..."] [--runtime codex|claude-code|qoderwork|trae|lingma|openclaw|qclaw|...] [--provider openai|anthropic|github|cursor|aliyun|longjia|other] [--workspace path|manual] [--interface cli|desktop|web|ide|api|manual] [--sync-mode local-files|sync-center|handoff-only|manual-paste|none] [--handoff-target "..."] [--binding-status active|paused|unknown] [--notes "..."] [--update]
   aw agents register --preset communicator|businessman|pm|product-plan-review|fullstack|frontend|admin|backend|tester [--update]
   aw agents register --defaults [--update]
+  aw agents bind <agent-id> [--runtime "..."] [--provider "..."] [--workspace "..."] [--interface "..."] [--sync-mode "..."] [--handoff-target "..."] [--status active|paused|unknown]
+  aw agents unbind <agent-id>
   aw agents unregister <agent-id>
-  aw agents list
+  aw agents list [--bindings]
+  aw agents bindings
   aw agents show <agent-id>
   aw agents assign --role developer|reviewer|tester|security|release --owner "..." --scope "..." [--allowed "..."] [--blocked "..."] [--related "REQ/AT-T"]
   aw agents handoff --from "..." --to "..." --related "REQ/AT-T" --scope "..." --done "..." --todo "..." [--risk "..."] [--evidence "..."]
@@ -69,6 +72,29 @@ valid_agent_type() {
   case "$1" in developer|reviewer|tester|security|release|coordinator|observer) return 0 ;; *) return 1 ;; esac
 }
 
+valid_runtime() {
+  case "$1" in
+    codex|claude-code|claude-chat|cursor|cline|windsurf|copilot|continue|generic-chat|manual|qoderwork|qoder|trae|traeide|lingma|openclaw|qclaw) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+valid_provider() {
+  case "$1" in openai|anthropic|github|cursor|aliyun|longjia|other) return 0 ;; *) return 1 ;; esac
+}
+
+valid_interface() {
+  case "$1" in cli|desktop|web|ide|api|manual) return 0 ;; *) return 1 ;; esac
+}
+
+valid_sync_mode() {
+  case "$1" in local-files|sync-center|handoff-only|manual-paste|none) return 0 ;; *) return 1 ;; esac
+}
+
+valid_binding_status() {
+  case "$1" in active|paused|unknown) return 0 ;; *) return 1 ;; esac
+}
+
 agent_section_exists() {
   local agent_id="$1"
   [[ -f "$REGISTRY" ]] || return 1
@@ -99,7 +125,7 @@ read_preset() {
   ensure_agents
   awk -F'\t' -v preset="$preset" '
     NR > 1 && $1 == preset {
-      print $2 "\t" $3 "\t" $4 "\t" $5 "\t" $6 "\t" $7
+      print $2 "\t" $3 "\t" $4 "\t" $5 "\t" $6 "\t" $7 "\t" $8 "\t" $9 "\t" $10 "\t" $11 "\t" $12 "\t" $13 "\t" $14
       found=1
       exit
     }
@@ -107,8 +133,23 @@ read_preset() {
   ' "$PRESETS"
 }
 
+agent_field() {
+  local agent_id="$1" field="$2"
+  [[ -f "$REGISTRY" ]] || return 0
+  awk -v id="$agent_id" -v field="$field" '
+    $0 == "## Agent - " id {in_agent=1; next}
+    in_agent && /^## Agent - / {in_agent=0}
+    in_agent && index($0, "- " field ":") == 1 {
+      v=substr($0, index($0, ":")+1)
+      gsub(/^[ \t]+|[ \t]+$/, "", v)
+      print v
+      exit
+    }
+  ' "$REGISTRY"
+}
+
 write_agent_record() {
-  local agent_id="$1" name="$2" type="$3" status="$4" scope="$5" allowed="$6" blocked="$7" source="$8" notes="$9" update="${10}"
+  local agent_id="$1" name="$2" type="$3" status="$4" scope="$5" allowed="$6" blocked="$7" source="$8" notes="$9" update="${10}" runtime="${11}" provider="${12}" workspace="${13}" interface="${14}" sync_mode="${15}" handoff_target="${16}" binding_status="${17}"
   local now created tmp record
   now="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
   created="$now"
@@ -117,18 +158,23 @@ write_agent_record() {
       echo "error: agent already registered: ${agent_id} (use --update to modify)" >&2
       exit 1
     fi
-    created="$(awk -v id="$agent_id" '
-      $0 == "## Agent - " id {in_agent=1; next}
-      in_agent && /^## Agent - / {in_agent=0}
-      in_agent && /^- Created at:/ {
-        v=substr($0, index($0, ":")+1)
-        gsub(/^[ \t]+|[ \t]+$/, "", v)
-        print v
-        exit
-      }
-    ' "$REGISTRY")"
+    created="$(agent_field "$agent_id" "Created at")"
     [[ -n "$created" ]] || created="$now"
+    [[ "$runtime" == "unknown" ]] && runtime="$(agent_field "$agent_id" "Runtime")"
+    [[ "$provider" == "other" ]] && provider="$(agent_field "$agent_id" "Provider")"
+    [[ "$workspace" == "manual" ]] && workspace="$(agent_field "$agent_id" "Workspace")"
+    [[ "$interface" == "manual" ]] && interface="$(agent_field "$agent_id" "Interface")"
+    [[ "$sync_mode" == "none" ]] && sync_mode="$(agent_field "$agent_id" "Sync mode")"
+    [[ "$handoff_target" == "docs/agents/AGENT_HANDOFFS.md" ]] && handoff_target="$(agent_field "$agent_id" "Handoff target")"
+    [[ "$binding_status" == "unknown" ]] && binding_status="$(agent_field "$agent_id" "Binding status")"
   fi
+  runtime="${runtime:-unknown}"
+  provider="${provider:-other}"
+  workspace="${workspace:-manual}"
+  interface="${interface:-manual}"
+  sync_mode="${sync_mode:-none}"
+  handoff_target="${handoff_target:-docs/agents/AGENT_HANDOFFS.md}"
+  binding_status="${binding_status:-unknown}"
   record="$(mktemp)"
   {
     echo ""
@@ -140,6 +186,14 @@ write_agent_record() {
     echo "- Scope: ${scope}"
     echo "- Allowed paths: ${allowed}"
     echo "- Blocked paths: ${blocked}"
+    echo "- Runtime: ${runtime}"
+    echo "- Provider: ${provider}"
+    echo "- Workspace: ${workspace}"
+    echo "- Interface: ${interface}"
+    echo "- Sync mode: ${sync_mode}"
+    echo "- Handoff target: ${handoff_target}"
+    echo "- Last seen: ${now}"
+    echo "- Binding status: ${binding_status}"
     echo "- Created at: ${created}"
     echo "- Updated at: ${now}"
     echo "- Source: ${source}"
@@ -170,11 +224,16 @@ write_agent_record() {
 }
 
 register_one() {
-  local agent_id="$1" name="$2" type="$3" scope="$4" allowed="$5" blocked="$6" source="$7" notes="$8" update="$9"
+  local agent_id="$1" name="$2" type="$3" scope="$4" allowed="$5" blocked="$6" source="$7" notes="$8" update="$9" runtime="${10}" provider="${11}" workspace="${12}" interface="${13}" sync_mode="${14}" handoff_target="${15}" binding_status="${16}"
   [[ -n "$agent_id" && -n "$name" && -n "$scope" ]] || { echo "error: --id --name --scope are required" >&2; exit 1; }
   valid_agent_type "$type" || { echo "error: --type developer|reviewer|tester|security|release|coordinator|observer is required" >&2; exit 1; }
+  valid_runtime "${runtime:-unknown}" || { echo "error: invalid --runtime ${runtime}" >&2; exit 1; }
+  valid_provider "${provider:-other}" || { echo "error: invalid --provider ${provider}" >&2; exit 1; }
+  valid_interface "${interface:-manual}" || { echo "error: invalid --interface ${interface}" >&2; exit 1; }
+  valid_sync_mode "${sync_mode:-none}" || { echo "error: invalid --sync-mode ${sync_mode}" >&2; exit 1; }
+  valid_binding_status "${binding_status:-unknown}" || { echo "error: invalid --binding-status ${binding_status}" >&2; exit 1; }
   ensure_agents
-  write_agent_record "$agent_id" "$name" "$type" "active" "$scope" "${allowed:-—}" "${blocked:-—}" "$source" "${notes:-—}" "$update"
+  write_agent_record "$agent_id" "$name" "$type" "active" "$scope" "${allowed:-—}" "${blocked:-—}" "$source" "${notes:-—}" "$update" "${runtime:-unknown}" "${provider:-other}" "${workspace:-manual}" "${interface:-manual}" "${sync_mode:-none}" "${handoff_target:-docs/agents/AGENT_HANDOFFS.md}" "${binding_status:-unknown}"
   echo "registered: ${agent_id}"
 }
 
@@ -182,17 +241,23 @@ list_registered_agents() {
   ensure_agents
   awk '
     /^## Agent - / {
-      if (id != "") print id "\t" name "\t" type "\t" status "\t" source
+      if (id != "") print id "\t" name "\t" type "\t" status "\t" source "\t" runtime "\t" provider "\t" workspace "\t" interface "\t" sync_mode "\t" binding_status
       id=$0; sub(/^## Agent - /, "", id)
-      name=""; type=""; status=""; source=""
+      name=""; type=""; status=""; source=""; runtime="unknown"; provider="other"; workspace="manual"; interface="manual"; sync_mode="none"; binding_status="unknown"
       next
     }
     /^- Name:/ {name=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", name)}
     /^- Type:/ {type=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", type)}
     /^- Status:/ {status=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", status)}
     /^- Source:/ {source=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", source)}
+    /^- Runtime:/ {runtime=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", runtime)}
+    /^- Provider:/ {provider=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", provider)}
+    /^- Workspace:/ {workspace=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", workspace)}
+    /^- Interface:/ {interface=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", interface)}
+    /^- Sync mode:/ {sync_mode=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", sync_mode)}
+    /^- Binding status:/ {binding_status=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", binding_status)}
     END {
-      if (id != "") print id "\t" name "\t" type "\t" status "\t" source
+      if (id != "") print id "\t" name "\t" type "\t" status "\t" source "\t" runtime "\t" provider "\t" workspace "\t" interface "\t" sync_mode "\t" binding_status
     }
   ' "$REGISTRY"
 }
@@ -225,11 +290,19 @@ registry_format_check() {
         print "invalid agent status: " id " -> " status > "/dev/stderr"
         err=1
       }
+      if (runtime != "" && runtime !~ /^(codex|claude-code|claude-chat|cursor|cline|windsurf|copilot|continue|generic-chat|manual|qoderwork|qoder|trae|traeide|lingma|openclaw|qclaw)$/) {
+        print "invalid agent runtime: " id " -> " runtime > "/dev/stderr"
+        err=1
+      }
+      if (binding_status != "" && binding_status !~ /^(active|paused|unknown)$/) {
+        print "invalid binding status: " id " -> " binding_status > "/dev/stderr"
+        err=1
+      }
     }
     /^## Agent - / {
       finish()
       id=$0; sub(/^## Agent - /, "", id)
-      name=type=status=scope=created=updated=source=""
+      name=type=status=scope=created=updated=source=runtime=binding_status=""
       next
     }
     /^- Name:/ {name=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", name)}
@@ -239,8 +312,50 @@ registry_format_check() {
     /^- Created at:/ {created=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", created)}
     /^- Updated at:/ {updated=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", updated)}
     /^- Source:/ {source=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", source)}
+    /^- Runtime:/ {runtime=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", runtime)}
+    /^- Binding status:/ {binding_status=substr($0, index($0, ":")+1); gsub(/^[ \t]+|[ \t]+$/, "", binding_status)}
     END{finish(); exit err}
   ' "$REGISTRY"
+}
+
+bind_agent() {
+  local agent_id="$1" runtime="$2" provider="$3" workspace="$4" interface="$5" sync_mode="$6" handoff_target="$7" binding_status="$8"
+  ensure_agents
+  agent_section_exists "$agent_id" || { echo "error: agent not registered: ${agent_id}" >&2; exit 1; }
+  valid_runtime "$runtime" || { echo "error: invalid --runtime ${runtime}" >&2; exit 1; }
+  valid_provider "$provider" || { echo "error: invalid --provider ${provider}" >&2; exit 1; }
+  valid_interface "$interface" || { echo "error: invalid --interface ${interface}" >&2; exit 1; }
+  valid_sync_mode "$sync_mode" || { echo "error: invalid --sync-mode ${sync_mode}" >&2; exit 1; }
+  valid_binding_status "$binding_status" || { echo "error: invalid --status ${binding_status}" >&2; exit 1; }
+  local now tmp
+  now="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+  tmp="$(mktemp)"
+  awk -v id="$agent_id" -v runtime="$runtime" -v provider="$provider" -v workspace="$workspace" -v interface="$interface" -v sync_mode="$sync_mode" -v handoff_target="$handoff_target" -v binding_status="$binding_status" -v now="$now" '
+    function emit_missing() {
+      if (!seen_runtime) print "- Runtime: " runtime
+      if (!seen_provider) print "- Provider: " provider
+      if (!seen_workspace) print "- Workspace: " workspace
+      if (!seen_interface) print "- Interface: " interface
+      if (!seen_sync_mode) print "- Sync mode: " sync_mode
+      if (!seen_handoff) print "- Handoff target: " handoff_target
+      if (!seen_last_seen) print "- Last seen: " now
+      if (!seen_binding_status) print "- Binding status: " binding_status
+    }
+    $0 == "## Agent - " id {in_agent=1; seen_runtime=seen_provider=seen_workspace=seen_interface=seen_sync_mode=seen_handoff=seen_last_seen=seen_binding_status=0}
+    in_agent && /^## Agent - / && $0 != "## Agent - " id {emit_missing(); in_agent=0}
+    in_agent && /^- Runtime:/ {$0="- Runtime: " runtime; seen_runtime=1}
+    in_agent && /^- Provider:/ {$0="- Provider: " provider; seen_provider=1}
+    in_agent && /^- Workspace:/ {$0="- Workspace: " workspace; seen_workspace=1}
+    in_agent && /^- Interface:/ {$0="- Interface: " interface; seen_interface=1}
+    in_agent && /^- Sync mode:/ {$0="- Sync mode: " sync_mode; seen_sync_mode=1}
+    in_agent && /^- Handoff target:/ {$0="- Handoff target: " handoff_target; seen_handoff=1}
+    in_agent && /^- Last seen:/ {$0="- Last seen: " now; seen_last_seen=1}
+    in_agent && /^- Binding status:/ {$0="- Binding status: " binding_status; seen_binding_status=1}
+    in_agent && /^- Updated at:/ {$0="- Updated at: " now}
+    {print}
+    END{if(in_agent) emit_missing()}
+  ' "$REGISTRY" > "$tmp"
+  mv "$tmp" "$REGISTRY"
 }
 
 unregistered_agent_refs() {
@@ -294,6 +409,13 @@ case "$CMD" in
     PRESET=""
     DEFAULTS=false
     UPDATE=false
+    RUNTIME="unknown"
+    PROVIDER="other"
+    WORKSPACE="manual"
+    INTERFACE="manual"
+    SYNC_MODE="none"
+    HANDOFF_TARGET="docs/agents/AGENT_HANDOFFS.md"
+    BINDING_STATUS="unknown"
     while [[ $# -gt 0 ]]; do
       case "$1" in
         --id) ID="${2:-}"; shift 2 ;;
@@ -302,6 +424,13 @@ case "$CMD" in
         --scope) SCOPE="${2:-}"; shift 2 ;;
         --allowed) ALLOWED="${2:-}"; shift 2 ;;
         --blocked) BLOCKED="${2:-}"; shift 2 ;;
+        --runtime) RUNTIME="${2:-}"; shift 2 ;;
+        --provider) PROVIDER="${2:-}"; shift 2 ;;
+        --workspace) WORKSPACE="${2:-}"; shift 2 ;;
+        --interface) INTERFACE="${2:-}"; shift 2 ;;
+        --sync-mode) SYNC_MODE="${2:-}"; shift 2 ;;
+        --handoff-target) HANDOFF_TARGET="${2:-}"; shift 2 ;;
+        --binding-status) BINDING_STATUS="${2:-}"; shift 2 ;;
         --notes) NOTES="${2:-}"; shift 2 ;;
         --preset) PRESET="${2:-}"; shift 2 ;;
         --defaults) DEFAULTS=true; shift ;;
@@ -329,8 +458,8 @@ case "$CMD" in
       fi
       while IFS= read -r preset_name; do
         [[ -n "$preset_name" ]] || continue
-        IFS=$'\t' read -r p_id p_name p_type p_scope p_allowed p_blocked < <(read_preset "$preset_name")
-        register_one "$p_id" "$p_name" "$p_type" "$p_scope" "$p_allowed" "$p_blocked" "preset" "preset=${preset_name}" "$UPDATE"
+        IFS=$'\t' read -r p_id p_name p_type p_scope p_allowed p_blocked p_runtime p_provider p_workspace p_interface p_sync_mode p_handoff_target p_binding_status < <(read_preset "$preset_name")
+        register_one "$p_id" "$p_name" "$p_type" "$p_scope" "$p_allowed" "$p_blocked" "preset" "preset=${preset_name}" "$UPDATE" "${p_runtime:-unknown}" "${p_provider:-other}" "${p_workspace:-manual}" "${p_interface:-manual}" "${p_sync_mode:-none}" "${p_handoff_target:-docs/agents/AGENT_HANDOFFS.md}" "${p_binding_status:-unknown}"
       done < <(awk -F'\t' 'NR > 1 && $1 != "" {print $1}' "$PRESETS")
       aw_refresh_engineering_index
       exit 0
@@ -341,15 +470,56 @@ case "$CMD" in
         echo "available presets: $(available_presets)" >&2
         exit 1
       fi
-      IFS=$'\t' read -r ID NAME TYPE SCOPE ALLOWED BLOCKED <<< "$preset_row"
+      IFS=$'\t' read -r ID NAME TYPE SCOPE ALLOWED BLOCKED P_RUNTIME P_PROVIDER P_WORKSPACE P_INTERFACE P_SYNC_MODE P_HANDOFF_TARGET P_BINDING_STATUS <<< "$preset_row"
+      [[ "$RUNTIME" == "unknown" ]] && RUNTIME="${P_RUNTIME:-unknown}"
+      [[ "$PROVIDER" == "other" ]] && PROVIDER="${P_PROVIDER:-other}"
+      [[ "$WORKSPACE" == "manual" ]] && WORKSPACE="${P_WORKSPACE:-manual}"
+      [[ "$INTERFACE" == "manual" ]] && INTERFACE="${P_INTERFACE:-manual}"
+      [[ "$SYNC_MODE" == "none" ]] && SYNC_MODE="${P_SYNC_MODE:-none}"
+      [[ "$HANDOFF_TARGET" == "docs/agents/AGENT_HANDOFFS.md" ]] && HANDOFF_TARGET="${P_HANDOFF_TARGET:-docs/agents/AGENT_HANDOFFS.md}"
+      [[ "$BINDING_STATUS" == "unknown" ]] && BINDING_STATUS="${P_BINDING_STATUS:-unknown}"
       if [[ "$NOTES" == "—" ]]; then
         NOTES="preset=${PRESET}"
       fi
-      register_one "$ID" "$NAME" "$TYPE" "$SCOPE" "$ALLOWED" "$BLOCKED" "preset" "$NOTES" "$UPDATE"
+      register_one "$ID" "$NAME" "$TYPE" "$SCOPE" "$ALLOWED" "$BLOCKED" "preset" "$NOTES" "$UPDATE" "$RUNTIME" "$PROVIDER" "$WORKSPACE" "$INTERFACE" "$SYNC_MODE" "$HANDOFF_TARGET" "$BINDING_STATUS"
       aw_refresh_engineering_index
       exit 0
     fi
-    register_one "$ID" "$NAME" "$TYPE" "$SCOPE" "$ALLOWED" "$BLOCKED" "custom" "$NOTES" "$UPDATE"
+    register_one "$ID" "$NAME" "$TYPE" "$SCOPE" "$ALLOWED" "$BLOCKED" "custom" "$NOTES" "$UPDATE" "$RUNTIME" "$PROVIDER" "$WORKSPACE" "$INTERFACE" "$SYNC_MODE" "$HANDOFF_TARGET" "$BINDING_STATUS"
+    aw_refresh_engineering_index
+    ;;
+  bind)
+    AGENT_ID="${1:-}"
+    [[ -n "$AGENT_ID" ]] || { echo "error: agent id is required" >&2; usage 1; }
+    shift || true
+    RUNTIME="$(agent_field "$AGENT_ID" "Runtime")"; RUNTIME="${RUNTIME:-manual}"
+    PROVIDER="$(agent_field "$AGENT_ID" "Provider")"; PROVIDER="${PROVIDER:-other}"
+    WORKSPACE="$(agent_field "$AGENT_ID" "Workspace")"; WORKSPACE="${WORKSPACE:-manual}"
+    INTERFACE="$(agent_field "$AGENT_ID" "Interface")"; INTERFACE="${INTERFACE:-manual}"
+    SYNC_MODE="$(agent_field "$AGENT_ID" "Sync mode")"; SYNC_MODE="${SYNC_MODE:-none}"
+    HANDOFF_TARGET="$(agent_field "$AGENT_ID" "Handoff target")"; HANDOFF_TARGET="${HANDOFF_TARGET:-docs/agents/AGENT_HANDOFFS.md}"
+    BINDING_STATUS="$(agent_field "$AGENT_ID" "Binding status")"; BINDING_STATUS="${BINDING_STATUS:-active}"
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --runtime) RUNTIME="${2:-}"; shift 2 ;;
+        --provider) PROVIDER="${2:-}"; shift 2 ;;
+        --workspace) WORKSPACE="${2:-}"; shift 2 ;;
+        --interface) INTERFACE="${2:-}"; shift 2 ;;
+        --sync-mode) SYNC_MODE="${2:-}"; shift 2 ;;
+        --handoff-target) HANDOFF_TARGET="${2:-}"; shift 2 ;;
+        --status) BINDING_STATUS="${2:-}"; shift 2 ;;
+        *) echo "Unknown: $1" >&2; usage 1 ;;
+      esac
+    done
+    bind_agent "$AGENT_ID" "$RUNTIME" "$PROVIDER" "$WORKSPACE" "$INTERFACE" "$SYNC_MODE" "$HANDOFF_TARGET" "$BINDING_STATUS"
+    echo "bound: ${AGENT_ID} -> ${RUNTIME} (${BINDING_STATUS})"
+    aw_refresh_engineering_index
+    ;;
+  unbind)
+    AGENT_ID="${1:-}"
+    [[ -n "$AGENT_ID" ]] || { echo "error: agent id is required" >&2; usage 1; }
+    bind_agent "$AGENT_ID" "manual" "other" "manual" "manual" "none" "docs/agents/AGENT_HANDOFFS.md" "unknown"
+    echo "unbound: ${AGENT_ID}"
     aw_refresh_engineering_index
     ;;
   unregister)
@@ -646,6 +816,22 @@ case "$CMD" in
       echo "warn  assignment/claim references unregistered active agents" >&2
       echo "$missing_agents" >&2
     fi
+    binding_issues="$(
+      list_registered_agents | awk -F'\t' '
+        $4 == "active" && ($6 == "" || $6 == "unknown" || $11 == "" || $11 == "unknown") {
+          print $1 " runtime=" ($6 == "" ? "unknown" : $6) " binding-status=" ($11 == "" ? "unknown" : $11)
+        }
+      '
+    )"
+    if [[ -n "$binding_issues" ]]; then
+      if $STRICT; then
+        echo "block: active agents missing runtime/tool binding" >&2
+        echo "$binding_issues" >&2
+        exit 1
+      fi
+      echo "warn  active agents missing runtime/tool binding" >&2
+      echo "$binding_issues" >&2
+    fi
     conflicts="$(
       awk '
         function trim(s){gsub(/^[ \t]+|[ \t]+$/, "", s); return s}
@@ -696,10 +882,33 @@ case "$CMD" in
     ;;
   list)
     ensure_agents
-    echo "== registered agents =="
-    printf "%-28s %-28s %-12s %-10s %s\n" "Agent ID" "Name" "Type" "Status" "Source"
-    list_registered_agents | while IFS=$'\t' read -r id name type status source; do
-      printf "%-28s %-28s %-12s %-10s %s\n" "$id" "$name" "$type" "$status" "$source"
+    SHOW_BINDINGS=false
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --bindings) SHOW_BINDINGS=true; shift ;;
+        *) echo "Unknown: $1" >&2; usage 1 ;;
+      esac
+    done
+    if $SHOW_BINDINGS; then
+      echo "== registered agents + bindings =="
+      printf "%-28s %-18s %-12s %-12s %-14s %s\n" "Agent ID" "Runtime" "Provider" "Interface" "Sync mode" "Binding"
+      list_registered_agents | while IFS=$'\t' read -r id name type status source runtime provider workspace interface sync_mode binding_status; do
+        printf "%-28s %-18s %-12s %-12s %-14s %s\n" "$id" "$runtime" "$provider" "$interface" "$sync_mode" "$binding_status"
+      done
+    else
+      echo "== registered agents =="
+      printf "%-28s %-28s %-12s %-10s %s\n" "Agent ID" "Name" "Type" "Status" "Source"
+      list_registered_agents | while IFS=$'\t' read -r id name type status source _rest; do
+        printf "%-28s %-28s %-12s %-10s %s\n" "$id" "$name" "$type" "$status" "$source"
+      done
+    fi
+    ;;
+  bindings)
+    ensure_agents
+    echo "== agent bindings =="
+    printf "%-28s %-18s %-12s %-12s %-14s %s\n" "Agent ID" "Runtime" "Provider" "Interface" "Sync mode" "Workspace"
+    list_registered_agents | while IFS=$'\t' read -r id name type status source runtime provider workspace interface sync_mode binding_status; do
+      printf "%-28s %-18s %-12s %-12s %-14s %s\n" "$id" "$runtime" "$provider" "$interface" "$sync_mode" "$workspace"
     done
     ;;
   show)

@@ -34,4 +34,4 @@
 
 ## 工具适配（可选）
 
-见 [`adapters/README.md`](./adapters/README.md) — Cursor / Claude / Codex / Copilot / 通用对话。
+见 [`adapters/README.md`](./adapters/README.md) — Claude / Codex / Copilot / Cursor / Windsurf / Cline / Continue / QoderWork / TraeIDE / Lingma / OpenClaw / qclaw / 通用对话。

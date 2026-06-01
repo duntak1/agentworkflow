@@ -8,7 +8,8 @@
 
 ```bash
 ./scripts/install-aw-adapters.sh --all
-# 或按需：--claude --codex --copilot --cursor --windsurf --cline --continue
+# 或按需：--claude --codex --copilot --cursor --windsurf --cline --continue --qoderwork --trae --lingma --openclaw --qclaw
+# 国产 / 龙嘉组合：--china
 ```
 
 也可：`./scripts/aw adapters --all`
@@ -26,6 +27,11 @@
 | **Windsurf** | `.windsurfrules` | [windsurf.md](./windsurf.md) |
 | **Cline** | `.clinerules` | [cline.md](./cline.md) |
 | **Continue** | `.continue/rules/` | [continue.md](./continue.md) |
+| **QoderWork / Qoder** | `.qoderwork/rules/agent-workflow.md` | [qoderwork.md](./qoderwork.md) |
+| **TraeIDE** | `.trae/rules/agent-workflow.md` | [traeide.md](./traeide.md) |
+| **Lingma / 通义灵码** | `.lingma/rules/agent-workflow.md` | [lingma.md](./lingma.md) |
+| **OpenClaw** | `.openclaw/agent-workflow.md` | [openclaw.md](./openclaw.md) |
+| **qclaw** | `.qclaw/agent-workflow.md` | [qclaw.md](./qclaw.md) |
 | **VS Code 组合** | 见上 | [vscode.md](./vscode.md) |
 
 ## 原则

@@ -4,7 +4,7 @@
 
 - **真源：** `agent-workflow/INVOCATION.md`（`aw install` 后位于业务仓）
 - **CLI：** `scripts/aw` — 所有 IDE 共用
-- **Skill：** 仅 Cursor 可选；Windsurf/Cline/Codex 等用各自规则文件
+- **Skill：** 仅 Cursor 可选；Codex、Windsurf、Cline、Continue、QoderWork、TraeIDE、Lingma、OpenClaw、qclaw 等用各自规则文件
 
 ## 启动入口
 
@@ -62,6 +62,12 @@ PM 或产品主导项目时，先使用 `aw pm start` 进入向导，再用 `aw 
 | `--windsurf` | `.windsurfrules` |
 | `--cline` | `.clinerules` |
 | `--continue` | `.continue/rules/agent-workflow.md` |
+| `--qoderwork` / `--qoder` | `.qoderwork/rules/agent-workflow.md` |
+| `--trae` / `--traeide` | `.trae/rules/agent-workflow.md` |
+| `--lingma` | `.lingma/rules/agent-workflow.md` |
+| `--openclaw` | `.openclaw/agent-workflow.md` |
+| `--qclaw` | `.qclaw/agent-workflow.md` |
+| `--china` / `--cn` | 一次安装 QoderWork、TraeIDE、Lingma、OpenClaw、qclaw |
 
 详见业务仓 `agent-workflow/adapters/README.md`。
 
@@ -134,6 +140,8 @@ AW_SKILL_REF=v1.6.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw capabilities --json` | 机器可读能力摘要，供 dashboard/plugin/自动化消费 |
 | `aw memory init|add|list|search|show|archive|inject` | 文件化跨会话记忆 |
 | `aw memory chat <slug> "title" --summary "..."` | 记录聊天摘要记忆：背景、决定、待办、待确认和关联对象 |
+| `aw agents bind <agent-id> --runtime qoderwork|trae|lingma|openclaw|qclaw` | 给已注册 Agent 绑定运行工具、workspace、接口和同步模式 |
+| `aw agents bindings` / `aw agents list --bindings` | 查看 Agent 当前 runtime / tool binding |
 | `aw upgrade` | 从当前安装来源刷新 package/scripts，保留业务 docs/reference |
 | `aw upgrade --from-github` / `aw update --from-github` | 从 GitHub 重新获取 agentworkflow，删除旧本机 skill，安装新 skill，并替换当前项目 package/scripts |
 | `aw remove` | 预览移除 adapters/CI/package，`--execute` 后删除 |
@@ -198,10 +206,12 @@ AW_SKILL_REF=v1.6.0 ./scripts/install-cursor-skill.sh https://github.com/<you>/a
 | `aw agents init|register|list|show|unregister|check` | 初始化 Agent ledger；登记长期 Agent identity；查询或退休已登记 Agent |
 | `aw agents list` / `aw agents show <agent-id>` / `aw agents unregister <agent-id>` | 查看注册表、展示单个 Agent 完整记录、将 Agent 默认标记为 retired |
 | `aw agents register --preset <name>` / `--defaults` | 注册内置默认 Agent 预设；重复 ID 默认阻断，传 `--update` 才更新 |
+| `aw agents bind <agent-id> --runtime qoderwork|trae|lingma|openclaw|qclaw` | 将已注册 Agent 绑定到运行工具、provider、workspace、接口和同步模式 |
+| `aw agents bindings` / `aw agents list --bindings` | 查看所有 Agent 的 runtime / tool binding 状态 |
 | `aw agents assign|handoff|review|gate` | 记录具体任务分配、文件边界、交接和评审结论；gate 检查阻断评审 |
 | `aw agents claim|heartbeat|release|lock-check` | 多 Agent 任务锁和状态心跳，防止并行修改冲突和任务无人负责 |
-| `aw agents gate` | 检查 block 评审、未确认文件边界、未注册 Agent 引用、多个 Agent allowed paths 重叠；默认 warn |
-| `aw agents gate --strict` | 严格协作门禁：发现未注册 Agent 或 allowed paths 重叠时阻断，要求先 register / handoff 或重新分配边界 |
+| `aw agents gate` | 检查 block 评审、未确认文件边界、未注册 Agent 引用、缺少 runtime binding、多个 Agent allowed paths 重叠；默认 warn |
+| `aw agents gate --strict` | 严格协作门禁：发现未注册 Agent、缺少 runtime binding 或 allowed paths 重叠时阻断，要求先 register / bind / handoff 或重新分配边界 |
 | `aw gate init|check|pre-commit|task|pr|release` | 自动 Gate 聚合 DSL、REQ、TP、Contract、Agent 锁、Trace、Score、Release 等关键检查 |
 | `aw gate file-index` | 新增 / 删除 / 重命名业务文件时，若未刷新 `docs/FILE_INDEX.md` 则阻断 |
 | `aw context init|status|plan|query|impact|affected|gate|budget` | 任务级代码上下文控制：禁止无目标全仓扫描，按 CodeGraph / CODE_MAP / CODE_CONTEXT_INDEX / FILE_INDEX 生成最小读取范围和 affected 分析；`plan` 会自动刷新 CODE_MAP |

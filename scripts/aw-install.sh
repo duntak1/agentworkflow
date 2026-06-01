@@ -140,5 +140,5 @@ echo ""
 echo "Run in target:"
 echo "  cd ${TARGET} && ./scripts/aw init && ./scripts/aw status"
 if ! $INSTALL_ADAPTERS; then
-  echo "  optional: ./scripts/aw adapters --all   # Claude/Codex/Copilot/Cursor/Windsurf/Cline/Continue"
+  echo "  optional: ./scripts/aw adapters --all   # Claude/Codex/Copilot/Cursor/Windsurf/Cline/Continue/QoderWork/TraeIDE/Lingma/OpenClaw/qclaw"
 fi

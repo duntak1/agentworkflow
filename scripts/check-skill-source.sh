@@ -28,6 +28,14 @@ need "VERSION"
 [[ -f "${ROOT}/agent-workflow/templates/agents/AGENT_ROLES.md" ]] && echo "ok  templates/agents/AGENT_ROLES.md" || { echo "missing  templates/agents/AGENT_ROLES.md"; ERR=1; }
 [[ -f "${ROOT}/agent-workflow/templates/agents/AGENT_REGISTRY.md" ]] && echo "ok  templates/agents/AGENT_REGISTRY.md" || { echo "missing  templates/agents/AGENT_REGISTRY.md"; ERR=1; }
 [[ -f "${ROOT}/agent-workflow/templates/agents/AGENT_PRESETS.tsv" ]] && echo "ok  templates/agents/AGENT_PRESETS.tsv" || { echo "missing  templates/agents/AGENT_PRESETS.tsv"; ERR=1; }
+for adapter in qoderwork traeide lingma openclaw qclaw; do
+  if [[ -f "${ROOT}/agent-workflow/adapters/${adapter}.md" ]]; then
+    echo "ok  adapters/${adapter}.md"
+  else
+    echo "missing  adapters/${adapter}.md"
+    ERR=1
+  fi
+done
 [[ -f "${ROOT}/scripts/aw-report.sh" ]] && echo "ok  scripts/aw-report.sh" || { echo "missing  scripts/aw-report.sh"; ERR=1; }
 [[ -f "${ROOT}/scripts/aw-trace.sh" ]] && echo "ok  scripts/aw-trace.sh" || { echo "missing  scripts/aw-trace.sh"; ERR=1; }
 [[ -f "${ROOT}/scripts/aw-project.sh" ]] && echo "ok  scripts/aw-project.sh" || { echo "missing  scripts/aw-project.sh"; ERR=1; }
@@ -112,6 +120,20 @@ if grep -q 'aw metrics summary' "${SKILL_SRC}/SKILL.md" "${ROOT}/skill/reference
   echo "ok  harness summary/gates documented"
 else
   echo "missing  harness summary/gates docs"
+  ERR=1
+fi
+
+if grep -q 'aw agents bind' "${ROOT}/skill/reference.md" "${ROOT}/agent-workflow/INVOCATION.md" 2>/dev/null && grep -q 'aw agents bindings' "${ROOT}/skill/reference.md" "${ROOT}/agent-workflow/INVOCATION.md" 2>/dev/null; then
+  echo "ok  agent runtime binding documented"
+else
+  echo "missing  agent runtime binding docs"
+  ERR=1
+fi
+
+if grep -q 'QoderWork' "${SKILL_SRC}/SKILL.md" "${ROOT}/skill/reference.md" "${ROOT}/agent-workflow/adapters/README.md" 2>/dev/null && grep -q 'OpenClaw' "${SKILL_SRC}/SKILL.md" "${ROOT}/skill/reference.md" "${ROOT}/agent-workflow/adapters/README.md" 2>/dev/null && grep -q -- '--china' "${ROOT}/skill/reference.md" "${ROOT}/agent-workflow/adapters/README.md" 2>/dev/null; then
+  echo "ok  domestic/longjia adapters documented"
+else
+  echo "missing  domestic/longjia adapter docs"
   ERR=1
 fi
 

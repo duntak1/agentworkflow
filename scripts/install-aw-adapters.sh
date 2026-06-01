@@ -16,11 +16,17 @@ DO_CURSOR=false
 DO_WINDSURF=false
 DO_CLINE=false
 DO_CONTINUE=false
+DO_QODERWORK=false
+DO_TRAE=false
+DO_LINGMA=false
+DO_OPENCLAW=false
+DO_QCLAW=false
 DO_ALL=false
 
 usage() {
   cat <<EOF
 Usage: $0 [--all] [--claude] [--codex] [--copilot] [--cursor] [--windsurf] [--cline] [--continue]
+         [--qoderwork] [--trae] [--lingma] [--openclaw] [--qclaw] [--china]
 
 Installs optional IDE/Agent entry files that point to agent-workflow/INVOCATION.md.
 Does not replace policy in agent-workflow/ — safe to re-run (skips existing files).
@@ -33,6 +39,12 @@ Does not replace policy in agent-workflow/ — safe to re-run (skips existing fi
   --windsurf  .windsurfrules (Windsurf Cascade)
   --cline     .clinerules (Cline)
   --continue  .continue/rules/agent-workflow.md (Continue)
+  --qoderwork .qoderwork/rules/agent-workflow.md (QoderWork / Qoder)
+  --trae      .trae/rules/agent-workflow.md (TraeIDE)
+  --lingma    .lingma/rules/agent-workflow.md (Lingma)
+  --openclaw  .openclaw/agent-workflow.md (OpenClaw)
+  --qclaw     .qclaw/agent-workflow.md (qclaw)
+  --china     Install QoderWork, TraeIDE, Lingma, OpenClaw, and qclaw adapters
 EOF
   exit "${1:-0}"
 }
@@ -47,6 +59,12 @@ while [[ $# -gt 0 ]]; do
     --windsurf) DO_WINDSURF=true ;;
     --cline) DO_CLINE=true ;;
     --continue) DO_CONTINUE=true ;;
+    --qoderwork|--qoder) DO_QODERWORK=true ;;
+    --trae|--traeide) DO_TRAE=true ;;
+    --lingma) DO_LINGMA=true ;;
+    --openclaw) DO_OPENCLAW=true ;;
+    --qclaw) DO_QCLAW=true ;;
+    --china|--cn) DO_QODERWORK=true; DO_TRAE=true; DO_LINGMA=true; DO_OPENCLAW=true; DO_QCLAW=true ;;
     -h|--help) usage 0 ;;
     *) echo "Unknown: $1" >&2; usage 1 ;;
   esac
@@ -56,10 +74,12 @@ done
 if $DO_ALL; then
   DO_CLAUDE=true DO_CODEX=true DO_COPILOT=true DO_CURSOR=true
   DO_WINDSURF=true DO_CLINE=true DO_CONTINUE=true
+  DO_QODERWORK=true DO_TRAE=true DO_LINGMA=true DO_OPENCLAW=true DO_QCLAW=true
 fi
 
 if ! $DO_CLAUDE && ! $DO_CODEX && ! $DO_COPILOT && ! $DO_CURSOR && \
-   ! $DO_WINDSURF && ! $DO_CLINE && ! $DO_CONTINUE; then
+   ! $DO_WINDSURF && ! $DO_CLINE && ! $DO_CONTINUE && \
+   ! $DO_QODERWORK && ! $DO_TRAE && ! $DO_LINGMA && ! $DO_OPENCLAW && ! $DO_QCLAW; then
   usage 1
 fi
 
@@ -151,6 +171,41 @@ if $DO_CONTINUE; then
   write_if_missing ".continue/rules/agent-workflow.md" "${RULES_BLOCK}
 
 Continue：见 \`agent-workflow/adapters/continue.md\`
+"
+fi
+
+if $DO_QODERWORK; then
+  write_if_missing ".qoderwork/rules/agent-workflow.md" "${RULES_BLOCK}
+
+QoderWork / Qoder：见 \`agent-workflow/adapters/qoderwork.md\`
+"
+fi
+
+if $DO_TRAE; then
+  write_if_missing ".trae/rules/agent-workflow.md" "${RULES_BLOCK}
+
+TraeIDE：见 \`agent-workflow/adapters/traeide.md\`
+"
+fi
+
+if $DO_LINGMA; then
+  write_if_missing ".lingma/rules/agent-workflow.md" "${RULES_BLOCK}
+
+Lingma / 通义灵码：见 \`agent-workflow/adapters/lingma.md\`
+"
+fi
+
+if $DO_OPENCLAW; then
+  write_if_missing ".openclaw/agent-workflow.md" "${RULES_BLOCK}
+
+OpenClaw：见 \`agent-workflow/adapters/openclaw.md\`
+"
+fi
+
+if $DO_QCLAW; then
+  write_if_missing ".qclaw/agent-workflow.md" "${RULES_BLOCK}
+
+qclaw：见 \`agent-workflow/adapters/qclaw.md\`
 "
 fi
 

@@ -6,7 +6,7 @@
 | [`README.md`](./README.md) | 包总览、五分钟上手 |
 | [`AGENTWORKFLOW_MANUAL.html`](./AGENTWORKFLOW_MANUAL.html) | 暗色本地 HTML 使用手册，面向工程师学习完整功能 |
 | [`INVOCATION.md`](./INVOCATION.md) | **工具无关调用真源** |
-| [`adapters/`](./adapters/) | Cursor / Claude / Codex / Copilot / 通用对话 |
+| [`adapters/`](./adapters/) | Claude / Codex / Copilot / Cursor / Windsurf / Cline / Continue / QoderWork / TraeIDE / Lingma / OpenClaw / qclaw / 通用对话 |
 | [`BOOTSTRAP.md`](./BOOTSTRAP.md) | **复用到其他仓库** |
 | [`PRODUCT_INPUT_WORKFLOW.md`](./PRODUCT_INPUT_WORKFLOW.md) | 阶段 0：Reference → DSL → Plan |
 | [`CROSS_PROJECT_SYNC.md`](./CROSS_PROJECT_SYNC.md) | 前后端分仓 / 两个项目的 Agent 同步教程 |

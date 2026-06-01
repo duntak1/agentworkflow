@@ -423,7 +423,7 @@ agent-workflow CLI v${AW_CLI_VERSION} (any AI tool)
   aw trace check|list  Traceability across REQ, DSL, Plan, AT-T, TP, Bug, Changelog, Harness records
   aw metrics init|record|summary|check  DORA/flow delivery metrics and summary
   aw ops init|slo|incident|incident-close|runbook|gate|check  SLO, incident, runbook records and ops gate
-  aw agents init|assign|handoff|review|gate|check  Multi-agent role, handoff, review records and collaboration gate
+  aw agents init|register|bind|assign|handoff|review|gate|check  Multi-agent identity, runtime binding, handoff/review records and gate
   aw sync init|push|pull|gate|status|check  Cross-project frontend/backend agent synchronization via shared harness
   aw vcs branch|fill|create|review|gate  Provider-neutral PR/MR/CR loop for GitHub/GitLab/Bitbucket/Gitee/GitCode/Gitea/Forgejo/Gerrit/Codeup
   aw req new <slug> "title"   Record spoken/new requirement in unified REQ table
@@ -435,7 +435,7 @@ agent-workflow CLI v${AW_CLI_VERSION} (any AI tool)
   aw handoff [focus] [--write|--check]  Print/write/check PROJECT_HANDOFF
   aw compact [focus] [--write] [--snapshot] [--memory-summary "..."]  One-shot context compaction for Codex/new chat
   aw hooks             Install .githooks (pre-commit)
-  aw adapters [--all]  IDE rules: claude/codex/copilot/cursor/windsurf/cline/continue
+  aw adapters [--all]  IDE rules: claude/codex/copilot/cursor/windsurf/cline/continue/qoderwork/trae/lingma/openclaw/qclaw
   aw sync-skill        Install ~/.cursor/skills/agent-workflow (Cursor only)
   aw tp list|show|new|link  Test plans ↔ AT-T (Verify: TP:path or ; separated)
   aw memory init|add|chat|list|search|show|archive|inject
